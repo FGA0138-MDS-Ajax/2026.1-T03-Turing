@@ -1,11 +1,12 @@
 # Instruções gerais do projeto. 
+
 - developer :
- - branch pra desenvolvimento do software no geral,
- - confecção de testes.
- - rodou tudo certinho ? deploy pra testes.
+  - branch pra desenvolvimento do software no geral,
+  - confecção de testes.
+  - rodou tudo certinho ? deploy pra testes.
 - testes :
- - espaço pra raealiazção de qualquer tipo de testes mas principalemnte o de integração.
- - testes aprovados, funcionalidades ativas e sem problemas deploy pra produção / Main.
+  - espaço pra raealiazção de qualquer tipo de testes mas principalemnte o de integração.
+  - testes aprovados, funcionalidades ativas e sem problemas deploy pra produção / Main.
  
 ## template-repository - Branch Developer
 
