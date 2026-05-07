@@ -4,6 +4,26 @@ API REST em Django + SPA em React (Vite).
 
 ---
 
+## Fluxo de preparo
+
+para o proximo dev que clonar o repo o fluxo tem que ser :
+
+### Backend
+
+``cd backend``
+``python -m venv venv``
+``venv\Scripts\activate``
+``pip install -r requirements.txt``
+``cp .env.example .env   # editar o .env com os valores``
+``python manage.py migrate``
+``python manage.py runserver``
+
+### Frontend (novo terminal)
+
+``cd frontend``
+``npm install``
+``npm run dev``
+
 ## Requisitos
 
 | Ferramenta | Versão | Download |
