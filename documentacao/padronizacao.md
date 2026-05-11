@@ -45,9 +45,9 @@ Para potencializar o desenvolvimento, as tarefas dentro das issues devem ser s
 
 #### 2.1 Padrões de Código 
 
-* **Nomenclatura:** Utilizar **camelCase** para variáveis e APIs.
-
-* ***Consistência:** Os nomes de campos e entidades devem ser idênticos em todas as camadas (Front, Back e Banco).
+* **Nomenclatura:** Utilizar **snake_case** para variáveis, metodos e APIs.
+    * **PascalCase** para classes
+* **Consistência:** Os nomes de campos e entidades devem ser idênticos em todas as camadas (Front, Back e Banco).
 
 #### 2.2 Padrões de Commit
 
