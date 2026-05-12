@@ -45,6 +45,9 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'usuarios',
+    'disciplinas',
+    'interacoes',
+    'turmas',
 ]
 
 MIDDLEWARE = [
