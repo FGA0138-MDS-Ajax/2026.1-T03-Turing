@@ -104,9 +104,7 @@
 - **Problema encontrado:** A principal dificuldade identificada reside na desorganização e fragmentação do processo de aprendizagem individual, que culmina em um déficit educacional. Os alunos frequentemente perdem tempo produtivo buscando materiais confiáveis ou tentando estruturar cronogramas sem uma metodologia clara, o que resulta em baixa retenção de conteúdo e desmotivação.
 
 
-<div class="container-imagem">
-  <img src="assets/images/figura1.png" alt="Figura 1: Diagrama de Ishikawa">
-</div>
+![Figura 1: diagrama de ishikawa](./assets/images/figura1.png)
 <center> <i>Figura 1: Diagrama de Ishikawa</i></center>
 
 
@@ -205,12 +203,7 @@ E em relação a prática do desenvolvimento temos o **Guia XP**:
 
 Ou seja durante uma Sprint qual seria o fluxo:
 
-
-<div class="container-imagem">
-  <img src="assets/images/figura2.png" alt="Figura 1: Diagrama de Ishikawa">
-</div>
-<center> <i>Figura 2: Fluxo a ser seguido.</i></center>
-<br>
+  ![fluxo a ser seguido](./assets/images/figura2.png)
 
 **Ferramentas**
 
@@ -233,12 +226,12 @@ ferramentas, tudo constado em na seção 1.4 deste documento
 
 | Sprint | Produto (Entrega) | Data Início | Data Fim | Entregável(eis) | Responsável | % conclusão |
 |--------|-------------------|-------------|----------|-----------------|-------------|--------------|
-| Sprint 1 | Cadastro de alunos, professores e administrador | 04/05/2026 | 14/5/2026 | Cadastro: sistema de cadastro de alunos, professores e administradores com autenticação. | P.O e cliente | Intervalos mínimos de 10 em 10 % |
-| Sprint 2 | Administração | 9/5/2026 | 19/5/2026 | Admin: módulo de gerenciamento interno com permissões. | P.O e Desenvolvedores | |
-| Sprint 3 | Postagem de material | 14/5/2026 | 24/5/2026 | Postagem de material: módulo de postar conteúdo na plataforma | Desenvolvedores e qualidade | |
-| Sprint 4 | Visualização e interação | 30/5/2026 | 9/6/2026 | Visualização e interação: navegação e interação com post | Desenvolvedores, qualidade e P.O | |
-| Sprint 5 | fórum | 14/6/2026 | 24/6/2026 | fórum: fórum de perguntas e respostas | Desenvolvedores e P.O | |
-| Sprint 6 | Acessibilidade | 24/6/2026 | 2/6/2026 | Acessibilidade: configurações de acessibilidade para públicos especiais | Desenvolvedores e P.O | |
+| Sprint 1 | Cadastro de alunos, professores e administrador | 10/05/2026 | 19/5/2026 | Cadastro: sistema de cadastro de alunos, professores e administradores com autenticação. | P.O e cliente | Intervalos mínimos de 10 em 10 % |
+| Sprint 2 | Administração | 19/5/2026 | 28/5/2026 | Admin: módulo de gerenciamento interno com permissões. | P.O e Desenvolvedores | |
+| Sprint 3 | Postagem de material | 28/5/2026 | 6/6/2026 | Postagem de material: módulo de postar conteúdo na plataforma | Desenvolvedores e qualidade | |
+| Sprint 4 | Visualização e interação | 6/6/2026 | 15/6/2026 | Visualização e interação: navegação e interação com post | Desenvolvedores, qualidade e P.O | |
+| Sprint 5 | fórum | 15/6/2026 | 24/6/2026 | fórum: fórum de perguntas e respostas | Desenvolvedores e P.O | |
+| Sprint 6 | Acessibilidade | 24/6/2026 | 2/7/2026 | Acessibilidade: configurações de acessibilidade para públicos especiais | Desenvolvedores e P.O | |
 ---
 
 <center> <i>Tabela 5: Tabela com as sprints planejadas.</i></center>
@@ -343,9 +336,7 @@ O fluxo do desenvolvimento e organizado em ciclos iterativos de tarefas e ativid
 O fluxo do processo de desenvolvimento descrito está representado de forma simplificada no diagrama a seguir:
 
 
-<div class="container-imagem">
-  <img src="assets/images/figura3.png" alt="Figura 3: Fluxo do processo de desenvolvimento.">
-</div>
+![fluso do processo de desenvolvimento](./assets/images/figura3.png)
 
 
 <center> <i>Figura 3: Fluxo do processo de desenvolvimento.</i></center>

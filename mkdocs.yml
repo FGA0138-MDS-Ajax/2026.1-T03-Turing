@@ -4,6 +4,7 @@ nav:
   - Instruções mkdocs: "index.md"
   - Atas de Reunião:
     - Ata 1: "atas-reuniao/ata-reuniao-1.md"
+  - Documento de visão: "visao-produto-projeto(1.1).md"
 
 theme:
   name: material
