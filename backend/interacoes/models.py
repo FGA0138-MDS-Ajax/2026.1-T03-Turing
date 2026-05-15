@@ -93,10 +93,12 @@ class Denuncia(models.Model):
     denunciante = models.ForeignKey(
         'usuarios.Perfil',
         on_delete=models.CASCADE,
-        related_name='denuncias'
+        related_name='denuncias',
+        null=True,
+        blank=True
     )
     
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pen')
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pendente')
     descricao = models.TextField()
     data_create = models.DateTimeField(auto_now_add=True)
     data_update = models.DateTimeField(auto_now=True)
