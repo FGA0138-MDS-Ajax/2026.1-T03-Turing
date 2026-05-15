@@ -10,7 +10,7 @@ class Perfil(models.Model):
 
     nome = models.CharField(max_length=255)
     email = models.EmailField(unique=True)
-    cpf = models.BigIntegerField(unique=True)
+    cpf = models.CharField(max_length=11, unique=True)
     senha = models.CharField(max_length=255)
     data_nascimento = models.DateField()
     tipo = models.CharField(max_length=20, choices=TIPO_CHOICES)

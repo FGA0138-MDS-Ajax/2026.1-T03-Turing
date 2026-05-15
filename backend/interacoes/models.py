@@ -54,12 +54,12 @@ class Inscricao(models.Model):
     )
     admin = models.ForeignKey(
         'usuarios.Admin',
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
         null=True,
         blank=True
     )
 
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pendente')
     descricao = models.TextField()
     data_create = models.DateTimeField(auto_now_add=True)
     data_update = models.DateTimeField(auto_now=True)
@@ -91,12 +91,12 @@ class Denuncia(models.Model):
         blank=True
     )
     denunciante = models.ForeignKey(
-        'usuarios.Admin',
+        'usuarios.Perfil',
         on_delete=models.CASCADE,
         related_name='denuncias'
     )
     
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pen')
     descricao = models.TextField()
     data_create = models.DateTimeField(auto_now_add=True)
     data_update = models.DateTimeField(auto_now=True)
