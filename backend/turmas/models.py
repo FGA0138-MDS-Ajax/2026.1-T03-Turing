@@ -14,6 +14,12 @@ class Turma(models.Model):
     
     class Meta:
         db_table = 'turma'
+        constraints = [
+            models.UniqueConstraint(
+                fields=['disciplina','nome'],
+                name='unique_turma_por_disciplina'
+            )
+        ]
 
 
 class Matricula(models.Model):
@@ -35,6 +41,12 @@ class Matricula(models.Model):
     
     class Meta:
         db_table = 'matricula'
+        constraints = [
+            models.UniqueConstraint(
+                fields=['aluno', 'turma'],
+                name='unique_aluno_turma'
+            )
+        ]
 
 
 class ProfessorTurma(models.Model):
@@ -54,3 +66,9 @@ class ProfessorTurma(models.Model):
     
     class Meta:
         db_table = 'professor_turma'
+        constraints = [
+            models.UniqueConstraint(
+                fields=['professor','turma'],
+                name='unique_professor_turma'
+            )
+        ]
