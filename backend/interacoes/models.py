@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.exceptions import ValidationError
 
 class Pergunta(models.Model):
     aluno = models.ForeignKey(
@@ -89,8 +90,19 @@ class Denuncia(models.Model):
         null=True,
         blank=True
     )
+    denunciante = models.ForeignKey(
+        'usuarios.Admin',
+        on_delete=models.CASCADE,
+        related_name='denuncias'
+    )
     
     status = models.CharField(max_length=20, choices=STATUS_CHOICES)
     descricao = models.TextField()
     data_create = models.DateTimeField(auto_now_add=True)
     data_update = models.DateTimeField(auto_now=True)
+
+    def clean(self):
+        if not self.pergunta and not self.resposta:
+            raise ValidationError("A denúncia deve estar ligada a uma pergunta ou resposta")
+        if self.pergunta and self.resposta:
+            raise ValidationError("A denúncia não pode estar ligada a uma pergunta e resposta ao mesmo tempo")
