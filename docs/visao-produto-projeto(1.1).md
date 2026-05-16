@@ -36,7 +36,7 @@
 | Data | Versão | Descrição | Autor |
 |------|--------|-----------|-------|
 | 30/04/2026 | 1.0 | Versão inicial do projeto | Gabriel Vieira |
-| 13/05/2026 | 1.1 | Refinamento do escopo do produto (foco no Ensino Médio), alteração da abordagem de testes (substituição de TDD por Testes Automatizados) e atualização da tecnologia de banco de dados (SQLite para PostgreSQL). | Maria Eduarda Guimarãe |
+| 13/05/2026 | 1.1 | Refinamento do escopo do produto (foco no Ensino Médio), alteração da abordagem de testes (substituição de TDD por Testes Automatizados) e remoção de testes não funcionais, atualização da tecnologia de banco de dados (SQLite para PostgreSQL) e mudança nas datas das Sprints. | Maria Eduarda Guimarães    |
  ---
 
 
@@ -49,23 +49,23 @@
 
 - 1.1 Problema. 
 
-- 1.2 Declaração de Posição do Produto. 3
+- 1.2 Declaração de Posição do Produto. 
 
-- 1.3 Objetivos do Produto. 4
+- 1.3 Objetivos do Produto. 
 
-- 1.4 Tecnologias a Serem Utilizadas. 4
+- 1.4 Tecnologias a Serem Utilizadas. 
 
 2 VISÃO GERAL DO PROJETO
 
-- 2.1 Ciclo de vida do projeto de desenvolvimento de software. 4
+- 2.1 Ciclo de vida do projeto de desenvolvimento de software. 
 
-- 2.2 Organização do Projeto. 4
+- 2.2 Organização do Projeto. 
 
-- 2.3 Planejamento das Fases e/ou Iterações do Projeto. 5
+- 2.3 Planejamento das Fases e/ou Iterações do Projeto. 
 
-- 2.4 Matriz de Comunicação. 5
+- 2.4 Matriz de Comunicação. 
 
-- 2.5 Gerenciamento de Riscos. 5
+- 2.5 Gerenciamento de Riscos. 
 
 - 2.6 Critérios de Replanejamento. 
 
@@ -557,7 +557,7 @@ Os requisitos foram classificados em funcionais e não funcionais e priorizados 
 
 2. **Tipos de testes abordados:**
    - **Funcionais** - Focados em validar o cumprimento das regras de negócio e cenários obrigatórios, como fluxos de cadastro, login, postagem de materiais e gerenciamento de perfis e disciplinas.
-   - **Não funcionais** - Direcionados aos atributos de qualidade do sistema, validando Segurança (criptografia de senhas), Usabilidade (interface intuitiva) e Disponibilidade (funcionamento 24/7).
+
    - **Regressão** - garante que a nova atualização não interfere no que já estava funcionando corretamente, sendo de extrema importância em cada Sprint.
 
 3. **Ambientes de testes usados:**
@@ -579,32 +579,29 @@ O planejamento dos casos de teste a serem executados e validados são orientados
 |-------------|---------------|-------------------|----------------|---------------|-------------------------------|-------------------------------|
 | T01 | Cadastro de aluno | Verificar se o aluno consegue se cadastrar corretamente pela interface | Sistema | Funcional | Usuário não estar cadastrado ainda | Conta criada com sucesso |
 | T02 | Validação dos dados do usuário | Validar campos obrigatórios de cadastro | Unitário | Funcional | Dados inválidos | Erro de validação |
-| T03 | Persistência de dados | Verificar armazenamento correto no banco de dados | Integração | Não funcional | Sistema conectado ao banco | Dados persistidos corretamente |
-| T04 | Login com credenciais válidas | Verificar a autenticação correta dos dados | sistema | Funcional | Usuário previamente cadastrado | Acesso concedido |
-| T05 | Login inválido | Validar erro no login | Sistema | Funcional | Usuário previamente cadastrado | Acesso negado |
-| T06 | Autenticação interna | Validar a função de autenticação | unitário | Funcional | usuário existente | Retorno correto |
-| T07 | Cadastro de professor | Verificar o envio de currículo | Sistema | Funcional | Professor não cadastrado | Cadastro restrito concluído |
-| T08 | Login de administrador padrão | Verificar conta pré cadastrada | Sistema | Funcional | Credenciais padrão configuradas | Login bem sucedido |
-| T09 | Criptografia de senha | Verificar se a senha é armazenada de forma segura | Unitário | Não funcional (segurança) | Usuário criado | Senha armazenada é criptografada |
-| T10 | Disponibilidade de do sistema | Verificar acesso contínuo | Sistema | Não funcional (disponibilidade) | Sistema ativo | Sistema acessível |
-| T11 | Gerenciamento de perfis | Validar alteração de usuários | Sistema | Funcional | Usuário existente | Alteração realizada e persistida |
-| T12 | Aprovação de professores | Validar aprovação de currículo | Sistema | Funcional | Professor com cadastro pendente | Aprovação concluída |
-| T13 | Análise de denúncias | Verificar tratamento de denúncias | Sistema | Funcional | Denúncia registrada | Denúncia analisada |
-| T14 | Criação de disciplina | Validar cadastro de disciplina | Sistema | Funcional | Administrador autenticado | Disciplina criada |
-| T15 | Exclusão de disciplina | Validar remoção de disciplina | Sistema | Funcional | Disciplina existente | Disciplina removida |
-| T16 | Pré requisitos de disciplina | Verificar a sugestão de requisitos de disciplina | Sistema | Funcional | Disciplinas cadastradas | Sugestão exibida ao usuário |
-| T17 | Postagem de conteúdo | Validar a publicação do material pelo professor | Sistema | funcional | Professor autenticado | Conteúdo disponibilizado aos alunos |
-| T18 | Validação de conteúdo | Validar a persistência dos conteúdos postados | Unitário | Funcional | Dados válidos | Conteúdo salvo corretamente |
-| T19 | Criação de avaliação | Verificar criação de avaliação | Sistema | Funcional | Professor autenticado | Avaliação criada |
-| T20 | Navegação do aluno | Verificar navegação entre disciplinas | Sistema | Funcional | Aluno autenticado | Navegação funcional |
-| T21 | Visualização de disciplinas | Verificar listagem das disciplinas | Sistema | Funcional | Usuário autenticado | Lista exibida corretamente |
-| T22 | Visão intra-disciplinas | Validar acesso ao conteúdo da disciplina aos usuários cadastrados | Sistema | Funcional | Usuário autenticado | Conteúdo visível e acessível |
-| T23 | Envio de tarefas | Verificar o envio correto de tarefas pelo aluno | Sistema | Funcional | Tarefa disponibilizada | Submissão de tarefa registrada com sucesso |
-| T24 | Desempenho pessoal | Validar a exibição correta do desempenho pessoal do aluno | Sistema | Funcional | Aluno com alguma atividade concluída | Desempenho individual do aluno é exibido corretamente |
-| T25 | Desempenho de turma | Verificar a exibição correta do desempenho geral da turma | Sistema | Funcional | Atividades realizadas por alunos | Desempenho da turma exibido corretamente |
-| T26 | Fórum de dúvidas | Validar o envio e acesso de mensagens do fórum | Sistema | Funcional | Conteúdo com um fórum ativo | Mensagem publicada e visível com sucesso |
-| T27 | Módulo de denúncia | Verificar envio de denúncias ao administrador | Sistema | Funcional | Usuário autenticado | Denúncia registrada e enviada corretamente |
-| T28 | Acessibilidade | Validar configurações de acessibilidade disponibilizadas | Sistema | Funcional | Usuário autenticado | Configurações aplicadas corretamente na interface completa |
+| T03 | Login com credenciais válidas | Verificar a autenticação correta dos dados | sistema | Funcional | Usuário previamente cadastrado | Acesso concedido |
+| T04 | Login inválido | Validar erro no login | Sistema | Funcional | Usuário previamente cadastrado | Acesso negado |
+| T05 | Autenticação interna | Validar a função de autenticação | unitário | Funcional | usuário existente | Retorno correto |
+| T06 | Cadastro de professor | Verificar o envio de currículo | Sistema | Funcional | Professor não cadastrado | Cadastro restrito concluído |
+| T07 | Login de administrador padrão | Verificar conta pré cadastrada | Sistema | Funcional | Credenciais padrão configuradas | Login bem sucedido |
+| T08 | Gerenciamento de perfis | Validar alteração de usuários | Sistema | Funcional | Usuário existente | Alteração realizada e persistida |
+| T09 | Aprovação de professores | Validar aprovação de currículo | Sistema | Funcional | Professor com cadastro pendente | Aprovação concluída |
+| T10 | Análise de denúncias | Verificar tratamento de denúncias | Sistema | Funcional | Denúncia registrada | Denúncia analisada |
+| T11 | Criação de disciplina | Validar cadastro de disciplina | Sistema | Funcional | Administrador autenticado | Disciplina criada |
+| T12 | Exclusão de disciplina | Validar remoção de disciplina | Sistema | Funcional | Disciplina existente | Disciplina removida |
+| T13 | Pré requisitos de disciplina | Verificar a sugestão de requisitos de disciplina | Sistema | Funcional | Disciplinas cadastradas | Sugestão exibida ao usuário |
+| T14 | Postagem de conteúdo | Validar a publicação do material pelo professor | Sistema | funcional | Professor autenticado | Conteúdo disponibilizado aos alunos |
+| T15 | Validação de conteúdo | Validar a persistência dos conteúdos postados | Unitário | Funcional | Dados válidos | Conteúdo salvo corretamente |
+| T16 | Criação de avaliação | Verificar criação de avaliação | Sistema | Funcional | Professor autenticado | Avaliação criada |
+| T17 | Navegação do aluno | Verificar navegação entre disciplinas | Sistema | Funcional | Aluno autenticado | Navegação funcional |
+| T18 | Visualização de disciplinas | Verificar listagem das disciplinas | Sistema | Funcional | Usuário autenticado | Lista exibida corretamente |
+| T19 | Visão intra-disciplinas | Validar acesso ao conteúdo da disciplina aos usuários cadastrados | Sistema | Funcional | Usuário autenticado | Conteúdo visível e acessível |
+| T20 | Envio de tarefas | Verificar o envio correto de tarefas pelo aluno | Sistema | Funcional | Tarefa disponibilizada | Submissão de tarefa registrada com sucesso |
+| T21 | Desempenho pessoal | Validar a exibição correta do desempenho pessoal do aluno | Sistema | Funcional | Aluno com alguma atividade concluída | Desempenho individual do aluno é exibido corretamente |
+| T22 | Desempenho de turma | Verificar a exibição correta do desempenho geral da turma | Sistema | Funcional | Atividades realizadas por alunos | Desempenho da turma exibido corretamente |
+| T23 | Fórum de dúvidas | Validar o envio e acesso de mensagens do fórum | Sistema | Funcional | Conteúdo com um fórum ativo | Mensagem publicada e visível com sucesso |
+| T24 | Módulo de denúncia | Verificar envio de denúncias ao administrador | Sistema | Funcional | Usuário autenticado | Denúncia registrada e enviada corretamente |
+| T25 | Acessibilidade | Validar configurações de acessibilidade disponibilizadas | Sistema | Funcional | Usuário autenticado | Configurações aplicadas corretamente na interface completa |
 ---
 
 <center> <i>Tabela 11: tabela de testes previstos</i></center>

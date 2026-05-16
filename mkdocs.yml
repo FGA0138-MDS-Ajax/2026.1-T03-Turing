@@ -5,6 +5,7 @@ nav:
   - Atas de Reunião:
     - Ata 1: "atas-reuniao/ata-reuniao-1.md"
   - Documento de visão: "visao-produto-projeto(1.1).md"
+  - Documento de arquitetura: "documento-arquitetura(1.0).md"
 
 theme:
   name: material
