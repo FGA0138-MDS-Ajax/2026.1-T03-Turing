@@ -7,5 +7,6 @@ router = DefaultRouter()
 router.register(r'administradores', AdminViewSet, basename='admin')
 
 urlpatterns = [
+    # (/usuarios/api/administradores/)
     path('api/', include(router.urls)),
 ]

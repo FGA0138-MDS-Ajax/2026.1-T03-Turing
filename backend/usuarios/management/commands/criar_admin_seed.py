@@ -2,7 +2,7 @@ from django.core.management.base import BaseCommand
 from django.contrib.auth.hashers import make_password
 from usuarios.models import Perfil, Admin
 
-# implementa o comando para criar um admin no banco de dados
+# implementa o comando para criar um admin no banco de dados via terminal
 
 class Command(BaseCommand):
     
