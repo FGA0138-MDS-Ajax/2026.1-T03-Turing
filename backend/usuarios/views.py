@@ -5,7 +5,7 @@ from .serializers import AdminSerializer
 from .permissions import IsGoStudyAdmin
 
 class AdminViewSet(viewsets.ModelViewSet):
-   
+    
     queryset = Admin.objects.all()
     serializer_class = AdminSerializer
     
