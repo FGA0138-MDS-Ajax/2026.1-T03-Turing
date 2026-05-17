@@ -13,5 +13,5 @@ class AdminViewSet(viewsets.ModelViewSet):
     queryset = Admin.objects.all()
     serializer_class = AdminSerializer
     
-    #OBS: comente essa linha caso queira criar admin via Insomnia/Postman
+    #OBS: comente essa linha caso queira criar admin via Insomnia/Postman:
     permission_classes = [IsAuthenticated, IsGoStudyAdmin]
