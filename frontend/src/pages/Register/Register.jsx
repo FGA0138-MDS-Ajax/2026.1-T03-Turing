@@ -4,27 +4,28 @@ import "./Register.css";
 
 export default function Register() {
   const [form, setForm] = useState({
-    fullName: "",
+    nome: "",
     email: "",
-    accountType: "aluno",
-    password: "",
-    confirmPassword: "",
+    cpf: "",
+    senha: "",
+    confirmar_senha: "",
+    data_nascimento: "",
+    account_type: "aluno",
     curriculum: null,
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [fileError, setFileError] = useState("");
+  const [cpfError, setCpfError] = useState("");
   const [theme, setTheme] = useState("light");
   const navigate = useNavigate();
 
-  // Inicializar tema do localStorage
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme") || "light";
     setTheme(savedTheme);
     document.documentElement.setAttribute("data-theme", savedTheme);
   }, []);
 
-  // Alternar tema
   const toggleTheme = () => {
     const newTheme = theme === "light" ? "dark" : "light";
     setTheme(newTheme);
@@ -36,6 +37,41 @@ export default function Register() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  // Formatar CPF 
+  const handleCpfChange = (e) => {
+    const onlyDigits = e.target.value.replace(/\D/g, "").slice(0, 11);
+    setCpfError("");
+    setForm({ ...form, cpf: onlyDigits });
+  };
+
+  const formatCpfDisplay = (digits) => {
+    if (digits.length <= 3) return digits;
+    if (digits.length <= 6) return `${digits.slice(0, 3)}.${digits.slice(3)}`;
+    if (digits.length <= 9) return `${digits.slice(0, 3)}.${digits.slice(3, 6)}.${digits.slice(6)}`;
+    return `${digits.slice(0, 3)}.${digits.slice(3, 6)}.${digits.slice(6, 9)}-${digits.slice(9)}`;
+  };
+
+  const validateCpf = (cpf) => {
+    if (cpf.length !== 11) return false;
+    if (/^(\d)\1+$/.test(cpf)) return false;
+    let sum = 0;
+    for (let i = 0; i < 9; i++) sum += parseInt(cpf[i]) * (10 - i);
+    let remainder = (sum * 10) % 11;
+    if (remainder === 10 || remainder === 11) remainder = 0;
+    if (remainder !== parseInt(cpf[9])) return false;
+    sum = 0;
+    for (let i = 0; i < 10; i++) sum += parseInt(cpf[i]) * (11 - i);
+    remainder = (sum * 10) % 11;
+    if (remainder === 10 || remainder === 11) remainder = 0;
+    return remainder === parseInt(cpf[10]);
+  };
+
+  const handleCpfBlur = () => {
+    if (form.cpf && !validateCpf(form.cpf)) {
+      setCpfError("CPF inválido.");
+    }
+  };
+
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     setFileError("");
@@ -45,34 +81,63 @@ export default function Register() {
         setFileError("Por favor, envie um arquivo em formato PDF.");
         return;
       }
-
       if (file.size > 5 * 1024 * 1024) {
         setFileError("O arquivo não pode exceder 5MB.");
         return;
       }
-
       setForm({ ...form, curriculum: file });
     }
   };
 
-  const handleSubmit = (e) => {
+  const getEndpoint = (accountType) => {
+    const routes = {
+      aluno: "/api/usuarios/alunos/",
+      professor: "/api/usuarios/professores/",
+    };
+    return routes[accountType] || "/api/usuarios/alunos/";
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (form.password !== form.confirmPassword) {
+    if (form.senha !== form.confirmar_senha) {
       alert("As senhas não coincidem.");
       return;
     }
 
-    // Validar se professor enviou currículo
-    if (form.accountType === "professor" && !form.curriculum) {
+    if (!validateCpf(form.cpf)) {
+      setCpfError("CPF inválido.");
+      return;
+    }
+
+    if (form.account_type === "professor" && !form.curriculum) {
       alert("Professores devem enviar um currículo em PDF.");
       return;
     }
 
-    console.log({
-      ...form,
-      curriculum: form.curriculum ? form.curriculum.name : null,
-    });
+    const endpoint = getEndpoint(form.account_type);
+
+
+    const payload = {
+      perfil: {
+        nome: form.nome,
+        email: form.email,
+        cpf: form.cpf,                          
+        senha: form.senha,
+        data_nascimento: form.data_nascimento,  
+      },
+    };
+
+    if (form.account_type === "professor" && form.curriculum) {
+      const formData = new FormData();
+      formData.append("perfil", JSON.stringify(payload.perfil));
+      formData.append("curriculo", form.curriculum);
+
+      console.log("POST", endpoint, "— FormData com currículo");
+    } else {
+      console.log("POST", endpoint, JSON.stringify(payload, null, 2));
+     
+    }
   };
 
   return (
@@ -114,8 +179,10 @@ export default function Register() {
           <p className="register-subtitle">Comece sua jornada de aprendizado</p>
 
           <form className="register-form" onSubmit={handleSubmit}>
+
+            {/* Nome */}
             <div className="field-group">
-              <label htmlFor="fullName">Nome Completo</label>
+              <label htmlFor="nome">Nome Completo</label>
               <div className="input-wrapper">
                 <span className="input-icon">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="18" height="18">
@@ -124,17 +191,18 @@ export default function Register() {
                   </svg>
                 </span>
                 <input
-                  id="fullName"
-                  name="fullName"
+                  id="nome"
+                  name="nome"
                   type="text"
                   placeholder="João Silva"
-                  value={form.fullName}
+                  value={form.nome}
                   onChange={handleChange}
                   required
                 />
               </div>
             </div>
 
+            {/* E-mail */}
             <div className="field-group">
               <label htmlFor="email">E-mail</label>
               <div className="input-wrapper">
@@ -156,13 +224,65 @@ export default function Register() {
               </div>
             </div>
 
+            {/* CPF */}
             <div className="field-group">
-              <label htmlFor="accountType">Tipo de Conta</label>
+              <label htmlFor="cpf">CPF</label>
+              <div className="input-wrapper">
+                <span className="input-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="18" height="18">
+                    <rect x="3" y="4" width="18" height="16" rx="2" />
+                    <line x1="7" y1="9" x2="17" y2="9" />
+                    <line x1="7" y1="13" x2="13" y2="13" />
+                  </svg>
+                </span>
+                <input
+                  id="cpf"
+                  name="cpf"
+                  type="text"
+                  inputMode="numeric"
+                  placeholder="000.000.000-00"
+                  value={formatCpfDisplay(form.cpf)}
+                  onChange={handleCpfChange}
+                  onBlur={handleCpfBlur}
+                  maxLength={14}
+                  required
+                />
+              </div>
+              {cpfError && <span className="error-message">{cpfError}</span>}
+            </div>
+
+            {/* Data de nascimento */}
+            <div className="field-group">
+              <label htmlFor="data_nascimento">Data de Nascimento</label>
+              <div className="input-wrapper">
+                <span className="input-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="18" height="18">
+                    <rect x="3" y="4" width="18" height="18" rx="2" />
+                    <line x1="16" y1="2" x2="16" y2="6" />
+                    <line x1="8" y1="2" x2="8" y2="6" />
+                    <line x1="3" y1="10" x2="21" y2="10" />
+                  </svg>
+                </span>
+                <input
+                  id="data_nascimento"
+                  name="data_nascimento"
+                  type="date"
+                  value={form.data_nascimento}
+                  onChange={handleChange}
+                  max={new Date().toISOString().split("T")[0]}
+                  required
+                />
+              </div>
+            </div>
+
+            {/* Tipo da conta */}
+            <div className="field-group">
+              <label htmlFor="account_type">Tipo de Conta</label>
               <div className="select-wrapper">
                 <select
-                  id="accountType"
-                  name="accountType"
-                  value={form.accountType}
+                  id="account_type"
+                  name="account_type"
+                  value={form.account_type}
                   onChange={handleChange}
                 >
                   <option value="aluno">Aluno</option>
@@ -176,7 +296,8 @@ export default function Register() {
               </div>
             </div>
 
-            {form.accountType === "professor" && (
+            {/* Curriculo */}
+            {form.account_type === "professor" && (
               <div className="field-group">
                 <label htmlFor="curriculum">Currículo (PDF)</label>
                 <div className="file-input-wrapper">
@@ -198,7 +319,9 @@ export default function Register() {
                       className="file-input"
                     />
                     <span className="file-input-text">
-                      {form.curriculum ? form.curriculum.name : "Clique aqui para anexar seu currículo (PDF)"}
+                      {form.curriculum
+                        ? form.curriculum.name
+                        : "Clique aqui para anexar seu currículo (PDF)"}
                     </span>
                   </div>
                 </div>
@@ -207,8 +330,9 @@ export default function Register() {
               </div>
             )}
 
+            {/* Senh */}
             <div className="field-group">
-              <label htmlFor="password">Senha</label>
+              <label htmlFor="senha">Senha</label>
               <div className="input-wrapper">
                 <span className="input-icon">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="18" height="18">
@@ -217,11 +341,11 @@ export default function Register() {
                   </svg>
                 </span>
                 <input
-                  id="password"
-                  name="password"
+                  id="senha"
+                  name="senha"
                   type={showPassword ? "text" : "password"}
                   placeholder="••••••••"
-                  value={form.password}
+                  value={form.senha}
                   onChange={handleChange}
                   required
                 />
@@ -247,8 +371,9 @@ export default function Register() {
               </div>
             </div>
 
+            {/* Confirma Senha */}
             <div className="field-group">
-              <label htmlFor="confirmPassword">Confirmar Senha</label>
+              <label htmlFor="confirmar_senha">Confirmar Senha</label>
               <div className="input-wrapper">
                 <span className="input-icon">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="18" height="18">
@@ -257,11 +382,11 @@ export default function Register() {
                   </svg>
                 </span>
                 <input
-                  id="confirmPassword"
-                  name="confirmPassword"
+                  id="confirmar_senha"
+                  name="confirmar_senha"
                   type={showConfirm ? "text" : "password"}
                   placeholder="••••••••"
-                  value={form.confirmPassword}
+                  value={form.confirmar_senha}
                   onChange={handleChange}
                   required
                 />

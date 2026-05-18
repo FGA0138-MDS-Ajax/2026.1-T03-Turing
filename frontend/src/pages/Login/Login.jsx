@@ -1,13 +1,16 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 import "./Login.css";
 
 export default function Login() {
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [senha, setSenha] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [theme, setTheme] = useState("light");
+  const [loading, setLoading] = useState(false);
+  const [loginError, setLoginError] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -23,9 +26,44 @@ export default function Login() {
     localStorage.setItem("theme", newTheme);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log({ email, password, rememberMe });
+    setLoginError("");
+    setLoading(true);
+
+    const payload = {
+      email,
+      senha,
+    };
+
+    try {
+      const response = await axios.post("/api/auth/login/", payload);
+      
+      if (response.status === 200) {
+        if (response.data.token) {
+          localStorage.setItem("authToken", response.data.token);
+        }
+
+        if (rememberMe) {
+          localStorage.setItem("rememberedEmail", email);
+        }
+
+        navigate("/dashboard");
+      }
+    } catch (error) {
+      if (error.response) {
+        setLoginError(
+          error.response.data?.message || "Erro ao fazer login. Tente novamente."
+        );
+      } else if (error.request) {
+        setLoginError("Erro de conexão. Verifique sua internet.");
+      } else {
+        setLoginError("Erro desconhecido. Tente novamente.");
+      }
+      console.error("Erro no login:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -66,6 +104,8 @@ export default function Login() {
           <h1 className="login-title">GoStudy</h1>
           <p className="login-subtitle">Bem-vindo de volta!</p>
 
+          {loginError && <div className="error-message">{loginError}</div>}
+
           <form className="login-form" onSubmit={handleSubmit}>
             <div className="field-group">
               <label htmlFor="email">E-mail</label>
@@ -78,17 +118,19 @@ export default function Login() {
                 </span>
                 <input
                   id="email"
+                  name="email"
                   type="email"
                   placeholder="seu.email@exemplo.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  disabled={loading}
                   required
                 />
               </div>
             </div>
 
             <div className="field-group">
-              <label htmlFor="password">Senha</label>
+              <label htmlFor="senha">Senha</label>
               <div className="input-wrapper">
                 <span className="input-icon">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="18" height="18">
@@ -97,11 +139,13 @@ export default function Login() {
                   </svg>
                 </span>
                 <input
-                  id="password"
+                  id="senha"
+                  name="senha"
                   type={showPassword ? "text" : "password"}
                   placeholder="••••••••"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  value={senha}
+                  onChange={(e) => setSenha(e.target.value)}
+                  disabled={loading}
                   required
                 />
                 <button
@@ -109,6 +153,7 @@ export default function Login() {
                   className="toggle-password"
                   onClick={() => setShowPassword(!showPassword)}
                   aria-label="Mostrar/ocultar senha"
+                  disabled={loading}
                 >
                   {showPassword ? (
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="18" height="18">
@@ -132,6 +177,7 @@ export default function Login() {
                   type="checkbox"
                   checked={rememberMe}
                   onChange={(e) => setRememberMe(e.target.checked)}
+                  disabled={loading}
                 />
                 <span className="checkmark"></span>
                 Lembrar-me
@@ -141,8 +187,12 @@ export default function Login() {
               </Link>
             </div>
 
-            <button type="submit" className="btn-primary">
-              Entrar
+            <button 
+              type="submit" 
+              className="btn-primary"
+              disabled={loading}
+            >
+              {loading ? "Entrando..." : "Entrar"}
             </button>
           </form>
 
