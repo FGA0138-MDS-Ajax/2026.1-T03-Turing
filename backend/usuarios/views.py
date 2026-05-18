@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
-from .models import Admin
-from .serializers import AdminSerializer
+from .models import Admin, Aluno
+from .serializers import AdminSerializer, AlunoSerializer
 from .permissions import IsGoStudyAdmin
 
 class AdminViewSet(viewsets.ModelViewSet):
@@ -15,3 +15,8 @@ class AdminViewSet(viewsets.ModelViewSet):
     
     #OBS: comente essa linha caso queira criar admin via Insomnia/Postman:
     permission_classes = [IsAuthenticated, IsGoStudyAdmin]
+
+class AlunoViewSet(viewsets.ModelViewSet):
+
+    queryset = Aluno.objects.all()
+    serializer_class = AlunoSerializer
