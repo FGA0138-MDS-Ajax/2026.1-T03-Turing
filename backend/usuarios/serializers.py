@@ -5,6 +5,9 @@ from datetime import date
 
 
 class PerfilSerializer(serializers.ModelSerializer):
+
+    senha = serializers.CharField(source='password', write_only=True)
+
     class Meta:
         model = Perfil
         
@@ -12,7 +15,6 @@ class PerfilSerializer(serializers.ModelSerializer):
                   'role','data_create','data_update']
 
         extra_kwargs = {
-            'senha': {'write_only': True},
             'tipo': {'read_only': True}, 
             'role': {'read_only': True},
             'data_create': {'read_only': True},
@@ -39,7 +41,8 @@ class PerfilSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Limite máximo de idade ultrapassado")
         
         return data_nascimento
-            
+
+
 
 class AdminSerializer(serializers.ModelSerializer):
     
@@ -53,15 +56,14 @@ class AdminSerializer(serializers.ModelSerializer):
         
         perfil_data = validated_data.pop('perfil')
         
-        # senha criptografada pelo django
-        perfil_data['senha'] = make_password(perfil_data['senha'])
     
         perfil_data['tipo'] = 'admin'
         perfil_data['role'] = 'admin'
         
         # salv o perfil no banco através do ORM
-        perfil_instancia = Perfil.objects.create(**perfil_data)
+        perfil_instancia = Perfil.objects.create_user(**perfil_data)
         #  salva o admin no banco vinculado ao perfil recém-criado
         admin_instancia = Admin.objects.create(perfil=perfil_instancia)
         
         return admin_instancia
+    
