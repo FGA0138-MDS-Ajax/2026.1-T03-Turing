@@ -46,6 +46,12 @@ class Professor(models.Model):
         related_name='professor'
     )
 
+    curriculo = models.FileField(
+        upload_to='curriculos/',
+        null=True,
+        blank=True
+    )
+
     def __str__(self):
         return self.perfil.nome
 
