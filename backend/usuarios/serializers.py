@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from django.contrib.auth.hashers import make_password
 from .models import Perfil, Admin
+from datetime import date
+
 
 class PerfilSerializer(serializers.ModelSerializer):
     class Meta:
@@ -16,6 +18,28 @@ class PerfilSerializer(serializers.ModelSerializer):
             'data_create': {'read_only': True},
             'data_update': {'read_only': True}
         }
+
+    def validate_nome(self, nome):
+        if any(char.isdigit() for char in nome):
+            raise serializers.ValidationError("O nome não pode conter números")
+
+        return nome
+
+    # valida idade maior que 100 e data futura
+    def validate_data_nascimento(self, data_nascimento):
+    
+        hoje = date.today()
+
+        if(data_nascimento > hoje):
+            raise serializers.ValidationError("A data de nascimento não pode ser futura")
+
+        idade = hoje.year - data_nascimento.year - ((hoje.month, hoje.day) < (data_nascimento.month, data_nascimento.day))
+
+        if( idade >100):
+            raise serializers.ValidationError("Limite máximo de idade ultrapassado")
+        
+        return data_nascimento
+            
 
 class AdminSerializer(serializers.ModelSerializer):
     
