@@ -1,7 +1,6 @@
 from rest_framework import viewsets, permissions
 from .models import Professor, Admin
-from .serializer import ProfessorSerializer
-from .serializers import AdminSerializer
+from .serializers import AdminSerializer, ProfessorSerializer
 from .permissions import IsGoStudyProf, IsGoStudyAdmin
 
 class ProfessorViewSet(viewsets.ModelViewSet):
