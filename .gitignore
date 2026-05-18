@@ -9,3 +9,4 @@ frontend/dist/
 
 .DS_Store
 Thumbs.db
+.idea/
