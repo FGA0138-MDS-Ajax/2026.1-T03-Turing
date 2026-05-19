@@ -2,17 +2,36 @@ from rest_framework import serializers
 from django.contrib.auth.hashers import make_password
 from .models import Perfil, Admin
 from datetime import date
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+
+
+#   customizando como o token será pego
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):   #  método para construir o payload do token  
+        token = super().get_token(user)
+
+        token['nome'] = user.nome
+        token['email'] = user.email
+        token['role'] = user.role
+        token['tipo'] = user.tipo
+
+        return token
+
+
 
 
 class PerfilSerializer(serializers.ModelSerializer):
+
+    password = serializers.CharField( write_only=True)
+
     class Meta:
         model = Perfil
         
-        fields = ['id', 'nome', 'email', 'cpf', 'senha', 'data_nascimento', 'tipo', 
+        fields = ['id', 'nome', 'email', 'cpf', 'password', 'data_nascimento', 'tipo', 
                   'role','data_create','data_update']
 
         extra_kwargs = {
-            'senha': {'write_only': True},
             'tipo': {'read_only': True}, 
             'role': {'read_only': True},
             'data_create': {'read_only': True},
@@ -39,7 +58,8 @@ class PerfilSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Limite máximo de idade ultrapassado")
         
         return data_nascimento
-            
+
+
 
 class AdminSerializer(serializers.ModelSerializer):
     
@@ -53,15 +73,14 @@ class AdminSerializer(serializers.ModelSerializer):
         
         perfil_data = validated_data.pop('perfil')
         
-        # senha criptografada pelo django
-        perfil_data['senha'] = make_password(perfil_data['senha'])
     
         perfil_data['tipo'] = 'admin'
         perfil_data['role'] = 'admin'
         
         # salv o perfil no banco através do ORM
-        perfil_instancia = Perfil.objects.create(**perfil_data)
+        perfil_instancia = Perfil.objects.create_user(**perfil_data)
         #  salva o admin no banco vinculado ao perfil recém-criado
         admin_instancia = Admin.objects.create(perfil=perfil_instancia)
         
         return admin_instancia
+    

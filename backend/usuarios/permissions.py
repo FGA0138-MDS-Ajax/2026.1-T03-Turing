@@ -9,6 +9,6 @@ class IsGoStudyAdmin(permissions.BasePermission):
             return False
         
         try:
-            return request.user.perfil.role == 'admin'
+            return request.user.role == 'admin'
         except AttributeError:
             return False
