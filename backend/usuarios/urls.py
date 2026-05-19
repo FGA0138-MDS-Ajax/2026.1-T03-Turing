@@ -8,7 +8,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 # indica ao django que a serializer com o token personalizado será usada
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
- 
+
 
 router = DefaultRouter()
 router.register(r'administradores', AdminViewSet, basename='admin')
