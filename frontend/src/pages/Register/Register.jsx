@@ -11,7 +11,7 @@ export default function Register() {
     confirmar_senha: "",
     data_nascimento: "",
     account_type: "aluno",
-    curriculum: null,
+    curriculo: null,
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
@@ -85,7 +85,7 @@ export default function Register() {
         setFileError("O arquivo não pode exceder 5MB.");
         return;
       }
-      setForm({ ...form, curriculum: file });
+      setForm({ ...form, curriculo: file });
     }
   };
 
@@ -110,7 +110,7 @@ export default function Register() {
       return;
     }
 
-    if (form.account_type === "professor" && !form.curriculum) {
+    if (form.account_type === "professor" && !form.curriculo) {
       alert("Professores devem enviar um currículo em PDF.");
       return;
     }
@@ -128,10 +128,10 @@ export default function Register() {
       },
     };
 
-    if (form.account_type === "professor" && form.curriculum) {
+    if (form.account_type === "professor" && form.curriculo) {
       const formData = new FormData();
       formData.append("perfil", JSON.stringify(payload.perfil));
-      formData.append("curriculo", form.curriculum);
+      formData.append("curriculo", form.curriculo);
 
       console.log("POST", endpoint, "— FormData com currículo");
     } else {
@@ -299,7 +299,7 @@ export default function Register() {
             {/* Curriculo */}
             {form.account_type === "professor" && (
               <div className="field-group">
-                <label htmlFor="curriculum">Currículo (PDF)</label>
+                <label htmlFor="curriculo">Currículo (PDF)</label>
                 <div className="file-input-wrapper">
                   <span className="file-input-icon">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="18" height="18">
@@ -311,16 +311,16 @@ export default function Register() {
                   </span>
                   <div className="file-input-label">
                     <input
-                      id="curriculum"
-                      name="curriculum"
+                      id="curriculo"
+                      name="curriculo"
                       type="file"
                       accept=".pdf"
                       onChange={handleFileChange}
                       className="file-input"
                     />
                     <span className="file-input-text">
-                      {form.curriculum
-                        ? form.curriculum.name
+                      {form.curriculo
+                        ? form.curriculo.name
                         : "Clique aqui para anexar seu currículo (PDF)"}
                     </span>
                   </div>
