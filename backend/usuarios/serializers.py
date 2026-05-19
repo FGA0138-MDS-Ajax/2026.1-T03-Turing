@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.hashers import make_password
-from .models import Perfil, Admin
+from .models import Perfil, Admin, Aluno
 from datetime import date
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
@@ -83,4 +83,22 @@ class AdminSerializer(serializers.ModelSerializer):
         admin_instancia = Admin.objects.create(perfil=perfil_instancia)
         
         return admin_instancia
+
+class AlunoSerializer(serializers.ModelSerializer):
+    perfil = PerfilSerializer()
+
+    class Meta:
+        model = Aluno
+        fields = ['id', 'perfil']
+
+    def create(self, validated_data):
+
+        perfil_data = validated_data.pop('perfil')
+        perfil_data['tipo'] = 'aluno'
+        perfil_data['role'] = 'aluno'
+
+        perfil_instancia = Perfil.objects.create_user(**perfil_data)
+        aluno_instancia = Aluno.objects.create(perfil = perfil_instancia)
+
+        return aluno_instancia
     
