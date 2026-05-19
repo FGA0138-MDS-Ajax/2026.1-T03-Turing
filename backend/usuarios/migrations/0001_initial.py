@@ -5,7 +5,7 @@ from django.conf import settings
 from django.db import migrations, models
 
 
-class Migration(migrations.Migration):https://github.com/FGA0138-MDS-Ajax/2026.1-T03-Turing/pull/30/conflict?name=backend%252Fusuarios%252Fmigrations%252F0001_initial.py&ancestor_oid=5fee80cde4254ef7cbaa10ef0458cd4897854170&base_oid=308d75d0250a719d2dde83bfc53f55665158117a&head_oid=15303a4909d457c3186f019818de6a8ec571822b
+class Migration(migrations.Migration):
 
     initial = True
 
