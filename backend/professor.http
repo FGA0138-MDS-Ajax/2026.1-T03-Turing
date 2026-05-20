@@ -1,0 +1,26 @@
+### criando aluno via front
+POST http://localhost:5173/api/usuarios/alunos/
+Content-Type: application/json
+
+{
+  "perfil": {
+    "nome": "gabriel",
+    "email": "gabrielTeste@gmail.com",
+    "cpf": "08250787170",
+    "data_nascimento": "07-15-2005",
+    "senha": "teste12"
+  }
+}
+#### criando aluno via back
+POST http://localhost:8000/api/usuarios/alunos/
+Content-Type: application/json
+
+{
+  "perfil": {
+    "nome": "gabrielnovo",
+    "email": "gabrielTt@gmail.com",
+    "cpf": "08250787177",
+    "data_nascimento": "2005-07-15",
+    "password": "teste12"
+  }
+}
