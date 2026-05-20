@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 import "./Register.css";
 
 export default function Register() {
@@ -13,11 +14,13 @@ export default function Register() {
     account_type: "aluno",
     curriculo: null,
   });
+
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [fileError, setFileError] = useState("");
   const [cpfError, setCpfError] = useState("");
   const [theme, setTheme] = useState("light");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -36,8 +39,6 @@ export default function Register() {
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
-
-  // Formatar CPF 
   const handleCpfChange = (e) => {
     const onlyDigits = e.target.value.replace(/\D/g, "").slice(0, 11);
     setCpfError("");
@@ -117,26 +118,44 @@ export default function Register() {
 
     const endpoint = getEndpoint(form.account_type);
 
+    setLoading(true);
 
-    const payload = {
-      perfil: {
-        nome: form.nome,
-        email: form.email,
-        cpf: form.cpf,                          
-        senha: form.senha,
-        data_nascimento: form.data_nascimento,  
-      },
-    };
+    try {
+      const payload = {
+        perfil: {
+          nome: form.nome,
+          email: form.email,
+          cpf: form.cpf,
+          senha: form.senha,
+          data_nascimento: form.data_nascimento,
+        },
+      };
 
-    if (form.account_type === "professor" && form.curriculo) {
-      const formData = new FormData();
-      formData.append("perfil", JSON.stringify(payload.perfil));
-      formData.append("curriculo", form.curriculo);
+      let response;
 
-      console.log("POST", endpoint, "— FormData com currículo");
-    } else {
-      console.log("POST", endpoint, JSON.stringify(payload, null, 2));
-     
+      if (form.account_type === "professor" && form.curriculo) {
+        
+        const formData = new FormData();
+        formData.append("perfil", JSON.stringify(payload.perfil));
+        formData.append("curriculo", form.curriculo);
+
+        response = await axios.post(endpoint, formData);
+      } else {
+
+
+
+        response = await axios.post(endpoint, payload);
+      }
+
+      if (response.status === 201) {
+        alert("Conta criada com sucesso!");
+        navigate("/login");
+      }
+    } catch (error) {
+      console.error("Erro:", error);
+      alert("Erro ao criar conta. Tente novamente.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -147,6 +166,7 @@ export default function Register() {
         onClick={toggleTheme}
         aria-label="Alternar tema"
         title={theme === "light" ? "Modo escuro" : "Modo claro"}
+        disabled={loading}
       >
         {theme === "light" ? (
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -180,7 +200,6 @@ export default function Register() {
 
           <form className="register-form" onSubmit={handleSubmit}>
 
-            {/* Nome */}
             <div className="field-group">
               <label htmlFor="nome">Nome Completo</label>
               <div className="input-wrapper">
@@ -197,12 +216,12 @@ export default function Register() {
                   placeholder="João Silva"
                   value={form.nome}
                   onChange={handleChange}
+                  disabled={loading}
                   required
                 />
               </div>
             </div>
 
-            {/* E-mail */}
             <div className="field-group">
               <label htmlFor="email">E-mail</label>
               <div className="input-wrapper">
@@ -219,12 +238,12 @@ export default function Register() {
                   placeholder="seu.email@exemplo.com"
                   value={form.email}
                   onChange={handleChange}
+                  disabled={loading}
                   required
                 />
               </div>
             </div>
 
-            {/* CPF */}
             <div className="field-group">
               <label htmlFor="cpf">CPF</label>
               <div className="input-wrapper">
@@ -244,6 +263,7 @@ export default function Register() {
                   value={formatCpfDisplay(form.cpf)}
                   onChange={handleCpfChange}
                   onBlur={handleCpfBlur}
+                  disabled={loading}
                   maxLength={14}
                   required
                 />
@@ -251,7 +271,6 @@ export default function Register() {
               {cpfError && <span className="error-message">{cpfError}</span>}
             </div>
 
-            {/* Data de nascimento */}
             <div className="field-group">
               <label htmlFor="data_nascimento">Data de Nascimento</label>
               <div className="input-wrapper">
@@ -269,13 +288,13 @@ export default function Register() {
                   type="date"
                   value={form.data_nascimento}
                   onChange={handleChange}
+                  disabled={loading}
                   max={new Date().toISOString().split("T")[0]}
                   required
                 />
               </div>
             </div>
 
-            {/* Tipo da conta */}
             <div className="field-group">
               <label htmlFor="account_type">Tipo de Conta</label>
               <div className="select-wrapper">
@@ -284,6 +303,7 @@ export default function Register() {
                   name="account_type"
                   value={form.account_type}
                   onChange={handleChange}
+                  disabled={loading}
                 >
                   <option value="aluno">Aluno</option>
                   <option value="professor">Professor</option>
@@ -296,7 +316,6 @@ export default function Register() {
               </div>
             </div>
 
-            {/* Curriculo */}
             {form.account_type === "professor" && (
               <div className="field-group">
                 <label htmlFor="curriculo">Currículo (PDF)</label>
@@ -316,6 +335,7 @@ export default function Register() {
                       type="file"
                       accept=".pdf"
                       onChange={handleFileChange}
+                      disabled={loading}
                       className="file-input"
                     />
                     <span className="file-input-text">
@@ -330,7 +350,6 @@ export default function Register() {
               </div>
             )}
 
-            {/* Senh */}
             <div className="field-group">
               <label htmlFor="senha">Senha</label>
               <div className="input-wrapper">
@@ -347,12 +366,14 @@ export default function Register() {
                   placeholder="••••••••"
                   value={form.senha}
                   onChange={handleChange}
+                  disabled={loading}
                   required
                 />
                 <button
                   type="button"
                   className="toggle-password"
                   onClick={() => setShowPassword(!showPassword)}
+                  disabled={loading}
                   aria-label="Mostrar/ocultar senha"
                 >
                   {showPassword ? (
@@ -371,7 +392,6 @@ export default function Register() {
               </div>
             </div>
 
-            {/* Confirma Senha */}
             <div className="field-group">
               <label htmlFor="confirmar_senha">Confirmar Senha</label>
               <div className="input-wrapper">
@@ -388,12 +408,14 @@ export default function Register() {
                   placeholder="••••••••"
                   value={form.confirmar_senha}
                   onChange={handleChange}
+                  disabled={loading}
                   required
                 />
                 <button
                   type="button"
                   className="toggle-password"
                   onClick={() => setShowConfirm(!showConfirm)}
+                  disabled={loading}
                   aria-label="Mostrar/ocultar confirmação"
                 >
                   {showConfirm ? (
@@ -412,8 +434,12 @@ export default function Register() {
               </div>
             </div>
 
-            <button type="submit" className="btn-primary">
-              Criar Conta
+            <button 
+              type="submit" 
+              className="btn-primary"
+              disabled={loading}
+            >
+              {loading ? "Criando conta..." : "Criar Conta"}
             </button>
           </form>
 
