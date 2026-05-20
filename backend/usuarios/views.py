@@ -4,7 +4,15 @@ from .models import Admin, Aluno
 from .serializers import AdminSerializer, AlunoSerializer
 from .permissions import IsGoStudyAdmin
 
-class AdminViewSet(viewsets.ModelViewSet):
+
+class PerfilViewSet(viewsets.ModelViewSet):
+    
+    def perform_destroy(self, instance):
+        perfil =instance.perfil
+        perfil.delete()
+
+
+class AdminViewSet(PerfilViewSet):
     
     """
       ViewSet que fornece automaticamente as ações de:
@@ -16,7 +24,8 @@ class AdminViewSet(viewsets.ModelViewSet):
     #OBS: comente essa linha caso queira criar admin via Insomnia/Postman:
     permission_classes = [IsAuthenticated, IsGoStudyAdmin]
 
-class AlunoViewSet(viewsets.ModelViewSet):
+    
+class AlunoViewSet(PerfilViewSet):
 
     queryset = Aluno.objects.all()
     serializer_class = AlunoSerializer

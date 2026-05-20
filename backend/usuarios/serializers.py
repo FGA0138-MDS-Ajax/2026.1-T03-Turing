@@ -58,6 +58,13 @@ class PerfilSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Limite máximo de idade ultrapassado")
         
         return data_nascimento
+    
+
+    def validate_cpf(self, cpf):
+        if len(cpf) != 11 or not cpf.isdigit() :
+            raise serializers.ValidationError("O cpf deve conter 11 dígitos")
+        
+        return cpf
 
 
 
@@ -83,6 +90,29 @@ class AdminSerializer(serializers.ModelSerializer):
         admin_instancia = Admin.objects.create(perfil=perfil_instancia)
         
         return admin_instancia
+    
+    def update(self, instance, validated_data):
+    
+        perfil_data = validated_data.pop('perfil', None)
+
+        # (Futuramente os campos únicos dessa tabela deverão ser atualizados aqui, antes do instance.save)
+        instance.save()
+
+        if perfil_data:
+            
+            perfil = instance.perfil
+            perfil.nome = perfil_data.get('nome', perfil.nome)
+            perfil.cpf = perfil_data.get("cpf", perfil.cpf)
+            perfil.email = perfil_data.get("email", perfil.email)
+            perfil.data_nascimento = perfil_data.get ('data_nascimento',perfil.data_nascimento)
+
+            
+            password = perfil_data.get("password", None)
+            if password:
+                perfil.set_password(password)
+
+            perfil.save()
+        return instance
 
 class AlunoSerializer(serializers.ModelSerializer):
     perfil = PerfilSerializer()
@@ -101,4 +131,27 @@ class AlunoSerializer(serializers.ModelSerializer):
         aluno_instancia = Aluno.objects.create(perfil = perfil_instancia)
 
         return aluno_instancia
+    
+    def update(self, instance, validated_data):
+    
+        perfil_data = validated_data.pop('perfil', None)
+
+        # (Futuramente os campos únicos dessa tabela deverão ser atualizados aqui, antes do instance.save)
+        instance.save()
+
+        if perfil_data:
+            
+            perfil = instance.perfil
+            perfil.nome = perfil_data.get('nome', perfil.nome)
+            perfil.cpf = perfil_data.get("cpf", perfil.cpf)
+            perfil.email = perfil_data.get("email", perfil.email)
+            perfil.data_nascimento = perfil_data.get ('data_nascimento',perfil.data_nascimento)
+
+            
+            password = perfil_data.get("password", None)
+            if password:
+                perfil.set_password(password)
+
+            perfil.save()
+        return instance
     
