@@ -1,5 +1,4 @@
 from rest_framework import serializers
-from django.contrib.auth.hashers import make_password
 from .models import Perfil, Admin, Professor
 from datetime import date
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
@@ -21,12 +20,12 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 
 class PerfilSerializer(serializers.ModelSerializer):
 
-    senha = serializers.CharField(source='password', write_only=True)
+    password = serializers.CharField( write_only=True)
 
     class Meta:
         model = Perfil
         
-        fields = ['id', 'nome', 'email', 'cpf', 'senha', 'data_nascimento', 'tipo', 
+        fields = ['id', 'nome', 'email', 'cpf', 'password', 'data_nascimento', 'tipo', 
                   'role','data_create','data_update']
 
         extra_kwargs = {
@@ -111,6 +110,7 @@ class AdminSerializer(serializers.ModelSerializer):
             perfil.save()
         return instance
     
+
     
 class ProfessorSerializer(serializers.ModelSerializer):
     
@@ -128,11 +128,8 @@ class ProfessorSerializer(serializers.ModelSerializer):
         perfil_data['role'] = 'professor'
         
         # salva o perfil no banco através do ORM
-        perfil_instancia = Perfil.objects.create_user(
-            email = perfil_data.pop('email'),        # o .pop() garante que as variáveis etrem exatamente onde o método do Perfil espera
-            password = perfil_data.pop('password'),
-            **perfil_data
-            )
+        perfil_instancia = Perfil.objects.create_user(**perfil_data)
+
         #  salva o professor no banco vinculado ao perfil recém-criado
         professor_instancia = Professor.objects.create(perfil=perfil_instancia)
         

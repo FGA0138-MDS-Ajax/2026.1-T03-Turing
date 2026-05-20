@@ -18,10 +18,17 @@ class ProfessorViewSet(PerfilViewSet):
     def get_permissions(self):
         # Se for uma criação de cadastro, qualquer usuário pode preencher
         if self.action == 'create':
-            return [AllowAny()]
+             return [AllowAny()]
         
-        # Para qualquer outra ação (GET, PUT, PATCH, DELETE), exige autenticação de professor
-        return [IsAuthenticated(), IsGoStudyProf()]
+        if self.action in ['update', 'partial_update']:
+            return [IsGoStudyAdmin() | IsGoStudyProf()]
+        
+        # somente admins ou professores poderam deletar um professor
+        if self.action == 'destroy':
+            return [IsGoStudyAdmin() | IsGoStudyProf()]
+       
+        # a listagem de professor deve ser feita por qualquer usuário autenticado
+        return [IsAuthenticated()]
 
 
 class AdminViewSet(PerfilViewSet):
@@ -33,5 +40,4 @@ class AdminViewSet(PerfilViewSet):
     queryset = Admin.objects.all()
     serializer_class = AdminSerializer
     
-    #OBS: comente essa linha caso queira criar admin via Insomnia/Postman:
     permission_classes = [IsAuthenticated, IsGoStudyAdmin]
