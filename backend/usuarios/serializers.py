@@ -2,6 +2,21 @@ from rest_framework import serializers
 from django.contrib.auth.hashers import make_password
 from .models import Perfil, Admin, Professor
 from datetime import date
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+
+
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):   #  método para construir o payload do token  
+        token = super().get_token(user)
+
+        token['nome'] = user.nome
+        token['email'] = user.email
+        token['role'] = user.role
+        token['tipo'] = user.tipo
+
+        return token
+
 
 
 class PerfilSerializer(serializers.ModelSerializer):
@@ -41,6 +56,12 @@ class PerfilSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Limite máximo de idade ultrapassado")
         
         return data_nascimento
+    
+    def validate_cpf(self, cpf):
+        if len(cpf) != 11 or not cpf.isdigit() :
+            raise serializers.ValidationError("O cpf deve conter 11 dígitos")
+        
+        return cpf
 
 
 
@@ -67,6 +88,30 @@ class AdminSerializer(serializers.ModelSerializer):
         
         return admin_instancia
     
+    def update(self, instance, validated_data):
+    
+        perfil_data = validated_data.pop('perfil', None)
+
+        # (Futuramente os campos únicos dessa tabela deverão ser atualizados aqui, antes do instance.save)
+        instance.save()
+
+        if perfil_data:
+            
+            perfil = instance.perfil
+            perfil.nome = perfil_data.get('nome', perfil.nome)
+            perfil.cpf = perfil_data.get("cpf", perfil.cpf)
+            perfil.email = perfil_data.get("email", perfil.email)
+            perfil.data_nascimento = perfil_data.get ('data_nascimento',perfil.data_nascimento)
+
+            
+            password = perfil_data.get("password", None)
+            if password:
+                perfil.set_password(password)
+
+            perfil.save()
+        return instance
+    
+    
 class ProfessorSerializer(serializers.ModelSerializer):
     
     perfil = PerfilSerializer()
@@ -85,9 +130,31 @@ class ProfessorSerializer(serializers.ModelSerializer):
         perfil_data['tipo'] = 'professor'
         perfil_data['role'] = 'professor'
         
-        # salv o perfil no banco através do ORM
-        perfil_instancia = Perfil.objects.create(**perfil_data)
-        #  salva o admin no banco vinculado ao perfil recém-criado
+        # salva o perfil no banco através do ORM
+        perfil_instancia = Perfil.objects.create_user(**perfil_data)
+        #  salva o professor no banco vinculado ao perfil recém-criado
         professor_instancia = Professor.objects.create(perfil=perfil_instancia)
         
         return professor_instancia
+    
+    def update(self, instance, validated_data):
+    
+        perfil_data = validated_data.pop('perfil', None)
+
+        instance.save()
+
+        if perfil_data:
+            
+            perfil = instance.perfil
+            perfil.nome = perfil_data.get('nome', perfil.nome)
+            perfil.cpf = perfil_data.get("cpf", perfil.cpf)
+            perfil.email = perfil_data.get("email", perfil.email)
+            perfil.data_nascimento = perfil_data.get ('data_nascimento',perfil.data_nascimento)
+
+            
+            password = perfil_data.get("password", None)
+            if password:
+                perfil.set_password(password)
+
+            perfil.save()
+        return instance
