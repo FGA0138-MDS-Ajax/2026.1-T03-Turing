@@ -1,5 +1,5 @@
 from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from .models import Professor, Admin
 from .serializers import AdminSerializer, ProfessorSerializer
 from .permissions import IsGoStudyProf, IsGoStudyAdmin
@@ -15,8 +15,13 @@ class ProfessorViewSet(PerfilViewSet):
     queryset = Professor.objects.all()
     serializer_class = ProfessorSerializer
 
-    # Funcionamento: apenas autenticados
-    permission_classes = [IsAuthenticated, IsGoStudyProf]
+    def get_permissions(self):
+        # Se for uma criação de cadastro, qualquer usuário pode preencher
+        if self.action == 'create':
+            return [AllowAny()]
+        
+        # Para qualquer outra ação (GET, PUT, PATCH, DELETE), exige autenticação de professor
+        return [IsAuthenticated(), IsGoStudyProf()]
 
 
 class AdminViewSet(PerfilViewSet):

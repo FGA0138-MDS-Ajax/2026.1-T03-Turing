@@ -8,7 +8,7 @@ class IsGoStudyProf(permissions.BasePermission):
             return False
         
         try:
-            return request.user.perfil.role == 'professor'
+            return request.user.role == 'professor'
         except AttributeError:
             return False
         

@@ -123,15 +123,16 @@ class ProfessorSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         
         perfil_data = validated_data.pop('perfil')
-        
-        # senha criptografada pelo django
-        perfil_data['senha'] = make_password(perfil_data['senha'])
     
         perfil_data['tipo'] = 'professor'
         perfil_data['role'] = 'professor'
         
         # salva o perfil no banco através do ORM
-        perfil_instancia = Perfil.objects.create_user(**perfil_data)
+        perfil_instancia = Perfil.objects.create_user(
+            email = perfil_data.pop('email'),        # o .pop() garante que as variáveis etrem exatamente onde o método do Perfil espera
+            password = perfil_data.pop('password'),
+            **perfil_data
+            )
         #  salva o professor no banco vinculado ao perfil recém-criado
         professor_instancia = Professor.objects.create(perfil=perfil_instancia)
         
