@@ -1,5 +1,18 @@
 from rest_framework import permissions
 
+class IsGoStudyProf(permissions.BasePermission):
+
+   # permissão que concede acesso apenas a usuários autenticados com a role 'professor'
+   def has_permission(self, request, view):
+        if not request.user or not request.user.is_authenticated:
+            return False
+        
+        try:
+            return request.user.role == 'professor'
+        except AttributeError:
+            return False
+        
+
 class IsGoStudyAdmin(permissions.BasePermission):
     """
     permissão que concede acesso apenas a usuários autenticados cujo perfil possua a role 'admin'
@@ -8,7 +21,7 @@ class IsGoStudyAdmin(permissions.BasePermission):
         if not request.user or not request.user.is_authenticated:
             return False
         
-        try:
+        try:      
             return request.user.role == 'admin'
         except AttributeError:
             return False

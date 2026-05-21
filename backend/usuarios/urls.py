@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import AdminViewSet
+from .views import ProfessorViewSet, AdminViewSet, AlunoViewSet
 from .serializers import CustomTokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
@@ -11,7 +11,14 @@ class CustomTokenObtainPairView(TokenObtainPairView):
 
 
 router = DefaultRouter()
+
 router.register(r'administradores', AdminViewSet, basename='admin')
+router.register(r'professores', ProfessorViewSet, basename='professor')
+
+urlpatterns = [
+    # (/api/usuarios/)
+    path('', include(router.urls)),
+router.register(r'alunos', AlunoViewSet, basename='aluno')]
 
 urlpatterns = [
    #  inclui todas as rotas registradas no router acima no caminho: /api/usuarios/
