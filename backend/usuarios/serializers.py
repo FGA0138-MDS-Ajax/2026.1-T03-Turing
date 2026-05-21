@@ -1,9 +1,11 @@
 from rest_framework import serializers
-from .models import Perfil, Admin, Professor
+from django.contrib.auth.hashers import make_password
+from .models import Perfil, Admin, Aluno
 from datetime import date
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 
+#   customizando como o token será pego
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):   #  método para construir o payload do token  
@@ -15,6 +17,7 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['tipo'] = user.tipo
 
         return token
+
 
 
 
@@ -56,6 +59,7 @@ class PerfilSerializer(serializers.ModelSerializer):
         
         return data_nascimento
     
+
     def validate_cpf(self, cpf):
         if len(cpf) != 11 or not cpf.isdigit() :
             raise serializers.ValidationError("O cpf deve conter 11 dígitos")
@@ -134,11 +138,30 @@ class ProfessorSerializer(serializers.ModelSerializer):
         professor_instancia = Professor.objects.create(perfil=perfil_instancia)
         
         return professor_instancia
+
+class AlunoSerializer(serializers.ModelSerializer):
+    perfil = PerfilSerializer()
+
+    class Meta:
+        model = Aluno
+        fields = ['id', 'perfil']
+
+    def create(self, validated_data):
+
+        perfil_data = validated_data.pop('perfil')
+        perfil_data['tipo'] = 'aluno'
+        perfil_data['role'] = 'aluno'
+
+        perfil_instancia = Perfil.objects.create_user(**perfil_data)
+        aluno_instancia = Aluno.objects.create(perfil = perfil_instancia)
+
+        return aluno_instancia
     
     def update(self, instance, validated_data):
     
         perfil_data = validated_data.pop('perfil', None)
 
+        # (Futuramente os campos únicos dessa tabela deverão ser atualizados aqui, antes do instance.save)
         instance.save()
 
         if perfil_data:
@@ -156,3 +179,4 @@ class ProfessorSerializer(serializers.ModelSerializer):
 
             perfil.save()
         return instance
+    

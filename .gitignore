@@ -11,5 +11,5 @@ frontend/dist/
 Thumbs.db
 backend/http-client.private.env.json
 backend/professor.http
-.idea
+.idea/
 .vscode/
