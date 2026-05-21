@@ -16,16 +16,17 @@ class ProfessorViewSet(PerfilViewSet):
     serializer_class = ProfessorSerializer
 
     def get_permissions(self):
+        # se precisar desabiliar as funções de permissão de professo é apenas comentar essa função
         # Se for uma criação de cadastro, qualquer usuário pode preencher
         if self.action == 'create':
              return [AllowAny()]
         
         if self.action in ['update', 'partial_update']:
-            return [IsGoStudyAdmin() | IsGoStudyProf()]
+            return [(IsGoStudyAdmin | IsGoStudyProf)()]
         
         # somente admins ou professores poderam deletar um professor
         if self.action == 'destroy':
-            return [IsGoStudyAdmin() | IsGoStudyProf()]
+            return [(IsGoStudyAdmin | IsGoStudyProf)()]
        
         # a listagem de professor deve ser feita por qualquer usuário autenticado
         return [IsAuthenticated()]
