@@ -150,7 +150,8 @@ export default function Register() {
       }
     } catch (error) {
         console.error("Erro:", error);
-        alert("Erro ao criar conta. Tente novamente.");
+        alert("Erro ao criar conta. Tente novamente. Certifique-se que o campo de CPF e email sejam unicos e que o cpf seja valido e com 11 digitos");
+        //todo alertar de forma melhor o formato desses dados
     } finally {
       setLoading(false);
     }
