@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../../services/api";
 import "./Register.css";
@@ -21,6 +21,7 @@ export default function Register() {
   const [cpfError, setCpfError] = useState("");
   const [theme, setTheme] = useState("light");
   const [loading, setLoading] = useState(false);
+  const fileInputRef = useRef(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -87,6 +88,12 @@ export default function Register() {
         return;
       }
       setForm({ ...form, curriculo: file });
+    }
+  };
+
+  const handleFileWrapperClick = () => {
+    if (!loading) {
+      fileInputRef.current?.click();
     }
   };
 
@@ -317,7 +324,11 @@ export default function Register() {
             {form.account_type === "professor" && (
               <div className="field-group">
                 <label htmlFor="curriculo">Currículo (PDF)</label>
-                <div className="file-input-wrapper">
+                <div 
+                  className="file-input-wrapper"
+                  onClick={handleFileWrapperClick}
+                  style={{ cursor: loading ? "not-allowed" : "pointer" }}
+                >
                   <span className="file-input-icon">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="18" height="18">
                       <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
@@ -328,6 +339,7 @@ export default function Register() {
                   </span>
                   <div className="file-input-label">
                     <input
+                      ref={fileInputRef}
                       id="curriculo"
                       name="curriculo"
                       type="file"
