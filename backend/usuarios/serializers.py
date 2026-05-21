@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.hashers import make_password
-from .models import Perfil, Admin, Aluno
+from .models import Perfil, Admin, Aluno, Professor
 from datetime import date
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
