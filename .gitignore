@@ -9,4 +9,7 @@ frontend/dist/
 
 .DS_Store
 Thumbs.db
+backend/http-client.private.env.json
+backend/professor.http
 .idea/
+.vscode/

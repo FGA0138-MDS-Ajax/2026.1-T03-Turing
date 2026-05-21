@@ -113,6 +113,31 @@ class AdminSerializer(serializers.ModelSerializer):
 
             perfil.save()
         return instance
+    
+
+    
+class ProfessorSerializer(serializers.ModelSerializer):
+    
+    perfil = PerfilSerializer()
+
+    class Meta:
+        model = Professor
+        fields = ['id', 'perfil']
+
+    def create(self, validated_data):
+        
+        perfil_data = validated_data.pop('perfil')
+    
+        perfil_data['tipo'] = 'professor'
+        perfil_data['role'] = 'professor'
+        
+        # salva o perfil no banco através do ORM
+        perfil_instancia = Perfil.objects.create_user(**perfil_data)
+
+        #  salva o professor no banco vinculado ao perfil recém-criado
+        professor_instancia = Professor.objects.create(perfil=perfil_instancia)
+        
+        return professor_instancia
 
 class AlunoSerializer(serializers.ModelSerializer):
     perfil = PerfilSerializer()
