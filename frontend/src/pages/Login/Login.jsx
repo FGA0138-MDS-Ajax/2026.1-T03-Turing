@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../services/api";
 import "./Login.css";
 
 export default function Login() {
@@ -33,15 +33,16 @@ export default function Login() {
 
     const payload = {
       email,
-      senha,
+      password: senha,
     };
 
     try {
-      const response = await axios.post("/api/auth/login/", payload);
+      const response = await api.post("/api/usuarios/login/", payload);
       
       if (response.status === 200) {
-        if (response.data.token) {
-          localStorage.setItem("authToken", response.data.token);
+        const accessToken = response.data.access || response.data.token;
+        if (accessToken) {
+          localStorage.setItem("authToken", accessToken);
         }
 
         if (rememberMe) {
@@ -53,7 +54,7 @@ export default function Login() {
     } catch (error) {
       if (error.response) {
         setLoginError(
-          error.response.data?.message || "Erro ao fazer login. Tente novamente."
+          error.response.data?.detail || error.response.data?.message || "Erro ao fazer login. Tente novamente."
         );
       } else if (error.request) {
         setLoginError("Erro de conexão. Verifique sua internet.");
