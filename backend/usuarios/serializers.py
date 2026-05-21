@@ -3,6 +3,7 @@ from django.contrib.auth.hashers import make_password
 from .models import Perfil, Admin, Aluno, Professor
 from datetime import date
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+import json
 
 
 #   customizando como o token será pego
@@ -119,14 +120,28 @@ class AdminSerializer(serializers.ModelSerializer):
 class ProfessorSerializer(serializers.ModelSerializer):
     
     perfil = PerfilSerializer()
+    curriculo = serializers.FileField(required=False)
 
     class Meta:
         model = Professor
-        fields = ['id', 'perfil']
+        fields = ['id', 'perfil', 'curriculo']
 
+    def to_internal_value(self, data):
+        mutable_data = dict(data.items())
+        perfil = mutable_data.get('perfil')
+
+        if isinstance(perfil, str):
+            try:
+                mutable_data['perfil'] = json.loads(perfil)
+            except json.JSONDecodeError:
+                raise serializers.ValidationError({'perfil': 'formato JSON nao e valido'})
+
+        return super().to_internal_value(mutable_data)
+    
     def create(self, validated_data):
         
         perfil_data = validated_data.pop('perfil')
+        curriculo = validated_data.pop('curriculo', None)
     
         perfil_data['tipo'] = 'professor'
         perfil_data['role'] = 'professor'
@@ -135,7 +150,7 @@ class ProfessorSerializer(serializers.ModelSerializer):
         perfil_instancia = Perfil.objects.create_user(**perfil_data)
 
         #  salva o professor no banco vinculado ao perfil recém-criado
-        professor_instancia = Professor.objects.create(perfil=perfil_instancia)
+        professor_instancia = Professor.objects.create(perfil=perfil_instancia, curriculo=curriculo )
         
         return professor_instancia
 
