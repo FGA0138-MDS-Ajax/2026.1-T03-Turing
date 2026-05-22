@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import api from "../../services/api";
+import { useAuth } from "../../context/AuthContext";
 import "./Login.css";
 
 export default function Login() {
@@ -26,31 +26,21 @@ export default function Login() {
     localStorage.setItem("theme", newTheme);
   };
 
+  const { login } = useAuth();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoginError("");
     setLoading(true);
 
-    const payload = {
-      email,
-      password: senha,
-    };
-
     try {
-      const response = await api.post("/api/usuarios/login/", payload);
-      
-      if (response.status === 200) {
-        const accessToken = response.data.access || response.data.token;
-        if (accessToken) {
-          localStorage.setItem("authToken", accessToken);
-        }
+      await login(email, senha);
 
-        if (rememberMe) {
-          localStorage.setItem("rememberedEmail", email);
-        }
-
-        navigate("/dashboard");
+      if (rememberMe) {
+        localStorage.setItem("rememberedEmail", email);
       }
+
+      navigate("/dashboard");
     } catch (error) {
       if (error.response) {
         setLoginError(
