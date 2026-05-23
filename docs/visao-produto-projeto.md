@@ -37,6 +37,7 @@
 |------|--------|-----------|-------|
 | 30/04/2026 | 1.0 | Versão inicial do projeto | Gabriel Vieira |
 | 13/05/2026 | 1.1 | Refinamento do escopo do produto (foco no Ensino Médio), alteração da abordagem de testes (substituição de TDD por Testes Automatizados) e remoção de testes não funcionais, atualização da tecnologia de banco de dados (SQLite para PostgreSQL) e mudança nas datas das Sprints. | Maria Eduarda Guimarães    |
+| 22/05/2026 | 1.2 | Inclusão do framework Pytest | Maria Eduarda Guimarães |
  ---
 
 
@@ -157,7 +158,7 @@ Para o desenvolvimento da plataforma, foram selecionadas tecnologias que possibi
 
 #### Linguagens e Frameworks
 
-No back-end, sera utilizado Python com o framework Django, principalmente devido a sua robustez no gerenciamento de autenticacao de usuarios e controle de permissoes de acesso. No front-end, sera adotado o React, visando proporcionar maior dinamismo e responsividade a interface. Adicionalmente, sera empregadas as tecnologias HTML, CSS, JavaScript e o framework Bootstrap, a fim de garantir compatibilidade e boa experiencia de uso tanto em dispositivos desktop quanto moveis.
+No back-end, sera utilizado Python com o framework Django, principalmente devido a sua robustez no gerenciamento de autenticacao de usuarios e controle de permissoes de acesso. Para a garantia de qualidade e execução dos testes automatizados no back-end, será adotado o framework Pytest. No front-end, será adotado o React, visando proporcionar maior dinamismo e responsividade a interface. Adicionalmente, sera empregadas as tecnologias HTML, CSS, JavaScript e o framework Bootstrap, a fim de garantir compatibilidade e boa experiencia de uso tanto em dispositivos desktop quanto moveis.
 
 #### Banco de Dados
 
@@ -550,7 +551,8 @@ Os requisitos foram classificados em funcionais e não funcionais e priorizados 
 ### 6.1 Estratégia de testes:
 
 1. **Níveis de testes abordados:**
-   - **Unitário** - Realizado atomicamente para garantir o funcionamento isolado das funções. Serão utilizadas bibliotecas de testes nativas ou compatíveis com os ambientes definidos para o back-end (Python/Django) e front-end (React).
+   - **Unitário** - Realizado atomicamente para garantir o funcionamento isolado das funções. Serão utilizadas bibliotecas de testes nativas ou compatíveis com os ambientes definidos, aplicando o framework Pytest para a automação no back-end (Python/Django) e bibliotecas nativas para o front-end (React).
+
    - **Integração** - Contextual à arquitetura da API REST, validando a comunicação, endpoints e a transferência de dados correta entre o back-end e o front-end.
    - **Sistema (End to End)** - Focado no fluxo de usabilidade do usuário, simulando como os perfis de Aluno, Professor e Administrador utilizarão a aplicação na prática.
    - **Aceitação** - confirmar se a entrega atende aos critérios de User Stories com o Product Owner.

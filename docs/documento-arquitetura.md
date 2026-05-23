@@ -36,6 +36,7 @@ Versão 1.0
 | **Data** | **Versão** | **Descrição** | **Autor(es)** |
 | --- | --- | --- | --- |
 | **14/05** | 1.0 | Primeira versão do documento | Grupo Turing |
+| **22/05** | 1.1 | Alinhamento das restrições arquiteturais de testes com a inclusão do framework Pytest | Maria Eduarda Guimarães |
 
 
 ---
@@ -215,8 +216,8 @@ O sistema adotará uma arquitetura baseada em SPA (Single Page Application) + AP
   - O desenvolvimento e controle de versão deve ser restringido ao Github, organizado em branches e integrado com Pull Requests revisados, sendo integrado na branch principal apenas após validação.
 
 - **Testes:**
-  - O backend deve possuir testes unitários para regras de negócio;
-  - O frontend deve possuir testes de componentes críticos;
+  - O backend deve possuir testes unitários para regras de negócio utilizando o framework Pytest;
+  - O frontend deve possuir testes de componentes críticos utilizando bibliotecas nativas do React;
   - Novas funcionalidades somente serão integradas após validação por meio de testes unitários.
 
 - **Segurança:**
