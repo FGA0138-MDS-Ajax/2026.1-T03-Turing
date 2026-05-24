@@ -51,5 +51,12 @@ class AlunoViewSet(PerfilViewSet):
     queryset = Aluno.objects.all()
     serializer_class = AlunoSerializer
 
-
+    def get_permissions(self):
+            
+            # qualquer um pode chamar o endpoint de criar um aluno
+            if self.action == 'create':
+                return [AllowAny()]
+            
+            # para o restando dos endpoints é exigido que o usuário esteja logado
+            return [IsAuthenticated()]
     
