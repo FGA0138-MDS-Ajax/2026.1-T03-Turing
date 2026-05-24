@@ -14,11 +14,7 @@ router = DefaultRouter()
 
 router.register(r'administradores', AdminViewSet, basename='admin')
 router.register(r'professores', ProfessorViewSet, basename='professor')
-
-urlpatterns = [
-    # (/api/usuarios/)
-    path('', include(router.urls)),
-router.register(r'alunos', AlunoViewSet, basename='aluno')]
+router.register(r'alunos', AlunoViewSet, basename='aluno')
 
 urlpatterns = [
    #  inclui todas as rotas registradas no router acima no caminho: /api/usuarios/

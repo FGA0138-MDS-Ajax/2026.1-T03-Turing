@@ -42,7 +42,7 @@ class AdminViewSet(PerfilViewSet):
     queryset = Admin.objects.all()
     serializer_class = AdminSerializer
     
-    #OBS: comente essa linha caso queira criar admin via Insomnia/Postman:
+    # qualquer request pra CRUD de admin vai exisgir essas permissões
     permission_classes = [IsAuthenticated, IsGoStudyAdmin]
 
     
@@ -50,3 +50,13 @@ class AlunoViewSet(PerfilViewSet):
 
     queryset = Aluno.objects.all()
     serializer_class = AlunoSerializer
+
+    def get_permissions(self):
+            
+            # qualquer um pode chamar o endpoint de criar um aluno
+            if self.action == 'create':
+                return [AllowAny()]
+            
+            # para o restando dos endpoints é exigido que o usuário esteja logado
+            return [IsAuthenticated()]
+    
