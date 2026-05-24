@@ -10,6 +10,19 @@ from usuarios.serializers import PerfilSerializer
 
 
 class AlunoTestCase(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+        self.payload = self.payload = \
+            {
+                'perfil': {
+                    "nome": "Nome do ALUNO",
+                    "email": "novo.aluno@gostu.com",
+                    "cpf": "12345678905",
+                    "password": "SuaSenhaSegura",
+                    "data_nascimento": "1998-05-16"
+                }
+            }
+
     # metodo que vai rodar toda vez antes de cada teste
     @classmethod
     def setUpTestData(cls):
@@ -32,6 +45,8 @@ class AlunoTestCase(TestCase):
         aluno = Aluno.objects.get(perfil=perfil)
         self.assertEqual(perfil.tipo, 'aluno')  # tipo do perfil é aluno?
         self.assertEqual(aluno.perfil, perfil)  # são iguais os objetos?
+
+    ### TESTE DE PERFIL E VERIFICACOES DE PERFIL
 
     def test_verificacao_cpf_mais_de_11_caracteres(self):
         with self.assertRaises(DataError):
@@ -138,30 +153,46 @@ class AlunoTestCase(TestCase):
         print(serializer.errors)
         self.assertIn('data_nascimento', serializer.errors)
 
-
-class Test_crud_aluno(TestCase):
-    def setUp(self):
-        self.client = APIClient()
-        self.payload = \
-            {
-                'perfil': {
-                    "nome": "Nome do Administrador",
-                    "email": "novo.admin@gostudy.com",
-                    "cpf": "12345678901",
-                    "password": "SuaSenhaSegura",
-                    "data_nascimento": "1998-05-16"
-                }
-            }
-
-    def test_criar_aluno(self):
+    def test_criar_aluno_POST(self):
         response = self.client.post('/api/usuarios/alunos/', self.payload, format='json')
         print(response.data)
         self.assertEqual(response.status_code, 201)
 
-
-    def test_listar_aluno(self):
+    def test_listar_aluno_GET(self):
         self.client.post('/api/usuarios/alunos/', self.payload, format='json')
         response = self.client.get('/api/usuarios/alunos/', self.payload)
         print(response.data)
         self.assertEqual(response.status_code, 200)
         self.assertIsInstance(response.data, list)
+
+    def test_atualizar_aluno_PATCH(self):
+        self.client.post('/api/usuarios/alunos/', self.payload, format='json')
+        response = self.client.patch('/api/usuarios/alunos/1/', {
+            "perfil": {
+                "nome": "Novo Nome"
+            }
+        }, format='json')
+        # print(response.data)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data['perfil']['nome'], 'Novo Nome')
+
+    def test_atualizar_aluno_PUT(self):
+        self.client.post('/api/usuarios/alunos/', self.payload, format='json')
+        response = self.client.put('/api/usuarios/alunos/2/', {
+            "perfil": {"nome": "Nome do ALUNi",
+                       "email": "novo.aluno@gost.com",
+                       "cpf": "12345678908",
+                       "password": "SuaSenhaSegura",
+                       "data_nascimento": "1998-05-16"}
+
+        }, format='json')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data['perfil']['nome'], 'Nome do ALUNi')
+
+    def test_deletar_aluno_DELETE(self):
+        self.client.post('/api/usuarios/alunos/', self.payload, format='json')
+        response1 = self.client.get('/api/usuarios/alunos/', self.payload)
+        print("resposta: ", response1.data)
+        response = self.client.delete('/api/usuarios/alunos/3/')
+        print(response.context_data)
+        self.assertEqual(response.status_code, 204)
