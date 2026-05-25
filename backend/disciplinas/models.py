@@ -5,7 +5,6 @@ class Disciplina(models.Model):
     
     nome = models.CharField(max_length=255, unique=True)
     descricao = models.TextField()
-    carga_horaria = models.IntegerField()
     data_create = models.DateTimeField(auto_now_add=True)
     data_update = models.DateTimeField(auto_now=True)
 
@@ -43,3 +42,43 @@ class DisciplinaPrerequisito(models.Model):
     def clean(self):
         if self.disciplina_id == self.prerequisito_id:
             raise ValidationError("Uma disciplina não pode ser pré requisito dela mesma")
+
+class Conteudo(models.Model):
+    STATUS_CHOICES = [
+        ('ativo', 'Ativo'),
+        ('encerrado', 'Encerrado'),
+    ]
+
+    disciplina = models.ForeignKey(
+        Disciplina,
+        on_delete=models.CASCADE,
+        related_name='conteudos'
+    )
+    professores = models.ManyToManyField(
+        'usuarios.Professor',
+        related_name='conteudos'
+    )
+    nome = models.CharField(max_length=255)
+    descricao = models.TextField()
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='ativo')
+    data_create = models.DateTimeField(auto_now_add=True)
+    data_update = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.nome
+
+    class Meta:
+        db_table = 'conteudo'
+
+
+class Material(models.Model):
+    conteudo = models.ForeignKey(
+        Conteudo,
+        on_delete=models.CASCADE,
+        related_name='materiais'
+    )
+    data_create = models.DateTimeField(auto_now_add=True)
+    data_update = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'material'

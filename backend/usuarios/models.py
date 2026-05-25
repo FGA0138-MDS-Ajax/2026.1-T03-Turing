@@ -30,8 +30,7 @@ class PerfilManager(BaseUserManager):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
 
-        # definindo que o superuser vai ter o tipo e a role do user admin padrão
-        extra_fields.setdefault('role', 'admin') 
+        # definindo que o superuser vai ter o tipo  do user admin padrão
         extra_fields.setdefault('tipo', 'admin')
 
         if extra_fields.get('is_staff') is not True:
@@ -56,7 +55,6 @@ class Perfil(AbstractBaseUser, PermissionsMixin):
     #senha = models.CharField(max_length=255) O abstractBaseUser cria o campo password automaticamente na tabela
     data_nascimento = models.DateField()
     tipo = models.CharField(max_length=20, choices=TIPO_CHOICES)
-    role = models.CharField(max_length=50)
     data_create = models.DateTimeField(auto_now_add=True)
     data_update = models.DateTimeField(auto_now=True)
 
