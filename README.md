@@ -1,4 +1,14 @@
-# template-repository - Branch Main
+# Instruções gerais do projeto. 
+
+- developer :
+  - branch pra desenvolvimento do software no geral,
+  - confecção de testes.
+  - rodou tudo certinho ? deploy pra testes.
+- testes :
+  - espaço pra raealiazção de qualquer tipo de testes mas principalemnte o de integração.
+  - testes aprovados, funcionalidades ativas e sem problemas deploy pra produção / Main.
+ 
+## template-repository - Branch Developer
 
 Template de Repositório para a matéria de Métodos de Desenvolvimento de Software lecionado pelo professor Ricardo Ajax.
 
