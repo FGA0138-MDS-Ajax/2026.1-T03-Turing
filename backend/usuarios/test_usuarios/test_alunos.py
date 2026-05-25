@@ -1,15 +1,14 @@
 from urllib import response
 
-import pytest
-from rest_framework.templatetags.rest_framework import data
+from django.contrib.auth.hashers import make_password
 from rest_framework.test import APIClient
 from django.db import DataError, IntegrityError
-from django.test import TestCase
+from rest_framework.test import APIClient, APITestCase
 from usuarios.models import Aluno, Perfil
 from usuarios.serializers import PerfilSerializer
 
 
-class AlunoTestCase(TestCase):
+class AlunoTestCase(APITestCase):
     def setUp(self):
         self.client = APIClient()
         self.payload = self.payload = \
@@ -22,10 +21,20 @@ class AlunoTestCase(TestCase):
                     "data_nascimento": "1998-05-16"
                 }
             }
+        self.get_token()
 
     # metodo que vai rodar toda vez antes de cada teste
     @classmethod
     def setUpTestData(cls):
+        Perfil.objects.create(
+            nome='Admin',
+            email='admin@email.com',
+            cpf='00000000000',
+            data_nascimento='2000-01-01',
+            tipo='administrador',
+            role='admin',
+            password=make_password('123456')
+        )
         perfil_criado = Perfil.objects.create(
             nome='aleatorio',
             email='gabriel@aleatorio.com',
@@ -39,9 +48,17 @@ class AlunoTestCase(TestCase):
             perfil=perfil_criado
         )
 
+    def get_token(self):
+        login = self.client.post('/api/usuarios/login/', {
+            'email': 'admin@email.com',
+            'password': '123456'
+        }, format='json')
+        token = login.data['access']
+        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {token}')
+
     def test_criacao_aluno(self):
         # verifica se o perfil foi criado corretamente
-        perfil = Perfil.objects.get(id=1)
+        perfil = Perfil.objects.get(id=2)
         aluno = Aluno.objects.get(perfil=perfil)
         self.assertEqual(perfil.tipo, 'aluno')  # tipo do perfil é aluno?
         self.assertEqual(aluno.perfil, perfil)  # são iguais os objetos?
@@ -178,7 +195,7 @@ class AlunoTestCase(TestCase):
 
     def test_atualizar_aluno_PUT(self):
         self.client.post('/api/usuarios/alunos/', self.payload, format='json')
-        response = self.client.put('/api/usuarios/alunos/2/', {
+        response = self.client.put('/api/usuarios/alunos/3/', {
             "perfil": {"nome": "Nome do ALUNi",
                        "email": "novo.aluno@gost.com",
                        "cpf": "12345678908",
@@ -193,6 +210,6 @@ class AlunoTestCase(TestCase):
         self.client.post('/api/usuarios/alunos/', self.payload, format='json')
         response1 = self.client.get('/api/usuarios/alunos/', self.payload)
         print("resposta: ", response1.data)
-        response = self.client.delete('/api/usuarios/alunos/3/')
+        response = self.client.delete('/api/usuarios/alunos/5/')
         print(response.context_data)
         self.assertEqual(response.status_code, 204)
