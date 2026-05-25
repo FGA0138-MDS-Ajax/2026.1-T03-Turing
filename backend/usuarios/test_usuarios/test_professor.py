@@ -11,8 +11,8 @@ class ProfessorTestCase(APITestCase):
             email='admin@email.com',
             cpf='00000000000',
             data_nascimento='2000-01-01',
-            tipo='administrador',
-            role='admin',
+            tipo='admin',
+
             password=make_password('123456')
         )
         perfil_criado = Perfil.objects.create(
@@ -21,7 +21,6 @@ class ProfessorTestCase(APITestCase):
             cpf='12345678901',
             data_nascimento='2005-05-12',
             tipo='professor',
-            role='professor',
         )
 
         Professor.objects.create(
@@ -63,7 +62,6 @@ class ProfessorTestCase(APITestCase):
                 "cpf" : '12345678902',
                 "data_nascimento" : '2005-05-12',
                 "tipo" : 'professor',
-                "role" : 'professor',
                 "password" : "make_password('123456')"
             }
         }, format='json')
