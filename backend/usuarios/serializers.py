@@ -14,7 +14,6 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 
         token['nome'] = user.nome
         token['email'] = user.email
-        token['role'] = user.role
         token['tipo'] = user.tipo
 
         return token
@@ -30,11 +29,10 @@ class PerfilSerializer(serializers.ModelSerializer):
         model = Perfil
         
         fields = ['id', 'nome', 'email', 'cpf', 'password', 'data_nascimento', 'tipo', 
-                  'role','data_create','data_update']
+                'data_create','data_update']
 
         extra_kwargs = {
             'tipo': {'read_only': True}, 
-            'role': {'read_only': True},
             'data_create': {'read_only': True},
             'data_update': {'read_only': True}
         }
@@ -83,7 +81,6 @@ class AdminSerializer(serializers.ModelSerializer):
         
     
         perfil_data['tipo'] = 'admin'
-        perfil_data['role'] = 'admin'
         
         # salv o perfil no banco através do ORM
         perfil_instancia = Perfil.objects.create_user(**perfil_data)
@@ -145,7 +142,6 @@ class ProfessorSerializer(serializers.ModelSerializer):
         curriculo = validated_data.pop('curriculo', None)
     
         perfil_data['tipo'] = 'professor'
-        perfil_data['role'] = 'professor'
         
         # salva o perfil no banco através do ORM
         perfil_instancia = Perfil.objects.create_user(**perfil_data)
@@ -193,7 +189,6 @@ class AlunoSerializer(serializers.ModelSerializer):
 
         perfil_data = validated_data.pop('perfil')
         perfil_data['tipo'] = 'aluno'
-        perfil_data['role'] = 'aluno'
 
         perfil_instancia = Perfil.objects.create_user(**perfil_data)
         aluno_instancia = Aluno.objects.create(perfil = perfil_instancia)
