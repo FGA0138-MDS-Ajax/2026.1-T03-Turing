@@ -17,7 +17,7 @@ class ProfessorViewSet(PerfilViewSet):
     serializer_class = ProfessorSerializer
 
     def get_permissions(self):
-        # se precisar desabiliar as funções de permissão de professo é apenas comentar essa função
+        # se precisar desabiliar as funções de permissão de professor é apenas comentar essa função
         # Se for uma criação de cadastro, qualquer usuário pode preencher
         if self.action == 'create':
              return [AllowAny()]
@@ -42,7 +42,7 @@ class AdminViewSet(PerfilViewSet):
     queryset = Admin.objects.all()
     serializer_class = AdminSerializer
     
-    # qualquer request pra CRUD de admin vai exisgir essas permissões
+    # qualquer request pra CRUD de admin vai exigir essas permissões
     permission_classes = [IsAuthenticated, IsGoStudyAdmin]
 
     

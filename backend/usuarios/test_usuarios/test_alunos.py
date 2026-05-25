@@ -32,7 +32,6 @@ class AlunoTestCase(APITestCase):
             cpf='00000000000',
             data_nascimento='2000-01-01',
             tipo='administrador',
-            role='admin',
             password=make_password('123456')
         )
         perfil_criado = Perfil.objects.create(
@@ -41,7 +40,6 @@ class AlunoTestCase(APITestCase):
             cpf='12345678901',
             data_nascimento='2005-05-12',
             tipo='aluno',
-            role='aluno',
         )
 
         Aluno.objects.create(
@@ -73,7 +71,6 @@ class AlunoTestCase(APITestCase):
                 cpf='1234567890112',
                 data_nascimento='2005-05-12',
                 tipo='aluno',
-                role='aluno',
             )
 
     def test_verificacao_cpf_menos_de_11_caracteres(self):
@@ -83,7 +80,6 @@ class AlunoTestCase(APITestCase):
             'cpf': '12345',
             'data_nascimento': '2005-05-12',
             'tipo': 'aluno',
-            'role': 'aluno',
         }
 
         serializer = PerfilSerializer(data=dados)
@@ -99,7 +95,6 @@ class AlunoTestCase(APITestCase):
                 cpf='12345678901',
                 data_nascimento='2005-05-12',
                 tipo='aluno',
-                role='aluno',
             )
 
     def test_verificacao_cpf_com_letras(self):
@@ -109,7 +104,6 @@ class AlunoTestCase(APITestCase):
             'cpf': '12345678ab@',
             'data_nascimento': '2005-05-12',
             'tipo': 'aluno',
-            'role': 'aluno',
         }
 
         serializer = PerfilSerializer(data=dados)
@@ -122,7 +116,6 @@ class AlunoTestCase(APITestCase):
             'cpf': '12345',
             'data_nascimento': '2005-05-12',
             'tipo': 'aluno',
-            'role': 'aluno',
         }
 
         serializer = PerfilSerializer(data=dados)
@@ -137,7 +130,6 @@ class AlunoTestCase(APITestCase):
                 cpf='12345678901',
                 data_nascimento='2005-05-12',
                 tipo='aluno',
-                role='aluno',
             )
 
     def test_nome_valido(self):
@@ -147,7 +139,6 @@ class AlunoTestCase(APITestCase):
             'cpf': '12345',
             'data_nascimento': '2005-05-12',
             'tipo': 'aluno',
-            'role': 'aluno',
         }
 
         serializer = PerfilSerializer(data=dados)
@@ -162,7 +153,6 @@ class AlunoTestCase(APITestCase):
             'cpf': '12345',
             'data_nascimento': '2030-05-12',
             'tipo': 'aluno',
-            'role': 'aluno',
         }
 
         serializer = PerfilSerializer(data=dados)
