@@ -18,10 +18,13 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from disciplinas.views import MaterialCreateListView, MaterialRetrieveUpdateDestroyAPIView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("api/usuarios/", include('usuarios.urls')),
+    path('disciplinas/materiais', MaterialCreateListView.as_view(), name='materiais-create-view'),
+    path('disciplinas/materiais/<int:pk>/', MaterialRetrieveUpdateDestroyAPIView.as_view(), name='materiais-detail-view'),
 ]
 
 urlpatterns += static(
