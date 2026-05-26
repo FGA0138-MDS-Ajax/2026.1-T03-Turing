@@ -39,7 +39,7 @@ class MaterialSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError(
                     {"arquivo": "Para Documento, envie um arquivo no formato aceito"})
 
-            return data
+        return data
 
 
 
