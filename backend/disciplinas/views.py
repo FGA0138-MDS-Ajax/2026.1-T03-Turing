@@ -4,7 +4,7 @@ from disciplinas.models import Material
 from disciplinas.serializers import MaterialSerializer
 
 
-class MaterialCreateListView(generics,ListCreateAPIView):
+class MaterialCreateListView(generics.ListCreateAPIView):
     queryset = Material.objects.all()
     serializer_class = MaterialSerializer
 
