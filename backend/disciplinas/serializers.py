@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from disciplinas.models import Material
 
-
+    #Classe de Materiais
 class MaterialSerializer(serializers.ModelSerializer):
     class Meta:
         model = Material
