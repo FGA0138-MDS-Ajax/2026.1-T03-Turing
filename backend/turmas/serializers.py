@@ -2,7 +2,7 @@
 from rest_framework import serializers
 from .models import Matricula
 
-class MatriculaSerializer(serializers.BaseSerializer):
+class MatriculaSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Matricula
@@ -18,12 +18,11 @@ class MatriculaSerializer(serializers.BaseSerializer):
         representacao = super().to_representation(instance)
 
         representacao["conteudo_detalhes"]={
-            "id": instance.conteudo.id,
             "nome": instance.conteudo.nome,
             "descricao": instance.conteudo.descricao,
             "status": instance.conteudo.status
         }
 
-        representacao["disciplina_id"]= instance.conteudo.disciplica.id
+        representacao["disciplina_id"]= instance.conteudo.disciplina.id
         
         return representacao
