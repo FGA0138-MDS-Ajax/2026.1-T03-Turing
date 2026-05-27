@@ -27,3 +27,9 @@ class IsGoStudyAdmin(permissions.BasePermission):
             return request.user.tipo == 'admin'
         except AttributeError:
             return False
+        
+# Permite acesso apenas para usuarios tipo 'aluno'.
+class IsAluno(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return bool(request.user and request.user.is_authenticated and request.user.tipo == 'aluno')
+        
