@@ -21,7 +21,7 @@ class MatriculaViewSet(mixins.CreateModelMixin, mixins.ListModelMixin,  mixins.R
 
         return [IsAuthenticated()] 
     
-
+    #logica para carregar matricula com base no user
     def get_queryset(self):    
         user = self.request.user
 
@@ -45,12 +45,20 @@ class MatriculaViewSet(mixins.CreateModelMixin, mixins.ListModelMixin,  mixins.R
             raise ValidationError({"conteudo": "Este conteúdo já foi encerrado e não aceita novas matrículas."})
         
         if user.tipo == 'aluno':
-            serializer.save(aluno = user.aluno)
-        
-        if user.tipo == "admin":    
-            if 'aluno' not in serializer.validated_data:
+            aluno_alvo = user.aluno
+
+        elif user.tipo == "admin":  
+            aluno_alvo = serializer.validated_data.get('aluno')  
+            if not aluno_alvo:
                 raise ValidationError({"aluno": "É necessário especificar o ID do aluno a ser matriculado"})
-            serializer.save()
+
+       
+        # checagem de unicidade 
+        if Matricula.objects.filter(aluno=aluno_alvo, conteudo=conteudo).exists():
+            raise ValidationError({"non_field_errors": "Este aluno já está matriculado neste conteúdo"})
+
+        serializer.save(aluno=aluno_alvo)        
+
 
 
     def perform_destroy(self, instance):
@@ -59,13 +67,8 @@ class MatriculaViewSet(mixins.CreateModelMixin, mixins.ListModelMixin,  mixins.R
 
         if user.tipo == "admin":
             instance.delete()
+            return
         
         elif user.tipo == 'aluno':
-            if instance.aluno.perfil == user:
-                instance.delete()
-            
-            else:
-                raise PermissionDenied("erro: Você só pode cancelar a sua própria matrícula")
-            
-        else:
-            raise PermissionDenied("Apenas administradores e o próprio aluno podem cancelar uma matrícula")
+            instance.delete()
+            return

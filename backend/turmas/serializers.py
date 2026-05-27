@@ -12,7 +12,13 @@ class MatriculaSerializer(serializers.ModelSerializer):
         #campos que o front pode apenas ler (GET)
         read_only_fields = ['id','matriculado_em']
 
+        extra_kwargs = {
+            'aluno': {'required': False}
+        }
 
+        validators = []
+
+    
     def to_representation(self, instance):
 
         representacao = super().to_representation(instance)
