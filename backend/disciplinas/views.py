@@ -3,9 +3,8 @@ from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 
-from django.shortcuts import render
-from .models import Conteudo
-from .serializers import ConteudoSerializer
+from .models import Conteudo, Disciplina, DisciplinaPrerequisito
+from .serializers import ConteudoSerializer, DisciplinaSerializer, DisciplinaPrerequisitoSerializer
 from usuarios.permissions import IsGoStudyAdmin, IsAluno
 from turmas.models import Matricula
 
@@ -38,6 +37,23 @@ class ConteudoViewSet(viewsets.ModelViewSet):
             return Response({'detail': 'Aluno já matriculado.'}, status=status.HTTP_400_BAD_REQUEST)
         
     
+class DisciplinaViewSet(viewsets.ModelViewSet):
+    queryset = Disciplina.objects.all()
+    serializers_class = DisciplinaSerializer
 
-    
-    
+    # Deixa que apenas administradores mudem os dados de disciplina
+    def get_permissions(self):
+        if self.action in ['create', 'update', 'partial_update', 'destroy']:
+            return [IsGoStudyAdmin()]
+        return [IsAuthenticated()]
+
+
+class DisciplinaPrerequisitoViewSet(viewsets.ModelViewSet):
+    queryset = DisciplinaPrerequisito.objects.all()
+    serializer_class = DisciplinaPrerequisitoSerializer
+
+    # Apenas admins podem gerenciar essa parte
+    def get_permissions(self):
+        if self.action in ['create', 'update', 'partial_update', 'destroy']:
+            return [IsGoStudyAdmin()]
+        return [IsAuthenticated()]
