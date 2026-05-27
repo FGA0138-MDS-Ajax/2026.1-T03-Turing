@@ -17,9 +17,13 @@ class MatriculaSerializer(serializers.BaseSerializer):
 
         representacao = super().to_representation(instance)
 
-        representacao["detalhes_conteudo"]={
+        representacao["conteudo_detalhes"]={
             "id": instance.conteudo.id,
             "nome": instance.conteudo.nome,
-            "descricao": instance.conteudo.descricao
+            "descricao": instance.conteudo.descricao,
+            "status": instance.conteudo.status
         }
+
+        representacao["disciplina_id"]= instance.conteudo.disciplica.id
+        
         return representacao
