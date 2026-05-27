@@ -43,6 +43,12 @@ class DisciplinaPrerequisito(models.Model):
         if self.disciplina_id == self.prerequisito_id:
             raise ValidationError("Uma disciplina não pode ser pré requisito dela mesma")
 
+        # corrige um problema do clean() acima, onde o banco aceitaria o erro se o usuário fosse um admin
+    def save(self, *args, **kwargs):
+        self.full_clean() # garante a execução do método clean() antes de salvar no banco
+        super().save(*args, **kwargs)
+
+
 class Conteudo(models.Model):
     STATUS_CHOICES = [
         ('ativo', 'Ativo'),
