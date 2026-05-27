@@ -23,8 +23,7 @@ from disciplinas.views import MaterialCreateListView, MaterialRetrieveUpdateDest
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("api/usuarios/", include('usuarios.urls')),
-    path('disciplinas/materiais', MaterialCreateListView.as_view(), name='materiais-create-view'),
-    path('disciplinas/materiais/<int:pk>/', MaterialRetrieveUpdateDestroyAPIView.as_view(), name='materiais-detail-view'),
+    path('api/disciplinas/', include('disciplinas.urls')),
 ]
 
 urlpatterns += static(
