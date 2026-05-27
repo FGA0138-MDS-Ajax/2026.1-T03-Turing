@@ -13,6 +13,6 @@ class IsGoStudyProfOrAdmin(permissions.BasePermission):
         is_professor = (request.user.tipo == 'professor')
         is_admin = (request.user.tipo == 'admin' or request.user.is_superuser)
 
-        return is_professor and is_admin
+        return is_professor or is_admin
 
 
