@@ -1,11 +1,7 @@
 from django.db import models
 
 class Matricula(models.Model):
-    STATUS_CHOICES = [
-        ('ativa', 'Ativa'),
-        ('cancelada', 'Cancelada'),
-        ('finalizada', 'Finalizada'),
-    ]
+   
 
     aluno = models.ForeignKey(
         'usuarios.Aluno',
@@ -20,7 +16,6 @@ class Matricula(models.Model):
         blank=True
     )
 
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='ativa')
     matriculado_em = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
