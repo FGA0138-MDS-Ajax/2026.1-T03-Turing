@@ -38,8 +38,29 @@ class InscricaoViewSet(viewsets.ModelViewSet):
         perfil = inscricao.professor.perfil
         perfil.is_active = True
         perfil.save()
+        inscricao.save()
 
         return Response(
             {'mensagem': 'Inscrição aprovada com sucesso'},
+            status=status.HTTP_200_OK
+        )
+    
+    @action(detail=True, methods=['patch'])
+    def rejeitar(self, request, pk=None):
+        inscricao = self.get_object()
+
+        if inscricao.status != 'pendente':
+            return Response(
+            {'erro': 'essa inscrição ja foi analisada'},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+        inscricao.status = 'recusado'
+        inscricao.analisado_por = request.user.admin
+        inscricao.analisado_em = timezone.now()
+        inscricao.save()
+
+        return Response(
+            {'mensagem': 'inscrição recusada com sucesso'},
             status=status.HTTP_200_OK
         )
