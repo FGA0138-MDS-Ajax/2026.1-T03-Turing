@@ -31,7 +31,7 @@ class AlunoTestCase(APITestCase):
             email='admin@email.com',
             cpf='00000000000',
             data_nascimento='2000-01-01',
-            tipo='administrador',
+            tipo='admin',
             password=make_password('123456')
         )
         perfil_criado = Perfil.objects.create(
