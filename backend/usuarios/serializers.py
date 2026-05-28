@@ -14,7 +14,6 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 
         token['nome'] = user.nome
         token['email'] = user.email
-        token['role'] = user.role
         token['tipo'] = user.tipo
 
         return token
@@ -30,11 +29,10 @@ class PerfilSerializer(serializers.ModelSerializer):
         model = Perfil
         
         fields = ['id', 'nome', 'email', 'cpf', 'password', 'data_nascimento', 'tipo', 
-                  'role','data_create','data_update']
+                'data_create','data_update']
 
         extra_kwargs = {
             'tipo': {'read_only': True}, 
-            'role': {'read_only': True},
             'data_create': {'read_only': True},
             'data_update': {'read_only': True}
         }
@@ -83,7 +81,6 @@ class AdminSerializer(serializers.ModelSerializer):
         
     
         perfil_data['tipo'] = 'admin'
-        perfil_data['role'] = 'admin'
         
         # salv o perfil no banco através do ORM
         perfil_instancia = Perfil.objects.create_user(**perfil_data)
@@ -96,7 +93,7 @@ class AdminSerializer(serializers.ModelSerializer):
     
         perfil_data = validated_data.pop('perfil', None)
 
-        # (Futuramente os campos únicos dessa tabela deverão ser atualizados aqui, antes do instance.save)
+        # (Futuramente os campos únicos desse user deverão ser atualizados aqui, antes do instance.save)
         instance.save()
 
         if perfil_data:
@@ -138,21 +135,48 @@ class ProfessorSerializer(serializers.ModelSerializer):
 
         return super().to_internal_value(mutable_data)
     
+
     def create(self, validated_data):
         
         perfil_data = validated_data.pop('perfil')
         curriculo = validated_data.pop('curriculo', None)
     
         perfil_data['tipo'] = 'professor'
-        perfil_data['role'] = 'professor'
         
         # salva o perfil no banco através do ORM
         perfil_instancia = Perfil.objects.create_user(**perfil_data)
 
         #  salva o professor no banco vinculado ao perfil recém-criado
         professor_instancia = Professor.objects.create(perfil=perfil_instancia, curriculo=curriculo )
-        
+
         return professor_instancia
+    
+
+
+    def update(self, instance, validated_data):
+    
+        perfil_data = validated_data.pop('perfil', None)
+
+        # (Futuramente os campos únicos desse tipo de user deverão ser atualizados aqui, antes do instance.save)
+
+        instance.save()
+
+        if perfil_data:
+            
+            perfil = instance.perfil
+            perfil.nome = perfil_data.get('nome', perfil.nome)
+            perfil.cpf = perfil_data.get("cpf", perfil.cpf)
+            perfil.email = perfil_data.get("email", perfil.email)
+            perfil.data_nascimento = perfil_data.get ('data_nascimento',perfil.data_nascimento)
+
+            
+            password = perfil_data.get("password", None)
+            if password:
+                perfil.set_password(password)
+
+            perfil.save()
+        return instance
+        
 
 class AlunoSerializer(serializers.ModelSerializer):
     perfil = PerfilSerializer()
@@ -165,7 +189,6 @@ class AlunoSerializer(serializers.ModelSerializer):
 
         perfil_data = validated_data.pop('perfil')
         perfil_data['tipo'] = 'aluno'
-        perfil_data['role'] = 'aluno'
 
         perfil_instancia = Perfil.objects.create_user(**perfil_data)
         aluno_instancia = Aluno.objects.create(perfil = perfil_instancia)
@@ -176,7 +199,7 @@ class AlunoSerializer(serializers.ModelSerializer):
     
         perfil_data = validated_data.pop('perfil', None)
 
-        # (Futuramente os campos únicos dessa tabela deverão ser atualizados aqui, antes do instance.save)
+        # (Futuramente os campos únicos desse tipo de user deverão ser atualizados aqui, antes do instance.save)
         instance.save()
 
         if perfil_data:
