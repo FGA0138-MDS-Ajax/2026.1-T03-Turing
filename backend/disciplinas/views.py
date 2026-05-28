@@ -3,8 +3,8 @@ from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 
-from .models import Conteudo, Disciplina, DisciplinaPrerequisito
-from .serializers import ConteudoSerializer, DisciplinaSerializer, DisciplinaPrerequisitoSerializer
+from .models import Conteudo, Disciplina
+from .serializers import ConteudoSerializer, DisciplinaSerializer
 from usuarios.permissions import IsGoStudyAdmin, IsAluno
 from turmas.models import Matricula
 
@@ -42,17 +42,6 @@ class DisciplinaViewSet(viewsets.ModelViewSet):
     serializers_class = DisciplinaSerializer
 
     # Deixa que apenas administradores mudem os dados de disciplina
-    def get_permissions(self):
-        if self.action in ['create', 'update', 'partial_update', 'destroy']:
-            return [IsGoStudyAdmin()]
-        return [IsAuthenticated()]
-
-
-class DisciplinaPrerequisitoViewSet(viewsets.ModelViewSet):
-    queryset = DisciplinaPrerequisito.objects.all()
-    serializer_class = DisciplinaPrerequisitoSerializer
-
-    # Apenas admins podem gerenciar essa parte
     def get_permissions(self):
         if self.action in ['create', 'update', 'partial_update', 'destroy']:
             return [IsGoStudyAdmin()]
