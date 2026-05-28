@@ -58,6 +58,9 @@ class InscricaoViewSet(viewsets.ModelViewSet):
         inscricao.status = 'recusado'
         inscricao.analisado_por = request.user.admin
         inscricao.analisado_em = timezone.now()
+        perfil = inscricao.professor.perfil
+        perfil.is_active = False
+        perfil.save()
         inscricao.save()
 
         return Response(
