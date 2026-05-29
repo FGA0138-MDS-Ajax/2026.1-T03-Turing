@@ -56,7 +56,8 @@ class Conteudo(models.Model):
     )
     professores = models.ManyToManyField(
         'usuarios.Professor',
-        related_name='conteudos'
+        related_name='conteudos',
+        blank=True
     )
     nome = models.CharField(max_length=255)
     descricao = models.TextField()
