@@ -23,7 +23,9 @@ from disciplinas.views import MaterialCreateListView, MaterialRetrieveUpdateDest
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("api/usuarios/", include('usuarios.urls')),
+
     path('api/disciplinas/', include('disciplinas.urls')),
+    path('api/interacoes/', include('interacoes.urls')),
 ]
 
 urlpatterns += static(

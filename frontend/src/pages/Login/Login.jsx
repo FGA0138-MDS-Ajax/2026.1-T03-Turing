@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import api from "../../services/api";
+import { useAuth } from "../../context/AuthContext";
 import "./Login.css";
 
 export default function Login() {
@@ -12,6 +12,7 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const [loginError, setLoginError] = useState("");
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme") || "light";
@@ -28,40 +29,42 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("1 - submit chamado");
+    console.log("email:", email, "| senha:", senha);
     setLoginError("");
     setLoading(true);
 
-    const payload = {
-      email,
-      password: senha,
-    };
-
     try {
-      const response = await api.post("/api/usuarios/login/", payload);
-      
-      if (response.status === 200) {
-        const accessToken = response.data.access || response.data.token;
-        if (accessToken) {
-          localStorage.setItem("authToken", accessToken);
-        }
+      console.log("2 - chamando login()");
+      const userData = await login(email, senha);
+      console.log("3 - login retornou:", userData);
 
-        if (rememberMe) {
-          localStorage.setItem("rememberedEmail", email);
-        }
+      if (rememberMe) {
+        localStorage.setItem("rememberedEmail", email);
+      }
 
-        navigate("/dashboard");
+      if (userData.tipo === "admin") {
+        console.log("4 - navegando para /admin");
+        navigate("/admin/");
+      } else {
+        console.log("4 - navegando para /");
+        navigate("/");
       }
     } catch (error) {
+      console.error("ERRO no login:", error);
+      console.error("error.response:", error.response);
+      console.error("error.request:", error.request);
+      console.error("error.message:", error.message);
+
       if (error.response) {
         setLoginError(
-          error.response.data?.detail || error.response.data?.message || "Erro ao fazer login. Tente novamente."
+          error.response.data?.detail || "Erro ao fazer login. Tente novamente."
         );
       } else if (error.request) {
         setLoginError("Erro de conexão. Verifique sua internet.");
       } else {
         setLoginError("Erro desconhecido. Tente novamente.");
       }
-      console.error("Erro no login:", error);
     } finally {
       setLoading(false);
     }
@@ -188,8 +191,8 @@ export default function Login() {
               </Link>
             </div>
 
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               className="btn-primary"
               disabled={loading}
             >
