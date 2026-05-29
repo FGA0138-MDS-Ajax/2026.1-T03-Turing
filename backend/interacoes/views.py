@@ -40,6 +40,8 @@ class InscricaoViewSet(viewsets.ModelViewSet):
         perfil.save()
         inscricao.save()
 
+        enviar_email_aprovacao_professor(perfil.nome, perfil.email)
+
         return Response(
             {'mensagem': 'Inscrição aprovada com sucesso'},
             status=status.HTTP_200_OK
