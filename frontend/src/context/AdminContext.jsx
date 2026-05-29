@@ -23,12 +23,18 @@ export function AdminProvider({ children }) {
   return (
     <AdminContext.Provider
       value={{
-        stats, setStats: updateStats,
-        activity, setActivity: updateActivity,
-        loadingStats, setLoadingStats,
-        loadingActivity, setLoadingActivity,
-        errorStats, setErrorStats,
-        errorActivity, setErrorActivity,
+        stats,
+        setStats: updateStats,
+        activity,
+        setActivity: updateActivity,
+        loadingStats,
+        setLoadingStats,
+        loadingActivity,
+        setLoadingActivity,
+        errorStats,
+        setErrorStats,
+        errorActivity,
+        setErrorActivity,
       }}
     >
       {children}
