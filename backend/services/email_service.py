@@ -38,3 +38,18 @@ Equipe GoStudy
 '''
     
     enviar_email(assunto, mensagem, email)
+
+def enviar_email_aprovacao_professor(nome, email):
+    assunto='Aprovação de inscrição - GoStudy',
+    mensagem=f'''
+Olá, {nome}!
+Seu currículo foi avaliado por nossos administradores e sua inscrição foi aprovada!
+Sua conta já está ativa e pronta para utilização.
+Estamos felizes em te ter como professor na nossa plataforma.
+Bem-vindo(a) à GoStudy!
+
+Atenciosamente,
+Equipe GoStudy
+'''
+    
+    enviar_email(assunto, mensagem, email)
