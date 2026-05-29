@@ -53,3 +53,17 @@ Equipe GoStudy
 '''
     
     enviar_email(assunto, mensagem, email)
+
+def enviar_email_rejeicao_professor(nome, email):
+    assunto='Rejeição de inscrição - GoStudy',
+    mensagem=f'''
+Olá, {nome}!
+Seu currículo foi avaliado por nossos administradores e infelizmente sua inscrição foi recusada
+Sua conta permanecerá inativa para utilização.
+Agradecemos por sua inscrição.
+
+Atenciosamente,
+Equipe GoStudy
+'''
+    
+    enviar_email(assunto, mensagem, email)
