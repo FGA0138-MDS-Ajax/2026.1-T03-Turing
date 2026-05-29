@@ -10,8 +10,7 @@ class AdminTestCase(APITestCase):
             email='admin@email.com',
             cpf='00000000000',
             data_nascimento='2005-12-12',
-            tipo='administrador',
-            role='admin',
+            tipo='admin',
             password=make_password('123456')
         )
         Admin.objects.create(
@@ -36,7 +35,7 @@ class AdminTestCase(APITestCase):
         perfil = Perfil.objects.get(id=1)
         print(perfil)
         admin = Admin.objects.get(perfil=perfil)
-        self.assertEqual(perfil.tipo, 'administrador')
+        self.assertEqual(perfil.tipo, 'admin')
         self.assertEqual(admin.perfil, perfil)
 
     ### CRUD
@@ -54,9 +53,8 @@ class AdminTestCase(APITestCase):
                 'email': 'gabriel@aleatorio2.com',
                 "cpf": '12345678902',
                 "data_nascimento": '2005-05-12',
-                "tipo": 'professor',
-                "role": 'professor',
-                "password": "make_password('123456')"
+                "tipo": 'admin',
+                "password": make_password('123456')
             }
         }, format='json')
         print(response.data)

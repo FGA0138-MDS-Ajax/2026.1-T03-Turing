@@ -29,7 +29,7 @@ class Command(BaseCommand):
                 password=senha_padrao, 
                 data_nascimento="2026-05-16",
                 tipo="admin",
-                role="admin"
+                
             )
 
             # ligando a tabela do Perfil recém-criado
