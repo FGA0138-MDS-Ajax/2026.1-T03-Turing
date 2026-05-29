@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import { ProtectedRoute }  from './ProtectedRoute';
 import { AdminProvider }   from '../context/AdminContext';
 import { AdminDashboard }  from '../pages/admin/AdminDashboard';
@@ -8,6 +8,14 @@ import { Configuracoes }   from '../pages/admin/Configuracoes';
 import Login               from '../pages/Login/Login';
 import Register            from '../pages/Register/Register';
 
+function AdminLayout() {
+  return (
+    <AdminProvider>
+      <Outlet />
+    </AdminProvider>
+  );
+}
+
 export function AppRoutes() {
   return (
     <Routes>
@@ -15,20 +23,18 @@ export function AppRoutes() {
       <Route path="/register" element={<Register />} />
 
       <Route
-        path="/admin/*"
+        path="/admin"
         element={
           <ProtectedRoute requiredRole="admin">
-            <AdminProvider>
-              <Routes>
-                <Route path="/"              element={<AdminDashboard />} />
-                <Route path="/professores"   element={<Professores />} />
-                <Route path="/alunos"        element={<Alunos />} />
-                <Route path="/configuracoes" element={<Configuracoes />} />
-              </Routes>
-            </AdminProvider>
+            <AdminLayout />
           </ProtectedRoute>
         }
-      />
+      >
+        <Route index                element={<AdminDashboard />} />
+        <Route path="professores"   element={<Professores />} />
+        <Route path="alunos"        element={<Alunos />} />
+        <Route path="configuracoes" element={<Configuracoes />} />
+      </Route>
 
       <Route
         path="/403"
