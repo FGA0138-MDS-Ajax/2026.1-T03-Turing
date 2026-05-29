@@ -24,3 +24,17 @@ Equipe GoStudy
 '''
     
     enviar_email(assunto, mensagem, email)
+
+def enviar_email_boas_vindas_aluno(nome, email):
+    assunto='Cadastro de aluno recebido - GoStudy',
+    mensagem=f'''
+Olá, {nome}!
+Seu cadastro como aluno na plataforma GoStudy foi realizado com sucesso.
+Sua conta já está ativa e pronta para utilização. Estamos felizes em te ter como estudante na nossa plataforma.
+Bem-vindo(a) à GoStudy!
+
+Atenciosamente,
+Equipe GoStudy
+'''
+    
+    enviar_email(assunto, mensagem, email)
