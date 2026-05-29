@@ -3,6 +3,7 @@ from rest_framework.permissions import IsAuthenticated
 from .models import Inscricao
 from .serializers import InscricaoSerializer
 from usuarios.permissions import IsGoStudyAdmin
+from services.email_service import enviar_email_aprovacao_professor, enviar_email_rejeicao_professor
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import status
@@ -64,6 +65,8 @@ class InscricaoViewSet(viewsets.ModelViewSet):
         perfil.is_active = False
         perfil.save()
         inscricao.save()
+
+        enviar_email_rejeicao_professor(perfil.nome, perfil.email)
 
         return Response(
             {'mensagem': 'inscrição recusada com sucesso'},
