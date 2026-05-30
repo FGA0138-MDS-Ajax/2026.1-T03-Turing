@@ -8,9 +8,10 @@ class MaterialSerializer(serializers.ModelSerializer):
         fields = '__all__' #Deixei o all para traduzir todos campos, mas qualquer coisa eu arrumo
 
     def validate(self, data):
-        tipo = data.get('tipo')
-        arquivo = data.get('arquivo')
-        link = data.get('link')
+            # Agora vai usar o novo valor ou valor existente no banco
+        tipo = data.get('tipo', self.instance.tipo if self.instance else None)
+        arquivo = data.get('arquivo', self.instance.arquivo if self.instance else None)
+        link = data.get('link', self.instance.link if self.instance else None)
 
             # Tem que ter arquivo ou link, conforme a issue
         if not arquivo and not link:
@@ -21,8 +22,9 @@ class MaterialSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError(f"Para o material ({tipo}) deve conter um link(URL)")
 
             # Verifica se o arquivo esta nos formatos aceitos
-        if arquivo:
-            extensao = arquivo.name.split('.')[-1].lower()
+        novo_arquivo = data.get('arquivo')
+        if novo_arquivo:
+            extensao = novo_arquivo.name.split('.')[-1].lower()
 
             if tipo == 'pdf' and extensao != 'pdf':
                 raise serializers.ValidationError({"Você selecionou PDF, mas enviou um arquivo com formato diferente."})
