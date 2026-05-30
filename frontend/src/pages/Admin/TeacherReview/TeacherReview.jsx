@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { User } from "lucide-react";
 import { useAuth } from "../../../context/AuthContext";
 import api from "../../../services/api";
 import "./TeacherReview.css";
@@ -276,7 +277,7 @@ export default function TeacherReview() {
                   <div className="admin-card-left">
 
                     <div className="teacher-avatar">
-                      {professor.perfil?.nome?.charAt(0)}
+                      <User size={20} color="#1f4f46" />
                     </div>
 
                     <div className="teacher-info">
