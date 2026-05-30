@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from .models import Conteudo, Disciplina
 from disciplinas.models import Material
 
     #Classe de Materiais
@@ -54,3 +55,7 @@ class ConteudoSerializer(serializers.ModelSerializer):
         fields = '__all__'
         #disciplina já é obrigatorio pq é FK sem null=True
         
+class DisciplinaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Disciplina
+        fields = '__all__'

@@ -1,11 +1,12 @@
 from rest_framework import generics, viewsets
 from rest_framework.generics import ListCreateAPIView
 from rest_framework.permissions import IsAuthenticated
+
+from .models import Conteudo, Disciplina
+from .serializers import ConteudoSerializer, DisciplinaSerializer
 from disciplinas.models import Material
 from disciplinas.serializers import MaterialSerializer
 from disciplinas.permissions import IsGoStudyProfOrAdmin
-from .models import Conteudo
-from .serializers import ConteudoSerializer
 from usuarios.permissions import IsGoStudyAdmin
 
 class MaterialCreateListView(generics.ListCreateAPIView):
@@ -30,4 +31,16 @@ class ConteudoViewSet(viewsets.ModelViewSet):
             return [IsGoStudyAdmin()]
         
         # GET ou visualizar só precisa estar logado
+        return [IsAuthenticated()]
+
+class DisciplinaViewSet(viewsets.ModelViewSet):
+    queryset = Disciplina.objects.all()
+    serializer_class = DisciplinaSerializer
+
+    def get_permissions(self):
+        # Apenas admin pode criar (create), editar (update/partial_update) e deletar (destroy)
+        if self.action in ['create', 'update', 'partial_update', 'destroy']:
+            return [IsGoStudyAdmin()]
+        
+        # Alunos e professores autenticados podem apenas visualizar (list, retrieve)
         return [IsAuthenticated()]
