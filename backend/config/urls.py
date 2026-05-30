@@ -24,6 +24,7 @@ urlpatterns = [
     path("api/usuarios/", include('usuarios.urls')),
 
     path('api/disciplinas/', include('disciplinas.urls')),
+    path('api/interacoes/', include('interacoes.urls')),
 ]
 
 urlpatterns += static(

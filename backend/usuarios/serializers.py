@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth.hashers import make_password
 from .models import Perfil, Admin, Aluno, Professor
+from interacoes.models import Inscricao
 from datetime import date
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 import json
@@ -148,6 +149,9 @@ class ProfessorSerializer(serializers.ModelSerializer):
 
         #  salva o professor no banco vinculado ao perfil recém-criado
         professor_instancia = Professor.objects.create(perfil=perfil_instancia, curriculo=curriculo )
+
+        # salva a inscricao relacionada ao professor no banco
+        inscricao = Inscricao.objects.create(professor=professor_instancia, status='pendente', descricao='Inscricao criada automaticamente')
 
         return professor_instancia
     
