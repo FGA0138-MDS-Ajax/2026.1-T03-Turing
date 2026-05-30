@@ -1,27 +1,56 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import Login from "../pages/Login/Login";
-import Register from "../pages/Register/Register";
-import TeacherReview from "../pages/Admin/TeacherReview/TeacherReview";
-import { useAuth } from "../context/AuthContext";
+import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
+import { ProtectedRoute }  from './ProtectedRoute';
+import { AdminProvider }   from '../context/AdminContext';
+import { AdminDashboard }  from '../pages/admin/AdminDashboard';
+import { Professores }     from '../pages/admin/Professores';
+import { Alunos }          from '../pages/admin/Alunos';
+import { Configuracoes }   from '../pages/admin/Configuracoes';
+import Login               from '../pages/Login/Login';
+import Register            from '../pages/Register/Register';
+import TeacherReview       from '../pages/admin/TeacherReview/TeacherReview';
 
-function PrivateRoute({ children }) {
-  const { user } = useAuth();
-  return user ? children : <Navigate to="/login" replace />;
-}
-
-export default function AppRoutes() {
+function AdminLayout() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/admin/professores" element={<TeacherReview />} />
-
-        <Route path="/" element={<Navigate to="/login" replace />} />
- 
-        <Route path="*" element={<Navigate to="/login" replace />} />
-      </Routes>
-    </BrowserRouter>
+    <AdminProvider>
+      <Outlet />
+    </AdminProvider>
   );
 }
- 
+
+export function AppRoutes() {
+  return (
+    <Routes>
+      <Route path="/login"    element={<Login />} />
+      <Route path="/register" element={<Register />} />
+
+      <Route
+        path="/admin"
+        element={
+          <ProtectedRoute requiredRole="admin">
+            <AdminLayout />
+          </ProtectedRoute>
+        }
+      >
+        <Route index                element={<AdminDashboard />} />
+        <Route path="professores"   element={<Professores />} />
+        <Route path="alunos"        element={<Alunos />} />
+        <Route path="configuracoes" element={<Configuracoes />} />
+        <Route path="professores/revisao" element={<TeacherReview />} />
+      </Route>
+
+      <Route
+        path="/403"
+        element={
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
+            <div style={{ textAlign: 'center' }}>
+              <h1 style={{ fontSize: '4rem', color: '#C45C2E' }}>403</h1>
+              <p>Você não tem permissão para acessar esta página.</p>
+            </div>
+          </div>
+        }
+      />
+
+      <Route path="/" element={<Navigate to="/login" replace />} />
+    </Routes>
+  );
+}

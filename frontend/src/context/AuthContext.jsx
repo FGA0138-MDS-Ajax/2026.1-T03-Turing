@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import api from "../services/api";
 
 const AuthContext = createContext(null);
@@ -35,6 +35,16 @@ export function AuthProvider({ children }) {
     const token = localStorage.getItem("authToken");
     return token ? getUserFromToken(token) : null;
   });
+  const [loadingAuth, setLoadingAuth] = useState(true);
+
+  useEffect(() => {
+    const token = localStorage.getItem("authToken");
+    if (token) {
+      const loggedUser = getUserFromToken(token);
+      setUser(loggedUser);
+    }
+    setLoadingAuth(false);
+  }, []);
 
   const login = async (email, password) => {
     const response = await api.post("/api/usuarios/login/", {
@@ -54,7 +64,6 @@ export function AuthProvider({ children }) {
   };
 
   const register = async (fullName, email, accountType, password) => {
-    // TODO: implementar registro real quando o endpoint estiver disponível.
     setUser({ fullName, email, accountType });
   };
 
@@ -64,7 +73,7 @@ export function AuthProvider({ children }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, register, logout }}>
+    <AuthContext.Provider value={{ user, login, register, logout, loadingAuth }}>
       {children}
     </AuthContext.Provider>
   );
@@ -77,4 +86,3 @@ export function useAuth() {
   }
   return context;
 }
-

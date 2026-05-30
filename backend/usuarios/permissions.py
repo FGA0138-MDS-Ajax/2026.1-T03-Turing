@@ -27,3 +27,5 @@ class IsGoStudyAdmin(permissions.BasePermission):
             return request.user.tipo == 'admin'
         except AttributeError:
             return False
+        
+        
