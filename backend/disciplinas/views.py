@@ -1,9 +1,24 @@
-from rest_framework import viewsets
+from rest_framework import generics, viewsets
+from rest_framework.generics import ListCreateAPIView
 from rest_framework.permissions import IsAuthenticated
-
+from disciplinas.models import Material
+from disciplinas.serializers import MaterialSerializer
+from disciplinas.permissions import IsGoStudyProfOrAdmin
 from .models import Conteudo
 from .serializers import ConteudoSerializer
 from usuarios.permissions import IsGoStudyAdmin
+
+class MaterialCreateListView(generics.ListCreateAPIView):
+    queryset = Material.objects.all()
+    serializer_class = MaterialSerializer
+    permission_classes = [IsGoStudyProfOrAdmin]
+
+    
+class MaterialRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Material.objects.all()
+    serializer_class = MaterialSerializer
+    permission_classes = [IsGoStudyProfOrAdmin]
+
 
 class ConteudoViewSet(viewsets.ModelViewSet):
     queryset = Conteudo.objects.all()
