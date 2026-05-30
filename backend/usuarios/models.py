@@ -102,6 +102,13 @@ class Professor(models.Model):
         null=True,
         blank=True
     )
+    STATUS_CHOICES = [
+        ('pendente', 'Pendente'),
+        ('aprovado', 'Aprovado'),
+        ('rejeitado', 'Rejeitado'),
+    ]
+
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pendente')
 
     def __str__(self):
         return self.perfil.nome
