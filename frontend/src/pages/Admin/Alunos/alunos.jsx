@@ -119,7 +119,6 @@ export default function Alunos() {
       <div className={styles.cabecalho}>
         <div>
           <h1 className={styles.cabecalho__titulo}>Alunos ativos</h1>
-          <p className={styles.cabecalho__subtitulo}>alunos ativos no sistema</p>
         </div>
       </div>
 

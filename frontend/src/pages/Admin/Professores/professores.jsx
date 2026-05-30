@@ -122,7 +122,6 @@ export default function Professores() {
       <div className={styles.cabecalho}>
         <div>
           <h1 className={styles.cabecalho__titulo}>Professores ativos</h1>
-          <p className={styles.cabecalho__subtitulo}>professores ativos no sistema</p>
         </div>
       </div>
 

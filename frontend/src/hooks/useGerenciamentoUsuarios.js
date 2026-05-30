@@ -40,10 +40,17 @@ export function useGerenciamentoUsuarios({ listar, criar, editar, deletar }) {
       await carregar();
       return true;
     } catch (err) {
-      const mensagem =
-        err?.response?.data?.perfil?.email?.[0] ||
-        err?.response?.data?.perfil?.cpf?.[0] ||
-        'Erro ao criar usuário. Verifique os dados.';
+      const erros = err?.response?.data?.perfil;
+
+      let mensagem = 'Erro ao criar usuário. Verifique os dados.';
+
+      if (erros) {
+        const primeiroCampo = Object.values(erros)[0];
+        if (Array.isArray(primeiroCampo) && primeiroCampo.length > 0) {
+          mensagem = primeiroCampo[0];
+        }
+      }
+
       exibirToast('erro', mensagem);
       return false;
     } finally {
