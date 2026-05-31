@@ -28,6 +28,10 @@ urlpatterns = [
     path('api/interacoes/', include('interacoes.urls')),
 ]
 
+# Obs: esse endpoint deverá ser substituindo quando as matriculas forem implementadas como parte das rotas
+#  de disciplinas
+    path("api/matriculas/", include('turmas.urls')) 
+]
 urlpatterns += static(
     settings.MEDIA_URL,
     document_root=settings.MEDIA_ROOT
