@@ -64,14 +64,14 @@ class MatriculaTestCase(APITestCase):
             status='encerrado'
         )
 
-        cls.matricula = Matricula.objects.create(
-            aluno=cls.aluno,
-            conteudo=cls.conteudo
-        )
-        cls.matricula2=Matricula.objects.create(
-            aluno=cls.aluno_terceiro,
-            conteudo=cls.conteudo
-        )
+        # cls.matricula = Matricula.objects.create(
+        #     aluno=cls.aluno,
+        #     conteudo=cls.conteudo
+        # )
+        # cls.matricula2=Matricula.objects.create(
+        #     aluno=cls.aluno_terceiro,
+        #     conteudo=cls.conteudo
+        # )
 
     def get_token(self, email, password='123456'):
         login = self.client.post('/api/usuarios/login/', {
@@ -100,7 +100,12 @@ class MatriculaTestCase(APITestCase):
         self.assertIsInstance(response.data, list)
 
     def test_deletar_matricula_DELETE(self):
-        response = self.client.delete(f'/api/matriculas/{self.matricula.id}/')
+        matricula =self.client.post('/api/matriculas/', {
+            "aluno": self.aluno.id,
+            "conteudo": self.conteudo.id
+        }, format='json')
+        self.assertEqual(matricula.status_code, 201)
+        response = self.client.delete(f'/api/matriculas/{matricula.data['id']}/')
         print(response.data)
         self.assertEqual(response.status_code, 204)
 
@@ -111,8 +116,12 @@ class MatriculaTestCase(APITestCase):
 
     ### alunos
     def test_delete_matricula_aluno_terceiro(self):
+        matricula = self.client.post('/api/matriculas/', {
+            "aluno": self.aluno_terceiro.id,
+            "conteudo": self.conteudo.id
+        }, format='json')
         self.get_token('aluno@email.com')
-        response = self.client.delete(f'/api/matriculas/{self.matricula2.id}/')
+        response = self.client.delete(f'/api/matriculas/{matricula.data['id']}/')
         print(response.data)
         self.assertEqual(response.status_code, 404)
 
@@ -123,8 +132,12 @@ class MatriculaTestCase(APITestCase):
         self.assertEqual(response.status_code, 400)
 
     def test_deletar_matricula_aluno_DELETE(self):
+        matricula = self.client.post('/api/matriculas/', {
+            "aluno": self.aluno.id,
+            "conteudo": self.conteudo.id
+        }, format='json')
         self.get_token('aluno@email.com')
-        response = self.client.delete(f'/api/matriculas/{self.matricula.id}/')
+        response = self.client.delete(f'/api/matriculas/{matricula.data['id']}/')
         print(response.data)
         self.assertEqual(response.status_code, 204)
 
@@ -143,14 +156,15 @@ class MatriculaTestCase(APITestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIsInstance(response.data, list)
 
-    def test__matricula_aluno_terceiro(self):
+    def test_matricula_aluno_terceiro(self):
         self.get_token('aluno@email.com')
         response = self.client.post('/api/matriculas/', {
             'aluno': self.aluno_terceiro.id,
             'conteudo': self.conteudo.id,
         }, format='json')
-        self.assertEqual(response.status_code, 201)
         print(response.data)
+        self.assertEqual(response.status_code, 201)
+
 
     ## professores
 
