@@ -13,8 +13,13 @@ class PerfilViewSet(viewsets.ModelViewSet):
 
 class ProfessorViewSet(PerfilViewSet):
     
-    queryset = Professor.objects.all()
     serializer_class = ProfessorSerializer
+
+    # faz o get retornar apenas professores aprovados
+    def get_queryset(self):
+        return Professor.objects.filter(
+            inscricao__status='aprovado'
+        )
 
     def get_permissions(self):
         # se precisar desabiliar as funções de permissão de professor é apenas comentar essa função
