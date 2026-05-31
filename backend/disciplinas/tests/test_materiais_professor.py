@@ -22,7 +22,24 @@ class MaterialTestCaseProfesor(APITestCase):
         Professor.objects.create(
             perfil=perfil_criado
         )
-        MaterialTestCaseProfesor.cria(cls)
+        cls.disciplina=Disciplina.objects.create(
+            nome="teste",
+            descricao="testando",
+
+        )
+        cls.conteudo_criado = Conteudo.objects.create(
+            nome="conteudoTeste",
+            descricao="teste",
+            status="teste",
+            disciplina_id=cls.disciplina.id
+        )
+        cls.material=Material.objects.create(
+            nome="teste",
+            descricao="teste",
+            arquivo="pdf",
+            conteudo_id=cls.conteudo_criado.id,
+            tipo="pdf",
+        )
 
 
     def get_token(self):
@@ -49,36 +66,36 @@ class MaterialTestCaseProfesor(APITestCase):
         data = {
             "nome": "material teste",
             "tipo": "pdf",
-            "conteudo": 1,
+            "conteudo": self.conteudo_criado.id,
             'arquivo': arquivo
         }
         response = self.client.post('/api/disciplinas/materiais/', data=data, format='multipart')
         print(response.data)
         self.assertEqual(response.status_code, 201)
 
-    def cria(self):
-        Disciplina.objects.create(
-            nome="teste",
-            descricao="testando",
-
-        )
-        conteudo_criado = Conteudo.objects.create(
-            nome="conteudoTeste",
-            descricao="teste",
-            status="teste",
-            disciplina_id=1
-        )
-        Material.objects.create(
-            nome="teste",
-            descricao="teste",
-            arquivo="pdf",
-            conteudo_id=1,
-            tipo="pdf",
-        )
+    # def cria(self):
+    #     Disciplina.objects.create(
+    #         nome="teste",
+    #         descricao="testando",
+    #
+    #     )
+    #     conteudo_criado = Conteudo.objects.create(
+    #         nome="conteudoTeste",
+    #         descricao="teste",
+    #         status="teste",
+    #         disciplina_id=1
+    #     )
+    #     Material.objects.create(
+    #         nome="teste",
+    #         descricao="teste",
+    #         arquivo="pdf",
+    #         conteudo_id=1,
+    #         tipo="pdf",
+    #     )
 
     def testMaterial_especifico_GET(self):
         # self.cria()
-        response = self.client.get('/api/disciplinas/materiais/1/')
+        response = self.client.get(f'/api/disciplinas/materiais/{self.material.id}/')
         print(response.data)
         self.assertEqual(response.status_code, 200)
 
@@ -88,10 +105,10 @@ class MaterialTestCaseProfesor(APITestCase):
         data = {
             "nome": "Novo Nome",
             "tipo": "pdf",
-            "conteudo": 1,
+            "conteudo": self.conteudo_criado.id,
             'arquivo': arquivo
         }
-        response=self.client.put('/api/disciplinas/materiais/1/', data=data
+        response=self.client.put(f'/api/disciplinas/materiais/{self.material.id}/', data=data
         , format='multipart')
         print(response.data)
         self.assertEqual(response.status_code, 200)
@@ -101,7 +118,7 @@ class MaterialTestCaseProfesor(APITestCase):
         # self.cria()
         arquivo = SimpleUploadedFile('teste.pdf', b'pdf', content_type='application/pdf')
         data= {"arquivo": arquivo}
-        response=self.client.patch('/api/disciplinas/materiais/1/', data=data
+        response=self.client.patch(f'/api/disciplinas/materiais/{self.material.id}/', data=data
         , format='multipart')
         print(response.data)
         self.assertEqual(response.status_code, 200)
@@ -109,7 +126,7 @@ class MaterialTestCaseProfesor(APITestCase):
     def testAlterar_material_especifico_outros_campos_PATCH(self):
         # self.cria()
         dataSemArquivo = {"nome": "Novo Nome"}
-        response2= self.client.patch('/api/disciplinas/materiais/1/', data=dataSemArquivo
+        response2= self.client.patch(f'/api/disciplinas/materiais/{self.material.id}/', data=dataSemArquivo
         , format='multipart')
         self.assertEqual(response2.status_code, 200)
         self.assertEqual(response2.data['nome'],'Novo Nome')
@@ -117,5 +134,5 @@ class MaterialTestCaseProfesor(APITestCase):
 
     def testDeletar_material_especifico_DELETE(self):
         # self.cria()
-        response=self.client.delete('/api/disciplinas/materiais/1/')
+        response=self.client.delete(f'/api/disciplinas/materiais/{self.material.id}/')
         self.assertEqual(response.status_code, 204)

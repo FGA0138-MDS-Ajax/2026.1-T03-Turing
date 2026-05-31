@@ -22,7 +22,25 @@ class MaterialTestCaseAdmin(APITestCase):
         Admin.objects.create(
             perfil=perfil_criado
         )
-        MaterialTestCaseAdmin.cria(cls)
+        cls.disciplina = Disciplina.objects.create(
+            nome="teste",
+            descricao="testando",
+
+        )
+        cls.conteudo_criado = Conteudo.objects.create(
+            nome="conteudoTeste",
+            descricao="teste",
+            status="teste",
+            disciplina_id=cls.disciplina.id
+        )
+        cls.material = Material.objects.create(
+            nome="teste",
+            descricao="teste",
+            arquivo="pdf",
+            conteudo_id=cls.conteudo_criado.id,
+            tipo="pdf",
+        )
+#        MaterialTestCaseAdmin.cria(cls)
 
 
     def get_token(self):
@@ -49,36 +67,37 @@ class MaterialTestCaseAdmin(APITestCase):
         data = {
             "nome": "material teste",
             "tipo": "pdf",
-            "conteudo": 1,
+            "conteudo": self.conteudo_criado.id,
             'arquivo': arquivo
         }
         response = self.client.post('/api/disciplinas/materiais/', data=data, format='multipart')
         print(response.data)
         self.assertEqual(response.status_code, 201)
 
-    def cria(self):
-        Disciplina.objects.create(
-            nome="teste",
-            descricao="testando",
-
-        )
-        conteudo_criado = Conteudo.objects.create(
-            nome="conteudoTeste",
-            descricao="teste",
-            status="teste",
-            disciplina_id=1
-        )
-        Material.objects.create(
-            nome="teste",
-            descricao="teste",
-            arquivo="pdf",
-            conteudo_id=1,
-            tipo="pdf",
-        )
+    # @classmethod
+    # def cria(cls):
+    #     cls.disciplina=Disciplina.objects.create(
+    #         nome="teste",
+    #         descricao="testando",
+    #
+    #     )
+    #     cls.conteudo_criado = Conteudo.objects.create(
+    #         nome="conteudoTeste",
+    #         descricao="teste",
+    #         status="teste",
+    #         disciplina_id=cls.disciplina.id
+    #     )
+    #     cls.material=Material.objects.create(
+    #         nome="teste",
+    #         descricao="teste",
+    #         arquivo="pdf",
+    #         conteudo_id=cls.conteudo_criado.id,
+    #         tipo="pdf",
+    #     )
 
     def testMaterial_especifico_GET(self):
         # self.cria()
-        response = self.client.get('/api/disciplinas/materiais/1/')
+        response = self.client.get(f'/api/disciplinas/materiais/1/')
         print(response.data)
         self.assertEqual(response.status_code, 200)
 
@@ -88,7 +107,7 @@ class MaterialTestCaseAdmin(APITestCase):
         data = {
             "nome": "Novo Nome",
             "tipo": "pdf",
-            "conteudo": 1,
+            "conteudo": self.conteudo_criado.id,
             'arquivo': arquivo
         }
         response=self.client.put('/api/disciplinas/materiais/1/', data=data
@@ -134,7 +153,7 @@ class MaterialTestCaseAdmin(APITestCase):
         data = {
             "nome": "material imagem",
             "tipo": "imagem",
-            "conteudo": 1,
+            "conteudo": self.conteudo_criado.id,
             "arquivo": arquivo
         }
 
@@ -158,7 +177,7 @@ class MaterialTestCaseAdmin(APITestCase):
         data = {
             "nome": "material apresentacao",
             "tipo": "apresentacao",
-            "conteudo": 1,
+            "conteudo": self.conteudo_criado.id,
             "arquivo": arquivo
         }
 
@@ -181,7 +200,7 @@ class MaterialTestCaseAdmin(APITestCase):
         data = {
             "nome": "material documento",
             "tipo": "documento",
-            "conteudo": 1,
+            "conteudo": self.conteudo_criado.id,
             "arquivo": arquivo
         }
 
@@ -198,7 +217,7 @@ class MaterialTestCaseAdmin(APITestCase):
         data = {
             "nome": "material link",
             "tipo": "link",
-            "conteudo": 1,
+            "conteudo": self.conteudo_criado.id,
             "link": "https://google.com"
         }
 
@@ -215,7 +234,7 @@ class MaterialTestCaseAdmin(APITestCase):
         data = {
             "nome": "material video",
             "tipo": "video",
-            "conteudo": 1,
+            "conteudo": self.conteudo_criado.id,
             "link": "https://youtube.com/video"
         }
 
