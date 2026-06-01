@@ -141,10 +141,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-]
-
+CORS_ALLOW_ALL_ORIGINS = True
 
 #definindo a tabela perfil como tabela padrao
 AUTH_USER_MODEL = 'usuarios.Perfil'
@@ -166,3 +163,8 @@ SIMPLE_JWT = {
 
 # configura o backend pra envio de email no console
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+
+
+
+

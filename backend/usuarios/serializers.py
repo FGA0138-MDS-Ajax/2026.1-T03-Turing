@@ -148,6 +148,10 @@ class ProfessorSerializer(serializers.ModelSerializer):
         # salva o perfil no banco através do ORM
         perfil_instancia = Perfil.objects.create_user(**perfil_data)
 
+        #tira a concessao de acesso automatica
+        perfil_instancia.is_active = False
+        perfil_instancia.save()
+
         #  salva o professor no banco vinculado ao perfil recém-criado
         professor_instancia = Professor.objects.create(perfil=perfil_instancia, curriculo=curriculo )
 

@@ -1,12 +1,12 @@
 :root[data-theme="light"],
 :root:not([data-theme]) {
-  --bg-page: #f5f5f7;
+  --bg-page: #f4f3eb;
   --bg-card: #ffffff;
   --bg-input: #f5f5f5;
   --border: #e0e0e0;
-  --border-focus: #667eea;
-  --accent: #667eea;
-  --accent-hover: #5568d3;
+  --border-focus: #2c5154;
+  --accent: #2c5154;
+  --accent-hover: #1e373a;
   --text-primary: #1a1a1e;
   --text-secondary: #666666;
   --text-label: #333333;
@@ -16,12 +16,12 @@
 }
 
 :root[data-theme="dark"] {
-  --bg-page: #1a1a1e;
+  --bg-page: #161d1e;
   --bg-card: #26262c;
   --bg-input: #1e1e23;
   --border: #3a3a42;
   --border-focus: #5a5a6a;
-  --accent: #5c6bc0;
+  --accent: #376569;
   --accent-hover: #4a59b0;
   --text-primary: #e8e8ee;
   --text-secondary: #9090a0;
