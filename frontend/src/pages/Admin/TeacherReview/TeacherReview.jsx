@@ -7,6 +7,17 @@ import "./TeacherReview.css";
 export default function TeacherReview() {
   const { user } = useAuth();
 
+
+  const [inscricoesPendentes, setInscricoesPendentes] = useState([]);
+  const [selectedProfessor, setSelectedProfessor] = useState(null);
+  const [search, setSearch] = useState("");
+
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [toast, setToast] = useState("");
+
+  const [confirmAction, setConfirmAction] = useState(null);
+  const [actionLoading, setActionLoading] = useState(false);
     
     // 403 simples
     if (user?.tipo !== "admin") {
@@ -25,17 +36,7 @@ export default function TeacherReview() {
         </div>
       );
     }
-    
-  const [professoresPendentes, setProfessoresPendentes] = useState([]);
-  const [selectedProfessor, setSelectedProfessor] = useState(null);
-  const [search, setSearch] = useState("");
 
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const [toast, setToast] = useState("");
-
-  const [confirmAction, setConfirmAction] = useState(null);
-  const [actionLoading, setActionLoading] = useState(false);
 
   // ESPERAR BACK INTEGRAR O RECEBIMENTO DO HORARIO FEITO O ENVIO DO CURRICULO
 
@@ -71,19 +72,16 @@ export default function TeacherReview() {
 
     try {
       const response = await api.get(
-        "/api/usuarios/professores/"
+        "/api/interacoes/inscricoes/?status=pendente"
       );
-      const professors = Array.isArray(response.data)
+      const inscricoes = Array.isArray(response.data)
         ? response.data
         : [];
 
-      const pending = professors.filter((professor) =>
-        Boolean(professor.curriculo)
-      );
-
-      setProfessoresPendentes(pending);
+      setInscricoesPendentes(inscricoes);
 
     } catch (err) {
+      console.log( err);
       setError(
         err.response?.data?.detail ||
           "Não foi possível carregar os professores."
@@ -122,26 +120,19 @@ export default function TeacherReview() {
     setError("");
 
     try {
-      const { professor, type } = confirmAction;
+      const { professor , type } = confirmAction;
 
       if (type === "rejeitar") {
         await api.patch(
-          `/api/usuarios/professores/${professor.id}/`,
-          {
-            curriculo: null,
-            // status: "rejeitado"  ← descomentar quando back adicionar campo status no model Professor
-          }
+          `/api/interacoes/inscricoes/${professor.id}/rejeitar/`
         );
       } else {
         await api.patch(
-          `/api/usuarios/professores/${professor.id}/`,
-          {
-            // status: "aprovado"  ← descomentar quando back adicionar campo status no model Professor
-          }
+          `/api/interacoes/inscricoes/${professor.id}/aprovar/`
         );
       }
 
-      setProfessoresPendentes((previous) =>
+      setInscricoesPendentes((previous) =>
         previous.filter(
           (item) => item.id !== professor.id
         )
@@ -162,6 +153,7 @@ export default function TeacherReview() {
     } catch (err) {
       setError(
         err.response?.data?.detail ||
+          console.log(err) &&
           "Erro ao processar a ação."
       );
     } finally {
@@ -169,12 +161,12 @@ export default function TeacherReview() {
       setConfirmAction(null);
     }
   };
-  const filteredProfessores = professoresPendentes.filter(
-    (professor) =>
-      professor.perfil?.nome
-        ?.toLowerCase()
+  const filteredProfessores = inscricoesPendentes.filter(
+    (inscricao) =>
+      inscricao.professor_nome
+        .toLowerCase()
         .includes(search.toLowerCase()) ||
-      professor.perfil?.email
+      inscricao.professor_email
         ?.toLowerCase()
         .includes(search.toLowerCase())
   );
@@ -269,10 +261,10 @@ export default function TeacherReview() {
           <div className="section-divider"></div>
 
             <div className="admin-list">
-                {filteredProfessores.map((professor) => (
+                {filteredProfessores.map((inscricao) => (
                   <article
                     className="admin-card"
-                    key={professor.id}
+                    key={inscricao.id}
                   > 
                   <div className="admin-card-left">
 
@@ -283,11 +275,11 @@ export default function TeacherReview() {
                     <div className="teacher-info">
 
                       <strong>
-                        {professor.perfil?.nome || "Professor sem nome"}
+                        {inscricao.professor_nome || "Professor sem nome"}
                       </strong>
 
                       <p>
-                        {professor.perfil?.email}
+                        {inscricao.professor_email}
                       </p>
 
                       <span className="admin-badge">
@@ -307,7 +299,8 @@ export default function TeacherReview() {
                     type="button"
                     className="btn-secondary-admin"
                     onClick={() =>
-                      setSelectedProfessor(professor)}
+
+                      setSelectedProfessor(inscricao)}
                     >
                       Ver currículo
                     </button>
@@ -321,7 +314,7 @@ export default function TeacherReview() {
       )}
 
       {/* Modal DE VISUALIZAÇÃO DE CURRÍCULO */}
-      {selectedProfessor && (
+      {selectedProfessor &&(
 
         <div className="resume-modal-backdrop">
 
@@ -333,11 +326,11 @@ export default function TeacherReview() {
               <div className="resume-user-info">
 
                 <h2>
-                  {selectedProfessor.perfil?.nome}
+                  {selectedProfessor.professor_nome}
                 </h2>
 
                 <p>
-                  {selectedProfessor.perfil?.email}
+                  {selectedProfessor.professor_email}
                 </p>
 
               </div>
@@ -346,6 +339,7 @@ export default function TeacherReview() {
 
                 <a
                   href={
+                    // aqui ta deboa
                     selectedProfessor.curriculo.startsWith("http")
                       ? selectedProfessor.curriculo
                       : `http://localhost:8000${selectedProfessor.curriculo}`
@@ -371,6 +365,7 @@ export default function TeacherReview() {
 
                <embed
                 src={
+                 // aqui ta deboa
                   selectedProfessor.curriculo.startsWith("http")
                     ? selectedProfessor.curriculo
                     : `http://localhost:8000${selectedProfessor.curriculo}`
@@ -397,6 +392,7 @@ export default function TeacherReview() {
               <button
                 className="btn-primary-admin"
                 onClick={() =>
+                    // ja ta mudado
                   requestAction(
                     selectedProfessor,
                     "aprovar"
@@ -435,7 +431,7 @@ export default function TeacherReview() {
               <strong>
                 {
                   confirmAction.professor
-                    .perfil?.nome
+                      .professor_nome
                 }
               </strong>
               ?
