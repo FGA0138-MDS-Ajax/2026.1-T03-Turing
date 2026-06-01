@@ -7,6 +7,7 @@ import { Alunos }          from '../pages/admin/Alunos';
 import { Configuracoes }   from '../pages/admin/Configuracoes';
 import Login               from '../pages/Login/Login';
 import Register            from '../pages/Register/Register';
+import TeacherReview       from '../pages/admin/TeacherReview/TeacherReview';
 
 function AdminLayout() {
   return (
@@ -34,6 +35,7 @@ export function AppRoutes() {
         <Route path="professores"   element={<Professores />} />
         <Route path="alunos"        element={<Alunos />} />
         <Route path="configuracoes" element={<Configuracoes />} />
+        <Route path="professores/revisao" element={<TeacherReview />} />
       </Route>
 
       <Route
