@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from django.contrib.auth.hashers import make_password
 from .models import Perfil, Admin, Aluno, Professor
+from interacoes.models import Inscricao
+from services.email_service import enviar_email_boas_vindas_professor, enviar_email_boas_vindas_aluno
 from datetime import date
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 import json
@@ -14,7 +16,6 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 
         token['nome'] = user.nome
         token['email'] = user.email
-        token['role'] = user.role
         token['tipo'] = user.tipo
 
         return token
@@ -30,11 +31,10 @@ class PerfilSerializer(serializers.ModelSerializer):
         model = Perfil
         
         fields = ['id', 'nome', 'email', 'cpf', 'password', 'data_nascimento', 'tipo', 
-                  'role','data_create','data_update']
+                'data_create','data_update']
 
         extra_kwargs = {
             'tipo': {'read_only': True}, 
-            'role': {'read_only': True},
             'data_create': {'read_only': True},
             'data_update': {'read_only': True}
         }
@@ -83,7 +83,6 @@ class AdminSerializer(serializers.ModelSerializer):
         
     
         perfil_data['tipo'] = 'admin'
-        perfil_data['role'] = 'admin'
         
         # salv o perfil no banco através do ORM
         perfil_instancia = Perfil.objects.create_user(**perfil_data)
@@ -145,13 +144,22 @@ class ProfessorSerializer(serializers.ModelSerializer):
         curriculo = validated_data.pop('curriculo', None)
     
         perfil_data['tipo'] = 'professor'
-        perfil_data['role'] = 'professor'
         
         # salva o perfil no banco através do ORM
         perfil_instancia = Perfil.objects.create_user(**perfil_data)
 
+        #tira a concessao de acesso automatica
+        perfil_instancia.is_active = False
+        perfil_instancia.save()
+
         #  salva o professor no banco vinculado ao perfil recém-criado
         professor_instancia = Professor.objects.create(perfil=perfil_instancia, curriculo=curriculo )
+
+        # salva a inscricao relacionada ao professor no banco
+        inscricao = Inscricao.objects.create(professor=professor_instancia, status='pendente', descricao='Inscricao criada automaticamente')
+
+        #envia email de boas vindas pro professor com as orientacoes
+        enviar_email_boas_vindas_professor(perfil_instancia.nome, perfil_instancia.email)
 
         return professor_instancia
     
@@ -193,10 +201,11 @@ class AlunoSerializer(serializers.ModelSerializer):
 
         perfil_data = validated_data.pop('perfil')
         perfil_data['tipo'] = 'aluno'
-        perfil_data['role'] = 'aluno'
 
         perfil_instancia = Perfil.objects.create_user(**perfil_data)
         aluno_instancia = Aluno.objects.create(perfil = perfil_instancia)
+
+        enviar_email_boas_vindas_aluno(perfil_instancia.nome, perfil_instancia.email)
 
         return aluno_instancia
     

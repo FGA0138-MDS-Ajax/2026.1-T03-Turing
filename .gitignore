@@ -15,3 +15,7 @@ backend/http-client.private.env.json
 backend/professor.http
 .idea/
 .vscode/
+
+.venv/
+venv/
+source/

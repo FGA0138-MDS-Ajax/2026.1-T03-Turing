@@ -52,13 +52,15 @@ class Inscricao(models.Model):
         'usuarios.Professor',
         on_delete=models.CASCADE
     )
-    admin = models.ForeignKey(
+    analisado_por = models.ForeignKey(
         'usuarios.Admin',
         on_delete=models.SET_NULL,
         null=True,
-        blank=True
+        blank=True,
+        related_name='inscricoes_analisadas'
     )
 
+    analisado_em = models.DateTimeField(null=True, blank=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pendente')
     descricao = models.TextField()
     data_create = models.DateTimeField(auto_now_add=True)
@@ -84,20 +86,31 @@ class Denuncia(models.Model):
         null=True,
         blank=True
     )
-    admin = models.ForeignKey(
-        'usuarios.Admin',
-        on_delete=models.CASCADE,
-        null=True,
-        blank=True
-    )
     denunciante = models.ForeignKey(
         'usuarios.Perfil',
         on_delete=models.CASCADE,
         related_name='denuncias',
         null=True,
         blank=True
+    )   
+    denunciado = models.ForeignKey(
+        'usuarios.Perfil',
+        on_delete=models.CASCADE,
+        related_name='denuncias_recebidas',
+        null=True,
+        blank=True
     )
-    
+    motivo = models.TextField(null=True, blank=True)
+    evidencias = models.TextField(null=True, blank=True)
+    parecer_admin = models.TextField(null=True, blank=True)
+    analisado_por = models.ForeignKey(
+        'usuarios.Admin',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='denuncias_analisadas'
+    )
+
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pendente')
     descricao = models.TextField()
     data_create = models.DateTimeField(auto_now_add=True)

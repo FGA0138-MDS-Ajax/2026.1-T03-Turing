@@ -10,11 +10,10 @@ class AdminTestCase(APITestCase):
             email='admin@email.com',
             cpf='00000000000',
             data_nascimento='2005-12-12',
-            tipo='administrador',
-            role='admin',
+            tipo='admin',
             password=make_password('123456')
         )
-        Admin.objects.create(
+        cls.admin=Admin.objects.create(
             perfil=perfil_criado
         )
 
@@ -33,10 +32,10 @@ class AdminTestCase(APITestCase):
 
     def test_criacao_Admin(self):
         # verifica se o perfil foi criado corretamente
-        perfil = Perfil.objects.get(id=1)
+        perfil = Perfil.objects.get(id=self.admin.perfil.id)
         print(perfil)
         admin = Admin.objects.get(perfil=perfil)
-        self.assertEqual(perfil.tipo, 'administrador')
+        self.assertEqual(perfil.tipo, 'admin')
         self.assertEqual(admin.perfil, perfil)
 
     ### CRUD
@@ -54,16 +53,15 @@ class AdminTestCase(APITestCase):
                 'email': 'gabriel@aleatorio2.com',
                 "cpf": '12345678902',
                 "data_nascimento": '2005-05-12',
-                "tipo": 'professor',
-                "role": 'professor',
-                "password": "make_password('123456')"
+                "tipo": 'admin',
+                "password": make_password('123456')
             }
         }, format='json')
         print(response.data)
         self.assertEqual(response.status_code, 201)
 
     def test_atualizar_admin_PATCH(self):
-        response=self.client.patch('/api/usuarios/administradores/1/', {
+        response=self.client.patch(f'/api/usuarios/administradores/{self.admin.id}/', {
             "perfil": {
                 "nome": "Novo Nome"
             }
@@ -74,7 +72,7 @@ class AdminTestCase(APITestCase):
         self.assertEqual(response.data['perfil']['nome'],'Novo Nome')
 
     def test_atualizar_admin_PUT(self):
-        response=self.client.put('/api/usuarios/administradores/1/', {
+        response=self.client.put(f'/api/usuarios/administradores/{self.admin.id}/', {
               "perfil": {
                 "nome": "Novo Nome",
                 "email": "admin1@email.com",
@@ -88,6 +86,6 @@ class AdminTestCase(APITestCase):
         self.assertEqual(response.data['perfil']['nome'],'Novo Nome')
 
     def test_deletar_aluno_DELETE(self):
-        response=self.client.delete('/api/usuarios/administradores/1/')
+        response=self.client.delete(f'/api/usuarios/administradores/{self.admin.id}/')
         print(response.data)
         self.assertEqual(response.status_code, 204)
