@@ -2,6 +2,7 @@ from rest_framework import serializers
 from django.contrib.auth.hashers import make_password
 from .models import Perfil, Admin, Aluno, Professor
 from interacoes.models import Inscricao
+from services.email_service import enviar_email_boas_vindas_professor, enviar_email_boas_vindas_aluno
 from datetime import date
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 import json
@@ -157,6 +158,9 @@ class ProfessorSerializer(serializers.ModelSerializer):
         # salva a inscricao relacionada ao professor no banco
         inscricao = Inscricao.objects.create(professor=professor_instancia, status='pendente', descricao='Inscricao criada automaticamente')
 
+        #envia email de boas vindas pro professor com as orientacoes
+        enviar_email_boas_vindas_professor(perfil_instancia.nome, perfil_instancia.email)
+
         return professor_instancia
     
 
@@ -200,6 +204,8 @@ class AlunoSerializer(serializers.ModelSerializer):
 
         perfil_instancia = Perfil.objects.create_user(**perfil_data)
         aluno_instancia = Aluno.objects.create(perfil = perfil_instancia)
+
+        enviar_email_boas_vindas_aluno(perfil_instancia.nome, perfil_instancia.email)
 
         return aluno_instancia
     
