@@ -1,6 +1,5 @@
 .admin-review-page {
   padding: 32px;
-  background: #CFC6B8;
   min-height: 100vh;
   font-family: "Segoe UI", system-ui, sans-serif;
 }
@@ -28,8 +27,8 @@
 /* -SECTION- */
 
 .teachers-section {
-  background: #F4F1EA;
-  border: 1px solid #d0d0d0;
+  background: #ffffff;
+  border: 1px solid #E5E7EB;
   box-shadow: 0 2px 3px rgba(58, 63, 94, 0.3);
   border-radius: 12px;
   padding: 24px;
@@ -66,7 +65,7 @@
   height: 40px;
   border-radius: 11px;
   border: 1px solid #ddd6cb;
-  background: #F4F1EA;
+  background: #ffffff;
   padding: 0 35px;
   font-size: 14px;
   outline: none;
@@ -106,7 +105,7 @@
   padding: 0 26px;
   border-radius: 10px;
   border: 1px solid #ddd6cb;
-  background: #f1f1f1;
+  background: #ffffff;
   color: #777474;
   font-size: 14px;
   cursor: pointer;
@@ -199,8 +198,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #F4F1EA;
-  border: 2px solid #dddad4;
+  background: #fff;
+  border: 1px solid #E5E7EB;
   border-radius: 10px;
   padding: 20px;
 }
