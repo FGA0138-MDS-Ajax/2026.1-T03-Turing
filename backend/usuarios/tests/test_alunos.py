@@ -32,7 +32,6 @@ class AlunoTestCase(APITestCase):
             cpf='00000000000',
             data_nascimento='2000-01-01',
             tipo='administrador',
-            role='admin',
             password=make_password('123456')
         )
         perfil_criado = Perfil.objects.create(
@@ -41,10 +40,9 @@ class AlunoTestCase(APITestCase):
             cpf='12345678901',
             data_nascimento='2005-05-12',
             tipo='aluno',
-            role='aluno',
         )
 
-        Aluno.objects.create(
+        cls.aluno=Aluno.objects.create(
             perfil=perfil_criado
         )
 
@@ -58,7 +56,7 @@ class AlunoTestCase(APITestCase):
 
     def test_criacao_aluno(self):
         # verifica se o perfil foi criado corretamente
-        perfil = Perfil.objects.get(id=2)
+        perfil = Perfil.objects.get(id=self.aluno.perfil.id)
         aluno = Aluno.objects.get(perfil=perfil)
         self.assertEqual(perfil.tipo, 'aluno')  # tipo do perfil é aluno?
         self.assertEqual(aluno.perfil, perfil)  # são iguais os objetos?
@@ -73,7 +71,6 @@ class AlunoTestCase(APITestCase):
                 cpf='1234567890112',
                 data_nascimento='2005-05-12',
                 tipo='aluno',
-                role='aluno',
             )
 
     def test_verificacao_cpf_menos_de_11_caracteres(self):
@@ -83,7 +80,6 @@ class AlunoTestCase(APITestCase):
             'cpf': '12345',
             'data_nascimento': '2005-05-12',
             'tipo': 'aluno',
-            'role': 'aluno',
         }
 
         serializer = PerfilSerializer(data=dados)
@@ -99,7 +95,6 @@ class AlunoTestCase(APITestCase):
                 cpf='12345678901',
                 data_nascimento='2005-05-12',
                 tipo='aluno',
-                role='aluno',
             )
 
     def test_verificacao_cpf_com_letras(self):
@@ -109,7 +104,6 @@ class AlunoTestCase(APITestCase):
             'cpf': '12345678ab@',
             'data_nascimento': '2005-05-12',
             'tipo': 'aluno',
-            'role': 'aluno',
         }
 
         serializer = PerfilSerializer(data=dados)
@@ -122,7 +116,6 @@ class AlunoTestCase(APITestCase):
             'cpf': '12345',
             'data_nascimento': '2005-05-12',
             'tipo': 'aluno',
-            'role': 'aluno',
         }
 
         serializer = PerfilSerializer(data=dados)
@@ -137,7 +130,6 @@ class AlunoTestCase(APITestCase):
                 cpf='12345678901',
                 data_nascimento='2005-05-12',
                 tipo='aluno',
-                role='aluno',
             )
 
     def test_nome_valido(self):
@@ -147,7 +139,6 @@ class AlunoTestCase(APITestCase):
             'cpf': '12345',
             'data_nascimento': '2005-05-12',
             'tipo': 'aluno',
-            'role': 'aluno',
         }
 
         serializer = PerfilSerializer(data=dados)
@@ -162,7 +153,6 @@ class AlunoTestCase(APITestCase):
             'cpf': '12345',
             'data_nascimento': '2030-05-12',
             'tipo': 'aluno',
-            'role': 'aluno',
         }
 
         serializer = PerfilSerializer(data=dados)
@@ -184,7 +174,7 @@ class AlunoTestCase(APITestCase):
 
     def test_atualizar_aluno_PATCH(self):
         self.client.post('/api/usuarios/alunos/', self.payload, format='json')
-        response = self.client.patch('/api/usuarios/alunos/1/', {
+        response = self.client.patch(f'/api/usuarios/alunos/{self.aluno.id}/', {
             "perfil": {
                 "nome": "Novo Nome"
             }
@@ -195,7 +185,7 @@ class AlunoTestCase(APITestCase):
 
     def test_atualizar_aluno_PUT(self):
         self.client.post('/api/usuarios/alunos/', self.payload, format='json')
-        response = self.client.put('/api/usuarios/alunos/3/', {
+        response = self.client.put(f'/api/usuarios/alunos/{self.aluno.id}/', {
             "perfil": {"nome": "Nome do ALUNi",
                        "email": "novo.aluno@gost.com",
                        "cpf": "12345678908",
@@ -210,6 +200,6 @@ class AlunoTestCase(APITestCase):
         self.client.post('/api/usuarios/alunos/', self.payload, format='json')
         response1 = self.client.get('/api/usuarios/alunos/', self.payload)
         print("resposta: ", response1.data)
-        response = self.client.delete('/api/usuarios/alunos/5/')
+        response = self.client.delete(f'/api/usuarios/alunos/{self.aluno.id}/')
         print(response.context_data)
         self.assertEqual(response.status_code, 204)
