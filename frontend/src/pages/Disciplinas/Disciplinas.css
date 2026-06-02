@@ -1,0 +1,174 @@
+.disc-topbar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.disc-page-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1C2B3A;
+  margin: 0 0 3px;
+  letter-spacing: -0.01em;
+}
+
+.disc-page-sub {
+  font-size: 13px;
+  color: #7A8A96;
+  margin: 0;
+}
+
+.disc-filters {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.disc-search-wrap {
+  position: relative;
+  flex: 1;
+  min-width: 200px;
+}
+
+.disc-search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9BAAB8;
+  pointer-events: none;
+}
+
+.disc-search {
+  width: 100%;
+  padding: 9px 12px 9px 34px;
+  border: 1px solid rgba(28,43,58,0.14);
+  border-radius: 8px;
+  font-size: 13px;
+  color: #1C2B3A;
+  background: #fff;
+  outline: none;
+  transition: border-color 0.15s;
+  box-sizing: border-box;
+}
+
+.disc-search:focus { border-color: #2E8B57; }
+.disc-search::placeholder { color: #9BAAB8; }
+
+.disc-filter-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 14px;
+  border: 1px solid rgba(28,43,58,0.14);
+  border-radius: 8px;
+  background: #fff;
+  font-size: 13px;
+  color: #5A6A76;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  white-space: nowrap;
+}
+
+.disc-filter-btn:hover {
+  background: #F0EDE8;
+  border-color: rgba(28,43,58,0.22);
+}
+
+.disc-section {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.disc-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.disc-section-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1C2B3A;
+  margin: 0;
+}
+
+/* ── Buttons ── */
+.disc-btn-primary {
+  background: #2672CE;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 9px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.disc-btn-primary:hover { background: #1E5FAD; }
+
+.disc-btn-new {
+  font-size: 13px;
+  padding: 8px 16px;
+}
+
+.disc-btn-outline {
+  width: 100%;
+  background: #fff;
+  border: 1px solid rgba(28,43,58,0.18);
+  border-radius: 8px;
+  padding: 8px 0;
+  font-size: 12px;
+  font-weight: 500;
+  color: #3A4A58;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.disc-btn-outline:hover { background: #F0EDE8; }
+
+.disc-btn-dark {
+  width: 100%;
+  background: #1C2B3A;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.disc-btn-dark:hover { background: #152030; }
+
+.disc-btn-cancel {
+  background: none;
+  border: 1px solid rgba(28,43,58,0.18);
+  border-radius: 8px;
+  padding: 9px 18px;
+  font-size: 13px;
+  color: #5A6A76;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.disc-btn-cancel:hover { background: #F0EDE8; }
+
+.disc-btn-danger {
+  background: #D94040;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 9px 18px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
