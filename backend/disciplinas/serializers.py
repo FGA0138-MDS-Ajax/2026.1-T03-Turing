@@ -44,16 +44,22 @@ class MaterialSerializer(serializers.ModelSerializer):
 
         return data
 
-
-
-
-from .models import Conteudo
-
 class ConteudoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Conteudo
         fields = '__all__'
         #disciplina já é obrigatorio pq é FK sem null=True
+
+    def validate(self, data):
+        professores = data.get('professores')
+        if professores:
+            for professor in professores:
+                inscricao = professor.inscricao_set.filter(status='aprovado').first()
+                if not inscricao:
+                    raise serializers.ValidationError(
+                        f"O professor {professor.perfil.nome} não está aprovado na plataforma."
+                    )
+        return data
         
 class DisciplinaSerializer(serializers.ModelSerializer):
     class Meta:

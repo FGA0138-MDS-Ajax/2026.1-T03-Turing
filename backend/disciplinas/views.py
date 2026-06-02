@@ -9,6 +9,9 @@ from disciplinas.serializers import MaterialSerializer
 from disciplinas.permissions import IsGoStudyProfOrAdmin
 from usuarios.permissions import IsGoStudyAdmin
 
+from rest_framework.decorators import action
+from rest_framework.response import Response
+
 class MaterialCreateListView(generics.ListCreateAPIView):
     queryset = Material.objects.all()
     serializer_class = MaterialSerializer
@@ -44,3 +47,11 @@ class DisciplinaViewSet(viewsets.ModelViewSet):
         
         # Alunos e professores autenticados podem apenas visualizar (list, retrieve)
         return [IsAuthenticated()]
+    
+    # Endpoint que lista conteúdos de uma disciplina específica
+    @action(detail=True, methods=['get'], permission_classes=[IsAuthenticated])
+    def conteudos(self, request, pk=None):
+        disciplina = self.get_object()
+        conteudos = Conteudo.objects.filter(disciplina=disciplina)
+        serializer = ConteudoSerializer(conteudos, many=True)
+        return Response(serializer.data)
