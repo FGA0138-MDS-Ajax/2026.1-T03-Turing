@@ -62,6 +62,16 @@ class ConteudoSerializer(serializers.ModelSerializer):
         return data
         
 class DisciplinaSerializer(serializers.ModelSerializer):
+
+    def validate_nome(self, value):
+        # Verifica se já existe uma disciplina com esse nome, excluindo a própria no caso de edição
+        qs = Disciplina.objects.filter(nome=value)
+        if self.instance:
+            qs = qs.exclude(pk=self.instance.pk)
+        if qs.exists():
+            raise serializers.ValidationError("Já existe uma disciplina com esse nome.")
+        return value
+    
     class Meta:
         model = Disciplina
         fields = '__all__'
