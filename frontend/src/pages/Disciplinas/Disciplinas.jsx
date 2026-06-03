@@ -538,9 +538,8 @@ export function Disciplinas() {
   const disciplinasFiltradas = disciplinas.filter(d => d.nome.toLowerCase().includes(busca.toLowerCase()));
   const conteudosFiltrados = conteudos.filter(c => c.nome.toLowerCase().includes(busca.toLowerCase()));
 
-  // [Integração]: Manda os dados reais. Se a DB tiver vazia, manda os mocks pra tela não ficar esburacada
-  const listaDisciplinasRender = disciplinas.length > 0 ? disciplinasFiltradas : MOCK_DISCIPLINAS;
-  const listaConteudosRender = conteudos.length > 0 ? conteudosFiltrados : MOCK_CONTEUDOS;
+  const listaDisciplinasRender = disciplinasFiltradas;
+  const listaConteudosRender = conteudosFiltrados;
 
   return (
     <AdminLayout>
@@ -569,11 +568,14 @@ export function Disciplinas() {
         {/* [Integração]: Mostra logo se o Django estiver dormindo ou der erro de rede */}
         {!loading && erro && <p className="disc-estado disc-estado--erro" style={{color:'red'}}>{erro}</p>}
         
-        <div className="disc-grid">
-          {listaDisciplinasRender.map((d, i) => (
-            <DisciplinaCard key={d.id} d={d} index={i} onEditar={d => open('editar-disc', d)} onDeletar={d => open('deletar-disc', d)} />
-          ))}
-        </div>
+        {!loading && !erro && listaDisciplinasRender.length === 0 && (
+        <p className="disc-estado">Nenhuma disciplina cadastrada.</p>
+      )}
+      <div className="disc-grid">
+        {listaDisciplinasRender.map((d, i) => (
+          <DisciplinaCard key={d.id} d={d} index={i} onEditar={d => open('editar-disc', d)} onDeletar={d => open('deletar-disc', d)} />
+        ))}
+      </div>
       </section>
 
       <section className="disc-section">
@@ -583,11 +585,14 @@ export function Disciplinas() {
             <span>+</span> Novo conteúdo
           </button>
         </div>
-        <div className="disc-grid">
-          {listaConteudosRender.map((c, i) => (
-            <ConteudoCard key={c.id} c={c} index={i} disciplinas={disciplinas} onEditar={c => open('editar-cont', c)} onDeletar={c => open('deletar-cont', c)} onMatriculas={c => open('matriculas', c)} onAlocarProfessor={c => open('alocar-prof', c)} />
-          ))}
-        </div>
+        {!loading && !erro && listaConteudosRender.length === 0 && (
+        <p className="disc-estado">Nenhum conteúdo cadastrado.</p>
+      )}
+      <div className="disc-grid">
+        {listaConteudosRender.map((c, i) => (
+          <ConteudoCard key={c.id} c={c} index={i} disciplinas={disciplinas} onEditar={c => open('editar-cont', c)} onDeletar={c => open('deletar-cont', c)} onMatriculas={c => open('matriculas', c)} onAlocarProfessor={c => open('alocar-prof', c)} />
+        ))}
+      </div>
       </section>
 
       <section className="disc-section">
