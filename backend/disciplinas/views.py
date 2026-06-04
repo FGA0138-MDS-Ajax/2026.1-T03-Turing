@@ -33,9 +33,11 @@ class ConteudoViewSet(viewsets.ModelViewSet):
 
         #se tiver logado como professor vai listar so os conteudos do proprio professor
         if user.tipo == 'professor':
-            return Conteudo.objects.filter(
-                professores=user.professor
-            ).distinct()
+            if hasattr(user, 'professor'):
+                return Conteudo.objects.filter(
+                    professores=user.professor
+                ).distinct()
+            return Conteudo.objects.none
 
         return Conteudo.objects.all()
 
