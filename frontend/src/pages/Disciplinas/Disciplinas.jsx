@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { AdminLayout } from '../../components/admin/AdminLayout';
+// [Integração]: Importa o hook que concentra as requisições pro Django
 import { useGerenciamentoDisciplinas } from '../../hooks/useGerenciamentoDisciplinas';
 import './Disciplinas.css';
 
@@ -76,8 +77,8 @@ function ModalDisciplinaCriar({ onClose, onSalvar, loading }) {
   );
 }
 
-function ModalDisciplinaEditar({ disciplina, onClose, onSalvar, loading, professores }) {
-  const [form, setForm] = useState({ nome: disciplina.nome, descricao: disciplina.descricao || '', professoresVinculados: disciplina.professores || [] });
+function ModalDisciplinaEditar({ disciplina, onClose, onSalvar, loading }) {
+  const [form, setForm] = useState({ nome: disciplina.nome, descricao: disciplina.descricao || '' });
   const [erros, setErros] = useState({});
 
   const validar = () => {
@@ -90,18 +91,8 @@ function ModalDisciplinaEditar({ disciplina, onClose, onSalvar, loading, profess
   const handleSubmit = async () => {
     if (!validar()) return;
     // [Integração]: Monta as alterações e atira pro PATCH usando o ID da disciplina
-    const ok = await onSalvar(disciplina.id, { nome: form.nome, descricao: form.descricao, professores: form.professoresVinculados });
+    const ok = await onSalvar(disciplina.id, { nome: form.nome, descricao: form.descricao });
     if (ok) onClose();
-  };
-
-  // [Integração]: Lógica pra incluir ou remover o ID do professor no array de selecionados
-  const toggleProfessor = (id) => {
-    setForm(prev => ({
-      ...prev,
-      professoresVinculados: prev.professoresVinculados.includes(id) 
-        ? prev.professoresVinculados.filter(pId => pId !== id) 
-        : [...prev.professoresVinculados, id]
-    }));
   };
 
   return (
@@ -117,22 +108,6 @@ function ModalDisciplinaEditar({ disciplina, onClose, onSalvar, loading, profess
         
         <label className="disc-label">Descrição</label>
         <input className="disc-input" value={form.descricao} onChange={e => setForm({...form, descricao: e.target.value})} />
-
-        <div className="disc-section-divider"><span>Alocar Professores na Disciplina</span></div>
-        <div className="disc-dropdown-list disc-dropdown-list--static" style={{maxHeight: 120, overflowY: 'auto'}}>
-          {professores && professores.map(p => {
-            const nomeProf = p.perfil?.nome || p.nome || 'Professor';
-            const isChecked = form.professoresVinculados.includes(p.id);
-            return (
-              <div key={p.id} className={`disc-dropdown-item ${isChecked ? 'disc-dropdown-item--active' : ''}`} onClick={() => toggleProfessor(p.id)}>
-                <span className="disc-prof-avatar">{nomeProf[0]}</span>
-                {nomeProf}
-                {/* [Integração]: Renderiza o check "✓" condicionalmente */}
-                {isChecked && <span className="disc-check" style={{marginLeft: 'auto'}}>✓</span>}
-              </div>
-            );
-          })}
-        </div>
       </div>
       <div className="disc-modal-actions">
         <button className="disc-btn-cancel" onClick={onClose} disabled={loading}>Cancelar</button>
@@ -173,17 +148,18 @@ function ModalConteudoCriar({ onClose, onSalvar, loading, disciplinas }) {
     const e = {};
     if (!form.nome.trim()) e.nome = 'Nome é obrigatório';
     if (!form.disciplina) e.disciplina = 'Disciplina é obrigatória';
+    if (!form.descricao.trim()) e.descricao = 'Descrição é obrigatória';
     setErros(e);
     return Object.keys(e).length === 0;
   };
 
   const handleSubmit = async () => {
     if (!validar()) return;
-    // [Integração]: Enviando nome, descricao e disciplina formatada
     const ok = await onSalvar({ 
         nome: form.nome, 
         descricao: form.descricao, 
-        disciplina: Number(form.disciplina) 
+        disciplina: Number(form.disciplina),
+        professores: [] 
     });
     if (ok) onClose();
   };
@@ -206,14 +182,15 @@ function ModalConteudoCriar({ onClose, onSalvar, loading, disciplinas }) {
         </select>
         {erros.disciplina && <span className="disc-erro-msg" style={{color:'red', fontSize:12}}>{erros.disciplina}</span>}
         
-        <label className="disc-label">Descrição</label>
-        <textarea 
-          className="disc-input disc-textarea" 
-          rows={3} 
-          placeholder="Descreva o conteúdo..." 
-          value={form.descricao} 
-          onChange={e => setForm({...form, descricao: e.target.value})}
+        <label className="disc-label">Descrição <span className="disc-required">*</span></label>
+        <textarea
+          className={`disc-input disc-textarea ${erros.descricao ? 'disc-input--erro' : ''}`}
+          rows={3}
+          placeholder="Descreva o conteúdo..."
+          value={form.descricao}
+          onChange={e => { setForm({...form, descricao: e.target.value}); setErros({...erros, descricao: undefined}); }}
         />
+        {erros.descricao && <span className="disc-erro-msg" style={{color:'red', fontSize:12}}>{erros.descricao}</span>}
       </div>
       <div className="disc-modal-actions">
         <button className="disc-btn-cancel" onClick={onClose} disabled={loading}>Cancelar</button>
@@ -243,7 +220,8 @@ function ModalConteudoEditar({ conteudo, onClose, onSalvar, loading, disciplinas
     const ok = await onSalvar(conteudo.id, {
       nome: form.nome,
       descricao: form.descricao,
-      disciplina: Number(form.disciplina)
+      disciplina: Number(form.disciplina),
+      professores: conteudo.professores || [] 
     });
     if (ok) onClose();
   };
@@ -388,7 +366,7 @@ function ModalMatriculas({ conteudo, onClose, alunos, matriculas, onMatricular, 
         )}
       </div>
       <div className="disc-modal-actions">
-        <button className="disc-btn-cancel" onClick={onClose}>Fechar</button>
+        <button className="disc-btn-cancel" onClick={onClose} disabled={loading}>Fechar</button>
       </div>
       
       {/* [Integração]: Submodal de confirmação antes de deletar a matrícula no back */}
@@ -565,11 +543,13 @@ function DisciplinaCard({ d, index, onEditar, onDeletar }) {
   );
 }
 
-function ConteudoCard({ c, index, disciplinas, onEditar, onDeletar, onMatriculas, onAlocarProfessor }) {
+function ConteudoCard({ c, index, disciplinas, matriculas, onEditar, onDeletar, onMatriculas, onAlocarProfessor }) {
   const cor = CORES[index % CORES.length] || c.cor;
   const icone = ICONES[index % ICONES.length] || c.icone;
-  // [Integração]: Caça o nome da disciplina pai batendo o ID
   const nomeDisciplina = disciplinas.find(d => d.id === c.disciplina)?.nome || c.disciplina || '—';
+
+  // [Integração]: Conta os alunos em tempo real filtrando as matrículas deste conteúdo
+  const qtdAlunos = matriculas ? matriculas.filter(m => m.conteudo === c.id).length : 0;
 
   return (
     <div className="disc-card">
@@ -589,8 +569,9 @@ function ConteudoCard({ c, index, disciplinas, onEditar, onDeletar, onMatriculas
           👤 Alocar Professor ({c.professores?.length ?? 0})
         </button>
 
+        {/* [Integração]: Exibe a quantidade real e reativa */}
         <button className="disc-alocar-btn" onClick={() => onMatriculas(c)}>
-          Alunos ({c.alunos ?? 0})
+          Alunos ({qtdAlunos})
         </button>
       </div>
       <div className="disc-card-actions">
@@ -701,7 +682,17 @@ export function Disciplinas() {
       )}
       <div className="disc-grid">
         {listaConteudosRender.map((c, i) => (
-          <ConteudoCard key={c.id} c={c} index={i} disciplinas={disciplinas} onEditar={c => open('editar-cont', c)} onDeletar={c => open('deletar-cont', c)} onMatriculas={c => open('matriculas', c)} onAlocarProfessor={c => open('alocar-prof', c)} />
+          <ConteudoCard 
+            key={c.id} 
+            c={c} 
+            index={i} 
+            disciplinas={disciplinas} 
+            matriculas={matriculas} 
+            onEditar={c => open('editar-cont', c)} 
+            onDeletar={c => open('deletar-cont', c)} 
+            onMatriculas={c => open('matriculas', c)} 
+            onAlocarProfessor={c => open('alocar-prof', c)} 
+          />
         ))}
       </div>
       </section>
@@ -763,7 +754,7 @@ export function Disciplinas() {
 
       {/* [Integração]: Acoplando tudo nos modais */}
       {modal === 'nova-disc' && <ModalDisciplinaCriar onClose={close} onSalvar={handleCriarDisciplina} loading={loading} />}
-      {modal === 'editar-disc' && <ModalDisciplinaEditar disciplina={modalTarget} onClose={close} onSalvar={handleEditarDisciplina} loading={loading} professores={professores} />}
+      {modal === 'editar-disc' && <ModalDisciplinaEditar disciplina={modalTarget} onClose={close} onSalvar={handleEditarDisciplina} loading={loading} />}
       
       {modal === 'deletar-disc' && (() => {
         // [Integração]: Checa e avisa se tentar apagar disciplina que tem turma amarrada nela

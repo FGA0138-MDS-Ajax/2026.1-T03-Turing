@@ -81,11 +81,11 @@ export function useGerenciamentoDisciplinas() {
   }, []);
 
   useEffect(() => {
-  carregarDisciplinas();
-  carregarConteudos();
-  carregarProfessores();
-  carregarAlunosEMatriculas();
-  carregarMateriais();
+    carregarDisciplinas();
+    carregarConteudos();
+    carregarProfessores();
+    carregarAlunosEMatriculas();
+    carregarMateriais();
   }, [carregarDisciplinas, carregarConteudos, carregarProfessores, carregarAlunosEMatriculas, carregarMateriais]);
 
   const handleCriarDisciplina = async (dados) => {
@@ -122,16 +122,26 @@ export function useGerenciamentoDisciplinas() {
   const handleDeletarDisciplina = async (id) => {
     setLoading(true);
     try {
-      await deletarDisciplina(id);
-      exibirToast('sucesso', 'Disciplina removida com sucesso!');
-      await carregarDisciplinas();
-      await carregarConteudos();
-      return true;
+        // [GAMBIARRA DO CASCADE] Deleta os materiais de cada conteúdo antes
+        const conteudosVinculados = conteudos.filter(c => c.disciplina === id);
+        const materiaisVinculados = materiais.filter(m => 
+          conteudosVinculados.some(c => c.id === m.conteudo)
+        );
+        await Promise.all(materiaisVinculados.map(m => deletarMaterial(m.id)));
+
+        // Deleta a disciplina (o backend vai deletar os conteúdos em cascata)
+        await deletarDisciplina(id);
+        
+        exibirToast('sucesso', 'Disciplina removida com sucesso!');
+        await carregarDisciplinas();
+        await carregarConteudos();
+        await carregarMateriais(); // Recarrega os materiais sumindo com eles da tela
+        return true;
     } catch {
-      exibirToast('erro', 'Erro ao remover disciplina.');
-      return false;
+        exibirToast('erro', 'Erro ao remover disciplina.');
+        return false;
     } finally {
-      setLoading(false);
+        setLoading(false);
     }
   };
 
@@ -169,9 +179,14 @@ export function useGerenciamentoDisciplinas() {
   const handleDeletarConteudo = async (id) => {
     setLoading(true);
     try {
+      // [GAMBIARRA DO CASCADE] Deleta os materiais vinculados a este conteúdo antes
+      const materiaisVinculados = materiais.filter(m => m.conteudo === id);
+      await Promise.all(materiaisVinculados.map(m => deletarMaterial(m.id)));
+
       await deletarConteudo(id);
       exibirToast('sucesso', 'Conteúdo removido com sucesso!');
       await carregarConteudos();
+      await carregarMateriais(); // Recarrega os materiais sumindo com eles da tela
       return true;
     } catch {
       exibirToast('erro', 'Erro ao remover conteúdo.');
@@ -196,30 +211,30 @@ export function useGerenciamentoDisciplinas() {
     }
   };
 
-  // Cria uma nova matrícula associando o aluno ao conteúdo correspondente
   const handleMatricularAluno = async (conteudoId, alunoId) => {
     setLoading(true);
     try {
-      await criarMatricula({ conteudo: conteudoId, aluno: alunoId });
-      exibirToast('sucesso', 'Aluno matriculado com sucesso!');
-      await carregarAlunosEMatriculas();
-      return true;
+        await criarMatricula({ conteudo: conteudoId, aluno: alunoId });
+        exibirToast('sucesso', 'Aluno matriculado com sucesso!');
+        await carregarAlunosEMatriculas();
+        await carregarConteudos(); // Atualiza a quantidade do card no frontend
+        return true;
     } catch (err) {
-      const msg = err?.response?.data?.non_field_errors?.[0] || err?.response?.data?.conteudo?.[0] || 'Erro ao matricular aluno.';
-      exibirToast('erro', msg);
-      return false;
+        const msg = err?.response?.data?.non_field_errors?.[0] || err?.response?.data?.conteudo?.[0] || 'Erro ao matricular aluno.';
+        exibirToast('erro', msg);
+        return false;
     } finally {
-      setLoading(false);
+        setLoading(false);
     }
   };
 
-  // Remove o registro de matrícula passando o ID do vínculo
   const handleCancelarMatricula = async (matriculaId) => {
     setLoading(true);
     try {
       await deletarMatricula(matriculaId);
       exibirToast('sucesso', 'Matrícula cancelada com sucesso!');
       await carregarAlunosEMatriculas();
+      await carregarConteudos(); // FALTAVA ISSO PARA ATUALIZAR O CARD NA DELEÇÃO TAMBÉM
       return true;
     } catch {
       exibirToast('erro', 'Erro ao cancelar matrícula.');
@@ -233,50 +248,50 @@ export function useGerenciamentoDisciplinas() {
     conteudos.filter((c) => c.disciplina === disciplinaId);
 
   const handleCriarMaterial = async (formData) => {
-  setLoading(true);
-  try {
-    await criarMaterial(formData);
-    exibirToast('sucesso', 'Material criado com sucesso!');
-    await carregarMateriais();
-    return true;
-  } catch (err) {
-    const msg = err?.response?.data?.detail || 'Erro ao criar material.';
-    exibirToast('erro', msg);
-    return false;
-  } finally {
-    setLoading(false);
-  }
-};
+    setLoading(true);
+    try {
+      await criarMaterial(formData);
+      exibirToast('sucesso', 'Material criado com sucesso!');
+      await carregarMateriais();
+      return true;
+    } catch (err) {
+      const msg = err?.response?.data?.detail || 'Erro ao criar material.';
+      exibirToast('erro', msg);
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  };
 
-const handleEditarMaterial = async (id, formData) => {
-  setLoading(true);
-  try {
-    await editarMaterial(id, formData);
-    exibirToast('sucesso', 'Material atualizado com sucesso!');
-    await carregarMateriais();
-    return true;
-  } catch {
-    exibirToast('erro', 'Erro ao atualizar material.');
-    return false;
-  } finally {
-    setLoading(false);
-  }
-};
+  const handleEditarMaterial = async (id, formData) => {
+    setLoading(true);
+    try {
+      await editarMaterial(id, formData);
+      exibirToast('sucesso', 'Material atualizado com sucesso!');
+      await carregarMateriais();
+      return true;
+    } catch {
+      exibirToast('erro', 'Erro ao atualizar material.');
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  };
 
-const handleDeletarMaterial = async (id) => {
-  setLoading(true);
-  try {
-    await deletarMaterial(id);
-    exibirToast('sucesso', 'Material removido com sucesso!');
-    await carregarMateriais();
-    return true;
-  } catch {
-    exibirToast('erro', 'Erro ao remover material.');
-    return false;
-  } finally {
-    setLoading(false);
-  }
-};
+  const handleDeletarMaterial = async (id) => {
+    setLoading(true);
+    try {
+      await deletarMaterial(id);
+      exibirToast('sucesso', 'Material removido com sucesso!');
+      await carregarMateriais();
+      return true;
+    } catch {
+      exibirToast('erro', 'Erro ao remover material.');
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return {
     disciplinas,
