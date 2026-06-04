@@ -54,3 +54,20 @@ export const criarMatricula = (dados) =>
 
 export const deletarMatricula = (id) =>
   api.delete(`/api/matriculas/${id}/`);
+
+// ─── Materiais ─────────────────────────────────────────────────
+export const listarMateriais = () =>
+  api.get('/api/disciplinas/materiais/');
+
+export const criarMaterial = (formData) =>
+  api.post('/api/disciplinas/materiais/', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
+
+export const editarMaterial = (id, formData) =>
+  api.patch(`/api/disciplinas/materiais/${id}/`, formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
+
+export const deletarMaterial = (id) =>
+  api.delete(`/api/disciplinas/materiais/${id}/`);

@@ -14,6 +14,10 @@ import {
   listarMatriculas,
   criarMatricula,
   deletarMatricula,
+  listarMateriais,
+  criarMaterial,
+  editarMaterial,
+  deletarMaterial,
 } from '../services/disciplinasService';
 
 export function useGerenciamentoDisciplinas() {
@@ -25,6 +29,14 @@ export function useGerenciamentoDisciplinas() {
   const [loading, setLoading] = useState(false);
   const [erro, setErro] = useState(null);
   const [toast, setToast] = useState(null);
+  const [materiais, setMateriais] = useState([]);
+
+  const carregarMateriais = useCallback(async () => {
+    try {
+        const { data } = await listarMateriais();
+        setMateriais(data);
+    } catch { /* silencioso */ }
+  }, []);
 
   const exibirToast = (tipo, mensagem) => {
     setToast({ tipo, mensagem });
@@ -69,11 +81,12 @@ export function useGerenciamentoDisciplinas() {
   }, []);
 
   useEffect(() => {
-    carregarDisciplinas();
-    carregarConteudos();
-    carregarProfessores();
-    carregarAlunosEMatriculas();
-  }, [carregarDisciplinas, carregarConteudos, carregarProfessores, carregarAlunosEMatriculas]);
+  carregarDisciplinas();
+  carregarConteudos();
+  carregarProfessores();
+  carregarAlunosEMatriculas();
+  carregarMateriais();
+  }, [carregarDisciplinas, carregarConteudos, carregarProfessores, carregarAlunosEMatriculas, carregarMateriais]);
 
   const handleCriarDisciplina = async (dados) => {
     setLoading(true);
@@ -219,6 +232,52 @@ export function useGerenciamentoDisciplinas() {
   const conteudosDaDisciplina = (disciplinaId) =>
     conteudos.filter((c) => c.disciplina === disciplinaId);
 
+  const handleCriarMaterial = async (formData) => {
+  setLoading(true);
+  try {
+    await criarMaterial(formData);
+    exibirToast('sucesso', 'Material criado com sucesso!');
+    await carregarMateriais();
+    return true;
+  } catch (err) {
+    const msg = err?.response?.data?.detail || 'Erro ao criar material.';
+    exibirToast('erro', msg);
+    return false;
+  } finally {
+    setLoading(false);
+  }
+};
+
+const handleEditarMaterial = async (id, formData) => {
+  setLoading(true);
+  try {
+    await editarMaterial(id, formData);
+    exibirToast('sucesso', 'Material atualizado com sucesso!');
+    await carregarMateriais();
+    return true;
+  } catch {
+    exibirToast('erro', 'Erro ao atualizar material.');
+    return false;
+  } finally {
+    setLoading(false);
+  }
+};
+
+const handleDeletarMaterial = async (id) => {
+  setLoading(true);
+  try {
+    await deletarMaterial(id);
+    exibirToast('sucesso', 'Material removido com sucesso!');
+    await carregarMateriais();
+    return true;
+  } catch {
+    exibirToast('erro', 'Erro ao remover material.');
+    return false;
+  } finally {
+    setLoading(false);
+  }
+};
+
   return {
     disciplinas,
     conteudos,
@@ -228,6 +287,10 @@ export function useGerenciamentoDisciplinas() {
     loading,
     erro,
     toast,
+    materiais,
+    handleCriarMaterial,
+    handleEditarMaterial,
+    handleDeletarMaterial,
     handleCriarDisciplina,
     handleEditarDisciplina,
     handleDeletarDisciplina,

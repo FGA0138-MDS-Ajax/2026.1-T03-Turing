@@ -1,31 +1,7 @@
 import { useState } from 'react';
 import { AdminLayout } from '../../components/admin/AdminLayout';
-// [Integração]: Importa o hook que concentra as requisições pro Django
 import { useGerenciamentoDisciplinas } from '../../hooks/useGerenciamentoDisciplinas';
 import './Disciplinas.css';
-
-// ─── MOCKS ────────────────────────
-const MOCK_DISCIPLINAS = [
-  { id: 1, nome: 'Matemática',  descricao: 'Álgebra, cálculo e geometria', conteudos: 30, cor: '#4A90D9', icone: '⊞' },
-  { id: 2, nome: 'Física',      descricao: 'Mecânica, termodinâmica e eletromagnetismo', conteudos: 87, cor: '#50B87A', icone: '⚛' },
-  { id: 3, nome: 'Geografia',   descricao: 'Geografia humana e física', conteudos: 92, cor: '#C8A96E', icone: '🌐' },
-];
-
-const MOCK_CONTEUDOS = [
-  { id: 1, nome: 'Probabilidade e estatística', disciplina: 'Matemática', professor: 'Prof. Carlos Silva', status: 'ativo', alunos: 45, cor: '#4A90D9', icone: '⊞' },
-  { id: 2, nome: 'Eletromagnetismo',            disciplina: 'Física',     professor: 'Prof. Roberto Lima', status: 'ativo', alunos: 62, cor: '#50B87A', icone: '⚛' },
-  { id: 3, nome: 'Geomorfologia',               disciplina: 'Geografia',  professor: 'Prof. Carlos Silva', status: 'pendente', alunos: 0, cor: '#C8A96E', icone: '🌐' },
-];
-
-const MOCK_MATERIAIS = [
-  { id: 1, nome: 'Introdução às Funções Quadráticas', descricao: 'Material completo sobre funções quadráticas...', disciplina: 'Matemática', professor: 'Prof. Carlos Silva', data: '14 Mai 2026', tipo: 'pdf', cor: '#4A90D9' },
-  { id: 2, nome: 'Leis de Newton - Aula Prática',     descricao: 'Vídeo-aula demonstrando as três leis de Newton...', disciplina: 'Física', professor: 'Prof. Ana Costa', data: '13 Mai 2026', tipo: 'video', cor: '#50B87A' },
-];
-
-const MOCK_ALUNOS = [
-  { id: 1, nome: 'Alice Ferreira', matricula: '2024001' },
-  { id: 2, nome: 'Bruno Mendes',   matricula: '2024002' },
-];
 
 function FileIcon({ tipo }) {
   if (tipo === 'video') return (
@@ -203,8 +179,12 @@ function ModalConteudoCriar({ onClose, onSalvar, loading, disciplinas }) {
 
   const handleSubmit = async () => {
     if (!validar()) return;
-    // [Integração]: Converte o ID da disciplina para Número pro Django não chiar
-    const ok = await onSalvar({ nome: form.nome, descricao: form.descricao, disciplina: Number(form.disciplina) });
+    // [Integração]: Enviando nome, descricao e disciplina formatada
+    const ok = await onSalvar({ 
+        nome: form.nome, 
+        descricao: form.descricao, 
+        disciplina: Number(form.disciplina) 
+    });
     if (ok) onClose();
   };
 
@@ -220,12 +200,20 @@ function ModalConteudoCriar({ onClose, onSalvar, loading, disciplinas }) {
         {erros.nome && <span className="disc-erro-msg" style={{color:'red', fontSize:12}}>{erros.nome}</span>}
         
         <label className="disc-label">Disciplina <span className="disc-required">*</span></label>
-        {/* [Integração]: Popula o select com as disciplinas vindas direto da API */}
         <select className={`disc-input disc-select ${erros.disciplina ? 'disc-input--erro' : ''}`} value={form.disciplina} onChange={e => { setForm({...form, disciplina: e.target.value}); setErros({...erros, disciplina: undefined}); }}>
           <option value="">Selecione uma disciplina</option>
           {disciplinas.map(d => <option key={d.id} value={d.id}>{d.nome}</option>)}
         </select>
         {erros.disciplina && <span className="disc-erro-msg" style={{color:'red', fontSize:12}}>{erros.disciplina}</span>}
+        
+        <label className="disc-label">Descrição</label>
+        <textarea 
+          className="disc-input disc-textarea" 
+          rows={3} 
+          placeholder="Descreva o conteúdo..." 
+          value={form.descricao} 
+          onChange={e => setForm({...form, descricao: e.target.value})}
+        />
       </div>
       <div className="disc-modal-actions">
         <button className="disc-btn-cancel" onClick={onClose} disabled={loading}>Cancelar</button>
@@ -431,6 +419,123 @@ function ModalMatriculas({ conteudo, onClose, alunos, matriculas, onMatricular, 
 const CORES = ['#4A90D9', '#50B87A', '#C8A96E', '#E07A5F', '#9B72CF', '#3D9970'];
 const ICONES = ['⊞', '⚛', '🌐', '📐', '🔬', '📚'];
 
+const TIPOS_MATERIAL = [
+  { value: 'pdf', label: 'PDF' },
+  { value: 'video', label: 'Vídeo' },
+  { value: 'imagem', label: 'Imagem' },
+  { value: 'link', label: 'Link Externo' },
+  { value: 'apresentacao', label: 'Apresentação' },
+  { value: 'documento', label: 'Documento' },
+];
+
+function ModalMaterialCriar({ onClose, onSalvar, loading, conteudos }) {
+  const [form, setForm] = useState({ nome: '', descricao: '', tipo: '', conteudo: '', link: '' });
+  const [arquivo, setArquivo] = useState(null);
+  const [erros, setErros] = useState({});
+  const precisaArquivo = ['pdf', 'imagem', 'apresentacao', 'documento'].includes(form.tipo);
+  const precisaLink = ['video', 'link'].includes(form.tipo);
+
+  const validar = () => {
+    const e = {};
+    if (!form.nome.trim()) e.nome = 'Nome é obrigatório';
+    if (!form.tipo) e.tipo = 'Tipo é obrigatório';
+    if (!form.conteudo) e.conteudo = 'Conteúdo é obrigatório';
+    if (precisaLink && !form.link.trim()) e.link = 'Link é obrigatório para este tipo';
+    if (precisaArquivo && !arquivo) e.arquivo = 'Arquivo é obrigatório para este tipo';
+    setErros(e);
+    return Object.keys(e).length === 0;
+  };
+
+  const handleSubmit = async () => {
+    if (!validar()) return;
+    const formData = new FormData();
+    formData.append('nome', form.nome);
+    formData.append('descricao', form.descricao);
+    formData.append('tipo', form.tipo);
+    formData.append('conteudo', form.conteudo);
+    if (form.link) formData.append('link', form.link);
+    if (arquivo) formData.append('arquivo', arquivo);
+    const ok = await onSalvar(formData);
+    if (ok) onClose();
+  };
+
+  return (
+    <ModalOverlay onClose={onClose}>
+      <div className="disc-modal-header">
+        <h2 className="disc-modal-title">Novo Material</h2>
+        <button className="disc-modal-close" onClick={onClose}>✕</button>
+      </div>
+      <div className="disc-modal-body">
+        <label className="disc-label">Nome <span className="disc-required">*</span></label>
+        <input
+          className={`disc-input ${erros.nome ? 'disc-input--erro' : ''}`}
+          placeholder="Ex: Introdução às Funções Quadráticas"
+          value={form.nome}
+          onChange={e => { setForm({...form, nome: e.target.value}); setErros({...erros, nome: undefined}); }}
+        />
+        {erros.nome && <span className="disc-erro-msg">{erros.nome}</span>}
+        <label className="disc-label">Tipo <span className="disc-required">*</span></label>
+        <select
+          className={`disc-input disc-select ${erros.tipo ? 'disc-input--erro' : ''}`}
+          value={form.tipo}
+          onChange={e => { setForm({...form, tipo: e.target.value, link: ''}); setArquivo(null); setErros({...erros, tipo: undefined}); }}
+        >
+          <option value="">Selecione o tipo</option>
+          {TIPOS_MATERIAL.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
+        </select>
+        {erros.tipo && <span className="disc-erro-msg">{erros.tipo}</span>}
+        <label className="disc-label">Conteúdo <span className="disc-required">*</span></label>
+        <select
+          className={`disc-input disc-select ${erros.conteudo ? 'disc-input--erro' : ''}`}
+          value={form.conteudo}
+          onChange={e => { setForm({...form, conteudo: e.target.value}); setErros({...erros, conteudo: undefined}); }}
+        >
+          <option value="">Selecione o conteúdo</option>
+          {conteudos.map(c => <option key={c.id} value={c.id}>{c.nome}</option>)}
+        </select>
+        {erros.conteudo && <span className="disc-erro-msg">{erros.conteudo}</span>}
+        <label className="disc-label">Descrição</label>
+        <textarea
+          className="disc-input disc-textarea"
+          rows={2}
+          placeholder="Descrição opcional..."
+          value={form.descricao}
+          onChange={e => setForm({...form, descricao: e.target.value})}
+        />
+        {precisaLink && (
+          <>
+            <label className="disc-label">Link <span className="disc-required">*</span></label>
+            <input
+              className={`disc-input ${erros.link ? 'disc-input--erro' : ''}`}
+              placeholder="https://..."
+              value={form.link}
+              onChange={e => { setForm({...form, link: e.target.value}); setErros({...erros, link: undefined}); }}
+            />
+            {erros.link && <span className="disc-erro-msg">{erros.link}</span>}
+          </>
+        )}
+        {precisaArquivo && (
+          <>
+            <label className="disc-label">Arquivo <span className="disc-required">*</span></label>
+            <input
+              type="file"
+              className={`disc-input ${erros.arquivo ? 'disc-input--erro' : ''}`}
+              onChange={e => { setArquivo(e.target.files[0]); setErros({...erros, arquivo: undefined}); }}
+            />
+            {erros.arquivo && <span className="disc-erro-msg">{erros.arquivo}</span>}
+          </>
+        )}
+      </div>
+      <div className="disc-modal-actions">
+        <button className="disc-btn-cancel" onClick={onClose} disabled={loading}>Cancelar</button>
+        <button className="disc-btn-primary" onClick={handleSubmit} disabled={loading}>
+          {loading ? 'Enviando...' : 'Criar Material'}
+        </button>
+      </div>
+    </ModalOverlay>
+  );
+}
+
 function DisciplinaCard({ d, index, onEditar, onDeletar }) {
   const cor = CORES[index % CORES.length] || d.cor;
   const icone = ICONES[index % ICONES.length] || d.icone;
@@ -476,8 +581,12 @@ function ConteudoCard({ c, index, disciplinas, onEditar, onDeletar, onMatriculas
       <div className="disc-card-body">
         <div className="disc-card-meta">Professores: {c.professores?.length ?? 0}</div>
         
-        <button className="disc-btn-outline" style={{marginBottom: 8, padding: '4px 0'}} onClick={() => onAlocarProfessor(c)}>
-          👤 Alocar Professor
+        <button
+          className="disc-alocar-btn"
+          style={{ marginTop: 6 }}
+          onClick={() => onAlocarProfessor(c)}
+        >
+          👤 Alocar Professor ({c.professores?.length ?? 0})
         </button>
 
         <button className="disc-alocar-btn" onClick={() => onMatriculas(c)}>
@@ -492,7 +601,7 @@ function ConteudoCard({ c, index, disciplinas, onEditar, onDeletar, onMatriculas
   );
 }
 
-// [Integração]: Toast rapidinho pra não deixar o usuário no escuro (exibe erro/sucesso da API)
+// [Integração]: Toast rapidinho pra não deixar o usuário no escuro
 function Toast({ toast }) {
   if (!toast) return null;
   return (
@@ -509,12 +618,14 @@ export function Disciplinas() {
     disciplinas,
     conteudos,
     professores,
-    // [Integração]: Puxa os dados e métodos das matrículas lá do hook
     alunos,
     matriculas,
     loading,
     erro,
     toast,
+    materiais,
+    handleCriarMaterial,
+    handleDeletarMaterial,
     handleCriarDisciplina,
     handleEditarDisciplina,
     handleDeletarDisciplina,
@@ -598,25 +709,55 @@ export function Disciplinas() {
       <section className="disc-section">
         <div className="disc-section-header">
           <h2 className="disc-section-title">Materiais</h2>
-          <button className="disc-btn-primary disc-btn-new"><span>+</span> Novo material</button>
+          <button className="disc-btn-primary disc-btn-new" onClick={() => open('novo-mat')}>
+            <span>+</span> Novo material
+          </button>
         </div>
+        {!loading && materiais.length === 0 && (
+          <p className="disc-estado">Nenhum material cadastrado.</p>
+        )}
         <div className="mat-grid">
-          {MOCK_MATERIAIS.map(m => (
-            <div key={m.id} className="mat-card">
-              <div className="mat-card-left">
-                <FileIcon tipo={m.tipo} />
-                <div className="mat-info">
-                  <p className="mat-nome">{m.nome}</p>
-                  <p className="mat-desc">{m.descricao}</p>
-                  <div className="mat-meta">
-                    <span className="mat-tag" style={{ color: m.cor }}>{m.disciplina}</span>
-                    <span className="mat-sep">·</span>
-                    <span className="mat-meta-txt">{m.professor}</span>
+          {materiais.map(m => {
+            const conteudoNome = conteudos.find(c => c.id === m.conteudo)?.nome || '—';
+            const disciplinaId = conteudos.find(c => c.id === m.conteudo)?.disciplina;
+            const disciplinaNome = disciplinas.find(d => d.id === disciplinaId)?.nome || '—';
+            return (
+              <div key={m.id} className="mat-card">
+                <div className="mat-card-left">
+                  <FileIcon tipo={m.tipo} />
+                  <div className="mat-info">
+                    <p className="mat-nome">{m.nome}</p>
+                    {m.descricao && <p className="mat-desc">{m.descricao}</p>}
+                    <div className="mat-meta">
+                      <span className="mat-tag">{disciplinaNome}</span>
+                      <span className="mat-sep">·</span>
+                      <span className="mat-meta-txt">{conteudoNome}</span>
+                    </div>
                   </div>
                 </div>
+                <div className="mat-card-actions" style={{marginTop: 10}}>
+                  <button
+                    className="mat-btn mat-btn--remover"
+                    onClick={() => open('deletar-mat', m)}
+                  >
+                    Remover
+                  </button>
+                  {m.link && (
+                    <a href={m.link} target="_blank" rel="noreferrer">
+                      <button className="mat-btn mat-btn--abrir">Abrir</button>
+                    </a>
+                  )}
+                  {m.arquivo && (
+                    <a href={m.arquivo} target="_blank" rel="noreferrer" download>
+                      <button className="mat-btn mat-btn--download">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" stroke="currentColor" strokeWidth="2"/><polyline points="7,10 12,15 17,10" stroke="currentColor" strokeWidth="2"/><line x1="12" y1="15" x2="12" y2="3" stroke="currentColor" strokeWidth="2"/></svg>
+                      </button>
+                    </a>
+                  )}
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </section>
 
@@ -671,6 +812,29 @@ export function Disciplinas() {
           onMatricular={handleMatricularAluno} 
           onCancelar={handleCancelarMatricula} 
           loading={loading} 
+        />
+      )}
+
+      {modal === 'novo-mat' && (
+        <ModalMaterialCriar
+          onClose={close}
+          onSalvar={handleCriarMaterial}
+          loading={loading}
+          conteudos={conteudos}
+        />
+      )}
+      
+      {modal === 'deletar-mat' && (
+        <ModalConfirmDelete
+          titulo={`Remover "${modalTarget?.nome}"?`}
+          subtitulo="Este material será permanentemente removido."
+          aviso={null}
+          onClose={close}
+          onConfirm={async () => {
+            const ok = await handleDeletarMaterial(modalTarget.id);
+            if (ok) close();
+          }}
+          loading={loading}
         />
       )}
 
