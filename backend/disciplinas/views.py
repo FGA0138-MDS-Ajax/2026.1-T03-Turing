@@ -10,9 +10,25 @@ from disciplinas.permissions import IsGoStudyProfOrAdmin
 from usuarios.permissions import IsGoStudyAdmin
 
 class MaterialCreateListView(generics.ListCreateAPIView):
-    queryset = Material.objects.all()
     serializer_class = MaterialSerializer
     permission_classes = [IsGoStudyProfOrAdmin]
+
+    def get_queryset(self):
+        user = self.request.user
+
+        # admin logado continua vendo todos os materiais
+        if user.tipo == 'admin':
+             return Material.objects.all()
+        
+        # professor logado ve so os materiais dos conteudos que ele tem
+        if user.tipo == 'professor':
+            if hasattr(user, 'professor'):
+                return Material.objects.filter(
+                    conteudo__professores=user.professor
+                ).distinct()
+            return Material.objects.none
+        
+        return Material.objects.all()
 
     
 class MaterialRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
