@@ -3,7 +3,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from .models import Professor, Admin, Aluno, Perfil
 from .serializers import AdminSerializer, ProfessorSerializer, AlunoSerializer
 from .permissions import IsGoStudyProf, IsGoStudyAdmin
-from interacoes import Inscricao
+from interacoes.models import Inscricao
 from django.utils import timezone
 from rest_framework.response import Response
 from rest_framework import status
