@@ -1,9 +1,13 @@
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from .models import Professor, Admin, Aluno
+from .models import Professor, Admin, Aluno, Perfil
 from .serializers import AdminSerializer, ProfessorSerializer, AlunoSerializer
 from .permissions import IsGoStudyProf, IsGoStudyAdmin
-
+from interacoes import Inscricao
+from django.utils import timezone
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.decorators import action
 
 class PerfilViewSet(viewsets.ModelViewSet):
     
@@ -37,6 +41,30 @@ class ProfessorViewSet(PerfilViewSet):
         # a listagem de professor deve ser feita por qualquer usuário autenticado
         return [IsAuthenticated()]
 
+    @action(detail=False, methods=['post'], permission_classes = [IsAuthenticated, IsGoStudyAdmin])
+
+    def create_by_admin(self, request):
+        perfil_data = request.data.get('perfil')
+        perfil_data['tipo'] = 'professor'
+        perfil_instancia = Perfil.objects.create_user(**perfil_data)
+
+        perfil_instancia.is_active = True
+        perfil_instancia.save()
+
+        professor = Professor.objects.create(perfil=perfil_instancia, curriculo=None)
+
+        Inscricao.objects.create(
+            professor=professor,
+            status='aprovado',
+            descricao='professor adicionado com sucesso por adm',
+            analisado_por = request.user.admin,
+            analisado_em = timezone.now())   
+
+        return Response(
+            ProfessorSerializer(professor).data,
+            {'mensagem': 'professor criado com sucesso'},
+            status=status.HTTP_201_CREATED
+        )
 
 class AdminViewSet(PerfilViewSet):
     
