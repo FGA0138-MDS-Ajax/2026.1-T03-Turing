@@ -8,11 +8,18 @@ class MaterialSerializer(serializers.ModelSerializer):
         model = Material
         fields = '__all__' #Deixei o all para traduzir todos campos, mas qualquer coisa eu arrumo
 
-    def validate(self, data):
+    def validate_nome(self, value):
+        nome = value.strip() if value else ""
+        if not nome:
+            raise serializers.ValidationError("O nome do material não pode ser vazio, adicione um nome válido.")
+        return nome
+
+    def validate_tipo(self, data):
             # Agora vai usar o novo valor ou valor existente no banco
         tipo = data.get('tipo', self.instance.tipo if self.instance else None)
         arquivo = data.get('arquivo', self.instance.arquivo if self.instance else None)
         link = data.get('link', self.instance.link if self.instance else None)
+
 
             # Tem que ter arquivo ou link, conforme a issue
         if not arquivo and not link:
