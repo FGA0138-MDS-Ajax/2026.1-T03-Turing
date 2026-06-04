@@ -31,6 +31,9 @@ class ProfessorViewSet(PerfilViewSet):
         if self.action == 'create':
              return [AllowAny()]
         
+        if self.action == 'create_by_admin':
+            return [IsGoStudyAdmin()]
+        
         if self.action in ['update', 'partial_update']:
             return [(IsGoStudyAdmin | IsGoStudyProf)()]
         
@@ -41,7 +44,7 @@ class ProfessorViewSet(PerfilViewSet):
         # a listagem de professor deve ser feita por qualquer usuário autenticado
         return [IsAuthenticated()]
 
-    @action(detail=False, methods=['post'], permission_classes = [IsAuthenticated, IsGoStudyAdmin])
+    @action(detail=False, methods=['post'], permission_classes=[IsAuthenticated, IsGoStudyAdmin])
 
     def create_by_admin(self, request):
         perfil_data = request.data.get('perfil')
@@ -62,7 +65,6 @@ class ProfessorViewSet(PerfilViewSet):
 
         return Response(
             ProfessorSerializer(professor).data,
-            {'mensagem': 'professor criado com sucesso'},
             status=status.HTTP_201_CREATED
         )
 
