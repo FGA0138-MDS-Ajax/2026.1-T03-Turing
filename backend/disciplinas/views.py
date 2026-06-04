@@ -32,9 +32,24 @@ class MaterialCreateListView(generics.ListCreateAPIView):
 
     
 class MaterialRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Material.objects.all()
     serializer_class = MaterialSerializer
     permission_classes = [IsGoStudyProfOrAdmin]
+
+    def get_queryset(self):
+        user = self.request.user
+
+        if user.tipo == 'admin':
+            return Material.objects.all()
+
+        if user.tipo == 'professor':
+            if hasattr(user, 'professor'):
+                return Material.objects.filter(
+                    conteudo__professores=user.professor
+                ).distinct()
+
+            return Material.objects.none()
+
+        return Material.objects.all()
 
 
 class ConteudoViewSet(viewsets.ModelViewSet):
