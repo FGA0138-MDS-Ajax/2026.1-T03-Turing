@@ -24,7 +24,7 @@ export function AppRoutes() {
     <Routes>
       <Route path="/login"    element={<Login />} />
       <Route path="/register" element={<Register />} />
-      <Route path="/professor/conteudo" element={<ProfessorConteudo />} />
+      <Route path="/professor/conteudos" element={<ProfessorConteudo />} />
 
       <Route
         path="/admin"

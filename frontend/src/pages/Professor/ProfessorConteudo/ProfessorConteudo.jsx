@@ -1,176 +1,247 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import api from "../../../services/api";
 import { useAuth } from "../../../context/AuthContext";
+import {
+  listarConteudos,
+  listarDisciplinas,
+  listarMateriais,
+} from "../../../services/disciplinasService";
 import "./ProfessorConteudo.css";
+import {
+  BookOpen,
+  CalendarDays,
+  FolderOpen,
+  Filter
+} from "lucide-react";
 
 export default function ProfessorConteudo() {
   const { user } = useAuth();
-    console.log(user);
+  const [conteudos, setConteudos] = useState([]);
+  const [disciplinas, setDisciplinas] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [materiais, setMateriais] = useState([]);
 
-  const [search, setSearch] = useState("");
-  const [disciplinaFiltro, setDisciplinaFiltro] = useState("");
+  const [filtroDisciplina, setFiltroDisciplina] =
+    useState("");
 
-  const [conteudos] = useState([
-    {
-      id: 1,
-      nome: "Equações do 1º Grau",
-      descricao:
-        "Introdução às equações e resolução de problemas matemáticos.",
-      disciplina: "Matemática",
-      materiais: 5,
-      data_create: "10/06/2025",
-      status: "ativo",
-    },
-    {
-      id: 2,
-      nome: "Geometria Plana",
-      descricao:
-        "Estudo de áreas, perímetros e figuras geométricas.",
-      disciplina: "Matemática",
-      materiais: 8,
-      data_create: "12/06/2025",
-      status: "ativo",
-    },
-    {
-      id: 3,
-      nome: "Brasil Colônia",
-      descricao:
-        "Principais acontecimentos do período colonial brasileiro.",
-      disciplina: "História",
-      materiais: 3,
-      data_create: "15/06/2025",
-      status: "ativo",
-    },
-  ]);
-
-  if (!user) return null;
-
-  if (user.tipo !== "professor") {
+  if (user?.tipo !== "professor") {
     return (
-      <div className="forbidden-page">
-        <h1>403</h1>
-        <p>Você não possui permissão para acessar esta página.</p>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          height: "100vh",
+          flexDirection: "column",
+        }}
+      >
+        <h1
+          style={{
+            fontSize: "4rem",
+            color: "#212121",
+          }}
+        >
+          403
+        </h1>
+
+        <p>
+          Você não possui permissão para acessar esta
+          página.
+        </p>
       </div>
     );
   }
 
-  const disciplinas = [
-    ...new Set(conteudos.map((c) => c.disciplina)),
-  ];
+  useEffect(() => {
+    carregarDados();
+  }, []);
 
-  const filteredConteudos = conteudos.filter((conteudo) => {
-    const matchesSearch =
-      conteudo.nome
-        .toLowerCase()
-        .includes(search.toLowerCase()) ||
-      conteudo.descricao
-        .toLowerCase()
-        .includes(search.toLowerCase());
+  const carregarDados = async () => {
+    try {
+      setLoading(true);
 
-    const matchesDisciplina =
-      disciplinaFiltro === "" ||
-      conteudo.disciplina === disciplinaFiltro;
+      const [conteudosResponse, disciplinasResponse, materiaisResponse] 
+      = await Promise.all([
+      listarConteudos(),
+      listarDisciplinas(),
+      listarMateriais()
+    ]);
 
-    return matchesSearch && matchesDisciplina;
-  });
+      setConteudos(conteudosResponse.data);
+      setDisciplinas(disciplinasResponse.data);
+      setMateriais(materiaisResponse.data);
+
+    } catch (err) {
+      console.log(err);
+
+      setError(
+        "Não foi possível carregar os conteúdos."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const criarMatricula = async (conteudoId) => {
+    try {
+      const alunoId = 1; // temporário até existir modal
+
+      await api.post("/api/matriculas/", {
+        aluno: alunoId,
+        conteudo: conteudoId,
+      });
+
+      alert("Matrícula criada com sucesso!");
+    } catch (error) {
+      console.error(error);
+      alert("Erro ao criar matrícula.");
+    }
+  };
+
+
+  const conteudosFiltrados =
+    filtroDisciplina === ""
+      ? conteudos
+      : conteudos.filter(
+          (conteudo) =>
+            conteudo.disciplina ===
+            Number(filtroDisciplina)
+        );
+
+  if (loading) {
+    return (
+      <div className="professor-conteudo-container">
+        <h2>Carregando conteúdos...</h2>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="professor-conteudo-container">
+        <h2>{error}</h2>
+      </div>
+    );
+  }
 
   return (
-    <div className="professor-content-page">
-      <div className="content-header">
+    <div className="professor-conteudo-container">
+      <div className="conteudo-page-header">
         <h1>Meus Conteúdos</h1>
 
         <p>
-          Visualize os conteúdos vinculados ao seu perfil.
+          Visualize os conteúdos vinculados a você.
         </p>
       </div>
 
-      <section className="content-section">
-        <div className="section-header">
-          <h2>Conteúdos Vinculados</h2>
+      <div className="conteudo-filters">
 
-          <div className="section-actions">
-            <input
-              type="text"
-              placeholder="Buscar conteúdo..."
-              className="search-input"
-              value={search}
-              onChange={(e) =>
-                setSearch(e.target.value)
-              }
-            />
+        <div className="filter-wrapper">
+          <Filter size={18} />
 
-            <select
-              className="filter-select"
-              value={disciplinaFiltro}
-              onChange={(e) =>
-                setDisciplinaFiltro(e.target.value)
-              }
-            >
-              <option value="">
-                Todas as disciplinas
-              </option>
+          <select
+            value={filtroDisciplina}
+            onChange={(e) =>
+              setFiltroDisciplina(e.target.value)
+            }
+          >
+            <option value="">
+              Todas as disciplinas
+            </option>
 
-              {disciplinas.map((disciplina) => (
-                <option
-                  key={disciplina}
-                  value={disciplina}
-                >
-                  {disciplina}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-
-        <div className="section-divider"></div>
-
-        {filteredConteudos.length === 0 ? (
-          <div className="empty-state">
-            Nenhum conteúdo encontrado.
-          </div>
-        ) : (
-          <div className="content-grid">
-            {filteredConteudos.map((conteudo) => (
-              <article
-                key={conteudo.id}
-                className="content-card"
+            {disciplinas.map((disciplina) => (
+              <option
+                key={disciplina.id}
+                value={disciplina.id}
               >
-                <div className="content-card-header">
-                  <h3>{conteudo.nome}</h3>
-
-                  <span className="status-badge">
-                    {conteudo.status}
-                  </span>
-                </div>
-
-                <p className="content-description">
-                  {conteudo.descricao}
-                </p>
-
-                <div className="content-info">
-                  <span>
-                    <strong>Disciplina:</strong>{" "}
-                    {conteudo.disciplina}
-                  </span>
-
-                  <span>
-                    <strong>Materiais:</strong>{" "}
-                    {conteudo.materiais}
-                  </span>
-
-                  <span>
-                    <strong>Criado em:</strong>{" "}
-                    {conteudo.data_create}
-                  </span>
-                </div>
-
-                <button className="btn-primary-content">
-                  Nova matrícula
-                </button>
-              </article>
+                {disciplina.nome}
+              </option>
             ))}
-          </div>
-        )}
-      </section>
-    </div>
+          </select>
+        </div>
+      </div>
+
+      <div className="matricula-section">
+        <button
+          className="btn-matricula"
+          onClick={() => criarMatricula()}
+        >
+          + Criar matrícula
+        </button>
+      </div>
+      
+      <div className="conteudos-grid">
+          {conteudosFiltrados.map((conteudo) => {
+            const disciplina = disciplinas.find(
+              (d) => d.id === conteudo.disciplina
+            );
+
+            const quantidadeMateriais = materiais.filter(
+              (material) =>
+                Number(material.conteudo) === Number(conteudo.id)
+            ).length;
+
+            return (
+              <article
+                className="conteudo-card"
+                key={conteudo.id}
+              >
+                <div className="conteudo-body">
+                  <h2>{conteudo.nome}</h2>
+
+                  <p className="conteudo-descricao">
+                    {conteudo.descricao || "Sem descrição"}
+                  </p>
+
+                  <div className="conteudo-info">
+
+                    <div className="info-row">
+                      <div className="info-icon">
+                        <BookOpen size={16} />
+                      </div>
+
+                      <p>
+                        <strong>Disciplina:</strong>{" "}
+                        {disciplina?.nome || "Não encontrada"}
+                      </p>
+                    </div>
+
+                    <div className="info-row">
+                      <div className="info-icon">
+                        <CalendarDays size={16} />
+                      </div>
+
+                      <p>
+                        <strong>Data de criação:</strong>{" "}
+                        {new Date(
+                          conteudo.data_create
+                        ).toLocaleDateString("pt-BR")}
+                      </p>
+                    </div>
+
+                    <div className="info-row">
+                      <div className="info-icon">
+                        <FolderOpen size={16} />
+                      </div>
+
+                      <p>
+                        <strong>Quantidade de materiais:</strong>{" "}
+                        {quantidadeMateriais}
+                      </p>
+                    </div>
+                    </div>
+                  </div>
+
+                <div className="conteudo-footer">
+                  <button className="btn-material">
+                    + Adicionar material
+                  </button>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+      </div>
   );
 }
