@@ -10,7 +10,7 @@
 
 <h2><center><strong>Visão do Produto e Projeto - Escopo</strong></center></h2>
 
-<center><strong>Versão [1.3]</strong></center>
+<center><strong>Versão [1.4]</strong></center>
 <br>
 
 | Matrícula | Nome | Função (responsabilidade) | Pontos de participação |
@@ -39,6 +39,7 @@
 | 13/05/2026 | 1.1 | Refinamento do escopo do produto (foco no Ensino Médio), alteração da abordagem de testes (substituição de TDD por Testes Automatizados) e remoção de testes não funcionais, atualização da tecnologia de banco de dados (SQLite para PostgreSQL) e mudança nas datas das Sprints. | Maria Eduarda Guimarães    |
 | 22/05/2026 | 1.2 | Inclusão do framework Pytest | Maria Eduarda Guimarães |
 | 28/05/2026 | 1.3 | Remoção da funcionalidade de Pré-requisitos de turmas e disciplinas. | Maria Eduarda Guimarães |
+| 03/06/2026 | 1.4 |  Consolidação da nomenclatura de 'Disciplinas' (remoção de Turmas), exclusão de avaliações, e realocação dos requisitos de Perguntas para a Sprint 5 (Fórum). | Maria Eduarda Guimarães |
  ---
 
 
@@ -360,9 +361,9 @@ Os requisitos foram classificados em funcionais e não funcionais e priorizados 
 
 | # | Nome do perfil | Características do perfil | Permissões de acesso |
 |---|----------------|---------------------------|----------------------|
-| 1 | Administrador | Responsável por manter os perfis tanto de Professor quanto de Aluno, aceitar inscrições de novos professores, analisar e homologar solicitações de denúncia, alterar dados de matrícula, reger disponibilidade de turmas e disciplinas. |
-| 2 | Professor | Responsável por postar links de vídeo aulas regulares, auxiliar dúvidas do aluno no fórum de dúvidas, postar avaliações/exercícios, postar material auxiliar. | Permissão para aba de gerenciamento de Disciplina/turma e alteração de dados. |
-| 3 | Aluno | Beneficiário que irá usufruir de todos os materiais disponibilizados pelo professor em qualquer turma que se inscrever. | Acesso a aba de ensino e alteração de dados. |
+| 1 | Administrador | Responsável por manter os perfis tanto de Professor quanto de Aluno, aceitar inscrições de novos professores, analisar e homologar solicitações de denúncia, alterar dados de matrícula, reger disponibilidade de disciplinas. | Permissão total para qualquer parte do site.
+| 2 | Professor | Responsável por postar links de vídeo aulas regulares, auxiliar dúvidas do aluno no fórum de dúvidas, postar exercícios, postar material auxiliar. | Permissão para aba de gerenciamento de Disciplina e alteração de dados. |
+| 3 | Aluno | Beneficiário que irá usufruir de todos os materiais disponibilizados pelo professor em qualquer disciplina que se inscrever. | Acesso a aba de ensino e alteração de dados. |
 
 <center> <i>Tabela 8: Perfis de acesso..</i></center>
 
@@ -376,9 +377,8 @@ Os requisitos foram classificados em funcionais e não funcionais e priorizados 
 | 3 | Administração de Disciplinas | 2 |
 | 4 | Postar material | 3 |
 | 5 | Visualização de conteúdo | 4 |
-| 6 | Visualização de desempenho | 4 |
-| 7 | fórum de dúvidas | 5 |
-| 8 | Acessibilidade e Diversidade | 6 |
+| 6 | fórum de dúvidas | 5 |
+| 7 | Acessibilidade e Diversidade | 6 |
 ---
 <center> <i>Tabela 9: Cenários funcionais.</i></center>
 
@@ -405,17 +405,13 @@ Os requisitos foram classificados em funcionais e não funcionais e priorizados 
 | Ce2/RF5 | 2 | Gerenciamento de perfis | funcional | Must | Deve haver um módulo de gerenciamento de perfis podendo alterar,deletar ou criar qualquer tipo de perfil | O administrador deverá ser capaz de manter os perfis podendo criar,deletar ou alterar qualquer um. |
 | Ce2/RF6 | 2 | PS de Professores | funcional | Must | Os currículos enviados pelos os professores deverão ser aprovados pela administração antes de efetivamente entrarem | o administrador deverá aceitar o currículo do professor, antes de tal ser adicionado no conjunto dos professores efetivos |
 | Ce2/RF7 | 2 | Análise de denúncias | funcional | Must | Tem que ter um módulo para o administrador analisar e homologar as denúncias; | o administrador deverá ser capaz de analisar e verificar a veracidade de denúncias |
-| Ce3/RF8 | 2 | Manutenção de turmas/disciplinas | funcional | Must | as turmas/disciplinas poderão ser cadastradas e deletadas pelo o admin | o administrador deverá ser capaz de dar manutenção nas turmas/disciplinas |
-| Ce4/RF9 | 3 | Postagem de conteúdo | funcional | Must | O sistema deve disponibilizar opções de postagem ao professor, por disciplinas/turmas | O professor deverá ser capaz de postar materiais de estudo como, slides, listas, plano pedagógico, links de vídeo e e qualquer coisa que auxilie no ensino do aluno |
-| Ce4/RF10 | 3 | Avaliações | funcional | Must | O sistema deverá disponibilizar campos de modelagem de formulários a fim de avaliar o saber do aluno. | O professor deve formular uma avaliação pra testar o aluno, sendo múltipla escolha, dissertativa ou pra carregar um arquivo como resposta. |
-| Ce5/RF11 | 4 | Navegação de aluno | funcional | Must | O sistema deve permitir navegação e cadastro do aluno em qualquer disciplina/turma do ensino médio sem número limite de disciplinas cadastradas | O aluno poderá se inscrever em quantas disciplinas quiser e navegar entre elas à vontade. |
-| Ce5/RF12 | 4 | Visualização de Disciplinas | funcional | Must | O sistema deverá ter um módulo onde o aluno veja as turmas que fazem parte separado das demais. | O aluno poderá ver as disciplinas selecionadas em outro lugar sem ser onde estão as demais. |
-| Ce5/RF13 | 4 | Visão intra-disciplinas | funcional | Must | O sistema deve permitir que o aluno veja o conteúdo de uma disciplina a partir do momento em que esteja cadastrado. | O aluno poderá visualizar o conteúdo de uma disciplina a partir do momento em que ele se inscrever nela |
-| Ce5/RF14 | 4 | Preenchimento de tarefas | funcional | Must | O sistema permitirá que os alunos possam enviar/preencher avaliações e tarefas que o professor previamente enviar | O aluno pode enviar submissões de formulários de tarefas/avaliações que o professor mandar. |
-| Ce6/RF15 | 4 | Módulo de desempenho pessoal | funcional | Must | O sistema deve mostrar na aba perfil como está o desempenho pessoal do aluno em relação às atividades concluídas. | Como aluno eu quero visualizar o meu desempenho nas atividades para poder acompanhar meu progresso em uma matéria. |
-| Ce6/RF16 | 4 | Módulo de desempenho geral de uma turma | funcional | Must | O sistema deve mostrar o desempenho geral dos estudantes que realizaram a atividade proposta | Como professor quero visualizar o desempenho da turma para acompanhar a qualidade de determinado conteúdo |
-| Ce6/RF17 | 4 | Visualização de perguntas já feitas | funcional | Should | O sistema deveria mostrar no perfil do estudante as perguntas já realizadas pelo mesmo. | Como estudante eu quero conseguir visualizar de forma facilitada todas as perguntas que já fiz. |
-| Ce6/RF18 | 4 | Visualização de perguntas pendentes | funcional | Should | O sistema deve mostrar no perfil do professor as perguntas pendentes feitas em algum dos fóruns de seus conteúdos. | Como professor gostaria de visualizar de forma facilitada todas as perguntas pendentes à serem resolvidas. |
+| Ce3/RF8 | 3 | Manutenção de disciplinas | funcional | Must | as disciplinas poderão ser cadastradas e deletadas pelo o admin | o administrador deverá ser capaz de dar manutenção nas disciplinas |
+| Ce4/RF9 | 3 | Postagem de conteúdo | funcional | Must | O sistema deve disponibilizar opções de postagem ao professor, por disciplinas | O professor deverá ser capaz de postar materiais de estudo como, slides, listas, plano pedagógico, links de vídeo e e qualquer coisa que auxilie no ensino do aluno |
+| Ce5/RF10 | 4 | Navegação de aluno | funcional | Must | O sistema deve permitir navegação e cadastro do aluno em qualquer disciplina do ensino médio sem número limite de disciplinas cadastradas | O aluno poderá se inscrever em quantas disciplinas quiser e navegar entre elas à vontade. |
+| Ce5/RF11 | 4 | Visualização de Disciplinas | funcional | Must | O sistema deverá ter um módulo onde o aluno veja as disciplinas que fazem parte separado das demais. | O aluno poderá ver as disciplinas selecionadas em outro lugar sem ser onde estão as demais. |
+| Ce5/RF12 | 4 | Visão intra-disciplinas | funcional | Must | O sistema deve permitir que o aluno veja o conteúdo de uma disciplina a partir do momento em que esteja cadastrado. | O aluno poderá visualizar o conteúdo de uma disciplina a partir do momento em que ele se inscrever nela |
+| Ce6/RF17 | 5 | Visualização de perguntas já feitas | funcional | Should | O sistema deveria mostrar no perfil do estudante as perguntas já realizadas pelo mesmo. | Como estudante eu quero conseguir visualizar de forma facilitada todas as perguntas que já fiz. |
+| Ce6/RF18 | 5 | Visualização de perguntas pendentes | funcional | Should | O sistema deve mostrar no perfil do professor as perguntas pendentes feitas em algum dos fóruns de seus conteúdos. | Como professor gostaria de visualizar de forma facilitada todas as perguntas pendentes à serem resolvidas. |
 | Ce7/RF19 | 5 | Elaboração de um fórum de dúvidas para cada conteúdo | funcional | Must | O sistema deve permitir um forum de duvidas em cada post pelo o professor a fim de troca de mensagens de texto | O aluno deve ser capaz de postar mensagens no fórum a fim de matar dúvidas e o professor deve ser capaz de responder essas perguntas(estilo reddit) |
 | Ce7/RF20 | 5 | Denúncias no fórum | funcional | Should | O sistema deve permitir denúncias feitas por qualquer perfil em relação a conversas no fórum de dúvidas | Como professor ou aluno eu posso denunciar qualquer mensagem em qualquer fórum |
 | Ce7/RF21 | 5 | Marcação de mensagens | Funcional | Could | O sistema deve marcar as mensagens de professor e aluno | Como aluno eu tenho que ver com clareza quais mensagens são do professor e quais são de alunos. |
@@ -593,13 +589,9 @@ O planejamento dos casos de teste a serem executados e validados são orientados
 | T12 | Exclusão de disciplina | Validar remoção de disciplina | Sistema | Funcional | Disciplina existente | Disciplina removida |
 | T13 | Postagem de conteúdo | Validar a publicação do material pelo professor | Sistema | funcional | Professor autenticado | Conteúdo disponibilizado aos alunos |
 | T14 | Validação de conteúdo | Validar a persistência dos conteúdos postados | Unitário | Funcional | Dados válidos | Conteúdo salvo corretamente |
-| T15 | Criação de avaliação | Verificar criação de avaliação | Sistema | Funcional | Professor autenticado | Avaliação criada |
 | T16 | Navegação do aluno | Verificar navegação entre disciplinas | Sistema | Funcional | Aluno autenticado | Navegação funcional |
 | T17 | Visualização de disciplinas | Verificar listagem das disciplinas | Sistema | Funcional | Usuário autenticado | Lista exibida corretamente |
 | T18 | Visão intra-disciplinas | Validar acesso ao conteúdo da disciplina aos usuários cadastrados | Sistema | Funcional | Usuário autenticado | Conteúdo visível e acessível |
-| T19 | Envio de tarefas | Verificar o envio correto de tarefas pelo aluno | Sistema | Funcional | Tarefa disponibilizada | Submissão de tarefa registrada com sucesso |
-| T20 | Desempenho pessoal | Validar a exibição correta do desempenho pessoal do aluno | Sistema | Funcional | Aluno com alguma atividade concluída | Desempenho individual do aluno é exibido corretamente |
-| T21 | Desempenho de turma | Verificar a exibição correta do desempenho geral da turma | Sistema | Funcional | Atividades realizadas por alunos | Desempenho da turma exibido corretamente |
 | T22 | Fórum de dúvidas | Validar o envio e acesso de mensagens do fórum | Sistema | Funcional | Conteúdo com um fórum ativo | Mensagem publicada e visível com sucesso |
 | T23 | Módulo de denúncia | Verificar envio de denúncias ao administrador | Sistema | Funcional | Usuário autenticado | Denúncia registrada e enviada corretamente |
 | T24 | Acessibilidade | Validar configurações de acessibilidade disponibilizadas | Sistema | Funcional | Usuário autenticado | Configurações aplicadas corretamente na interface completa |
