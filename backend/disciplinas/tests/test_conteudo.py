@@ -1,5 +1,7 @@
 from django.contrib.auth.hashers import make_password
 from rest_framework.test import APIClient, APITestCase
+
+from interacoes.models import Inscricao
 from usuarios.models import Admin, Perfil, Aluno, Professor
 from disciplinas.models import Conteudo, Disciplina
 
@@ -114,13 +116,44 @@ class ConteudoTestCase(APITestCase):
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response.data['nome'], 'integrais')
 
+    def test_nome_duplicado(self):
+        get= self.client.get('/api/disciplinas/conteudos/')
+        print(get.data)
+        response = self.client.post('/api/disciplinas/conteudos/', {
+            "nome": "Derivadas",
+            "descricao": "Derivadas",
+            'status': 'ativo',
+            "disciplina": self.disciplina.id,
+            'professores':[]
+        },format='json')
+        self.assertEqual(response.status_code, 400)
+
     def test_put_admin(self):
-        response = self.client.put('/api/disciplinas/conteudos/1/', {
+        professor2= self.client.post('/api/usuarios/professores/', {
+            "perfil": {
+                "nome": "Nome do Professor",
+                'email': 'gabriel@aleatorio2.com',
+                "cpf": '12345678902',
+                "data_nascimento": '2005-05-12',
+                "tipo": 'professor',
+                "password": "make_password('123456')"
+            }}, format='json')
+        _inscricao=Inscricao.objects.get(professor=professor2.data['id'])
+        print(_inscricao.professor)
+        # professor2.perfil.is_professor=True
+        professor = Professor.objects.get(id=professor2.data['id'])
+        inscricao = Inscricao.objects.get(professor=professor)
+        inscricao.status = 'aprovado'
+        inscricao.perfil_aprovado = True
+        inscricao.save()
+        professor.perfil.is_active = True
+        professor.perfil.save()
+        response = self.client.put(f"/api/disciplinas/conteudos/{self.conteudo.id}/", {
             "nome": "integrais",
             "descricao": "integrais",
             'status': 'encerrado',
             "disciplina": self.disciplina.id,
-            'professores':[1]
+            'professores':[professor2.data['id']]
         },format='json')
         print(response.data)
         self.assertEqual(response.status_code, 200)
@@ -146,3 +179,28 @@ class ConteudoTestCase(APITestCase):
     def test_delete_admin(self):
         response = self.client.delete('/api/disciplinas/conteudos/1/')
         self.assertEqual(response.status_code, 204)
+
+    def test_entrada_de_dados(self):
+        response = self.client.post('/api/disciplinas/conteudos/', {
+            "nome": "integrais",
+            'status': 'ativo',
+            "disciplina": self.disciplina.id,
+            'professores':[]
+        },format='json')
+        print(response.data)
+        self.assertEqual(response.status_code, 400)
+        response = self.client.post('/api/disciplinas/conteudos/', {
+            'status': 'ativo',
+            "descricao": "integrais",
+            "disciplina": self.disciplina.id,
+            'professores': []
+        }, format='json')
+        print(response.data)
+        self.assertEqual(response.status_code, 400)
+        response = self.client.post('/api/disciplinas/conteudos/', {
+            "nome": "integrais",
+            'status': 'ativo',
+            "descricao": "integrais",
+        }, format='json')
+        print(response.data)
+        self.assertEqual(response.status_code, 400)

@@ -1,0 +1,106 @@
+### ADMIN
+
+POST http://127.0.0.1:8000/api/usuarios/login/
+Content-Type: application/json
+
+{
+  "email": "admin@email.com",
+  "password": "123456"
+}
+
+###
+#Cria admin
+POST http://127.0.0.1:8000/api/usuarios/administradores/
+Content-Type: application/json
+
+
+{
+  "perfil": {
+    "nome": "Admin Teste",
+    "email": "admin@email.com",
+    "cpf": "12345678901",
+    "password": "123456",
+    "data_nascimento": "2000-01-01"
+  }
+}
+
+###Professor
+POST http://127.0.0.1:8000/api/usuarios/login/
+Content-Type: application/json
+
+{
+  "email": "prof@email.com",
+  "password": "123456"
+}
+
+
+
+
+###
+DELETE http://127.0.0.1:8000/api/usuarios/professores/3/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc5NjQ3NjM3LCJpYXQiOjE3Nzk1NjEyMzcsImp0aSI6IjZiNzBjOTg5YjZlNTRiZjA4MDYwZjE1ODA5NTQ4YzlmIiwidXNlcl9pZCI6IjIiLCJub21lIjoiQWRtaW4gVGVzdGUiLCJlbWFpbCI6ImFkbWluQGVtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsInRpcG8iOiJhZG1pbiJ9.TBdFUV-I6dd5Asxs2Jwuti3ZEyfkTCyvJ232g9VG2yg
+
+
+###
+PATCH 127.0.0.1:8000/api/usuarios/professores/4/
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc5NjQ3NjM3LCJpYXQiOjE3Nzk1NjEyMzcsImp0aSI6IjZiNzBjOTg5YjZlNTRiZjA4MDYwZjE1ODA5NTQ4YzlmIiwidXNlcl9pZCI6IjIiLCJub21lIjoiQWRtaW4gVGVzdGUiLCJlbWFpbCI6ImFkbWluQGVtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsInRpcG8iOiJhZG1pbiJ9.TBdFUV-I6dd5Asxs2Jwuti3ZEyfkTCyvJ232g9VG2yg
+
+
+{
+    "perfil": {
+        "nome" : "novo-nome"
+    }
+}
+
+###
+
+
+###
+#LISTAR ALUNOS
+GET http://127.0.0.1:8000/api/usuarios/alunos/
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc4MDE1NDQ3OSwiaWF0IjoxNzc5NTQ5Njc5LCJqdGkiOiIzYTRiMjVmYWNiNWM0MDhhOGE0OWJhYmI1MjAxZWFiMyIsInVzZXJfaWQiOiIyIiwibm9tZSI6IkFkbWluIFRlc3RlIiwiZW1haWwiOiJhZG1pbkBlbWFpbC5jb20iLCJyb2xlIjoiYWRtaW4iLCJ0aXBvIjoiYWRtaW4ifQ.G8dO8mi8X0xzA1QPh8Tgk7xb8yy4AZS0MbDwBGzTqqo
+
+###
+
+POST http://127.0.0.1:8000/api/usuarios/professores/
+Content-Type: application/json
+
+
+{
+  "perfil": {
+    "nome": "Professor",
+    "email": "prof@email.com",
+    "cpf": "12345678902",
+    "password": "123456",
+    "data_nascimento": "2000-01-01"
+  }
+}
+
+###
+#LISTAR Professores
+GET http://127.0.0.1:8000/api/usuarios/professores/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc5NjQ5NTgwLCJpYXQiOjE3Nzk1NjMxODAsImp0aSI6ImNiODQ3YWJmMTkzMTQwZTJhZTllYjVlODdkNzMwODEyIiwidXNlcl9pZCI6IjIiLCJub21lIjoiQWRtaW4gVGVzdGUiLCJlbWFpbCI6ImFkbWluQGVtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsInRpcG8iOiJhZG1pbiJ9.DUdqSEqJX8MPH1cJXSSLH8aO5-q8YloWrraSPXP5ets
+###
+
+###
+PUT 127.0.0.1:8000/api/usuarios/professores/4/
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc5NjQ3NjM3LCJpYXQiOjE3Nzk1NjEyMzcsImp0aSI6IjZiNzBjOTg5YjZlNTRiZjA4MDYwZjE1ODA5NTQ4YzlmIiwidXNlcl9pZCI6IjIiLCJub21lIjoiQWRtaW4gVGVzdGUiLCJlbWFpbCI6ImFkbWluQGVtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsInRpcG8iOiJhZG1pbiJ9.TBdFUV-I6dd5Asxs2Jwuti3ZEyfkTCyvJ232g9VG2yg
+
+
+{
+  "perfil": {
+    "nome": "Professorrrrrr",
+    "email": "prof1@email.com",
+    "cpf": "12345678903",
+    "password": "123456",
+    "data_nascimento": "2000-01-01"
+  }
+}
+
+###
+#LISTAR admins
+GET http://127.0.0.1:8000/api/usuarios/administradores/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc5NjUyNDY2LCJpYXQiOjE3Nzk1NjYwNjYsImp0aSI6IjYwOThhNzhhY2E3MzQ3NmFhZjg2ZjQ1ZDhjNDYwMWYzIiwidXNlcl9pZCI6IjIiLCJub21lIjoiQWRtaW4gVGVzdGUiLCJlbWFpbCI6ImFkbWluQGVtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsInRpcG8iOiJhZG1pbiJ9.FZNKv_Ymjh1hR-QGErWQdfwWF0XuIPb8ruZBpLTnC2M
+###

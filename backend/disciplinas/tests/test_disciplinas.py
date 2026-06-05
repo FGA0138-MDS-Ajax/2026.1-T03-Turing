@@ -1,7 +1,6 @@
 from django.contrib.auth.hashers import make_password
 from rest_framework.test import APIClient, APITestCase
 from disciplinas.models import Disciplina
-from urllib3 import response
 from usuarios.models import Perfil, Aluno, Admin
 
 
@@ -55,8 +54,21 @@ class DisciplinaTestCase(APITestCase):
         response = self.client.get('/api/disciplinas/')
         self.assertEqual(response.status_code, 401)
 
+### teste nome duplicado
+    def test_nome_duplicado(self):
+        self.get_token('admin@email.com')
+        self.client.post('/api/disciplinas/', {
+            "nome": "Estrutura de nada",
+            'descricao': 'horrivel'
+        }, format='json')
 
-### alunos ou professores
+        response = self.client.post('/api/disciplinas/', {
+            "nome": "Estrutura de nada",
+            'descricao': 'horrivel'
+        }, format='json')
+        self.assertEqual(response.status_code, 400)
+
+    ### alunos ou professores
     def test_listar_disciplinas_GET_aluno(self):
         self.get_token('professor@email.com')
         response = self.client.get('/api/disciplinas/')
@@ -122,3 +134,20 @@ class DisciplinaTestCase(APITestCase):
         self.get_token('admin@email.com')
         response = self.client.delete(f'/api/disciplinas/{self.disciplina.id}/')
         self.assertEqual(response.status_code, 204)
+
+    def test_entrada_de_dados(self):
+        self.get_token('admin@email.com')
+        response = self.client.post('/api/disciplinas/', {
+            "nome": "Estrutura de nada",
+        }, format='json')
+        print(response.data)
+        self.assertEqual(response.status_code, 400)
+
+        self.get_token('admin@email.com')
+        response = self.client.post('/api/disciplinas/', {
+            'descricao': 'horrivel'
+        }, format='json')
+        self.assertEqual(response.status_code, 400)
+
+
+
