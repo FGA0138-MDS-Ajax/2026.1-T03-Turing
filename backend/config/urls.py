@@ -28,8 +28,7 @@ urlpatterns = [
     path("api/matriculas/", include('turmas.urls'))
 ]
 
-# Obs: esse endpoint deverá ser substituindo quando as matriculas forem implementadas como parte das rotas
-#  de disciplinas
+
 
 urlpatterns += static(
     settings.MEDIA_URL,

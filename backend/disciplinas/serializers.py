@@ -12,9 +12,10 @@ class MaterialSerializer(serializers.ModelSerializer):
         nome = value.strip() if value else ""
         if not nome:
             raise serializers.ValidationError("O nome do material não pode ser vazio, adicione um nome válido.")
+
         return nome
 
-    def validate_tipo(self, data):
+    def validate(self, data):
             # Agora vai usar o novo valor ou valor existente no banco
         tipo = data.get('tipo', self.instance.tipo if self.instance else None)
         arquivo = data.get('arquivo', self.instance.arquivo if self.instance else None)
@@ -35,7 +36,7 @@ class MaterialSerializer(serializers.ModelSerializer):
             extensao = novo_arquivo.name.split('.')[-1].lower()
 
             if tipo == 'pdf' and extensao != 'pdf':
-                raise serializers.ValidationError({"Você selecionou PDF, mas enviou um arquivo com formato diferente."})
+                raise serializers.ValidationError({"arquivo":"Você selecionou PDF, mas enviou um arquivo com formato diferente."})
 
             elif tipo == 'imagem' and extensao not in ['jpg', 'jpeg', 'png', 'gif', 'webp']:
                 raise serializers.ValidationError(

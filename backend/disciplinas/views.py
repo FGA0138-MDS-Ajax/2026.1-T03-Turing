@@ -48,7 +48,7 @@ class MaterialViewSet(viewsets.ModelViewSet):
         if disciplina_id is not None:
                queryset = queryset.filter(conteudo__disciplina_id=disciplina_id)
 
-        return queryset
+        return queryset.distinct()
 
 
 class ConteudoViewSet(viewsets.ModelViewSet):
