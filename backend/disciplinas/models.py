@@ -5,6 +5,12 @@ class Disciplina(models.Model):
     
     nome = models.CharField(max_length=255, unique=True)
     descricao = models.TextField()
+    STATUS_CHOICES = [
+        ('ativo', 'Ativo'),
+        ('inativo', 'Inativo'),
+    ]
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='ativo')
+    
     data_create = models.DateTimeField(auto_now_add=True)
     data_update = models.DateTimeField(auto_now=True)
 
@@ -51,7 +57,7 @@ class Conteudo(models.Model):
 
     disciplina = models.ForeignKey(
         Disciplina,
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         related_name='conteudos'
     )
     professores = models.ManyToManyField(
@@ -84,7 +90,7 @@ class Material(models.Model):
 
     conteudo = models.ForeignKey(
         Conteudo,
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT, 
         related_name='materiais'
     )
 
