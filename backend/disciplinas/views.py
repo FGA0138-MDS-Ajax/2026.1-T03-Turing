@@ -35,6 +35,15 @@ class ConteudoViewSet(viewsets.ModelViewSet):
         
         # GET ou visualizar só precisa estar logado
         return [IsAuthenticated()]
+    
+    # Filtra conteúdos por disciplina via query string: ?disciplina={id}
+    def get_queryset(self):
+        queryset = Conteudo.objects.all()
+        disciplina_id = self.request.query_params.get('disciplina')
+        if disciplina_id:
+            queryset = queryset.filter(disciplina_id=disciplina_id)
+        return queryset
+    
     def perform_destroy(self, instance):
         # Ao invés de deletar, desativa o conteúdo e todas as matrículas vinculadas
         from turmas.models import Matricula
