@@ -7,7 +7,6 @@ import "./TeacherReview.css";
 export default function TeacherReview() {
   const { user } = useAuth();
 
-
   const [inscricoesPendentes, setInscricoesPendentes] = useState([]);
   const [selectedProfessor, setSelectedProfessor] = useState(null);
   const [search, setSearch] = useState("");
@@ -36,31 +35,6 @@ export default function TeacherReview() {
         </div>
       );
     }
-
-
-  // ESPERAR BACK INTEGRAR O RECEBIMENTO DO HORARIO FEITO O ENVIO DO CURRICULO
-
-  // const formatTimeAgo = (dateString) => {
-  //   if (!dateString) return "5 min atrás";
-
-  //   const now = new Date();
-  //   const createdAt = new Date(dateString);
-
-  //   const diffMs = now - createdAt;
-
-  //   const minutes = Math.floor(diffMs / 1000 / 60);
-
-  //   if (minutes < 1) return "Agora";
-  //   if (minutes < 60) return `${minutes} min atrás`;
-
-  //   const hours = Math.floor(minutes / 60);
-
-  //   if (hours < 24) return `${hours}h atrás`;
-
-  //   const days = Math.floor(hours / 24);
-
-  //   return `${days} dias atrás`;
-  // };
 
   useEffect(() => {
     fetchProfessores();
@@ -132,11 +106,7 @@ export default function TeacherReview() {
         );
       }
 
-      setInscricoesPendentes((previous) =>
-        previous.filter(
-          (item) => item.id !== professor.id
-        )
-      );
+      await fetchProfessores();
 
       setSelectedProfessor(null);
 
@@ -161,6 +131,7 @@ export default function TeacherReview() {
       setConfirmAction(null);
     }
   };
+  
   const filteredProfessores = inscricoesPendentes.filter(
     (inscricao) =>
       inscricao.professor_nome
@@ -192,8 +163,6 @@ export default function TeacherReview() {
         </div>
       ) : (
         <>
-
-          {/* PROFESSORES PENDENTES */}
             <div className="admin-review-header">
               <div>
                 <h1>Professores pendentes</h1>
@@ -291,10 +260,6 @@ export default function TeacherReview() {
 
                   <div className="admin-card-right">
 
-                    {/* <span className="teacher-time">
-                      {formatTimeAgo(professor.data_criacao)}
-                    </span> */}
-
                     <button
                     type="button"
                     className="btn-secondary-admin"
@@ -320,35 +285,27 @@ export default function TeacherReview() {
 
           <div className="resume-modal">
 
-
             <div className="resume-modal-header">
 
               <div className="resume-user-info">
-
-                <h2>
-                  {selectedProfessor.professor_nome}
-                </h2>
-
-                <p>
-                  {selectedProfessor.professor_email}
-                </p>
-
+                <h2>{selectedProfessor.professor_nome}</h2>
+                <p>{selectedProfessor.professor_email}</p>
               </div>
 
               <div className="resume-header-actions">
-
-                <a
-                  href={
-                    // aqui ta deboa
-                    selectedProfessor.curriculo
-                      ? selectedProfessor.curriculo
-                      : `http://localhost:8000${selectedProfessor.curriculo}`
-                  }
-                  download
-                  className="download-button"
-                >
-                  ⬇
-                </a>
+                {selectedProfessor.curriculo && (
+                  <a
+                    href={
+                      selectedProfessor.curriculo.startsWith("http")
+                        ? selectedProfessor.curriculo
+                        : `http://localhost:8000${selectedProfessor.curriculo}`
+                    }
+                    download
+                    className="download-button"
+                  >
+                    ⬇
+                  </a>
+                )}
 
                 <button
                   className="close-button"
@@ -360,19 +317,23 @@ export default function TeacherReview() {
               </div>
             </div>
 
-
             <div className="resume-modal-content">
-
-               <embed
-                src={
-                 // aqui ta deboa
-                  selectedProfessor.curriculo
-                    ? selectedProfessor.curriculo
-                    : `http://localhost:8000${selectedProfessor.curriculo}`
-                }
-                type="application/pdf"
-                className="resume-pdf"
-              />
+               {selectedProfessor.curriculo ? (
+                 <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", height: "100%", color: "#666", gap: "16px" }}>
+                   <p>A pré-visualização direta está bloqueada por definições de segurança do servidor.</p>
+                   <button
+                     className="btn-secondary-admin"
+                     onClick={() => showResume(selectedProfessor.curriculo)}
+                     style={{ padding: "10px 20px", fontSize: "14px", cursor: "pointer" }}
+                   >
+                     Abrir Currículo em Nova Guia ↗
+                   </button>
+                 </div>
+               ) : (
+                 <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%", color: "#666" }}>
+                   <p>Este professor não anexou um currículo.</p>
+                 </div>
+               )}
             </div>
 
             <div className="resume-modal-actions">
@@ -392,7 +353,6 @@ export default function TeacherReview() {
               <button
                 className="btn-primary-admin"
                 onClick={() =>
-                    // ja ta mudado
                   requestAction(
                     selectedProfessor,
                     "aprovar"
@@ -409,8 +369,6 @@ export default function TeacherReview() {
         </div>
 
       )}
-
-
 
       {/* MODAL DE CONFIRMAÇÃO */}
       {confirmAction && (
