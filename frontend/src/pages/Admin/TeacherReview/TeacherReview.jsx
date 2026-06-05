@@ -340,7 +340,7 @@ export default function TeacherReview() {
                 <a
                   href={
                     // aqui ta deboa
-                    selectedProfessor.curriculo.startsWith("http")
+                    selectedProfessor.curriculo
                       ? selectedProfessor.curriculo
                       : `http://localhost:8000${selectedProfessor.curriculo}`
                   }
@@ -366,7 +366,7 @@ export default function TeacherReview() {
                <embed
                 src={
                  // aqui ta deboa
-                  selectedProfessor.curriculo.startsWith("http")
+                  selectedProfessor.curriculo
                     ? selectedProfessor.curriculo
                     : `http://localhost:8000${selectedProfessor.curriculo}`
                 }
