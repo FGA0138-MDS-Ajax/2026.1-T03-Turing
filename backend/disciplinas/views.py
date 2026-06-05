@@ -35,6 +35,12 @@ class ConteudoViewSet(viewsets.ModelViewSet):
         
         # GET ou visualizar só precisa estar logado
         return [IsAuthenticated()]
+    def perform_destroy(self, instance):
+        # Ao invés de deletar, desativa o conteúdo e todas as matrículas vinculadas
+        from turmas.models import Matricula
+        Matricula.objects.filter(conteudo=instance).update(status='cancelada')
+        instance.status = 'encerrado'
+        instance.save()
 
 class DisciplinaViewSet(viewsets.ModelViewSet):
     queryset = Disciplina.objects.all()
@@ -55,3 +61,14 @@ class DisciplinaViewSet(viewsets.ModelViewSet):
         conteudos = Conteudo.objects.filter(disciplina=disciplina)
         serializer = ConteudoSerializer(conteudos, many=True)
         return Response(serializer.data)
+    
+    def perform_destroy(self, instance):
+        # Ao invés de deletar, desativa a disciplina e todos os conteúdos e matrículas vinculados
+        from turmas.models import Matricula
+        conteudos = Conteudo.objects.filter(disciplina=instance)
+        for conteudo in conteudos:
+            Matricula.objects.filter(conteudo=conteudo).update(status='cancelada')
+            conteudo.status = 'encerrado'
+            conteudo.save()
+        instance.status = 'inativo'
+        instance.save()
