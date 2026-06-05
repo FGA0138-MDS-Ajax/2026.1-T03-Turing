@@ -5,6 +5,7 @@ import { AdminDashboard }  from '../pages/admin/AdminDashboard';
 import { Professores }     from '../pages/admin/Professores';
 import { Alunos }          from '../pages/admin/Alunos';
 import { Configuracoes }   from '../pages/admin/Configuracoes';
+import { ProfessorDashboard }  from '../pages/professor/ProfessorDashboard';
 import Login               from '../pages/Login/Login';
 import Register            from '../pages/Register/Register';
 import TeacherReview       from '../pages/admin/TeacherReview/TeacherReview';
@@ -38,6 +39,19 @@ export function AppRoutes() {
         <Route path="configuracoes"        element={<Configuracoes />} />
         <Route path="professores/revisao"  element={<TeacherReview />} />
         <Route path="conteudos"            element={<Disciplinas />} />
+      </Route>
+
+      {/* Rotas do Professor */}
+      <Route
+        path="/professor"
+        element={
+          <ProtectedRoute requiredRole="professor">
+            <Outlet />
+          </ProtectedRoute>
+        }
+      >
+        <Route index element={<ProfessorDashboard />} />
+        {/* Futuras rotas: conteudos, materiais, configuracoes */}
       </Route>
 
       <Route
