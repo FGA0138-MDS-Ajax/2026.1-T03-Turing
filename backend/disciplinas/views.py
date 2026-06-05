@@ -52,8 +52,27 @@ class MaterialViewSet(viewsets.ModelViewSet):
 
 
 class ConteudoViewSet(viewsets.ModelViewSet):
-    queryset = Conteudo.objects.all()
+   
     serializer_class = ConteudoSerializer
+
+    # função para listagem de conteúdos
+    def get_queryset(self):
+        user = self.request.user
+
+        #se estiver logado como admin vai listar todos os conteudos
+        if user.tipo == 'admin':
+            return Conteudo.objects.all()
+
+        #se tiver logado como professor vai listar so os conteudos do proprio professor
+        if user.tipo == 'professor':
+            if hasattr(user, 'professor'):
+                return Conteudo.objects.filter(
+                    professores=user.professor
+                ).distinct()
+            return Conteudo.objects.none
+
+        return Conteudo.objects.all()
+
 
     def get_permissions(self):
         # Apenas admin pode criar, atualizar e deletar
@@ -62,6 +81,8 @@ class ConteudoViewSet(viewsets.ModelViewSet):
         
         # GET ou visualizar só precisa estar logado
         return [IsAuthenticated()]
+    
+
 
 class DisciplinaViewSet(viewsets.ModelViewSet):
     queryset = Disciplina.objects.all()
