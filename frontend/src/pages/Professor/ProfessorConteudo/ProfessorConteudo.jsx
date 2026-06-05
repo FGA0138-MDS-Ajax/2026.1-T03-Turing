@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import api from "../../../services/api";
 import { useAuth } from "../../../context/AuthContext";
 import {
   listarConteudos,
@@ -83,22 +82,12 @@ export default function ProfessorConteudo() {
     }
   };
 
-  const criarMatricula = async (conteudoId) => {
-    try {
-      const alunoId = 1; // temporário até existir modal
-
-      await api.post("/api/matriculas/", {
-        aluno: alunoId,
-        conteudo: conteudoId,
-      });
-
-      alert("Matrícula criada com sucesso!");
-    } catch (error) {
-      console.error(error);
-      alert("Erro ao criar matrícula.");
-    }
+  const handleAdicionarMaterial = (conteudoId) => {
+    console.log(
+      "Abrir modal para adicionar material ao conteúdo:",
+      conteudoId
+    );
   };
-
 
   const conteudosFiltrados =
     filtroDisciplina === ""
@@ -162,15 +151,6 @@ export default function ProfessorConteudo() {
         </div>
       </div>
 
-      <div className="matricula-section">
-        <button
-          className="btn-matricula"
-          onClick={() => criarMatricula()}
-        >
-          + Criar matrícula
-        </button>
-      </div>
-      
       <div className="conteudos-grid">
           {conteudosFiltrados.map((conteudo) => {
             const disciplina = disciplinas.find(
@@ -234,7 +214,8 @@ export default function ProfessorConteudo() {
                   </div>
 
                 <div className="conteudo-footer">
-                  <button className="btn-material">
+                  <button className="btn-material"
+                   onClick={() => handleAdicionarMaterial(conteudo.id)}>
                     + Adicionar material
                   </button>
                 </div>
