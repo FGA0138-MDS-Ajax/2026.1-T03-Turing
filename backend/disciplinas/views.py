@@ -58,20 +58,32 @@ class ConteudoViewSet(viewsets.ModelViewSet):
     # função para listagem de conteúdos
     def get_queryset(self):
         user = self.request.user
+        queryset = Conteudo.objects.all()
 
         #se estiver logado como admin vai listar todos os conteudos
         if user.tipo == 'admin':
-            return Conteudo.objects.all()
+            pass
 
         #se tiver logado como professor vai listar so os conteudos do proprio professor
-        if user.tipo == 'professor':
+        elif user.tipo == 'professor':
             if hasattr(user, 'professor'):
-                return Conteudo.objects.filter(
-                    professores=user.professor
-                ).distinct()
-            return Conteudo.objects.none
+                queryset = queryset.filter(professores=user.professor)
+            else:
+                return Conteudo.objects.none()
 
-        return Conteudo.objects.all()
+        #se logado como aluno vai listar so os conteudos que o aluno participa
+        if user.tipo == 'aluno':
+            queryset = queryset.filter(alunos=user.aluno)
+
+        else:
+            return Conteudo.objects.none()
+        
+        #pesquisa por disciplina
+        disciplina_id = self.request.query_params.get('disciplina')
+        if disciplina_id is not None:
+            queryset = queryset.filter(disciplina_id=disciplina_id)
+
+        return queryset.distinct()
 
 
     def get_permissions(self):
