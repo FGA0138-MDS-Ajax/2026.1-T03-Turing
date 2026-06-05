@@ -1,0 +1,171 @@
+.professor-content-page {
+  min-height: 100vh;
+  background: #f5f5f5;
+  padding: 32px;
+}
+
+.content-header {
+  margin-bottom: 24px;
+}
+
+.content-header h1 {
+  font-size: 32px;
+  font-weight: 700;
+  color: #212121;
+  margin-bottom: 8px;
+}
+
+.content-header p {
+  color: #666;
+  font-size: 15px;
+}
+
+.content-section {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.section-header h2 {
+  font-size: 22px;
+  color: #212121;
+  font-weight: 600;
+}
+
+.search-wrapper {
+  width: 320px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid #d8d8d8;
+  border-radius: 10px;
+  outline: none;
+  font-size: 14px;
+}
+
+.search-input:focus {
+  border-color: #2f5d62;
+}
+
+.section-divider {
+  width: 100%;
+  height: 1px;
+  background: #ececec;
+  margin: 20px 0;
+}
+
+.content-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 20px;
+}
+
+.content-card {
+  background: white;
+  border: 1px solid #ececec;
+  border-radius: 16px;
+  padding: 20px;
+  transition: 0.2s ease;
+}
+
+.content-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+.content-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.content-card-header h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #212121;
+}
+
+.content-status {
+  background: #e8f5e9;
+  color: #2e7d32;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 10px;
+  border-radius: 999px;
+}
+
+.content-description {
+  color: #666;
+  font-size: 14px;
+  line-height: 1.5;
+  margin-bottom: 18px;
+}
+
+.content-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+  color: #444;
+  font-size: 14px;
+}
+
+.content-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn-primary-content {
+  background: #2f5d62;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 18px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-primary-content:hover {
+  opacity: 0.9;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 50px 20px;
+  color: #777;
+  font-size: 15px;
+}
+
+/* Responsividade */
+
+@media (max-width: 768px) {
+  .professor-content-page {
+    padding: 16px;
+  }
+
+  .section-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-wrapper {
+    width: 100%;
+  }
+
+  .content-list {
+    grid-template-columns: 1fr;
+  }
+}

@@ -8,6 +8,7 @@ import { Configuracoes }   from '../pages/admin/Configuracoes';
 import Login               from '../pages/Login/Login';
 import Register            from '../pages/Register/Register';
 import TeacherReview       from '../pages/admin/TeacherReview/TeacherReview';
+import ProfessorConteudo   from "../pages/Professor/ProfessorConteudo/ProfessorConteudo";
 
 function AdminLayout() {
   return (
@@ -22,6 +23,7 @@ export function AppRoutes() {
     <Routes>
       <Route path="/login"    element={<Login />} />
       <Route path="/register" element={<Register />} />
+      <Route path="/professor/conteudo" element={<ProfessorConteudo />} />
 
       <Route
         path="/admin"
@@ -36,6 +38,7 @@ export function AppRoutes() {
         <Route path="alunos"        element={<Alunos />} />
         <Route path="configuracoes" element={<Configuracoes />} />
         <Route path="professores/revisao" element={<TeacherReview />} />
+        <Route path="professor/conteudo" element={<ProfessorConteudo />} />
       </Route>
 
       <Route
