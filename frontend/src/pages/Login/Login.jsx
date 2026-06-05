@@ -46,6 +46,9 @@ export default function Login() {
       if (userData.tipo === "admin") {
         console.log("4 - navegando para /admin");
         navigate("/admin/");
+      } else if (userData.tipo === 'professor') {
+        console.log("4 - navegando para /professor");
+        navigate('/professor');
       } else {
         console.log("4 - navegando para /");
         navigate("/");
