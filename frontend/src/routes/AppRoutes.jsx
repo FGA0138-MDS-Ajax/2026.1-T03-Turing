@@ -6,6 +6,9 @@ import { Professores }     from '../pages/admin/Professores';
 import { Alunos }          from '../pages/admin/Alunos';
 import { Configuracoes }   from '../pages/admin/Configuracoes';
 import { ProfessorDashboard }  from '../pages/professor/ProfessorDashboard';
+import { ProfessorConteudos }    from '../pages/professor/ProfessorConteudos';
+import { ProfessorMateriais }    from '../pages/professor/ProfessorMateriais';
+import { ProfessorConfiguracoes } from '../pages/professor/ProfessorConfiguracoes';
 import Login               from '../pages/Login/Login';
 import Register            from '../pages/Register/Register';
 import TeacherReview       from '../pages/admin/TeacherReview/TeacherReview';
@@ -41,7 +44,6 @@ export function AppRoutes() {
         <Route path="conteudos"            element={<Disciplinas />} />
       </Route>
 
-      {/* Rotas do Professor */}
       <Route
         path="/professor"
         element={
@@ -51,7 +53,9 @@ export function AppRoutes() {
         }
       >
         <Route index element={<ProfessorDashboard />} />
-        {/* Futuras rotas: conteudos, materiais, configuracoes */}
+        <Route path="conteudos"            element={<ProfessorConteudos />} />
+        <Route path="materiais"            element={<ProfessorMateriais />} />
+        <Route path="configuracoes"        element={<ProfessorConfiguracoes />} />
       </Route>
 
       <Route

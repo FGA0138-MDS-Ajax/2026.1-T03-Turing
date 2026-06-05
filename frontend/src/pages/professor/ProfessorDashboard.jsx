@@ -1,6 +1,8 @@
 import { BookOpen, FileText, Bell, Settings } from 'lucide-react';
+import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { ProfessorLayout } from '../../components/professor/ProfessorLayout';
+import api from '../../services/api';
 import './ProfessorDashboard.css';
 
 //substituir por chamadas à API quando backend estiver pronto
@@ -18,12 +20,14 @@ const DUVIDAS_RECENTES = [
   { id: 1, aluno: '--',    titulo: '--',    disciplina: '-', tempo: '- min atrás',   respondida: false },
 ];
 
-function StatCard({ label, value, icon: Icon, color }) {
+function StatCard({ label, value, icon: Icon, color, loading }) {
   return (
     <div className="prof-stat-card">
       <div className="prof-stat-info">
         <span className="prof-stat-label">{label}</span>
-        <span className="prof-stat-value">{value}</span>
+        <span className="prof-stat-value">
+          {loading ? <span className="prof-stat-skeleton" /> : value}
+        </span>
       </div>
       <div className="prof-stat-icon" style={{ background: color }}>
         <Icon size={22} color="#fff" />
@@ -64,9 +68,48 @@ function DuvidaItem({ aluno, titulo, disciplina, tempo, respondida }) {
 export function ProfessorDashboard() {
   const { user } = useAuth();
 
+  const [stats, setStats] = useState({ conteudosAtivos: null, atividadesCriadas: null });
+  const [loadingStats, setLoadingStats] = useState(true);
+  const [erroStats, setErroStats] = useState(null);
+
   const iniciais = user?.nome
     ? user.nome.split(' ').slice(0, 2).map((n) => n[0]).join('').toUpperCase()
     : 'P';
+
+  const fetchStats = useCallback(async () => {
+    setLoadingStats(true);
+    setErroStats(null);
+    try {
+      const [conteudosRes, materiaisRes] = await Promise.all([
+        api.get('/api/disciplinas/conteudos/'),
+        api.get('/api/disciplinas/materiais/'),
+      ]);
+
+      const conteudos = Array.isArray(conteudosRes.data) ? conteudosRes.data : [];
+      const materiais = Array.isArray(materiaisRes.data) ? materiaisRes.data : [];
+
+      const conteudosDoProfessor = conteudos.filter((c) =>
+        Array.isArray(c.professores) && c.professores.some(
+          (p) => p === user?.user_id || p?.id === user?.user_id
+        )
+      );
+
+      setStats({
+        conteudosAtivos: conteudosDoProfessor.filter((c) => c.status === 'ativo').length,
+        atividadesCriadas: materiais.length,
+      });
+    } catch (err) {
+      console.error(err);
+      setErroStats('Não foi possível carregar as estatísticas.');
+    } finally {
+      setLoadingStats(false);
+    }
+  }, [user?.user_id]);
+
+  useEffect(() => {
+    fetchStats();
+  }, [fetchStats]);
+
 
   return (
     <ProfessorLayout>
@@ -92,10 +135,27 @@ export function ProfessorDashboard() {
         </div>
       </header>
 
+
+      {erroStats && (
+        <div className="prof-erro-banner">{erroStats}</div>
+      )}
+
+
       <section className="prof-stats-grid">
-        {STAT_CARDS.map(({ label, value, icon, color }) => (
-          <StatCard key={label} label={label} value={value} icon={icon} color={color} />
-        ))}
+        <StatCard
+          label="Conteúdos ativos"
+          value={stats.conteudosAtivos ?? 0}
+          icon={BookOpen}
+          color="#C07A30"
+          loading={loadingStats}
+        />
+        <StatCard
+          label="Atividades criadas"
+          value={stats.atividadesCriadas ?? 0}
+          icon={FileText}
+          color="#C45C2E"
+          loading={loadingStats}
+        />
       </section>
 
       <section className="prof-panels">
