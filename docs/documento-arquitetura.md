@@ -8,7 +8,7 @@
 
 **Documento de Arquitetura**
 
-Versão 1.0
+Versão 1.2
 
 ---
 
@@ -37,6 +37,7 @@ Versão 1.0
 | --- | --- | --- | --- |
 | **14/05** | 1.0 | Primeira versão do documento | Grupo Turing |
 | **22/05** | 1.1 | Alinhamento das restrições arquiteturais de testes com a inclusão do framework Pytest | Maria Eduarda Guimarães |
+| **06/06** | 1.2 | Remoção completa dos módulos de Avaliações e Desempenho Acadêmico e consolidação da terminologia exclusiva de 'Disciplinas' (remoção de 'Turmas'). | Maria Eduarda Guimarães |
 
 
 ---
@@ -76,10 +77,8 @@ O sistema GoStudy é uma plataforma web educacional desenvolvida com o objetivo 
 De forma geral, o escopo do produto contempla:
 
 - Gestão de usuários, com cadastro, autenticação e controle de perfis (Aluno, Professor e Administrador);
-- Gerenciamento de turmas e disciplinas, permitindo organização do ambiente acadêmico;
+- Gerenciamento de disciplinas, permitindo organização do ambiente acadêmico;
 - Publicação e acesso a conteúdos educacionais, realizados por professores e disponibilizados aos alunos;
-- Criação e gerenciamento de avaliações e tarefas, incluindo envio de atividades pelos estudantes;
-- Acompanhamento de desempenho acadêmico, com visualização de progresso e relatórios;
 - Sistema de fórum e comunicação, promovendo interação entre usuários;
 - Módulo de notificações, para informar sobre atividades, atualizações e eventos relevantes;
 - Recursos de acessibilidade, garantindo inclusão e adaptação da interface para diferentes perfis de usuários.
@@ -88,7 +87,7 @@ O sistema será desenvolvido como uma aplicação web responsiva, utilizando Rea
 
 Não fazem parte do escopo desta versão inicial funcionalidades que não estejam diretamente relacionadas à operação acadêmica da plataforma, bem como integrações externas complexas não previstas nos documentos de Visão e Declaração de Escopo já entregues.
 
-Em síntese, o escopo do GoStudy compreende o desenvolvimento de uma plataforma educacional modular, segura e escalável, destinada a organizar conteúdos, atividades, comunicação e acompanhamento de desempenho acadêmico dentro de um ambiente web estruturado.
+Em síntese, o escopo do GoStudy compreende o desenvolvimento de uma plataforma educacional modular, segura e escalável, destinada a organizar conteúdos, atividades, comunicação dentro de um ambiente web estruturado.
 
 ---
 
@@ -132,7 +131,7 @@ Responsabilidades: verificação de autenticação, autorização, regras de neg
 
 **Camada de banco de dados:**
 
-Responsabilidades: armazenamento de dados e persistência, integridade relacional desses dados, performance, registro de usuário, conteúdo educacional, mensagens, avaliações.
+Responsabilidades: armazenamento de dados e persistência, integridade relacional desses dados, performance, registro de usuário, conteúdo educacional, mensagens.
 
 A comunicação entre essas camadas acontece de forma desacoplada e padronizada, onde temos interfaces de interação.
 
@@ -237,9 +236,9 @@ Seu objetivo central é organizar a rotina acadêmica através de trilhas de apr
 
 O sistema gerencia três perfis distintos:
 
-- **Alunos**: Acessam conteúdos, participam de fóruns e monitoram seu desempenho.
-- **Professores**: Realizam a postagem de materiais didáticos, avaliações e respondem a dúvidas.
-- **Administradores**: Gerenciam perfis, homologam currículos de professores, administram denúncias e mantêm as disciplinas/turmas.
+- **Alunos**: Acessam conteúdos, participam de fóruns.
+- **Professores**: Realizam a postagem de materiais didáticos  (que podem conter links externos para formulários e exercícios) e respondem a dúvidas.
+- **Administradores**: Gerenciam perfis, homologam currículos de professores, administram denúncias e mantêm as disciplinas.
 
 A plataforma foca na acessibilidade e na centralização de recursos pedagógicos para reduzir a desorganização do aprendizado individual.
 
@@ -260,14 +259,12 @@ O sistema é subdividido nos seguintes módulos:
 1. Cadastro e Autenticação;
 2. Gerenciamento Administrativo;
 3. Navegação do usuário;
-4. Turmas e Disciplinas;
+4. Disciplinas;
 5. Postagem de conteúdo;
-6. Avaliações e tarefas;
-7. Desempenho acadêmico;
-8.  Notificação e comunicação;
-9. Fórum;
-10. Acessibilidade;
-11. Persistência de Dados.
+6. Notificação e comunicação;
+7. Fórum;
+8. Acessibilidade;
+9. Persistência de Dados.
 
 ---
 
@@ -315,27 +312,25 @@ Interfaces:
 Este módulo organiza a experiência do aluno dentro da plataforma, permitindo navegação entre disciplinas, conteúdos e atividades. Sua lógica é proporcionar acessibilidade, organização e facilidade de uso.
 
 Comunica-se com:
-  - Módulo de Disciplinas;
-  - Módulo de Conteúdo;
-  - Módulo de Desempenho;
+  - Módulo de Disciplinas e conteúdos;
   - Banco de Dados.
 
 Interfaces:
   - Dashboard do aluno;
-  - Página de disciplinas;
-  - Página de conteúdos.
+  - Página de disciplinas e conteúdos;
+
 
 ---
 
-4. **Turmas e Disciplinas:**
+4. **Disciplinas:**
 
-Responsável pela criação, organização e gerenciamento das disciplinas e turmas disponíveis no sistema. Sua lógica é estruturar o ambiente educacional da plataforma, permitindo a separação dos conteúdos por áreas de ensino e organização acadêmica.
+Responsável pela criação, organização e gerenciamento das disciplinas disponíveis no sistema. Sua lógica é estruturar o ambiente educacional da plataforma, permitindo a separação dos conteúdos por áreas de ensino e organização acadêmica.
 
 Comunica-se com:
   - Módulo Administrativo → manutenção das disciplinas;
   - Módulo de Conteúdo → associação de materiais;
   - Módulo de Navegação → exibição das disciplinas aos alunos;
-  - Banco de Dados → armazenamento das turmas.
+  - Banco de Dados → armazenamento das disciplinas.
 
 Interfaces:
   - Tela de gerenciamento de disciplinas;
@@ -346,12 +341,11 @@ Interfaces:
 
 5. **Postagem de Conteúdo:**
 
-Permite que professores publiquem materiais didáticos, links, exercícios e conteúdos de apoio. A lógica deste módulo é centralizar o compartilhamento de conhecimento e garantir organização pedagógica dentro das respectivas disciplinas.
+Permite que professores publiquem materiais didáticos, links de exercícios e conteúdos de apoio. A lógica deste módulo é centralizar o compartilhamento de conhecimento e garantir organização pedagógica dentro das respectivas disciplinas.
 
 Comunica-se com:
   - Módulo de Disciplinas → vinculação do conteúdo;
   - Módulo de Fórum → criação automática de fóruns por postagem;
-  - Módulo de Avaliações → associação de atividades;
   - Banco de Dados → armazenamento dos conteúdos.
 
 Interfaces:
@@ -361,46 +355,15 @@ Interfaces:
 
 ---
 
-6. **Avaliações e Tarefas:**
 
-Responsável pela criação, envio e correção de avaliações e tarefas acadêmicas. Sua função lógica é permitir o acompanhamento do aprendizado e avaliação do desempenho dos estudantes.
-
-Comunica-se com:
-  - Módulo de Conteúdo → vínculo com disciplinas;
-  - Módulo de Desempenho → cálculo de progresso;
-  - Banco de Dados → armazenamento de respostas.
-
-Interfaces:
-  - Tela de criação de avaliações;
-  - Tela de submissão de tarefas;
-  - API de avaliações.
-
----
-
-7. **Desempenho acadêmico:**
-
-Responsável por monitorar o progresso individual e coletivo dos estudantes. A lógica deste módulo é fornecer feedback acadêmico para alunos individualmente quanto o feedback sobre a turma para os professores.
-
-Comunica-se com:
-  - Módulo de Avaliações;
-  - Módulo de Navegação;
-  - Banco de Dados.
-
-Interfaces:
-  - Painel de desempenho do aluno;
-  - Relatórios de turma;
-  - API de métricas acadêmicas.
-
----
 
 8. **Notificação e comunicação:**
 
-Responsável pelo envio de e-mails e notificações automáticas do sistema. Sua função lógica é manter usuários informados sobre atividades, respostas e aprovações.
+Responsável pelo envio de e-mails e notificações automáticas do sistema. Sua função lógica é manter usuários informados sobre a postagem de aulas e materiais, incluindo atividades por meio de links.
 
 Comunica-se com:
   - Fórum;
   - Cadastro;
-  - Avaliações;
   - Banco de Dados.
 
 Interfaces:
@@ -515,7 +478,7 @@ O armazenamento persistente das informações será realizado em um servidor ded
 
 A escolha do PostgreSQL se justifica pela robustez, confiabilidade e capacidade de lidar com múltiplos acessos simultâneos, característica importante para uma plataforma educacional com diversos usuários conectados ao mesmo tempo. Além disso, o banco oferece integridade relacional dos dados e boa integração com o Django ORM utilizado no backend.
 
-Nesse ambiente serão armazenados dados relacionados aos usuários, disciplinas, conteúdos, avaliações, notificações, mensagens do fórum e demais informações da plataforma.
+Nesse ambiente serão armazenados dados relacionados aos usuários, disciplinas, conteúdos, notificações, mensagens do fórum e demais informações da plataforma.
 
 O banco de dados não será acessado diretamente pelo frontend. Toda comunicação ocorrerá exclusivamente através do backend, garantindo maior segurança, controle de permissões e integridade dos dados manipulados pelo sistema.
 
@@ -557,11 +520,11 @@ A plataforma GoStudy é acessível diretamente pela internet, sem necessidade de
 
 - **Segurança:** Dado que a plataforma armazena dados pessoais dos usuários como nome, e-mail, CPF e data de nascimento, a segurança é uma restrição de alta prioridade. Os dados sensíveis, em especial senhas, devem ser armazenados com criptografia adequada. Além disso, o sistema deve garantir que cada perfil de usuário acesse exclusivamente as funcionalidades a ele atribuídas, conforme descrito a seguir:
 
-  - O **Administrador** possui acesso total à plataforma, podendo criar, editar e remover qualquer perfil, homologar cadastros de professores, analisar denúncias e gerenciar turmas e disciplinas. Por concentrar o maior nível de privilégio, sua conta deve ser protegida com credenciais seguras e não deve ser acessível por outros perfis.
+  - O **Administrador** possui acesso total à plataforma, podendo criar, editar e remover qualquer perfil, homologar cadastros de professores, analisar denúncias e gerenciar disciplinas. Por concentrar o maior nível de privilégio, sua conta deve ser protegida com credenciais seguras e não deve ser acessível por outros perfis.
 
-  - O **Professor** tem acesso restrito às funcionalidades de gestão de sua disciplina, podendo postar conteúdos, criar avaliações e interagir com alunos no fórum de dúvidas. Seu cadastro só é efetivado após aprovação do currículo pelo Administrador, o que representa uma camada adicional de controle de acesso.
+  - O **Professor** tem acesso restrito às funcionalidades de gestão de sua disciplina, podendo postar conteúdos de diversos tipos, incluindo links de exercícios e interagir com alunos no fórum de dúvidas. Seu cadastro só é efetivado após aprovação do currículo pelo Administrador, ou quando é adicionando diretamente pelo administrador o que representa uma camada adicional de controle de acesso.
 
-  - O **Aluno** tem acesso às funcionalidades de consumo de conteúdo, podendo se inscrever em disciplinas, visualizar materiais e enviar respostas a avaliações. Não possui permissão para acessar áreas administrativas ou de gerenciamento de conteúdo.
+  - O **Aluno** tem acesso às funcionalidades de consumo de conteúdo, podendo se inscrever em disciplinas e visualizar materiais. Não possui permissão para acessar áreas administrativas ou de gerenciamento de conteúdo.
 
 Essa separação de permissões está alinhada à legislação brasileira de proteção de dados (LGPD), que exige que os sistemas garantam o acesso às informações pessoais apenas por quem tem necessidade legítima de consultá-las.
 
