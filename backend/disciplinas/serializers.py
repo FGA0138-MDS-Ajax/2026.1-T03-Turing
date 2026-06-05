@@ -1,19 +1,23 @@
 from rest_framework import serializers
 from .models import Conteudo, Disciplina
 from disciplinas.models import Material
+from rest_framework.validators import UniqueValidator
 
     #Classe de Materiais
 class MaterialSerializer(serializers.ModelSerializer):
+
+    # validações de nome vazio e repetido
+    nome = serializers.CharField(
+        allow_blank =False, 
+        validators= [UniqueValidator(
+            queryset=Material.objects.all(), message="Já existe um material cadastrado com esse nome"
+        )]
+    )
+
+
     class Meta:
         model = Material
         fields = '__all__' #Deixei o all para traduzir todos campos, mas qualquer coisa eu arrumo
-
-    def validate_nome(self, value):
-        nome = value.strip() if value else ""
-        if not nome:
-            raise serializers.ValidationError("O nome do material não pode ser vazio, adicione um nome válido.")
-
-        return nome
 
     def validate(self, data):
             # Agora vai usar o novo valor ou valor existente no banco
