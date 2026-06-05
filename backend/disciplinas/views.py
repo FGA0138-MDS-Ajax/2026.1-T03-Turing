@@ -30,11 +30,11 @@ class MaterialViewSet(viewsets.ModelViewSet):
 
         # professores so podem ver materiais de conteudos lecionados
         elif user.tipo == 'professor':
-            queryset = queryset.filter(conteudo__professores__perfil=user)
+            queryset = queryset.filter(conteudo__professores__perfil=user, conteudo__status='ativo')
 
         # aluno so pode ver materiais de conteudos matriculados                  
         elif user.tipo =="aluno":
-            queryset = queryset.filter(conteudo__matriculas__aluno__perfil=user)
+            queryset = queryset.filter(conteudo__matriculas__aluno__perfil=user, conteudo__status='ativo')
 
         #retorna  uma lista vazia 
         else:
@@ -67,13 +67,13 @@ class ConteudoViewSet(viewsets.ModelViewSet):
         #se tiver logado como professor vai listar so os conteudos do proprio professor
         elif user.tipo == 'professor':
             if hasattr(user, 'professor'):
-                queryset = queryset.filter(professores=user.professor)
+                queryset = queryset.filter(professores__perfil=user, status='ativo')
             else:
                 return Conteudo.objects.none()
 
         #se logado como aluno vai listar so os conteudos que o aluno participa
-        if user.tipo == 'aluno':
-            queryset = queryset.filter(alunos=user.aluno)
+        elif user.tipo == 'aluno':
+            queryset = queryset.filter(matriculas__aluno__perfil=user, status='ativo')
 
         else:
             return Conteudo.objects.none()
