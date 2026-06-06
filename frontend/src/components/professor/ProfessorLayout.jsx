@@ -1,5 +1,6 @@
 import { ProfessorSidebar } from './ProfessorSidebar';
 import './professor.css';
+import '../admin/admin.css';
 
 export function ProfessorLayout({ children }) {
   return (
