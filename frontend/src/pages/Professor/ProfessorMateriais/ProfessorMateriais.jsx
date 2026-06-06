@@ -60,7 +60,7 @@ function ModalConfirmacao({ nome, onConfirmar, onCancelar, loading }) {
       </div>
       <div className="pm-modal-acoes">
         <button className="pm-btn-cancelar" onClick={onCancelar} disabled={loading}>Cancelar</button>
-        <button className="pm-btn-remover" onClick={onConfirmar} disabled={loading}>
+        <button className="pm-btn-remover-confirm" onClick={onConfirmar} disabled={loading}>
           {loading ? 'Removendo...' : 'Confirmar remoção'}
         </button>
       </div>
@@ -243,6 +243,7 @@ function ModalMaterialEditar({
 
   const [arquivo, setArquivo] = useState(null);
   const [erros, setErros] = useState({});
+  const [dragging, setDragging] = useState(false);
 
   const precisaArquivo =
     ['pdf', 'imagem', 'apresentacao', 'documento']
@@ -310,10 +311,24 @@ function ModalMaterialEditar({
       </div>
 
       <div className="pm-modal-body">
-
-        <label className="pm-label">
-          Título do material
-        </label>
+              <p className="pm-label-section">Selecione tipo de material</p>
+              <div className="pm-tipo-grid">
+                  {TIPOS.map(t => (
+                      <button
+                          key={t.value}
+                          type="button"
+                          className={`pm-tipo-card ${tipo === t.value ? 'pm-tipo-card--ativo' : ''}`}
+                          onClick={() => setTipo(t.value)}
+                      >
+                          <TipoIcone tipo={t.value} />
+                          <span className="pm-tipo-label">{t.label}</span>
+                          <span className="pm-tipo-sub">{t.sub}</span>
+                      </button>
+                  ))}
+              </div>
+              <label className="pm-label">
+                  Título do material
+              </label>
 
         <input
           className="pm-input"
@@ -388,29 +403,50 @@ function ModalMaterialEditar({
           Substituir arquivo
         </label>
 
-        <input
-          type="file"
-          onChange={(e) =>
-            setArquivo(
-              e.target.files?.[0] || null
-            )
-          }
-        />
-      </div>
+        <div
+            className={`pm-dropzone ${dragging ? 'pm-dropzone--drag' : ''}`}
+            onDragOver={e => { e.preventDefault(); setDragging(true); }}
+            onDragLeave={() => setDragging(false)}
+            onDrop={e => {
+                e.preventDefault();
+                setDragging(false);
+                const file = e.dataTransfer.files[0];
+                if (file) setArquivo(file);
+            }}
+            onClick={() => document.getElementById('pm-file-input-editar').click()}
+            >
+            {arquivo ? (
+                <span className="pm-dropzone-nome">{arquivo.name}</span>
+            ) : (
+                <>
+                <span>arraste e solte o arquivo</span>
+                <span>ou clique para selecionar</span>
+                <span className="pm-dropzone-hint">PDF, DOC, PPT, etc</span>
+                </>
+            )}
+            </div>
 
-      <div className="pm-modal-acoes">
-        <button
-          className="pm-btn-adicionar"
-          onClick={handleSubmit}
-          disabled={loading}
-        >
-          {loading
-            ? 'Salvando...'
-            : 'Salvar alterações'}
-        </button>
-      </div>
-    </ModalOverlay>
-  );
+            <input
+            id="pm-file-input-editar"
+            type="file"
+            style={{ display: 'none' }}
+            onChange={e => setArquivo(e.target.files?.[0] || null)}
+            />
+        </div>
+
+            <div className="pm-modal-acoes">
+                <button
+                    className="pm-btn-adicionar  pm-modal-acoes--cente"
+                    onClick={handleSubmit}
+                    disabled={loading}
+                >
+                    {loading
+                        ? 'Salvando...'
+                        : 'Salvar alterações'}
+                </button>
+            </div>
+        </ModalOverlay>
+    );
 }
 
 
