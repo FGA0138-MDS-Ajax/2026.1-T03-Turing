@@ -1,9 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
 import { ProfessorLayout } from '../../../components/professor/ProfessorLayout';
-import {listarMateriais, deletarMaterial, criarMaterial, listarConteudos,} from '../../../services/disciplinasService';
+import {listarMateriais, deletarMaterial, criarMaterial, editarMaterial, listarConteudos,} from '../../../services/disciplinasService';
 import { listarDisciplinas } from '../../../services/disciplinasService';
 import { useAuth } from '../../../context/AuthContext';
 import './ProfessorMateriais.css';
+
 
 function TipoIcone({ tipo }) {
   if (tipo === 'video') {
@@ -216,7 +217,196 @@ function ModalCriarMaterial({ onClose, onSalvar, loading, conteudos }) {
 
       <div className="pm-modal-acoes pm-modal-acoes--center">
         <button className="pm-btn-adicionar" onClick={handleSubmit} disabled={loading}>
-          {loading ? 'Enviando...' : 'Adicio'}
+          {loading ? 'Enviando...' : 'Adicionar'}
+        </button>
+      </div>
+    </ModalOverlay>
+  );
+}
+
+
+function ModalMaterialEditar({
+  material,
+  onClose,
+  onSalvar,
+  loading,
+  conteudos,
+}) {
+  const [tipo, setTipo] = useState(material.tipo);
+
+  const [form, setForm] = useState({
+    nome: material.nome || '',
+    conteudo: String(material.conteudo || ''),
+    descricao: material.descricao || '',
+    link: material.link || '',
+  });
+
+  const [arquivo, setArquivo] = useState(null);
+  const [erros, setErros] = useState({});
+
+  const precisaArquivo =
+    ['pdf', 'imagem', 'apresentacao', 'documento']
+      .includes(tipo);
+
+  const precisaLink =
+    ['video', 'link'].includes(tipo);
+
+  const validar = () => {
+    const e = {};
+
+    if (!form.nome.trim())
+      e.nome = 'Título é obrigatório';
+
+    if (!form.conteudo)
+      e.conteudo = 'Conteúdo é obrigatório';
+
+    setErros(e);
+
+    return Object.keys(e).length === 0;
+  };
+
+  const handleSubmit = async () => {
+    if (!validar()) return;
+
+    const formData = new FormData();
+
+    formData.append('nome', form.nome);
+    formData.append('tipo', tipo);
+    formData.append('conteudo', form.conteudo);
+
+    if (form.descricao)
+      formData.append(
+        'descricao',
+        form.descricao
+      );
+
+    if (form.link)
+      formData.append('link', form.link);
+
+    if (arquivo)
+      formData.append('arquivo', arquivo);
+
+    const ok = await onSalvar(
+      material.id,
+      formData
+    );
+
+    if (ok) onClose();
+  };
+
+  return (
+    <ModalOverlay onClose={onClose}>
+      <div className="pm-modal-header">
+        <h2 className="pm-modal-titulo">
+          Editar material
+        </h2>
+
+        <button
+          className="pm-modal-fechar"
+          onClick={onClose}
+        >
+          ✕
+        </button>
+      </div>
+
+      <div className="pm-modal-body">
+
+        <label className="pm-label">
+          Título do material
+        </label>
+
+        <input
+          className="pm-input"
+          value={form.nome}
+          onChange={(e) =>
+            setForm({
+              ...form,
+              nome: e.target.value,
+            })
+          }
+        />
+
+        <label className="pm-label">
+          Conteúdo
+        </label>
+
+        <select
+          className="pm-input pm-select"
+          value={form.conteudo}
+          onChange={(e) =>
+            setForm({
+              ...form,
+              conteudo: e.target.value,
+            })
+          }
+        >
+          {conteudos.map((c) => (
+            <option
+              key={c.id}
+              value={c.id}
+            >
+              {c.nome}
+            </option>
+          ))}
+        </select>
+
+        <label className="pm-label">
+          Descrição
+        </label>
+
+        <input
+          className="pm-input"
+          value={form.descricao}
+          onChange={(e) =>
+            setForm({
+              ...form,
+              descricao: e.target.value,
+            })
+          }
+        />
+
+        {precisaLink && (
+          <>
+            <label className="pm-label">
+              Link
+            </label>
+
+            <input
+              className="pm-input"
+              value={form.link}
+              onChange={(e) =>
+                setForm({
+                  ...form,
+                  link: e.target.value,
+                })
+              }
+            />
+          </>
+        )}
+
+        <label className="pm-label">
+          Substituir arquivo
+        </label>
+
+        <input
+          type="file"
+          onChange={(e) =>
+            setArquivo(
+              e.target.files?.[0] || null
+            )
+          }
+        />
+      </div>
+
+      <div className="pm-modal-acoes">
+        <button
+          className="pm-btn-adicionar"
+          onClick={handleSubmit}
+          disabled={loading}
+        >
+          {loading
+            ? 'Salvando...'
+            : 'Salvar alterações'}
         </button>
       </div>
     </ModalOverlay>
@@ -255,7 +445,11 @@ function MaterialCard({ material, conteudos, disciplinas, onRemover, onEditar })
 
       <div className="pm-card-acoes">
         <button className="pm-btn-remover" onClick={() => onRemover(material)}>Remover</button>
-        <button className="pm-btn-editar" onClick={() => onEditar(material)}>Editar</button>
+        <button className="pm-btn-editar" onClick={() => {
+        console.log(material); 
+        onEditar(material)
+        }}
+        >Editar</button>
         {urlAbrir && (
           <>
             <a href={urlAbrir} download={!!material.arquivo} target="_blank" rel="noopener noreferrer">
@@ -304,6 +498,7 @@ export function ProfessorMateriais() {
 
   const [modalCriar, setModalCriar] = useState(false);
   const [materialParaRemover, setMaterialParaRemover] = useState(null);
+  const [materialEditando, setMaterialEditando] = useState(null);
 
   const exibirToast = (tipo, mensagem) => {
     setToast({ tipo, mensagem });
@@ -379,6 +574,34 @@ export function ProfessorMateriais() {
     }
   };
 
+  const handleEditar = async (id, formData) => {
+  setLoadingAcao(true);
+
+  try {
+    await editarMaterial(id, formData);
+
+    exibirToast(
+      'sucesso',
+      'Material atualizado com sucesso!'
+    );
+
+    await carregar();
+
+    return true;
+  } catch (err) {
+    console.error(err);
+
+    exibirToast(
+      'erro',
+      'Erro ao atualizar material.'
+    );
+
+    return false;
+  } finally {
+    setLoadingAcao(false);
+  }
+};
+
   const handleRemover = async () => {
     if (!materialParaRemover) return;
     setLoadingAcao(true);
@@ -425,16 +648,6 @@ export function ProfessorMateriais() {
 
         <select
           className="pm-filtro-select"
-          value={filtroConteudo}
-          onChange={e => setFiltroConteudo(e.target.value)}
-          aria-label="Filtrar por conteúdo"
-        >
-          <option value="">Filtrar por conteúdo</option>
-          {conteudos.map(c => <option key={c.id} value={c.id}>{c.nome}</option>)}
-        </select>
-
-        <select
-          className="pm-filtro-select"
           value={filtroDisciplina}
           onChange={e => setFiltroDisciplina(e.target.value)}
           aria-label="Filtrar por disciplina"
@@ -459,7 +672,7 @@ export function ProfessorMateriais() {
               conteudos={conteudos}
               disciplinas={disciplinas}
               onRemover={mat => setMaterialParaRemover(mat)}
-              onEditar={() => {}} // edição será implementada em sprint futura
+              onEditar={mat => setMaterialEditando(mat)} 
             />
           ))}
         </div>
@@ -471,6 +684,17 @@ export function ProfessorMateriais() {
           onSalvar={handleCriar}
           loading={loadingAcao}
           conteudos={conteudos}
+        />
+      )}
+
+      {materialEditando && (
+        <ModalMaterialEditar
+          material={materialEditando}
+          conteudos={conteudos}
+          onClose={() =>
+          setMaterialEditando(null)}
+          onSalvar={handleEditar}
+          loading={loadingAcao}
         />
       )}
 
