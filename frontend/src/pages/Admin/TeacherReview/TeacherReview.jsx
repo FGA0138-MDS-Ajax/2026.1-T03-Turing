@@ -106,10 +106,13 @@ export default function TeacherReview() {
         );
       }
 
-      await fetchProfessores();
-      window.dispatchEvent(new Event('professores-atualizados'));
-
+      setInscricoesPendentes((prev) => prev.filter((item) => item.id !== professor.id));
+      
       setSelectedProfessor(null);
+
+      setTimeout(() => {
+        window.dispatchEvent(new Event('professores-atualizados'));
+      }, 500);
 
       setToast(
         type === "aprovar"
