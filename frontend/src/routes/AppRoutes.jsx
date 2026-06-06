@@ -8,6 +8,7 @@ import { Configuracoes }   from '../pages/admin/Configuracoes';
 import Login               from '../pages/Login/Login';
 import Register            from '../pages/Register/Register';
 import TeacherReview       from '../pages/admin/TeacherReview/TeacherReview';
+import { Disciplinas }     from '../pages/Disciplinas/Disciplinas';
 
 function AdminLayout() {
   return (
@@ -31,11 +32,12 @@ export function AppRoutes() {
           </ProtectedRoute>
         }
       >
-        <Route index                element={<AdminDashboard />} />
-        <Route path="professores"   element={<Professores />} />
-        <Route path="alunos"        element={<Alunos />} />
-        <Route path="configuracoes" element={<Configuracoes />} />
-        <Route path="professores/revisao" element={<TeacherReview />} />
+        <Route index                       element={<AdminDashboard />} />
+        <Route path="professores"          element={<Professores />} />
+        <Route path="alunos"               element={<Alunos />} />
+        <Route path="configuracoes"        element={<Configuracoes />} />
+        <Route path="professores/revisao"  element={<TeacherReview />} />
+        <Route path="conteudos"            element={<Disciplinas />} />
       </Route>
 
       <Route

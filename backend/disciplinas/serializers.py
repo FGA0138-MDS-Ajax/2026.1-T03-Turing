@@ -56,18 +56,34 @@ class MaterialSerializer(serializers.ModelSerializer):
 
         return data
 
-
-
-
-from .models import Conteudo
-
 class ConteudoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Conteudo
         fields = '__all__'
         #disciplina já é obrigatorio pq é FK sem null=True
+
+    def validate(self, data):
+        professores = data.get('professores')
+        if professores:
+            for professor in professores:
+                inscricao = professor.inscricao_set.filter(status='aprovado').first()
+                if not inscricao:
+                    raise serializers.ValidationError(
+                        f"O professor {professor.perfil.nome} não está aprovado na plataforma."
+                    )
+        return data
         
 class DisciplinaSerializer(serializers.ModelSerializer):
+
+    def validate_nome(self, value):
+        # Verifica se já existe uma disciplina com esse nome, excluindo a própria no caso de edição
+        qs = Disciplina.objects.filter(nome=value)
+        if self.instance:
+            qs = qs.exclude(pk=self.instance.pk)
+        if qs.exists():
+            raise serializers.ValidationError("Já existe uma disciplina com esse nome.")
+        return value
+    
     class Meta:
         model = Disciplina
         fields = '__all__'
