@@ -110,9 +110,7 @@ export default function TeacherReview() {
       
       setSelectedProfessor(null);
 
-      setTimeout(() => {
-        window.dispatchEvent(new Event('professores-atualizados'));
-      }, 500);
+      window.dispatchEvent(new Event('professores-atualizados'));
 
       setToast(
         type === "aprovar"
