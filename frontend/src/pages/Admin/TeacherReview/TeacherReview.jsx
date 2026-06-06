@@ -107,6 +107,7 @@ export default function TeacherReview() {
       }
 
       await fetchProfessores();
+      window.dispatchEvent(new Event('professores-atualizados'));
 
       setSelectedProfessor(null);
 
