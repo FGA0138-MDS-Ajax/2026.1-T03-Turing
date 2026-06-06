@@ -630,6 +630,17 @@ export function Disciplinas() {
   const open = (tipo, target = null) => { setModal(tipo); setModalTarget(target); };
   const close = () => { setModal(null); setModalTarget(null); };
 
+  // 👉 NOVO: Filtra as opções de conteúdo baseadas na disciplina selecionada
+  const conteudosParaDropdown = filtroDisciplina === ''
+    ? conteudos
+    : conteudos.filter(c => c.disciplina === Number(filtroDisciplina));
+
+  // 👉 NOVO: Função para atualizar a disciplina e resetar o conteúdo
+  const handleMudancaDisciplina = (e) => {
+    setFiltroDisciplina(e.target.value);
+    setFiltroConteudo(''); 
+  };
+
   // [Integração]: Filtro de busca na lista viva da API
   const disciplinasFiltradas = disciplinas.filter(d => 
     d.nome.toLowerCase().includes(busca.toLowerCase()) &&
@@ -674,7 +685,23 @@ export function Disciplinas() {
           <input className="disc-search" placeholder="Buscar materiais..." value={busca} onChange={e => setBusca(e.target.value)} />
         </div>
 
-        {/* 👉 ADICIONADO: Filtro por Conteúdo */}
+        {/* 👉 AJUSTE: Filtro por Disciplina (AGORA VEM PRIMEIRO) */}
+        <div style={{ position: 'relative' }}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', color: '#5A6A76', pointerEvents: 'none' }}><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+          <select 
+            className="disc-filter-btn disc-select" 
+            style={{ paddingLeft: 30, appearance: 'none', backgroundPosition: 'right 10px center', height: '100%', minHeight: 35 }}
+            value={filtroDisciplina}
+            onChange={handleMudancaDisciplina} // 👉 Usa a função que limpa o conteúdo
+          >
+            <option value="">Filtrar por disciplina</option>
+            {disciplinas.map(d => (
+              <option key={d.id} value={d.id}>{d.nome}</option>
+            ))}
+          </select>
+        </div>
+
+        {/* 👉 AJUSTE: Filtro por Conteúdo (AGORA VEM DEPOIS E É DINÂMICO) */}
         <div style={{ position: 'relative' }}>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', color: '#5A6A76', pointerEvents: 'none' }}><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
           <select 
@@ -684,24 +711,8 @@ export function Disciplinas() {
             onChange={(e) => setFiltroConteudo(e.target.value)}
           >
             <option value="">Filtrar por conteúdo</option>
-            {conteudos.map(c => (
+            {conteudosParaDropdown.map(c => ( // 👉 Usa a lista dinâmica
               <option key={c.id} value={c.id}>{c.nome}</option>
-            ))}
-          </select>
-        </div>
-
-        {/* 👉 ADICIONADO: Filtro por Disciplina */}
-        <div style={{ position: 'relative' }}>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', color: '#5A6A76', pointerEvents: 'none' }}><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
-          <select 
-            className="disc-filter-btn disc-select" 
-            style={{ paddingLeft: 30, appearance: 'none', backgroundPosition: 'right 10px center', height: '100%', minHeight: 35 }}
-            value={filtroDisciplina}
-            onChange={(e) => setFiltroDisciplina(e.target.value)}
-          >
-            <option value="">Filtrar por disciplina</option>
-            {disciplinas.map(d => (
-              <option key={d.id} value={d.id}>{d.nome}</option>
             ))}
           </select>
         </div>
