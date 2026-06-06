@@ -30,7 +30,13 @@ class MaterialTestCaseAdmin(APITestCase):
         cls.conteudo_criado = Conteudo.objects.create(
             nome="conteudoTeste",
             descricao="teste",
-            status="teste",
+            status="ativo",
+            disciplina_id=cls.disciplina.id
+        )
+        cls.conteudo_inativo = Conteudo.objects.create(
+            nome="conteudoInativo",
+            descricao="teste",
+            status="inativo",
             disciplina_id=cls.disciplina.id
         )
         cls.material = Material.objects.create(
@@ -38,6 +44,13 @@ class MaterialTestCaseAdmin(APITestCase):
             descricao="teste",
             arquivo="pdf",
             conteudo_id=cls.conteudo_criado.id,
+            tipo="pdf",
+        )
+        cls.material_inativo=Material.objects.create(
+            nome="teste",
+            descricao="teste",
+            arquivo="pdf",
+            conteudo_id=cls.conteudo_inativo.id,
             tipo="pdf",
         )
 #        MaterialTestCaseAdmin.cria(cls)
@@ -74,32 +87,21 @@ class MaterialTestCaseAdmin(APITestCase):
         print(response.data)
         self.assertEqual(response.status_code, 201)
 
-    # @classmethod
-    # def cria(cls):
-    #     cls.disciplina=Disciplina.objects.create(
-    #         nome="teste",
-    #         descricao="testando",
-    #
-    #     )
-    #     cls.conteudo_criado = Conteudo.objects.create(
-    #         nome="conteudoTeste",
-    #         descricao="teste",
-    #         status="teste",
-    #         disciplina_id=cls.disciplina.id
-    #     )
-    #     cls.material=Material.objects.create(
-    #         nome="teste",
-    #         descricao="teste",
-    #         arquivo="pdf",
-    #         conteudo_id=cls.conteudo_criado.id,
-    #         tipo="pdf",
-    #     )
+
 
     def testMaterial_especifico_GET(self):
         # self.cria()
-        response = self.client.get(f'/api/disciplinas/materiais/1/')
+        response = self.client.get(f'/api/disciplinas/materiais/{self.material.id}/')
         print(response.data)
         self.assertEqual(response.status_code, 200)
+
+    def test_material_inativo_GET(self):
+        response=self.client.get(f'/api/disciplinas/materiais/')
+        self.assertEqual(response.status_code, 200)
+        self.assertIsInstance(response.data, list)
+        ids=[m['id'] for m in response.data]
+        self.assertIn(self.material_inativo.id,ids)
+        self.assertIn(self.material.id,ids)
 
     def testAlterar_material_especifico_PUT(self):
         # self.cria()
@@ -246,3 +248,17 @@ class MaterialTestCaseAdmin(APITestCase):
 
         print(response.data)
         self.assertEqual(response.status_code, 201)
+
+    def test_filtro_conteudo(self):
+        response = self.client.get(f"/api/disciplinas/materiais/?conteudo={self.conteudo_criado.id}")
+        self.assertEqual(response.status_code, 200)
+        ids = [m["id"] for m in response.data]
+        self.assertIn(self.material.id, ids)
+        self.assertNotIn(self.material_inativo.id, ids)
+
+    def test_filtro_disciplina(self):
+        response = self.client.get(f"/api/disciplinas/materiais/?disciplina={self.disciplina.id}")
+        self.assertEqual(response.status_code, 200)
+        ids = [m["id"] for m in response.data]
+        self.assertIn(self.material.id, ids)
+        self.assertIn(self.material_inativo.id, ids)
