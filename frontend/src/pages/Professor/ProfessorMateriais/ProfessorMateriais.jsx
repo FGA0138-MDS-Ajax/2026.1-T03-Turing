@@ -1,8 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
 import { ProfessorLayout } from '../../../components/professor/ProfessorLayout';
-import {listarMateriais, deletarMaterial, criarMaterial, editarMaterial, listarConteudos,} from '../../../services/disciplinasService';
+import { listarMateriais, deletarMaterial, criarMaterial, editarMaterial, listarConteudos } from '../../../services/disciplinasService';
 import { listarDisciplinas } from '../../../services/disciplinasService';
 import { useAuth } from '../../../context/AuthContext';
+import ModalCriarMaterial from '../../../components/professor/ModalCriarMaterial';
 import './ProfessorMateriais.css';
 
 
@@ -75,9 +76,15 @@ const TIPOS = [
   { value: 'apresentacao', label: 'Link externo', sub: 'Site ou artigo online' },
 ];
 
-function ModalCriarMaterial({ onClose, onSalvar, loading, conteudos }) {
-  const [tipo, setTipo] = useState('');
-  const [form, setForm] = useState({ nome: '', conteudo: '', descricao: '', link: '' });
+
+function ModalMaterialEditar({ material, onClose, onSalvar, loading, conteudos }) {
+  const [tipo, setTipo] = useState(material.tipo);
+  const [form, setForm] = useState({
+    nome: material.nome || '',
+    conteudo: String(material.conteudo || ''),
+    descricao: material.descricao || '',
+    link: material.link || '',
+  });
   const [arquivo, setArquivo] = useState(null);
   const [erros, setErros] = useState({});
   const [dragging, setDragging] = useState(false);
@@ -87,11 +94,8 @@ function ModalCriarMaterial({ onClose, onSalvar, loading, conteudos }) {
 
   const validar = () => {
     const e = {};
-    if (!tipo) e.tipo = 'Selecione o tipo de material';
     if (!form.nome.trim()) e.nome = 'Título é obrigatório';
     if (!form.conteudo) e.conteudo = 'Conteúdo é obrigatório';
-    if (precisaLink && !form.link.trim()) e.link = 'Link é obrigatório para este tipo';
-    if (precisaArquivo && !arquivo) e.arquivo = 'Arquivo é obrigatório para este tipo';
     setErros(e);
     return Object.keys(e).length === 0;
   };
@@ -105,26 +109,18 @@ function ModalCriarMaterial({ onClose, onSalvar, loading, conteudos }) {
     if (form.descricao) formData.append('descricao', form.descricao);
     if (form.link) formData.append('link', form.link);
     if (arquivo) formData.append('arquivo', arquivo);
-    const ok = await onSalvar(formData);
+    const ok = await onSalvar(material.id, formData);
     if (ok) onClose();
-  };
-
-  const handleDrop = (e) => {
-    e.preventDefault();
-    setDragging(false);
-    const file = e.dataTransfer.files[0];
-    if (file) { setArquivo(file); setErros(prev => ({ ...prev, arquivo: undefined })); }
   };
 
   return (
     <ModalOverlay onClose={onClose}>
       <div className="pm-modal-header">
-        <h2 className="pm-modal-titulo">Adicionar novo material</h2>
+        <h2 className="pm-modal-titulo">Editar material</h2>
         <button className="pm-modal-fechar" onClick={onClose}>✕</button>
       </div>
 
       <div className="pm-modal-body">
-        {/* Tipo */}
         <p className="pm-label-section">Selecione tipo de material</p>
         <div className="pm-tipo-grid">
           {TIPOS.map(t => (
@@ -132,7 +128,7 @@ function ModalCriarMaterial({ onClose, onSalvar, loading, conteudos }) {
               key={t.value}
               type="button"
               className={`pm-tipo-card ${tipo === t.value ? 'pm-tipo-card--ativo' : ''}`}
-              onClick={() => { setTipo(t.value); setErros(prev => ({ ...prev, tipo: undefined })); }}
+              onClick={() => setTipo(t.value)}
             >
               <TipoIcone tipo={t.value} />
               <span className="pm-tipo-label">{t.label}</span>
@@ -140,25 +136,21 @@ function ModalCriarMaterial({ onClose, onSalvar, loading, conteudos }) {
             </button>
           ))}
         </div>
-        {erros.tipo && <span className="pm-erro-msg">{erros.tipo}</span>}
 
         <label className="pm-label">Título do material</label>
         <input
-          className={`pm-input ${erros.nome ? 'pm-input--erro' : ''}`}
-          placeholder="Ex: Introdução a funções quadráticas"
+          className="pm-input"
           value={form.nome}
-          onChange={e => { setForm({ ...form, nome: e.target.value }); setErros(prev => ({ ...prev, nome: undefined })); }}
+          onChange={e => setForm({ ...form, nome: e.target.value })}
         />
         {erros.nome && <span className="pm-erro-msg">{erros.nome}</span>}
 
-
         <label className="pm-label">Conteúdo</label>
         <select
-          className={`pm-input pm-select ${erros.conteudo ? 'pm-input--erro' : ''}`}
+          className="pm-input pm-select"
           value={form.conteudo}
-          onChange={e => { setForm({ ...form, conteudo: e.target.value }); setErros(prev => ({ ...prev, conteudo: undefined })); }}
+          onChange={e => setForm({ ...form, conteudo: e.target.value })}
         >
-          <option value="">Selecione o conteúdo</option>
           {conteudos.map(c => <option key={c.id} value={c.id}>{c.nome}</option>)}
         </select>
         {erros.conteudo && <span className="pm-erro-msg">{erros.conteudo}</span>}
@@ -166,287 +158,59 @@ function ModalCriarMaterial({ onClose, onSalvar, loading, conteudos }) {
         <label className="pm-label">Descrição</label>
         <input
           className="pm-input"
-          placeholder="desc do material"
           value={form.descricao}
           onChange={e => setForm({ ...form, descricao: e.target.value })}
         />
 
         {precisaLink && (
           <>
-            <label className="pm-label">Link <span className="pm-required">*</span></label>
+            <label className="pm-label">Link</label>
             <input
-              className={`pm-input ${erros.link ? 'pm-input--erro' : ''}`}
-              placeholder="https://..."
+              className="pm-input"
               value={form.link}
-              onChange={e => { setForm({ ...form, link: e.target.value }); setErros(prev => ({ ...prev, link: undefined })); }}
+              onChange={e => setForm({ ...form, link: e.target.value })}
             />
-            {erros.link && <span className="pm-erro-msg">{erros.link}</span>}
           </>
         )}
 
-        {precisaArquivo && (
-          <>
-            <label className="pm-label">Arquivo <span className="pm-required">*</span></label>
-            <div
-              className={`pm-dropzone ${dragging ? 'pm-dropzone--drag' : ''} ${erros.arquivo ? 'pm-dropzone--erro' : ''}`}
-              onDragOver={e => { e.preventDefault(); setDragging(true); }}
-              onDragLeave={() => setDragging(false)}
-              onDrop={handleDrop}
-              onClick={() => document.getElementById('pm-file-input').click()}
-            >
-              {arquivo ? (
-                <span className="pm-dropzone-nome">{arquivo.name}</span>
-              ) : (
-                <>
-                  <span>arraste e solte o arquivo</span>
-                  <span>ou clique para selecionar</span>
-                  <span className="pm-dropzone-hint">PDF, DOC, PPT, etc</span>
-                </>
-              )}
-            </div>
-            <input
-              id="pm-file-input"
-              type="file"
-              style={{ display: 'none' }}
-              onChange={e => { setArquivo(e.target.files[0]); setErros(prev => ({ ...prev, arquivo: undefined })); }}
-            />
-            {erros.arquivo && <span className="pm-erro-msg">{erros.arquivo}</span>}
-          </>
-        )}
+        <label className="pm-label">Substituir arquivo</label>
+        <div
+          className={`pm-dropzone ${dragging ? 'pm-dropzone--drag' : ''}`}
+          onDragOver={e => { e.preventDefault(); setDragging(true); }}
+          onDragLeave={() => setDragging(false)}
+          onDrop={e => {
+            e.preventDefault();
+            setDragging(false);
+            const file = e.dataTransfer.files[0];
+            if (file) setArquivo(file);
+          }}
+          onClick={() => document.getElementById('pm-file-input-editar').click()}
+        >
+          {arquivo ? (
+            <span className="pm-dropzone-nome">{arquivo.name}</span>
+          ) : (
+            <>
+              <span>arraste e solte o arquivo</span>
+              <span>ou clique para selecionar</span>
+              <span className="pm-dropzone-hint">PDF, DOC, PPT, etc</span>
+            </>
+          )}
+        </div>
+        <input
+          id="pm-file-input-editar"
+          type="file"
+          style={{ display: 'none' }}
+          onChange={e => setArquivo(e.target.files?.[0] || null)}
+        />
       </div>
 
-      <div className="pm-modal-acoes pm-modal-acoes--center">
-        <button className="pm-btn-adicionar" onClick={handleSubmit} disabled={loading}>
-          {loading ? 'Enviando...' : 'Adicionar'}
+      <div className="pm-modal-acoes">
+        <button className="pm-btn-adicionar pm-modal-acoes--center" onClick={handleSubmit} disabled={loading}>
+          {loading ? 'Salvando...' : 'Salvar alterações'}
         </button>
       </div>
     </ModalOverlay>
   );
-}
-
-
-function ModalMaterialEditar({
-  material,
-  onClose,
-  onSalvar,
-  loading,
-  conteudos,
-}) {
-  const [tipo, setTipo] = useState(material.tipo);
-
-  const [form, setForm] = useState({
-    nome: material.nome || '',
-    conteudo: String(material.conteudo || ''),
-    descricao: material.descricao || '',
-    link: material.link || '',
-  });
-
-  const [arquivo, setArquivo] = useState(null);
-  const [erros, setErros] = useState({});
-  const [dragging, setDragging] = useState(false);
-
-  const precisaArquivo =
-    ['pdf', 'imagem', 'apresentacao', 'documento']
-      .includes(tipo);
-
-  const precisaLink =
-    ['video', 'link'].includes(tipo);
-
-  const validar = () => {
-    const e = {};
-
-    if (!form.nome.trim())
-      e.nome = 'Título é obrigatório';
-
-    if (!form.conteudo)
-      e.conteudo = 'Conteúdo é obrigatório';
-
-    setErros(e);
-
-    return Object.keys(e).length === 0;
-  };
-
-  const handleSubmit = async () => {
-    if (!validar()) return;
-
-    const formData = new FormData();
-
-    formData.append('nome', form.nome);
-    formData.append('tipo', tipo);
-    formData.append('conteudo', form.conteudo);
-
-    if (form.descricao)
-      formData.append(
-        'descricao',
-        form.descricao
-      );
-
-    if (form.link)
-      formData.append('link', form.link);
-
-    if (arquivo)
-      formData.append('arquivo', arquivo);
-
-    const ok = await onSalvar(
-      material.id,
-      formData
-    );
-
-    if (ok) onClose();
-  };
-
-  return (
-    <ModalOverlay onClose={onClose}>
-      <div className="pm-modal-header">
-        <h2 className="pm-modal-titulo">
-          Editar material
-        </h2>
-
-        <button
-          className="pm-modal-fechar"
-          onClick={onClose}
-        >
-          ✕
-        </button>
-      </div>
-
-      <div className="pm-modal-body">
-              <p className="pm-label-section">Selecione tipo de material</p>
-              <div className="pm-tipo-grid">
-                  {TIPOS.map(t => (
-                      <button
-                          key={t.value}
-                          type="button"
-                          className={`pm-tipo-card ${tipo === t.value ? 'pm-tipo-card--ativo' : ''}`}
-                          onClick={() => setTipo(t.value)}
-                      >
-                          <TipoIcone tipo={t.value} />
-                          <span className="pm-tipo-label">{t.label}</span>
-                          <span className="pm-tipo-sub">{t.sub}</span>
-                      </button>
-                  ))}
-              </div>
-              <label className="pm-label">
-                  Título do material
-              </label>
-
-        <input
-          className="pm-input"
-          value={form.nome}
-          onChange={(e) =>
-            setForm({
-              ...form,
-              nome: e.target.value,
-            })
-          }
-        />
-
-        <label className="pm-label">
-          Conteúdo
-        </label>
-
-        <select
-          className="pm-input pm-select"
-          value={form.conteudo}
-          onChange={(e) =>
-            setForm({
-              ...form,
-              conteudo: e.target.value,
-            })
-          }
-        >
-          {conteudos.map((c) => (
-            <option
-              key={c.id}
-              value={c.id}
-            >
-              {c.nome}
-            </option>
-          ))}
-        </select>
-
-        <label className="pm-label">
-          Descrição
-        </label>
-
-        <input
-          className="pm-input"
-          value={form.descricao}
-          onChange={(e) =>
-            setForm({
-              ...form,
-              descricao: e.target.value,
-            })
-          }
-        />
-
-        {precisaLink && (
-          <>
-            <label className="pm-label">
-              Link
-            </label>
-
-            <input
-              className="pm-input"
-              value={form.link}
-              onChange={(e) =>
-                setForm({
-                  ...form,
-                  link: e.target.value,
-                })
-              }
-            />
-          </>
-        )}
-
-        <label className="pm-label">
-          Substituir arquivo
-        </label>
-
-        <div
-            className={`pm-dropzone ${dragging ? 'pm-dropzone--drag' : ''}`}
-            onDragOver={e => { e.preventDefault(); setDragging(true); }}
-            onDragLeave={() => setDragging(false)}
-            onDrop={e => {
-                e.preventDefault();
-                setDragging(false);
-                const file = e.dataTransfer.files[0];
-                if (file) setArquivo(file);
-            }}
-            onClick={() => document.getElementById('pm-file-input-editar').click()}
-            >
-            {arquivo ? (
-                <span className="pm-dropzone-nome">{arquivo.name}</span>
-            ) : (
-                <>
-                <span>arraste e solte o arquivo</span>
-                <span>ou clique para selecionar</span>
-                <span className="pm-dropzone-hint">PDF, DOC, PPT, etc</span>
-                </>
-            )}
-            </div>
-
-            <input
-            id="pm-file-input-editar"
-            type="file"
-            style={{ display: 'none' }}
-            onChange={e => setArquivo(e.target.files?.[0] || null)}
-            />
-        </div>
-
-            <div className="pm-modal-acoes">
-                <button
-                    className="pm-btn-adicionar  pm-modal-acoes--cente"
-                    onClick={handleSubmit}
-                    disabled={loading}
-                >
-                    {loading
-                        ? 'Salvando...'
-                        : 'Salvar alterações'}
-                </button>
-            </div>
-        </ModalOverlay>
-    );
 }
 
 
@@ -481,11 +245,7 @@ function MaterialCard({ material, conteudos, disciplinas, onRemover, onEditar })
 
       <div className="pm-card-acoes">
         <button className="pm-btn-remover" onClick={() => onRemover(material)}>Remover</button>
-        <button className="pm-btn-editar" onClick={() => {
-        console.log(material); 
-        onEditar(material)
-        }}
-        >Editar</button>
+        <button className="pm-btn-editar" onClick={() => { console.log(material); onEditar(material); }}>Editar</button>
         {urlAbrir && (
           <>
             <a href={urlAbrir} download={!!material.arquivo} target="_blank" rel="noopener noreferrer">
@@ -541,7 +301,6 @@ export function ProfessorMateriais() {
     setTimeout(() => setToast(null), 3500);
   };
 
-
   const carregar = useCallback(async () => {
     setLoading(true);
     setErro(null);
@@ -563,7 +322,6 @@ export function ProfessorMateriais() {
       );
 
       const idsConteudos = new Set(conteudosDoProfessor.map(c => c.id));
-
       const materiaisDoProfessor = todosMateriais.filter(m => idsConteudos.has(m.conteudo));
 
       setConteudos(conteudosDoProfessor);
@@ -581,7 +339,6 @@ export function ProfessorMateriais() {
     carregar();
   }, [carregar]);
 
-
   const materiaisFiltrados = materiais.filter(m => {
     const conteudo = conteudos.find(c => c.id === m.conteudo);
     const disciplina = disciplinas.find(d => d.id === conteudo?.disciplina);
@@ -592,7 +349,6 @@ export function ProfessorMateriais() {
 
     return buscaOk && conteudoOk && disciplinaOk;
   });
-
 
   const handleCriar = async (formData) => {
     setLoadingAcao(true);
@@ -611,32 +367,20 @@ export function ProfessorMateriais() {
   };
 
   const handleEditar = async (id, formData) => {
-  setLoadingAcao(true);
-
-  try {
-    await editarMaterial(id, formData);
-
-    exibirToast(
-      'sucesso',
-      'Material atualizado com sucesso!'
-    );
-
-    await carregar();
-
-    return true;
-  } catch (err) {
-    console.error(err);
-
-    exibirToast(
-      'erro',
-      'Erro ao atualizar material.'
-    );
-
-    return false;
-  } finally {
-    setLoadingAcao(false);
-  }
-};
+    setLoadingAcao(true);
+    try {
+      await editarMaterial(id, formData);
+      exibirToast('sucesso', 'Material atualizado com sucesso!');
+      await carregar();
+      return true;
+    } catch (err) {
+      console.error(err);
+      exibirToast('erro', 'Erro ao atualizar material.');
+      return false;
+    } finally {
+      setLoadingAcao(false);
+    }
+  };
 
   const handleRemover = async () => {
     if (!materialParaRemover) return;
@@ -653,10 +397,8 @@ export function ProfessorMateriais() {
     }
   };
 
-
   return (
     <ProfessorLayout>
-      {/* Cabeçalho */}
       <div className="pm-cabecalho">
         <div>
           <h1 className="pm-titulo">Meus materiais</h1>
@@ -708,12 +450,12 @@ export function ProfessorMateriais() {
               conteudos={conteudos}
               disciplinas={disciplinas}
               onRemover={mat => setMaterialParaRemover(mat)}
-              onEditar={mat => setMaterialEditando(mat)} 
+              onEditar={mat => setMaterialEditando(mat)}
             />
           ))}
         </div>
       )}
-      
+
       {modalCriar && (
         <ModalCriarMaterial
           onClose={() => setModalCriar(false)}
@@ -727,8 +469,7 @@ export function ProfessorMateriais() {
         <ModalMaterialEditar
           material={materialEditando}
           conteudos={conteudos}
-          onClose={() =>
-          setMaterialEditando(null)}
+          onClose={() => setMaterialEditando(null)}
           onSalvar={handleEditar}
           loading={loadingAcao}
         />
