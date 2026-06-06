@@ -620,18 +620,54 @@ export function Disciplinas() {
   } = useGerenciamentoDisciplinas();
 
   const [busca, setBusca] = useState('');
+
+  const [filtroDisciplina, setFiltroDisciplina] = useState('');
+  const [filtroConteudo, setFiltroConteudo] = useState('');
+
   const [modal, setModal] = useState(null);
   const [modalTarget, setModalTarget] = useState(null);
 
   const open = (tipo, target = null) => { setModal(tipo); setModalTarget(target); };
   const close = () => { setModal(null); setModalTarget(null); };
 
+  // 👉 NOVO: Filtra as opções de conteúdo baseadas na disciplina selecionada
+  const conteudosParaDropdown = filtroDisciplina === ''
+    ? conteudos
+    : conteudos.filter(c => c.disciplina === Number(filtroDisciplina));
+
+  // 👉 NOVO: Função para atualizar a disciplina e resetar o conteúdo
+  const handleMudancaDisciplina = (e) => {
+    setFiltroDisciplina(e.target.value);
+    setFiltroConteudo(''); 
+  };
+
   // [Integração]: Filtro de busca na lista viva da API
-  const disciplinasFiltradas = disciplinas.filter(d => d.nome.toLowerCase().includes(busca.toLowerCase()));
-  const conteudosFiltrados = conteudos.filter(c => c.nome.toLowerCase().includes(busca.toLowerCase()));
+  const disciplinasFiltradas = disciplinas.filter(d => 
+    d.nome.toLowerCase().includes(busca.toLowerCase()) &&
+    (filtroDisciplina === '' || d.id === Number(filtroDisciplina))
+  );
+
+  const conteudosFiltrados = conteudos.filter(c => {
+    const nomeBate = c.nome.toLowerCase().includes(busca.toLowerCase());
+    const discBate = filtroDisciplina === '' || c.disciplina === Number(filtroDisciplina);
+    const contBate = filtroConteudo === '' || c.id === Number(filtroConteudo);
+    return nomeBate && discBate && contBate;
+  });
+
+  const materiaisFiltrados = materiais.filter(m => {
+    const nomeBate = m.nome.toLowerCase().includes(busca.toLowerCase());
+    const contBate = filtroConteudo === '' || m.conteudo === Number(filtroConteudo);
+    
+    // Descobre a disciplina deste material através do conteúdo a que ele pertence
+    const conteudoRef = conteudos.find(c => c.id === m.conteudo);
+    const discBate = filtroDisciplina === '' || (conteudoRef && conteudoRef.disciplina === Number(filtroDisciplina));
+    
+    return nomeBate && contBate && discBate;
+  });
 
   const listaDisciplinasRender = disciplinasFiltradas;
   const listaConteudosRender = conteudosFiltrados;
+  const listaMateriaisRender = materiaisFiltrados; 
 
   return (
     <AdminLayout>
@@ -643,9 +679,42 @@ export function Disciplinas() {
       </div>
 
       <div className="disc-filters">
+        {/* Barra de busca principal */}
         <div className="disc-search-wrap">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" className="disc-search-icon"><circle cx="11" cy="11" r="8" stroke="currentColor" strokeWidth="2"/><line x1="21" y1="21" x2="16.65" y2="16.65" stroke="currentColor" strokeWidth="2"/></svg>
-          <input className="disc-search" placeholder="Buscar..." value={busca} onChange={e => setBusca(e.target.value)} />
+          <input className="disc-search" placeholder="Buscar materiais..." value={busca} onChange={e => setBusca(e.target.value)} />
+        </div>
+
+        {/* 👉 AJUSTE: Filtro por Disciplina (AGORA VEM PRIMEIRO) */}
+        <div style={{ position: 'relative' }}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', color: '#5A6A76', pointerEvents: 'none' }}><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+          <select 
+            className="disc-filter-btn disc-select" 
+            style={{ paddingLeft: 30, appearance: 'none', backgroundPosition: 'right 10px center', height: '100%', minHeight: 35 }}
+            value={filtroDisciplina}
+            onChange={handleMudancaDisciplina} // 👉 Usa a função que limpa o conteúdo
+          >
+            <option value="">Filtrar por disciplina</option>
+            {disciplinas.map(d => (
+              <option key={d.id} value={d.id}>{d.nome}</option>
+            ))}
+          </select>
+        </div>
+
+        {/* 👉 AJUSTE: Filtro por Conteúdo (AGORA VEM DEPOIS E É DINÂMICO) */}
+        <div style={{ position: 'relative' }}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', color: '#5A6A76', pointerEvents: 'none' }}><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+          <select 
+            className="disc-filter-btn disc-select" 
+            style={{ paddingLeft: 30, appearance: 'none', backgroundPosition: 'right 10px center', height: '100%', minHeight: 35 }}
+            value={filtroConteudo}
+            onChange={(e) => setFiltroConteudo(e.target.value)}
+          >
+            <option value="">Filtrar por conteúdo</option>
+            {conteudosParaDropdown.map(c => ( // 👉 Usa a lista dinâmica
+              <option key={c.id} value={c.id}>{c.nome}</option>
+            ))}
+          </select>
         </div>
       </div>
 
@@ -704,11 +773,13 @@ export function Disciplinas() {
             <span>+</span> Novo material
           </button>
         </div>
-        {!loading && materiais.length === 0 && (
-          <p className="disc-estado">Nenhum material cadastrado.</p>
+        {}
+        {!loading && listaMateriaisRender.length === 0 && (
+          <p className="disc-estado">Nenhum material encontrado.</p>
         )}
         <div className="mat-grid">
-          {materiais.map(m => {
+          {}
+          {listaMateriaisRender.map(m => {
             const conteudoNome = conteudos.find(c => c.id === m.conteudo)?.nome || '—';
             const disciplinaId = conteudos.find(c => c.id === m.conteudo)?.disciplina;
             const disciplinaNome = disciplinas.find(d => d.id === disciplinaId)?.nome || '—';
