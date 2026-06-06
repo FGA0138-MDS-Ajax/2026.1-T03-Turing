@@ -1,9 +1,20 @@
 from rest_framework import serializers
 from .models import Conteudo, Disciplina
 from disciplinas.models import Material
+from rest_framework.validators import UniqueValidator
 
     #Classe de Materiais
 class MaterialSerializer(serializers.ModelSerializer):
+
+    # validações de nome vazio e repetido
+    nome = serializers.CharField(
+        allow_blank =False, 
+        validators= [UniqueValidator(
+            queryset=Material.objects.all(), message="Já existe um material cadastrado com esse nome"
+        )]
+    )
+
+
     class Meta:
         model = Material
         fields = '__all__' #Deixei o all para traduzir todos campos, mas qualquer coisa eu arrumo
@@ -13,6 +24,7 @@ class MaterialSerializer(serializers.ModelSerializer):
         tipo = data.get('tipo', self.instance.tipo if self.instance else None)
         arquivo = data.get('arquivo', self.instance.arquivo if self.instance else None)
         link = data.get('link', self.instance.link if self.instance else None)
+
 
             # Tem que ter arquivo ou link, conforme a issue
         if not arquivo and not link:
@@ -28,7 +40,7 @@ class MaterialSerializer(serializers.ModelSerializer):
             extensao = novo_arquivo.name.split('.')[-1].lower()
 
             if tipo == 'pdf' and extensao != 'pdf':
-                raise serializers.ValidationError({"Você selecionou PDF, mas enviou um arquivo com formato diferente."})
+                raise serializers.ValidationError({"arquivo":"Você selecionou PDF, mas enviou um arquivo com formato diferente."})
 
             elif tipo == 'imagem' and extensao not in ['jpg', 'jpeg', 'png', 'gif', 'webp']:
                 raise serializers.ValidationError(
