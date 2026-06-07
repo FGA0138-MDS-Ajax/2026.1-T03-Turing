@@ -12,6 +12,7 @@ import { ProfessorConfiguracoes } from '../pages/professor/ProfessorConfiguracoe
 import Login               from '../pages/Login/Login';
 import Register            from '../pages/Register/Register';
 import TeacherReview       from '../pages/admin/TeacherReview/TeacherReview';
+import ProfessorConteudo   from "../pages/Professor/ProfessorConteudo/ProfessorConteudo";
 import { Disciplinas }     from '../pages/Disciplinas/Disciplinas';
 
 function AdminLayout() {
@@ -27,6 +28,7 @@ export function AppRoutes() {
     <Routes>
       <Route path="/login"    element={<Login />} />
       <Route path="/register" element={<Register />} />
+      <Route path="/professor/conteudos" element={<ProfessorConteudo />} />
 
       <Route
         path="/admin"
