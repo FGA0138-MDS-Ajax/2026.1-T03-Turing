@@ -1,0 +1,154 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.gs-professor-layout {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+  background: #F4F1EA;
+}
+
+.gs-professor-main {
+  flex: 1;
+  padding: 40px;
+  overflow-y: auto;
+  background: #F4F1EA;
+  min-width: 0;
+}
+
+.gs-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+}
+
+.gs-page-title {
+  margin: 0;
+  margin-bottom: 0.75rem;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #101828;
+}
+
+.gs-page-subtitle {
+  margin: 0;
+  margin-top: 0.25rem;
+  margin-bottom: 1rem;
+  color: #6A7282;
+  font-size: 0.95rem;
+}
+
+aside.gs-sidebar {
+  background: #FFFFFF;
+  border-right: 1px solid #E5E7EB;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+}
+
+.gs-sidebar-logo {
+  height: 78px;
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  padding-left: 20px;
+  border-bottom: 1px solid #E5E7EB;
+}
+
+.gs-sidebar-logo span {
+  color: #101828;
+}
+
+.gs-sidebar-nav {
+  color: #6A7282;
+}
+
+.gs-nav-item {
+   color: #6A7282;
+  border-radius: 10px;
+  font-weight: 500;
+}
+
+.gs-nav-item svg {
+  color: #6A7282;
+}
+
+.gs-nav-item:hover {
+  background: #F3F4F6;
+  color: #6A7282;
+}
+
+.gs-nav-item:hover svg {
+  color: #6A7282;
+}
+
+.gs-nav-item--active {
+  background: #D1D5DC;
+  color: #2F5D62;
+  font-weight: 600;
+}
+
+.gs-nav-item--active svg {
+  color: #2F5D62;
+}
+
+.gs-sidebar-bottom {
+  border-top: none;
+}
+
+.gs-sidebar-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  padding: 0;
+  justify-content: space-between;
+}
+
+.gs-user-avatar {
+  background: #2F5D62;
+}
+
+.gs-sidebar-logout-icon {
+  color: #6A7282;
+  margin-left: auto;
+  transition: color 0.2s ease;
+}
+
+.gs-sidebar-user:hover .gs-sidebar-logout-icon {
+  color: #2F5D62;
+}
+
+@media (max-width: 700px) {
+  .gs-professor-main {
+    padding: 1rem;
+  }
+
+  .gs-nav-item {
+    padding: 9px 0;
+    justify-content: center;
+  }
+
+  .gs-sidebar-logo {
+    justify-content: center;
+    padding: 0;
+  }
+
+  .gs-sidebar-bottom {
+    padding: 12px 0;
+    display: flex;
+    justify-content: center;
+  }
+
+  .gs-sidebar-user {
+    justify-content: center;
+    padding: 0;
+  }
+}
