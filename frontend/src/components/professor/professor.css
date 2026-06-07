@@ -13,9 +13,10 @@
 
 .gs-professor-main {
   flex: 1;
-  padding: 40px 40px 40px 40px;
+  padding: 40px;
   overflow-y: auto;
   background: #F4F1EA;
+  min-width: 0;
 }
 
 .gs-topbar {
@@ -42,12 +43,8 @@
 }
 
 aside.gs-sidebar {
-  width: 210px;
-  min-width: 260px;
   background: #FFFFFF;
   border-right: 1px solid #E5E7EB;
-  display: flex;
-  flex-direction: column;
   height: 100vh;
   position: sticky;
   top: 0;
@@ -67,32 +64,17 @@ aside.gs-sidebar {
 }
 
 .gs-sidebar-nav {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 0 16px;
+  color: #6A7282;
 }
 
 .gs-nav-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 0 16px;
-  height: 40px;
+   color: #6A7282;
   border-radius: 10px;
-  text-decoration: none;
-  font-size: 14px;
   font-weight: 500;
-  color: #6A7282;
-  transition: all 0.2s ease;
 }
 
 .gs-nav-item svg {
-  width: 18px;
-  height: 18px;
   color: #6A7282;
-  flex-shrink: 0;
 }
 
 .gs-nav-item:hover {
@@ -115,9 +97,7 @@ aside.gs-sidebar {
 }
 
 .gs-sidebar-bottom {
-  padding: 16px 20px;
   border-top: none;
-  margin-top: auto;
 }
 
 .gs-sidebar-user {
@@ -133,17 +113,7 @@ aside.gs-sidebar {
 }
 
 .gs-user-avatar {
-  width: 36px;
-  height: 36px;
   background: #2F5D62;
-  border-radius: 50%;
-  display: flex;
-align-items: center;
-  justify-content: center;
-  color: white;
-  font-size: 14px;
-  font-weight: 600;
-  flex-shrink: 0;
 }
 
 .gs-sidebar-logout-icon {
@@ -154,4 +124,31 @@ align-items: center;
 
 .gs-sidebar-user:hover .gs-sidebar-logout-icon {
   color: #2F5D62;
+}
+
+@media (max-width: 700px) {
+  .gs-professor-main {
+    padding: 1rem;
+  }
+
+  .gs-nav-item {
+    padding: 9px 0;
+    justify-content: center;
+  }
+
+  .gs-sidebar-logo {
+    justify-content: center;
+    padding: 0;
+  }
+
+  .gs-sidebar-bottom {
+    padding: 12px 0;
+    display: flex;
+    justify-content: center;
+  }
+
+  .gs-sidebar-user {
+    justify-content: center;
+    padding: 0;
+  }
 }
