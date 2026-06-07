@@ -28,9 +28,17 @@ export function useGerenciamentoUsuarios({ listar, criar, editar, deletar }) {
     }
   }, [listar]);
 
-  useEffect(() => {
-    carregar();
-  }, [carregar]);
+  // Carrega os dados ao montar
+useEffect(() => {
+  carregar();
+}, [carregar]);
+
+// Escuta o evento de atualização disparado pelo TeacherReview
+useEffect(() => {
+  const handler = () => carregar();
+  window.addEventListener('professores-atualizados', handler);
+  return () => window.removeEventListener('professores-atualizados', handler);
+}, [carregar]);
 
   const handleCriar = async (dados) => {
     setLoading(true);

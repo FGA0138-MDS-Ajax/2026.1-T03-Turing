@@ -30,9 +30,10 @@ class MaterialTestCaseProfesor(APITestCase):
         cls.conteudo_criado = Conteudo.objects.create(
             nome="conteudoTeste",
             descricao="teste",
-            status="teste",
+            status="ativo",
             disciplina_id=cls.disciplina.id
         )
+        cls.conteudo_criado.professores.add(Professor.objects.get(perfil=perfil_criado))
         cls.material=Material.objects.create(
             nome="teste",
             descricao="teste",
@@ -73,30 +74,11 @@ class MaterialTestCaseProfesor(APITestCase):
         print(response.data)
         self.assertEqual(response.status_code, 201)
 
-    # def cria(self):
-    #     Disciplina.objects.create(
-    #         nome="teste",
-    #         descricao="testando",
-    #
-    #     )
-    #     conteudo_criado = Conteudo.objects.create(
-    #         nome="conteudoTeste",
-    #         descricao="teste",
-    #         status="teste",
-    #         disciplina_id=1
-    #     )
-    #     Material.objects.create(
-    #         nome="teste",
-    #         descricao="teste",
-    #         arquivo="pdf",
-    #         conteudo_id=1,
-    #         tipo="pdf",
-    #     )
 
     def testMaterial_especifico_GET(self):
         # self.cria()
         response = self.client.get(f'/api/disciplinas/materiais/{self.material.id}/')
-        print(response.data)
+        # print(response.data)
         self.assertEqual(response.status_code, 200)
 
     def testAlterar_material_especifico_PUT(self):
@@ -136,3 +118,104 @@ class MaterialTestCaseProfesor(APITestCase):
         # self.cria()
         response=self.client.delete(f'/api/disciplinas/materiais/{self.material.id}/')
         self.assertEqual(response.status_code, 204)
+
+class MaterialFiltrosTestCase(APITestCase):
+
+    @classmethod
+    def setUpTestData(cls):
+        # Professor dono
+        perfil_prof = Perfil.objects.create(
+            nome="prof filtro",
+            email="prof.filtro@email.com",
+            cpf="11111111111",
+            data_nascimento="2000-01-01",
+            tipo="professor",
+            password=make_password("123456"),
+        )
+        cls.professor = Professor.objects.create(perfil=perfil_prof)
+
+        # Professor de outra coisa
+        perfil_outro = Perfil.objects.create(
+            nome="outro prof",
+            email="outro.prof@email.com",
+            cpf="22222222222",
+            data_nascimento="2000-01-01",
+            tipo="professor",
+            password=make_password("123456"),
+        )
+        cls.outro_professor = Professor.objects.create(perfil=perfil_outro)
+
+        cls.disciplina = Disciplina.objects.create(nome="disciplina filtro", descricao="d")
+        cls.outra_disciplina = Disciplina.objects.create(nome="outra disciplina", descricao="d")
+
+        cls.conteudo = Conteudo.objects.create(
+            nome="conteudo do prof",
+            descricao="d",
+            status="ativo",
+            disciplina_id=cls.disciplina.id,
+        )
+        cls.conteudo.professores.add(cls.professor)
+
+        # Conteúdo de outro professor (mesma disciplina)
+        cls.conteudo_outro = Conteudo.objects.create(
+            nome="conteudo de outro",
+            descricao="d",
+            status="ativo",
+            disciplina_id=cls.disciplina.id,
+        )
+        cls.conteudo_outro.professores.add(cls.outro_professor)
+
+        cls.material = Material.objects.create(
+            nome="material do prof",
+            descricao="d",
+            arquivo="pdf",
+            conteudo_id=cls.conteudo.id,
+            tipo="pdf",
+        )
+        cls.material_outro = Material.objects.create(
+            nome="material de outro prof",
+            descricao="d",
+            arquivo="pdf",
+            conteudo_id=cls.conteudo_outro.id,
+            tipo="pdf",
+        )
+
+    def login_como(self, email):
+        login = self.client.post(
+            "/api/usuarios/login/", {"email": email, "password": "123456"}, format="json"
+        )
+        self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {login.data['access']}")
+
+    def setUp(self):
+        self.login_como("prof.filtro@email.com")
+
+    def test_filtro_conteudo_proprio(self):
+        response = self.client.get(f"/api/disciplinas/materiais/?conteudo={self.conteudo.id}")
+        self.assertEqual(response.status_code, 200)
+        ids = [m["id"] for m in response.data]
+        self.assertIn(self.material.id, ids)
+        self.assertNotIn(self.material_outro.id, ids)
+
+    def test_filtro_conteudo_de_outro_prof_retorna_vazio(self):
+        response = self.client.get(
+            f"/api/disciplinas/materiais/?conteudo={self.conteudo_outro.id}"
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data, [])
+
+    def test_filtro_disciplina(self):
+        response = self.client.get(
+            f"/api/disciplinas/materiais/?disciplina={self.disciplina.id}"
+        )
+        self.assertEqual(response.status_code, 200)
+        ids = [m["id"] for m in response.data]
+        # Só aparece o material do professor logado
+        self.assertIn(self.material.id, ids)
+        self.assertNotIn(self.material_outro.id, ids)
+
+    def test_filtro_disciplina_sem_materiais_retorna_vazio(self):
+        response = self.client.get(
+            f"/api/disciplinas/materiais/?disciplina={self.outra_disciplina.id}"
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data, [])

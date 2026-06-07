@@ -5,9 +5,15 @@ import { AdminDashboard }  from '../pages/admin/AdminDashboard';
 import { Professores }     from '../pages/admin/Professores';
 import { Alunos }          from '../pages/admin/Alunos';
 import { Configuracoes }   from '../pages/admin/Configuracoes';
+import { ProfessorDashboard }  from '../pages/professor/ProfessorDashboard';
+import { ProfessorConteudos }    from '../pages/professor/ProfessorConteudos';
+import { ProfessorMateriais }    from '../pages/professor/ProfessorMateriais';
+import { ProfessorConfiguracoes } from '../pages/professor/ProfessorConfiguracoes';
 import Login               from '../pages/Login/Login';
 import Register            from '../pages/Register/Register';
 import TeacherReview       from '../pages/admin/TeacherReview/TeacherReview';
+import ProfessorConteudo   from "../pages/Professor/ProfessorConteudo/ProfessorConteudo";
+import { Disciplinas }     from '../pages/Disciplinas/Disciplinas';
 
 function AdminLayout() {
   return (
@@ -31,11 +37,26 @@ export function AppRoutes() {
           </ProtectedRoute>
         }
       >
-        <Route index                element={<AdminDashboard />} />
-        <Route path="professores"   element={<Professores />} />
-        <Route path="alunos"        element={<Alunos />} />
-        <Route path="configuracoes" element={<Configuracoes />} />
-        <Route path="professores/revisao" element={<TeacherReview />} />
+        <Route index                       element={<AdminDashboard />} />
+        <Route path="professores"          element={<Professores />} />
+        <Route path="alunos"               element={<Alunos />} />
+        <Route path="configuracoes"        element={<Configuracoes />} />
+        <Route path="professores/revisao"  element={<TeacherReview />} />
+        <Route path="conteudos"            element={<Disciplinas />} />
+      </Route>
+
+      <Route
+        path="/professor"
+        element={
+          <ProtectedRoute requiredRole="professor">
+            <Outlet />
+          </ProtectedRoute>
+        }
+      >
+        <Route index element={<ProfessorDashboard />} />
+        <Route path="conteudos"            element={<ProfessorConteudos />} />
+        <Route path="materiais"            element={<ProfessorMateriais />} />
+        <Route path="configuracoes"        element={<ProfessorConfiguracoes />} />
       </Route>
 
       <Route
