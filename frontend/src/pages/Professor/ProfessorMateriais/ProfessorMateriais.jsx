@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { ProfessorLayout } from '../../../components/professor/ProfessorLayout';
-import { listarMateriais, deletarMaterial, criarMaterial, editarMaterial, listarConteudos } from '../../../services/disciplinasService';
+import { listarMateriais, deletarMaterial, criarMaterial, editarMaterial, listarConteudos, listarProfessoresAprovados,} from '../../../services/disciplinasService';
 import { listarDisciplinas } from '../../../services/disciplinasService';
 import { useAuth } from '../../../context/AuthContext';
 import ModalCriarMaterial from '../../../components/professor/ModalCriarMaterial';
@@ -305,21 +305,29 @@ export function ProfessorMateriais() {
     setLoading(true);
     setErro(null);
     try {
-      const [materiaisRes, conteudosRes, disciplinasRes] = await Promise.all([
+      const token = localStorage.getItem('authToken');
+      const payload = token ? JSON.parse(atob(token.split('.')[1])) : {};
+      const perfilId = Number(payload.user_id);
+
+      const [materiaisRes, conteudosRes, disciplinasRes, professoresRes] = await Promise.all([
         listarMateriais(),
         listarConteudos(),
         listarDisciplinas(),
+        listarProfessoresAprovados(),
       ]);
 
       const todosConteudos = Array.isArray(conteudosRes.data) ? conteudosRes.data : [];
       const todasDisciplinas = Array.isArray(disciplinasRes.data) ? disciplinasRes.data : [];
       const todosMateriais = Array.isArray(materiaisRes.data) ? materiaisRes.data : [];
 
-      const conteudosDoProfessor = todosConteudos.filter(c =>
-        Array.isArray(c.professores) && c.professores.some(
-          p => p === user?.user_id || p?.id === user?.user_id
+      const professorLogado = professoresRes.data.find(p => p.perfil?.id === perfilId);
+      const professorId = professorLogado?.id;
+
+      const conteudosDoProfessor = professorId
+        ? todosConteudos.filter(c =>
+          Array.isArray(c.professores) && c.professores.includes(professorId)
         )
-      );
+        : [];
 
       const idsConteudos = new Set(conteudosDoProfessor.map(c => c.id));
       const materiaisDoProfessor = todosMateriais.filter(m => idsConteudos.has(m.conteudo));
@@ -333,7 +341,7 @@ export function ProfessorMateriais() {
     } finally {
       setLoading(false);
     }
-  }, [user?.user_id]);
+  }, []); 
 
   useEffect(() => {
     carregar();

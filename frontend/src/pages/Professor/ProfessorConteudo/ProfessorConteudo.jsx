@@ -5,6 +5,7 @@ import {
   listarDisciplinas,
   listarMateriais,
   criarMaterial,
+  listarProfessoresAprovados,
 } from "../../../services/disciplinasService";
 import "./ProfessorConteudo.css";
 import { BookOpen, CalendarDays, FolderOpen, Filter } from "lucide-react";
@@ -38,12 +39,30 @@ export default function ProfessorConteudo() {
   const carregarDados = async () => {
     try {
       setLoading(true);
-      const [conteudosResponse, disciplinasResponse, materiaisResponse] = await Promise.all([
+
+      const token = localStorage.getItem('authToken');
+      const payload = token ? JSON.parse(atob(token.split('.')[1])) : {};
+      const perfilId = Number(payload.user_id);
+
+      const [conteudosResponse, disciplinasResponse, materiaisResponse, professoresResponse] = await Promise.all([
         listarConteudos(),
         listarDisciplinas(),
         listarMateriais(),
+        listarProfessoresAprovados(),
       ]);
-      setConteudos(conteudosResponse.data);
+
+      const professorLogado = professoresResponse.data.find(p => p.perfil?.id === perfilId);
+      const professorId = professorLogado?.id;
+
+      const todosConteudos = Array.isArray(conteudosResponse.data) ? conteudosResponse.data : [];
+
+      const conteudosDoProfessor = professorId
+        ? todosConteudos.filter(c =>
+          Array.isArray(c.professores) && c.professores.includes(professorId)
+        )
+        : [];
+
+      setConteudos(conteudosDoProfessor);
       setDisciplinas(disciplinasResponse.data);
       setMateriais(materiaisResponse.data);
     } catch (err) {
