@@ -1,0 +1,209 @@
+.prof-stats-grid {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 3rem;
+  flex-wrap: wrap;
+}
+
+.prof-stat-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff;
+  border: 1px solid #E5E7EB;
+  border-radius: 12px;
+  padding: 1.5rem 1.75rem;
+  flex: 1;
+  min-width: 200px;
+  max-width: 280px;
+}
+
+.prof-stat-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.prof-stat-label {
+  font-size: 0.8rem;
+  color: #6A7282;
+  font-weight: 400;
+}
+
+.prof-stat-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #101828;
+  line-height: 1;
+}
+
+.prof-stat-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.prof-panels {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.prof-panel {
+  background: #fff;
+  border: 1px solid #E5E7EB;
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.prof-panel-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #101828;
+  margin: 0 0 1.25rem 0;
+}
+
+.prof-panel-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.prof-atividade-item {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #F3F4F6;
+}
+
+.prof-atividade-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.prof-atividade-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: #E0F2F1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.prof-atividade-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.prof-atividade-titulo {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #101828;
+}
+
+.prof-atividade-disciplina {
+  font-size: 0.78rem;
+  color: #6A7282;
+}
+
+.prof-duvida-item {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #F3F4F6;
+}
+
+.prof-duvida-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.prof-duvida-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.prof-duvida-aluno {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #101828;
+}
+
+.prof-duvida-titulo {
+  font-size: 0.8rem;
+  color: #4A5565;
+}
+
+.prof-duvida-meta {
+  font-size: 0.75rem;
+  color: #99A1AF;
+}
+
+.prof-duvida-badge {
+  flex-shrink: 0;
+  padding: 0.28rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: #2F5D62;
+  color: #fff;
+  white-space: nowrap;
+  margin-top: 0.1rem;
+}
+
+.prof-duvida-badge--respondida {
+  background: #E0F2F1;
+  color: #2F5D62;
+}
+
+/* Responsividade */
+@media (max-width: 900px) {
+  .prof-panels {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .prof-stats-grid {
+    flex-direction: column;
+  }
+
+  .prof-stat-card {
+    max-width: 100%;
+  }
+}
+
+.prof-stat-skeleton {
+  display: inline-block;
+  width: 40px;
+  height: 28px;
+  background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%);
+  background-size: 200% 100%;
+  border-radius: 4px;
+  animation: profShimmer 1.2s infinite;
+}
+
+@keyframes profShimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.prof-erro-banner {
+  background: #fde8e8;
+  color: #b42318;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  margin-bottom: 1.25rem;
+}
