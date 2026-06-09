@@ -6,7 +6,7 @@ class AdminTestCase(APITestCase):
     @classmethod
     def setUpTestData(cls):
         perfil_criado = Perfil.objects.create(
-            nome='Admin',
+            nome='admin',
             email='admin@email.com',
             cpf='00000000000',
             data_nascimento='2005-12-12',

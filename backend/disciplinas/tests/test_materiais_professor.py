@@ -4,7 +4,7 @@ from usuarios.models import Professor, Perfil
 from django.core.files.uploadedfile import SimpleUploadedFile
 from disciplinas.models import Conteudo,Disciplina,Material
 """"
-Nesse arquivo existem testes para adição de conteudo como Professor, ele tb deve ter acesso a tudo
+Nesse arquivo existem testes para adição de conteudo como professor, ele tb deve ter acesso a tudo
 """
 ### COMO PROFESSOR
 
@@ -123,7 +123,7 @@ class MaterialFiltrosTestCase(APITestCase):
 
     @classmethod
     def setUpTestData(cls):
-        # Professor dono
+        # professor dono
         perfil_prof = Perfil.objects.create(
             nome="prof filtro",
             email="prof.filtro@email.com",
@@ -134,7 +134,7 @@ class MaterialFiltrosTestCase(APITestCase):
         )
         cls.professor = Professor.objects.create(perfil=perfil_prof)
 
-        # Professor de outra coisa
+        # professor de outra coisa
         perfil_outro = Perfil.objects.create(
             nome="outro prof",
             email="outro.prof@email.com",

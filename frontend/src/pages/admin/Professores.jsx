@@ -1,6 +1,6 @@
 import {AdminLayout} from '../../components/admin/AdminLayout';
-import GerenciamentoProfessores from '../Admin/Professores/professores';
-import TeacherReview from '../admin/TeacherReview/TeacherReview';
+import GerenciamentoProfessores from './/Professores/professores';
+import TeacherReview from './/TeacherReview/TeacherReview';
 
 export function Professores() {
     return (

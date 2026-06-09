@@ -9,7 +9,7 @@ class TestEstrucModeraInscricoes(APITestCase):
     @classmethod
     def setUpTestData(cls):
         perfil_criado = Perfil.objects.create(
-            nome='Admin',
+            nome='admin',
             email='admin@email.com',
             cpf='00000000000',
             data_nascimento='2005-12-12',
@@ -68,7 +68,7 @@ class TestEstrucModeraInscricoes(APITestCase):
     def test_get_inscricoes_admin(self):
         response1 = self.client.post('/api/usuarios/professores/', {
             "perfil": {
-                "nome": "Nome do Professor",
+                "nome": "Nome do professor",
                 'email': 'gabriel@aleatorio2.com',
                 "cpf": '12345678902',
                 "data_nascimento": '2005-05-12',
@@ -87,7 +87,7 @@ class TestEstrucModeraInscricoes(APITestCase):
     def test_get_inscricoes_pendente(self):
         response1 = self.client.post('/api/usuarios/professores/', {
             "perfil": {
-                "nome": "Nome do Professor",
+                "nome": "Nome do professor",
                 'email': 'gabriel@aleatorio2.com',
                 "cpf": '12345678902',
                 "data_nascimento": '2005-05-12',

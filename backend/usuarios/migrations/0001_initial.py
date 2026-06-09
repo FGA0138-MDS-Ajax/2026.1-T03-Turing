@@ -25,7 +25,7 @@ class Migration(migrations.Migration):
                 ('email', models.EmailField(max_length=254, unique=True)),
                 ('cpf', models.CharField(max_length=11, unique=True)),
                 ('data_nascimento', models.DateField()),
-                ('tipo', models.CharField(choices=[('aluno', 'Aluno'), ('professor', 'Professor'), ('admin', 'Administrador')], max_length=20)),
+                ('tipo', models.CharField(choices=[('aluno', 'Aluno'), ('professor', 'professor'), ('admin', 'Administrador')], max_length=20)),
                 ('role', models.CharField(max_length=50)),
                 ('data_create', models.DateTimeField(auto_now_add=True)),
                 ('data_update', models.DateTimeField(auto_now=True)),
@@ -39,7 +39,7 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.CreateModel(
-            name='Admin',
+            name='admin',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('perfil', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='admin', to=settings.AUTH_USER_MODEL)),
@@ -59,7 +59,7 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.CreateModel(
-            name='Professor',
+            name='professor',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('curriculo', models.FileField(blank=True, null=True, upload_to='curriculos/')),

@@ -9,7 +9,7 @@ class EmailNotificacaoTestCase(APITestCase):
     @classmethod
     def setUpTestData(cls):
         perfil_admin=Perfil.objects.create(
-            nome='Admin',
+            nome='admin',
             email='admin@email.com',
             cpf='00000000000',
             data_nascimento='2000-01-01',

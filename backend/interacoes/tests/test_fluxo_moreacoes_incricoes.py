@@ -10,7 +10,7 @@ class TestEstrucModeraInscricoes(APITestCase):
         client = APIClient()
 
         perfil_criado = Perfil.objects.create(
-            nome='Admin',
+            nome='admin',
             email='admin@email.com',
             cpf='00000000000',
             data_nascimento='2005-12-12',
@@ -36,7 +36,7 @@ class TestEstrucModeraInscricoes(APITestCase):
         )
         cls.professor_id = client.post('/api/usuarios/professores/', {
             "perfil": {
-                "nome": "Nome do Professor",
+                "nome": "Nome do professor",
                 'email': 'gabriel@aleatorio2.com',
                 "cpf": '12345678902',
                 "data_nascimento": '2005-05-12',
@@ -47,7 +47,7 @@ class TestEstrucModeraInscricoes(APITestCase):
 
         client.post('/api/usuarios/professores/', {
             "perfil": {
-                "nome": "Nome do Professor",
+                "nome": "Nome do professor",
                 'email': 'gabriel@aeatori2.com',
                 "cpf": '12345678904',
                 "data_nascimento": '2005-05-12',

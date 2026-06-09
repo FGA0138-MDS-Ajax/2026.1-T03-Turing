@@ -1,5 +1,5 @@
 import { ProfessorLayout } from '../../components/professor/ProfessorLayout';
-import ProfessorMateriaisPage from '../professor/ProfessorMateriais/ProfessorMateriais';
+import ProfessorMateriaisPage from './/ProfessorMateriais/ProfessorMateriais';
 
 export function ProfessorMateriais() {
   return (

@@ -128,7 +128,7 @@ export function ProfessorDashboard() {
           <div className="gs-topbar-user">
             <div className="gs-topbar-avatar">{iniciais}</div>
             <div>
-              <p className="gs-topbar-name">{user?.nome ?? 'Professor'}</p>
+              <p className="gs-topbar-name">{user?.nome ?? 'professor'}</p>
               <p className="gs-topbar-role">Professor</p>
             </div>
           </div>

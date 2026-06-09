@@ -13,7 +13,7 @@ class Command(BaseCommand):
         senha_padrao = "admin123"
 
         if Perfil.objects.filter(email=email_padrao).exists():
-            self.stdout.write(self.style.WARNING(f'O Admin com e-mail {email_padrao} já existe no banco.'))
+            self.stdout.write(self.style.WARNING(f'O admin com e-mail {email_padrao} já existe no banco.'))
             return 
 
     
@@ -23,7 +23,7 @@ class Command(BaseCommand):
 
         try:
             perfil = Perfil.objects.create_user(
-                nome="Admin Turing",
+                nome="admin Turing",
                 email=email_padrao,
                 cpf=cpf_padrao,
                 password=senha_padrao, 
@@ -35,11 +35,11 @@ class Command(BaseCommand):
             # ligando a tabela do Perfil recém-criado
             Admin.objects.create(perfil=perfil)
 
-            self.stdout.write(self.style.SUCCESS(f' Admin criado com sucesso! Login: {email_padrao} | Senha: {senha_padrao}'))
+            self.stdout.write(self.style.SUCCESS(f' admin criado com sucesso! Login: {email_padrao} | Senha: {senha_padrao}'))
 
         except IntegrityError as e:
             #  
             self.stdout.write(self.style.ERROR(f' erro de integridade no banco de dados: {e}'))
             
         except Exception as e:
-            self.stdout.write(self.style.ERROR(f'  erro inesperado ao criar o Admin: {e}'))
+            self.stdout.write(self.style.ERROR(f'  erro inesperado ao criar o admin: {e}'))

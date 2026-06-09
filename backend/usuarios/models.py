@@ -45,7 +45,7 @@ class PerfilManager(BaseUserManager):
 class Perfil(AbstractBaseUser, PermissionsMixin):
     TIPO_CHOICES = [
         ('aluno', 'Aluno'),
-        ('professor', 'Professor'),
+        ('professor', 'professor'),
         ('admin', 'Administrador'),
     ]
 

@@ -4,7 +4,7 @@ from usuarios.models import Admin, Perfil
 from django.core.files.uploadedfile import SimpleUploadedFile
 from disciplinas.models import Conteudo,Disciplina,Material
 """"
-Nesse arquivo existem testes para adição de conteudo como Admin, além de testes para todo tipo de envio de material
+Nesse arquivo existem testes para adição de conteudo como admin, além de testes para todo tipo de envio de material
 """
 ### COMO ADMIN
 
@@ -12,7 +12,7 @@ class MaterialTestCaseAdmin(APITestCase):
     @classmethod
     def setUpTestData(cls):
         perfil_criado = Perfil.objects.create(
-            nome='Admin',
+            nome='admin',
             email='admin@email.com',
             cpf='00000000000',
             data_nascimento='2005-12-12',

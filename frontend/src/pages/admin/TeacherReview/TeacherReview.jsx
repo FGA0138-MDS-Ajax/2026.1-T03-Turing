@@ -246,7 +246,7 @@ export default function TeacherReview() {
                     <div className="teacher-info">
 
                       <strong>
-                        {inscricao.professor_nome || "Professor sem nome"}
+                        {inscricao.professor_nome || "professor sem nome"}
                       </strong>
 
                       <p>

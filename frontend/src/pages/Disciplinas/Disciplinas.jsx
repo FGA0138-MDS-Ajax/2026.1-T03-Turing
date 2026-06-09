@@ -277,7 +277,7 @@ function ModalAlocarProfessorConteudo({ conteudo, onClose, onAlocar, professores
         <div className="disc-dropdown-list disc-dropdown-list--static">
           {professores && professores.length === 0 && <p className="disc-empty-text">Nenhum professor disponível.</p>}
           {professores && professores.map(p => {
-            const nomeProf = p.perfil?.nome || p.nome || 'Professor';
+            const nomeProf = p.perfil?.nome || p.nome || 'professor';
             const isChecked = professoresSelecionados.includes(p.id);
             return (
               <div key={p.id} className={`disc-dropdown-item ${isChecked ? 'disc-dropdown-item--active' : ''}`} onClick={() => toggleProfessor(p.id)}>

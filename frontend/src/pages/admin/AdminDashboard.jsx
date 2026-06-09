@@ -76,7 +76,7 @@ export function AdminDashboard() {
               {user?.name?.[0]?.toUpperCase() ?? 'A'}
             </div>
             <div>
-              <p className="gs-topbar-name">{user?.name ?? 'Admin'}</p>
+              <p className="gs-topbar-name">{user?.name ?? 'admin'}</p>
               <p className="gs-topbar-role">Admin</p>
             </div>
           </div>

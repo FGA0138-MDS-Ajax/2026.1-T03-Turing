@@ -10,7 +10,7 @@ class ProfessorTestCase(APITestCase):
         client = APIClient()
 
         Admin.objects.create(perfil=Perfil.objects.create(
-            nome='Admin',
+            nome='admin',
             email='admin@email.com',
             cpf='00000000000',
             data_nascimento='2000-01-01',
@@ -35,7 +35,7 @@ class ProfessorTestCase(APITestCase):
         cls.professor = response.data
 
         cls.aluno = Aluno.objects.create(perfil=Perfil.objects.create(
-            nome='Admin',
+            nome='admin',
             email='aluno@email.com',
             cpf='11111111111',
             data_nascimento='2000-01-01',

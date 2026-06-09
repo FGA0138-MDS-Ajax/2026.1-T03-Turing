@@ -200,7 +200,7 @@ export function useGerenciamentoDisciplinas() {
     setLoading(true);
     try {
       await alocarProfessorConteudo(conteudoId, professoresIds);
-      exibirToast('sucesso', 'Professor alocado com sucesso!');
+      exibirToast('sucesso', 'professor alocado com sucesso!');
       await carregarConteudos();
       return true;
     } catch {
