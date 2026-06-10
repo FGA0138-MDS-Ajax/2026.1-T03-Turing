@@ -4,50 +4,30 @@ import {
   listarConteudos,
   listarDisciplinas,
   listarMateriais,
+  criarMaterial,
+  listarProfessoresAprovados,
 } from "../../../services/disciplinasService";
 import "./ProfessorConteudo.css";
-import {
-  BookOpen,
-  CalendarDays,
-  FolderOpen,
-  Filter
-} from "lucide-react";
+import { BookOpen, CalendarDays, FolderOpen, Filter } from "lucide-react";
+import ModalCriarMaterial from "../../../components/professor/ModalCriarMaterial";
 
 export default function ProfessorConteudo() {
   const { user } = useAuth();
   const [conteudos, setConteudos] = useState([]);
   const [disciplinas, setDisciplinas] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadingAcao, setLoadingAcao] = useState(false);
   const [error, setError] = useState("");
   const [materiais, setMateriais] = useState([]);
-
-  const [filtroDisciplina, setFiltroDisciplina] =
-    useState("");
+  const [filtroDisciplina, setFiltroDisciplina] = useState("");
+  const [modalCriar, setModalCriar] = useState(false);
+  const [conteudoSelecionado, setConteudoSelecionado] = useState(null);
 
   if (user?.tipo !== "professor") {
     return (
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          height: "100vh",
-          flexDirection: "column",
-        }}
-      >
-        <h1
-          style={{
-            fontSize: "4rem",
-            color: "#212121",
-          }}
-        >
-          403
-        </h1>
-
-        <p>
-          Você não possui permissão para acessar esta
-          página.
-        </p>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100vh", flexDirection: "column" }}>
+        <h1 style={{ fontSize: "4rem", color: "#212121" }}>403</h1>
+        <p>Você não possui permissão para acessar esta página.</p>
       </div>
     );
   }
@@ -60,43 +40,76 @@ export default function ProfessorConteudo() {
     try {
       setLoading(true);
 
-      const [conteudosResponse, disciplinasResponse, materiaisResponse] 
-      = await Promise.all([
-      listarConteudos(),
-      listarDisciplinas(),
-      listarMateriais()
-    ]);
+      const token = localStorage.getItem('authToken');
+      const payload = token ? JSON.parse(atob(token.split('.')[1])) : {};
+      const perfilId = Number(payload.user_id);
 
-      setConteudos(conteudosResponse.data);
+      const [conteudosResponse, disciplinasResponse, materiaisResponse, professoresResponse] = await Promise.all([
+        listarConteudos(),
+        listarDisciplinas(),
+        listarMateriais(),
+        listarProfessoresAprovados(),
+      ]);
+
+      const professorLogado = professoresResponse.data.find(p => p.perfil?.id === perfilId);
+      const professorId = professorLogado?.id;
+
+      const todosConteudos = Array.isArray(conteudosResponse.data) ? conteudosResponse.data : [];
+
+      const conteudosDoProfessor = professorId
+        ? todosConteudos.filter(c =>
+          Array.isArray(c.professores) && c.professores.includes(professorId)
+        )
+        : [];
+
+      setConteudos(conteudosDoProfessor);
       setDisciplinas(disciplinasResponse.data);
       setMateriais(materiaisResponse.data);
-
     } catch (err) {
       console.log(err);
-
-      setError(
-        "Não foi possível carregar os conteúdos."
-      );
+      setError("Não foi possível carregar os conteúdos.");
     } finally {
       setLoading(false);
     }
   };
 
-  const handleAdicionarMaterial = (conteudoId) => {
-    console.log(
-      "Abrir modal para adicionar material ao conteúdo:",
-      conteudoId
-    );
+  const [toast, setToast] = useState(null);
+
+    const exibirToast = (tipo, mensagem) => {
+      setToast({ tipo, mensagem });
+      setTimeout(() => setToast(null), 3500);
+    };
+
+  const handleCriar = async (formData) => {
+  setLoadingAcao(true);
+  try {
+    await criarMaterial(formData);
+    exibirToast('sucesso', 'Material adicionado com sucesso!');
+    await carregarDados();
+    return true;
+  } catch (err) {
+    console.error(err);
+    exibirToast('erro', 'Erro ao adicionar material.');
+    return false;
+  } finally {
+    setLoadingAcao(false);
+  }
+};
+
+  const abrirModalParaConteudo = (conteudo) => {
+    setConteudoSelecionado(conteudo);
+    setModalCriar(true);
+  };
+
+  const fecharModal = () => {
+    setModalCriar(false);
+    setConteudoSelecionado(null);
   };
 
   const conteudosFiltrados =
     filtroDisciplina === ""
       ? conteudos
-      : conteudos.filter(
-          (conteudo) =>
-            conteudo.disciplina ===
-            Number(filtroDisciplina)
-        );
+      : conteudos.filter((conteudo) => conteudo.disciplina === Number(filtroDisciplina));
 
   if (loading) {
     return (
@@ -118,32 +131,19 @@ export default function ProfessorConteudo() {
     <div className="professor-conteudo-container">
       <div className="conteudo-page-header">
         <h1>Meus Conteúdos</h1>
-
-        <p>
-          Visualize os conteúdos vinculados a você.
-        </p>
+        <p>Visualize os conteúdos vinculados a você.</p>
       </div>
 
       <div className="conteudo-filters">
-
         <div className="filter-wrapper">
           <Filter size={18} />
-
           <select
             value={filtroDisciplina}
-            onChange={(e) =>
-              setFiltroDisciplina(e.target.value)
-            }
+            onChange={(e) => setFiltroDisciplina(e.target.value)}
           >
-            <option value="">
-              Todas as disciplinas
-            </option>
-
+            <option value="">Todas as disciplinas</option>
             {disciplinas.map((disciplina) => (
-              <option
-                key={disciplina.id}
-                value={disciplina.id}
-              >
+              <option key={disciplina.id} value={disciplina.id}>
                 {disciplina.nome}
               </option>
             ))}
@@ -152,77 +152,55 @@ export default function ProfessorConteudo() {
       </div>
 
       <div className="conteudos-grid">
-          {conteudosFiltrados.map((conteudo) => {
-            const disciplina = disciplinas.find(
-              (d) => d.id === conteudo.disciplina
-            );
+        {conteudosFiltrados.map((conteudo) => {
+          const disciplina = disciplinas.find((d) => d.id === conteudo.disciplina);
+          const quantidadeMateriais = materiais.filter(
+            (material) => Number(material.conteudo) === Number(conteudo.id)
+          ).length;
 
-            const quantidadeMateriais = materiais.filter(
-              (material) =>
-                Number(material.conteudo) === Number(conteudo.id)
-            ).length;
-
-            return (
-              <article
-                className="conteudo-card"
-                key={conteudo.id}
-              >
-                <div className="conteudo-body">
-                  <h2>{conteudo.nome}</h2>
-
-                  <p className="conteudo-descricao">
-                    {conteudo.descricao || "Sem descrição"}
-                  </p>
-
-                  <div className="conteudo-info">
-
-                    <div className="info-row">
-                      <div className="info-icon">
-                        <BookOpen size={16} />
-                      </div>
-
-                      <p>
-                        <strong>Disciplina:</strong>{" "}
-                        {disciplina?.nome || "Não encontrada"}
-                      </p>
-                    </div>
-
-                    <div className="info-row">
-                      <div className="info-icon">
-                        <CalendarDays size={16} />
-                      </div>
-
-                      <p>
-                        <strong>Data de criação:</strong>{" "}
-                        {new Date(
-                          conteudo.data_create
-                        ).toLocaleDateString("pt-BR")}
-                      </p>
-                    </div>
-
-                    <div className="info-row">
-                      <div className="info-icon">
-                        <FolderOpen size={16} />
-                      </div>
-
-                      <p>
-                        <strong>Quantidade de materiais:</strong>{" "}
-                        {quantidadeMateriais}
-                      </p>
-                    </div>
-                    </div>
+          return (
+            <article className="conteudo-card" key={conteudo.id}>
+              <div className="conteudo-body">
+                <h2>{conteudo.nome}</h2>
+                <p className="conteudo-descricao">{conteudo.descricao || "Sem descrição"}</p>
+                <div className="conteudo-info">
+                  <div className="info-row">
+                    <div className="info-icon"><BookOpen size={16} /></div>
+                    <p><strong>Disciplina:</strong> {disciplina?.nome || "Não encontrada"}</p>
                   </div>
-
-                <div className="conteudo-footer">
-                  <button className="btn-material"
-                   onClick={() => handleAdicionarMaterial(conteudo.id)}>
-                    + Adicionar material
-                  </button>
+                  <div className="info-row">
+                    <div className="info-icon"><CalendarDays size={16} /></div>
+                    <p><strong>Data de criação:</strong> {new Date(conteudo.data_create).toLocaleDateString("pt-BR")}</p>
+                  </div>
+                  <div className="info-row">
+                    <div className="info-icon"><FolderOpen size={16} /></div>
+                    <p><strong>Quantidade de materiais:</strong> {quantidadeMateriais}</p>
+                  </div>
                 </div>
-              </article>
-            );
-          })}
-        </div>
+              </div>
+              <div className="conteudo-footer">
+                <button className="btn-material" onClick={() => abrirModalParaConteudo(conteudo)}>
+                  + Adicionar material
+                </button>
+              </div>
+            </article>
+          );
+        })}
       </div>
+
+      {modalCriar && (
+        <ModalCriarMaterial
+          onClose={fecharModal}
+          onSalvar={handleCriar}
+          loading={loadingAcao}
+          conteudos={conteudos}
+        />
+      )}
+      {toast && (
+        <div className={`pm-toast pm-toast--${toast.tipo}`}>
+          {toast.mensagem}
+        </div>
+      )}
+    </div>
   );
 }
