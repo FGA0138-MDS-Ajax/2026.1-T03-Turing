@@ -105,3 +105,45 @@ class ForumViewSet(viewsets.ModelViewSet):
         if self.action in ['create', 'update', 'partial_update', 'destroy']:
             return [IsGoStudyAdmin()]
         return [IsAuthenticated()]
+    
+class MensagemViewSet(viewsets.ModelViewSet):
+    serializer_class = MensagemSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        forum_id = self.request.query_params.get('forum')
+
+        # Admin vê todas as mensagens
+        if user.tipo == 'admin':
+            queryset = Mensagem.objects.all()
+        # Professor vê mensagens dos seus conteúdos
+        elif user.tipo == 'professor':
+            queryset = Mensagem.objects.filter(
+                forum__conteudo__professores=user.professor
+            )
+        # Aluno vê mensagens dos conteúdos em que está matriculado
+        elif user.tipo == 'aluno':
+            queryset = Mensagem.objects.filter(
+                forum__conteudo__matriculas__aluno=user.aluno,
+                forum__conteudo__matriculas__status='ativa'
+            )
+        else:
+            return Mensagem.objects.none()
+
+        # Filtra por forum se passado via query string
+        if forum_id:
+            queryset = queryset.filter(forum_id=forum_id)
+
+        # Ordena cronologicamente
+        return queryset.order_by('data_create')
+
+    def get_permissions(self):
+        # Apenas admin pode deletar mensagens
+        if self.action == 'destroy':
+            return [IsGoStudyAdmin()]
+        return [IsAuthenticated()]
+
+    def perform_create(self, serializer):
+        # Autor é sempre o usuário autenticado
+        serializer.save(autor=self.request.user)
