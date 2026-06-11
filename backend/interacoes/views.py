@@ -1,13 +1,14 @@
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
-from .models import Inscricao
-from .serializers import InscricaoSerializer
-from usuarios.permissions import IsGoStudyAdmin
+from .models import Inscricao, Forum, Mensagem
+from .serializers import InscricaoSerializer, ForumSerializer, MensagemSerializer
+from usuarios.permissions import IsGoStudyAdmin, IsGoStudyProf, IsGoStudyAluno
 from services.email_service import enviar_email_aprovacao_professor, enviar_email_rejeicao_professor
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import status
 from django.utils import timezone
+from turmas.models import Matricula
 
 class InscricaoViewSet(viewsets.ModelViewSet):
     queryset = Inscricao.objects.all()
@@ -72,3 +73,35 @@ class InscricaoViewSet(viewsets.ModelViewSet):
             {'mensagem': 'inscrição recusada com sucesso'},
             status=status.HTTP_200_OK
         )
+    
+class ForumViewSet(viewsets.ModelViewSet):
+    serializer_class = ForumSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+
+        # Admin vê todos os fóruns
+        if user.tipo == 'admin':
+            return Forum.objects.all()
+
+        # Professor vê fóruns dos conteúdos que ministra
+        if user.tipo == 'professor':
+            return Forum.objects.filter(
+                conteudo__professores=user.professor
+            )
+
+        # Aluno vê fóruns dos conteúdos em que está matriculado
+        if user.tipo == 'aluno':
+            return Forum.objects.filter(
+                conteudo__matriculas__aluno=user.aluno,
+                conteudo__matriculas__status='ativa'
+            )
+
+        return Forum.objects.none()
+
+    def get_permissions(self):
+        # Apenas admin pode criar, editar e deletar fóruns
+        if self.action in ['create', 'update', 'partial_update', 'destroy']:
+            return [IsGoStudyAdmin()]
+        return [IsAuthenticated()]
