@@ -147,3 +147,25 @@ class MensagemViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         # Autor é sempre o usuário autenticado
         serializer.save(autor=self.request.user)
+
+    @action(detail=False, methods=['get'], url_path='pendentes')
+    def pendentes(self, request):
+        # Só professor pode acessar
+        if request.user.tipo != 'professor':
+            return Response(
+                {'erro': 'Apenas professores podem acessar perguntas pendentes'},
+                status=status.HTTP_403_FORBIDDEN
+            )
+
+        professor = request.user.professor
+
+        # Mensagens que são perguntas (não respondem ninguém) nos conteúdos do professor
+        perguntas = Mensagem.objects.filter(
+            forum__conteudo__professores=professor,
+            resposta_para=None
+        ).exclude(
+            respostas__autor__tipo='professor'
+        ).order_by('data_create')
+
+        serializer = self.get_serializer(perguntas, many=True)
+        return Response(serializer.data)
