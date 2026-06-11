@@ -1,17 +1,11 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { BookOpen, Clock, CheckCircle } from 'lucide-react';
+import { BookOpen, Clock, CheckCircle, MessageCircle } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { AlunoLayout } from '../../components/aluno/AlunoLayout';
-import { listarConteudos, listarDisciplinas } from '../../services/disciplinasService';
+import { listarConteudos, listarDisciplinas, listarMateriais } from '../../services/disciplinasService';
 import api from '../../services/api';
 import './AlunoDashboard.css';
-
-// Dados estáticos por enquanto
-const ATIVIDADES_RECENTES = [
-  { id: 1, titulo: 'Exercícios de Geometria', disciplina: 'Geometria',    status: 'concluida', tempo: '2 dias atrás' },
-  { id: 2, titulo: 'Solos e relevos',         disciplina: 'Geomorfologia', status: 'andamento', tempo: 'Ontem' },
-];
 
 function StatCard({ label, value, icon: Icon, color, loading }) {
   return (
@@ -60,25 +54,41 @@ function ConteudoRecenteItem({ matricula, disciplinas }) {
   );
 }
 
-function AtividadeRecenteItem({ atividade }) {
+function MaterialDisponivel({ material }) {
+  const url = material.link || (
+    material.arquivo
+      ? (material.arquivo.startsWith('http') ? material.arquivo : `http://localhost:8000${material.arquivo}`)
+      : null
+  );
+
+  const icones = {
+    video: { bg: '#EEF5FF', cor: '#2672CE' },
+    pdf: { bg: '#FEF0F0', cor: '#D94040' },
+    link: { bg: '#F0FDF4', cor: '#2D7A46' },
+    apresentacao: { bg: '#FEF3E0', cor: '#C07A30' },
+    imagem: { bg: '#F5F0FF', cor: '#7C3AED' },
+    documento: { bg: '#F0F4FF', cor: '#2655CE' },
+  };
+  const estilo = icones[material.tipo] || icones.documento;
+
   return (
-    <div className="ad-atividade-item">
-      <div className={`ad-atividade-icone ad-atividade-icone--${atividade.status}`}>
-        {atividade.status === 'concluida'
-          ? <CheckCircle size={16} />
-          : <Clock size={16} />
-        }
+    <div className="ad-material-item">
+      <div className="ad-material-icone" style={{ background: estilo.bg, color: estilo.cor }}>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z"
+            stroke="currentColor" strokeWidth="1.8" fill="none" />
+          <polyline points="14,2 14,8 20,8" stroke="currentColor" strokeWidth="1.8" fill="none" />
+        </svg>
       </div>
-      <div className="ad-atividade-info">
-        <span className="ad-atividade-nome">{atividade.titulo}</span>
-        <span className="ad-atividade-disciplina">{atividade.disciplina}</span>
-        <div className="ad-atividade-rodape">
-          <span className={`ad-atividade-badge ad-atividade-badge--${atividade.status}`}>
-            {atividade.status === 'concluida' ? 'Concluída' : 'Em Andamento'}
-          </span>
-          <span className="ad-atividade-tempo">{atividade.tempo}</span>
-        </div>
+      <div className="ad-material-info">
+        <span className="ad-material-nome">{material.nome}</span>
+        <span className="ad-material-tipo">{material.tipo}</span>
       </div>
+      {url && (
+        <a href={url} target="_blank" rel="noopener noreferrer" className="ad-material-btn">
+          Abrir
+        </a>
+      )}
     </div>
   );
 }
@@ -89,6 +99,7 @@ export function AlunoDashboard() {
   const [stats, setStats]                     = useState({ disciplinasAtivas: null });
   const [conteudosRecentes, setConteudosRecentes] = useState([]);
   const [disciplinas, setDisciplinas]         = useState([]);
+  const [materiais, setMateriais] = useState([]);
   const [loadingStats, setLoadingStats]       = useState(true);
   const [erroStats, setErroStats]             = useState(null);
 
@@ -96,18 +107,21 @@ export function AlunoDashboard() {
     setLoadingStats(true);
     setErroStats(null);
     try {
-      const [conteudosRes, disciplinasRes, matriculasRes] = await Promise.all([
+      const [conteudosRes, disciplinasRes, matriculasRes, materiaisRes] = await Promise.all([
         listarConteudos(),
         listarDisciplinas(),
         api.get('/api/matriculas/'),
+        listarMateriais(),
       ]);
 
       const conteudos  = Array.isArray(conteudosRes.data)   ? conteudosRes.data   : [];
       const todasDisc  = Array.isArray(disciplinasRes.data) ? disciplinasRes.data : [];
       const matriculas = Array.isArray(matriculasRes.data)  ? matriculasRes.data  : [];
+      const todosMat  = Array.isArray(materiaisRes.data)   ? materiaisRes.data   : [];
 
       setStats({ disciplinasAtivas: conteudos.length });
       setDisciplinas(todasDisc);
+      setMateriais(todosMat.slice(0, 5)); 
 
       const recentes = [...matriculas]
         .sort((a, b) => new Date(b.matriculado_em) - new Date(a.matriculado_em))
@@ -128,7 +142,7 @@ export function AlunoDashboard() {
       <div className="gs-topbar">
         <h1 className="gs-page-title">Dashboard do Aluno</h1>
         <p className="gs-page-subtitle">
-          Bem-vindo de volta, {user?.nome?.split(' ')[0] || 'Aluno'}! Aqui está um resumo das suas atividades.
+          Bem-vindo de volta, {user?.nome?.split(' ')[0] || 'Aluno'}! Aqui está um resumo dos seus conteúdos e materiais.
         </p>
       </div>
 
@@ -143,15 +157,15 @@ export function AlunoDashboard() {
           loading={loadingStats}
         />
         <StatCard
-          label="Tarefas em andamento"
-          value={5}
-          icon={Clock}
+          label="Perguntas feitas"
+          value={0}
+          icon={MessageCircle}
           color="#C46A3C"
           loading={false}
         />
         <StatCard
-          label="Tarefas Concluídas"
-          value={23}
+          label="Perguntas respondidas"
+          value={0}
           icon={CheckCircle}
           color="#2F5D62"
           loading={false}
@@ -173,10 +187,14 @@ export function AlunoDashboard() {
         </div>
 
         <div className="ad-painel">
-          <h2 className="ad-painel-titulo">Atividades Recentes</h2>
+          <h2 className="ad-painel-titulo">Materiais disponíveis</h2>
           <div className="ad-painel-lista">
-            {ATIVIDADES_RECENTES.map(a => (
-              <AtividadeRecenteItem key={a.id} atividade={a} />
+            {loadingStats && <p className="ad-estado">Carregando...</p>}
+            {!loadingStats && materiais.length === 0 && (
+              <p className="ad-estado">Nenhum material disponível ainda.</p>
+            )}
+            {!loadingStats && materiais.map(m => (
+              <MaterialDisponivel key={m.id} material={m} />
             ))}
           </div>
         </div>
