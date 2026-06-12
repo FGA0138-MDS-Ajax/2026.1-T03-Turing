@@ -6,7 +6,11 @@ export default defineConfig({
   plugins: [react()],
   server: {
     watch: {
-      usePolling: true, 
+      usePolling: true,
+      interval: 100,
+    },
+    hmr: {
+      overlay: true,
     },
   },
 })
