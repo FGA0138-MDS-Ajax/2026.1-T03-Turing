@@ -47,10 +47,23 @@ class MensagemSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ['id', 'autor', 'data_create', 'data_update']
 
+    def validate_texto(self, value):
+        if not value.strip():
+            raise serializers.ValidationError("A mensagem não pode estar vazia.")
+        return value
+
+    def validate(self, data):
+        resposta_para = data.get('resposta_para')
+        if resposta_para:
+            request = self.context.get('request')
+            if request and request.user.tipo != 'professor':
+                raise serializers.ValidationError(
+                    "Apenas professores podem responder mensagens."
+                )
+        return data
+
 
 class ForumSerializer(serializers.ModelSerializer):
-    mensagens = MensagemSerializer(many=True, read_only=True)
-
     class Meta:
         model = Forum
         fields = [
