@@ -1,7 +1,7 @@
 import { Bell, Settings } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { AlunoSidebar } from './AlunoSidebar';
-import '../../components/professor/professor.css';
+import '../../styles/layout-shared.css'
 
 export function AlunoLayout({ children }) {
   const { user } = useAuth();

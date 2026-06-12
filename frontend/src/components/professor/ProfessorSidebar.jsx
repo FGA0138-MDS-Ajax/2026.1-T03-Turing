@@ -1,7 +1,7 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import { LayoutDashboard, BookOpen, FileText, Settings, LogOut } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
-import './professor.css';
+import '../../styles/layout-shared.css'
 
 const NAV_ITEMS = [
   { to: '/professor', label: 'Dashboard', icon: LayoutDashboard, end: true },
@@ -34,7 +34,9 @@ export function ProfessorSidebar() {
             <circle cx="23" cy="15.5" r="1.2" fill="#1A7A8A"/>
           </svg>
         </div>
-        <span className="gs-logo-text">GoStudy</span>
+        <span className="gs-logo-text">
+          <span className="gs-destaque">G</span>o<span className="gs-destaque">S</span>tudy
+        </span>
       </div>
 
       <nav className="gs-sidebar-nav">
