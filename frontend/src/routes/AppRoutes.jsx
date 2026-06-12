@@ -70,7 +70,7 @@ export function AppRoutes() {
       >
         <Route path="conteudos" element={<MeusConteudos />} />
         <Route path="conteudos/:id" element={<div>Conteúdo específico - a implementar</div>} />
-        <Route path="explorar" element={<div>Explorar conteúdos - a implementar</div>} />
+        <Route path="explorar" element={<div>Explorar Conteúdos</div>} />
       </Route>
 
       <Route
