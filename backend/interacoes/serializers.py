@@ -69,7 +69,6 @@ class ForumSerializer(serializers.ModelSerializer):
         fields = [
             'id',
             'conteudo',
-            'mensagens',
             'data_create'
         ]
         read_only_fields = ['id', 'data_create']
