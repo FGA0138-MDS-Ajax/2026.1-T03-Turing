@@ -5,7 +5,7 @@ import { useAuth } from '../../context/AuthContext';
 import { AlunoLayout } from '../../components/aluno/AlunoLayout';
 import { listarConteudos, listarDisciplinas, listarMateriais } from '../../services/disciplinasService';
 import api from '../../services/api';
-import './AlunoDashboard.css';
+import '../../styles/dashboard-shared.css'
 
 function StatCard({ label, value, icon: Icon, color, loading }) {
   return (
