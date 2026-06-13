@@ -140,8 +140,9 @@ class MensagemViewSet(viewsets.ModelViewSet):
 
 
     def _verificar_autor_e_denuncia(self, instance):
-        # Só o autor pode editar/deletar
-        if instance.autor != self.request.user:
+        user = self.request.user
+        # Só o autor ou o admin pode editar/deletar 
+        if user.tipo != 'admin' and instance.autor != self.request.user:
             raise PermissionDenied("Você só pode editar ou deletar suas próprias mensagens.")
 
         # Não pode editar/deletar se houver denúncia pendente sobre a mensagem
