@@ -1,12 +1,46 @@
+import { Bell, Settings } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
 import { ProfessorSidebar } from './ProfessorSidebar';
-import './professor.css';
-import '../admin/admin.css';
+import '../../styles/layout-shared.css'
+
 
 export function ProfessorLayout({ children }) {
+  const { user } = useAuth();
+
+  const iniciais = user?.nome
+    ? user.nome.split(' ').slice(0, 2).map(n => n[0]).join('').toUpperCase()
+    : 'P';
+
   return (
     <div className="gs-professor-layout">
       <ProfessorSidebar />
-      <main className="gs-professor-main">{children}</main>
+
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0, overflow: 'hidden' }}>
+
+        <header className="gs-topbar-wrapper">
+          <div className="gs-topbar-right">
+            <button className="gs-icon-btn" aria-label="Notificações">
+              <Bell size={17} />
+            </button>
+            <button className="gs-icon-btn" aria-label="Configurações">
+              <Settings size={17} />
+            </button>
+            <div className="gs-topbar-user">
+              <div>
+                <p className="gs-topbar-name">{user?.nome ?? 'Professor'}</p>
+                <p className="gs-topbar-role">Professor</p>
+              </div>
+              <div className="gs-topbar-avatar">{iniciais}</div>
+            </div>
+          </div>
+        </header>
+
+        <main className="gs-professor-main">
+          <div className="gs-page-content">
+            {children}
+          </div>
+        </main>
+      </div>
     </div>
   );
 }

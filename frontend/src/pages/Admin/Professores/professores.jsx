@@ -125,7 +125,7 @@ export default function Professores() {
 
       <div className={styles.cabecalho}>
         <div>
-          <h1 className={styles.cabecalho__titulo}>Professores ativos</h1>
+          <h1 style={{ fontSize: '2rem', fontWeight: 700, color: '#02373a', margin: 0, fontFamily: 'Serif' }}>Gerenciamento de Professores</h1>
         </div>
       </div>
 

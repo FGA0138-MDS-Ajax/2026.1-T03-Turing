@@ -207,6 +207,58 @@
   padding: 1rem 0;
 }
 
+.ad-duvida-item {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 0.6rem;
+  border-radius: 8px;
+}
+
+.ad-duvida-item:not(:last-child) {
+  border-bottom: 1px solid #F3F4F6;
+}
+
+.ad-duvida-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.ad-duvida-aluno {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #101828;
+}
+
+.ad-duvida-titulo {
+  font-size: 0.8rem;
+  color: #4A5565;
+}
+
+.ad-duvida-meta {
+  font-size: 0.75rem;
+  color: #99A1AF;
+}
+
+.ad-duvida-badge {
+  flex-shrink: 0;
+  padding: 0.28rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: #2F5D62;
+  color: #fff;
+  white-space: nowrap;
+  margin-top: 0.1rem;
+}
+
+.ad-duvida-badge--respondida {
+  background: #E0F2F1;
+  color: #2F5D62;
+}
+
 @media (max-width: 900px) {
   .ad-paineis      { grid-template-columns: 1fr; }
   .ad-stats-grid   { grid-template-columns: 1fr; }

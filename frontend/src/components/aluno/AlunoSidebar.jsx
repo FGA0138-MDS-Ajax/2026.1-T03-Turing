@@ -1,7 +1,7 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import { LayoutDashboard, BookOpen, FileText, Settings, LogOut } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
-import '../../components/professor/professor.css';
+import '../../styles/layout-shared.css'
 import minhaLogo from '../../assets/minha-logo.png';
 
 const NAV_ITEMS = [
