@@ -1,4 +1,4 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, mixins
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import PermissionDenied
 from .models import Inscricao, Forum, Mensagem, Denuncia
@@ -55,7 +55,14 @@ class InscricaoViewSet(viewsets.ModelViewSet):
         return Response({'mensagem': 'inscrição recusada com sucesso'}, status=status.HTTP_200_OK)
 
 
-class ForumViewSet(viewsets.ModelViewSet):
+class ForumViewSet(
+    mixins.RetrieveModelMixin, # Permite GET /api/foruns/{id}/
+    mixins.UpdateModelMixin,   # Permite PUT/PATCH /api/foruns/{id}/
+    mixins.DestroyModelMixin,  # Permite DELETE /api/foruns/{id}/
+    mixins.ListModelMixin,     #  Permite GET /api/foruns/ 
+    viewsets.GenericViewSet  # Bloqueia o CreateModelMixin removendo o post
+    ):
+
     serializer_class = ForumSerializer
     permission_classes = [IsAuthenticated]
 
@@ -78,7 +85,8 @@ class ForumViewSet(viewsets.ModelViewSet):
         return Forum.objects.none()
 
     def get_permissions(self):
-        if self.action in ['create', 'update', 'partial_update', 'destroy']:
+        #somente admins poderão: listar todos, atualizar, e deletar
+        if self.action in [ 'update', 'partial_update', 'destroy', 'list']:
             return [IsGoStudyAdmin()]
         return [IsAuthenticated()]
 
