@@ -115,7 +115,7 @@ class MensagemViewSet(viewsets.ModelViewSet):
         if forum_id:
             queryset = queryset.filter(forum_id=forum_id)
 
-        return queryset.order_by('data_create').distinct()
+        return queryset.distinct().order_by('data_create')
 
     def get_permissions(self):
         # Qualquer autenticado pode tentar; checagem de autor é feita em perform_update/destroy
@@ -176,7 +176,7 @@ class MensagemViewSet(viewsets.ModelViewSet):
             resposta_para=None
         ).exclude(
             respostas__autor__tipo='professor'
-        ).order_by('data_create').distinct()
+        ).distinct().order_by('data_create')
 
         serializer = self.get_serializer(perguntas, many=True)
         return Response(serializer.data)
