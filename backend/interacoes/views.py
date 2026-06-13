@@ -121,8 +121,23 @@ class MensagemViewSet(viewsets.ModelViewSet):
         # Qualquer autenticado pode tentar; checagem de autor é feita em perform_update/destroy
         return [IsAuthenticated()]
 
+
+    #admins são livres para mandar msg; alunos e professores precisam pertencer ao conteudo
     def perform_create(self, serializer):
+        forum = serializer.validated_data.get('forum')
+        user = self.request.user
+
+        if user.tipo == 'aluno':
+            tem_acesso = forum.conteudo.matriculas.filter(aluno=user.aluno).exists()
+            if not tem_acesso:
+                raise PermissionDenied("Você não está matriculado neste conteúdo.")
+            
+        elif user.tipo == 'professor':
+            if user.professor not in forum.conteudo.professores.all():
+                raise PermissionDenied("Você não é professor desta disciplina.")
+            
         serializer.save(autor=self.request.user)
+
 
     def _verificar_autor_e_denuncia(self, instance):
         # Só o autor pode editar/deletar
