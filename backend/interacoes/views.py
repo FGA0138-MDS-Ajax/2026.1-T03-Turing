@@ -3,14 +3,13 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import PermissionDenied
 from .models import Inscricao, Forum, Mensagem, Denuncia
 from .serializers import InscricaoSerializer, ForumSerializer, MensagemSerializer
-from usuarios.permissions import IsGoStudyAdmin, IsGoStudyProf, IsGoStudyAluno
+from usuarios.permissions import IsGoStudyAdmin
 from services.email_service import enviar_email_aprovacao_professor, enviar_email_rejeicao_professor
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import status
 from django.utils import timezone
-from turmas.models import Matricula
-
+from rest_framework.pagination import PageNumberPagination
 
 class InscricaoViewSet(viewsets.ModelViewSet):
     queryset = Inscricao.objects.all()
@@ -91,9 +90,17 @@ class ForumViewSet(
         return [IsAuthenticated()]
 
 
+#definição da paginação para as mensangens
+class MensagemPagination(PageNumberPagination):
+    page_size = 10  # numero de msgs por pagina 
+    page_size_query_param = 'page_size'  
+    max_page_size = 100
+
 class MensagemViewSet(viewsets.ModelViewSet):
     serializer_class = MensagemSerializer
     permission_classes = [IsAuthenticated]
+
+    pagination_class = MensagemPagination
 
     def get_queryset(self):
         user = self.request.user
@@ -116,6 +123,7 @@ class MensagemViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(forum_id=forum_id)
 
         return queryset.distinct().order_by('data_create')
+
 
     def get_permissions(self):
         # Qualquer autenticado pode tentar; checagem de autor é feita em perform_update/destroy
@@ -153,13 +161,16 @@ class MensagemViewSet(viewsets.ModelViewSet):
         if denuncia_pendente:
             raise PermissionDenied("Esta mensagem possui uma denúncia em análise e não pode ser alterada ou excluída.")
 
+
     def perform_update(self, serializer):
         self._verificar_autor_e_denuncia(serializer.instance)
         serializer.save()
 
+
     def perform_destroy(self, instance):
         self._verificar_autor_e_denuncia(instance)
         instance.delete()
+
 
     @action(detail=False, methods=['get'], url_path='pendentes')
     def pendentes(self, request):
@@ -177,6 +188,12 @@ class MensagemViewSet(viewsets.ModelViewSet):
         ).exclude(
             respostas__autor__tipo='professor'
         ).distinct().order_by('data_create')
+
+        # paginação para mensagens pendentes
+        page = self.paginate_queryset(perguntas)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
 
         serializer = self.get_serializer(perguntas, many=True)
         return Response(serializer.data)
