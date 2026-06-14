@@ -98,10 +98,10 @@ export default function MeusMateriais() {
         return;
       }
       if (error.response?.status === 403) {
-        setErro("Você não tem acesso aos materiais. Verifique sua matrícula.");
+        setErro("Você não tem acesso aos materiais.");
         return;
       }
-      setErro("Não foi possível carregar os materiais. Tente novamente.");
+      setErro("Não foi possível carregar os materiais.");
     } finally {
       setLoading(false);
     }
@@ -190,7 +190,7 @@ export default function MeusMateriais() {
             <span className="estado-vazio__icone" aria-hidden="true">📂</span>
             <p className="estado-vazio__titulo">Nenhum material disponível</p>
             <p className="estado-vazio__descricao">
-              Os materiais aparecerão aqui assim que você for matriculado em um conteúdo.
+              Os materiais aparecerão aqui assim que você tiver acessado um conteúdo.
             </p>
           </div>
         </div>
@@ -199,10 +199,10 @@ export default function MeusMateriais() {
       {!loading && !erro && materiais.length > 0 && materiaisFiltrados.length === 0 && (
         <div className="meus-materiais__estado">
           <div className="estado-vazio">
-            <span className="estado-vazio__icone" aria-hidden="true">🔍</span>
+            <span className="estado-vazio__icone" aria-hidden="true"></span>
             <p className="estado-vazio__titulo">Nenhum resultado encontrado</p>
             <p className="estado-vazio__descricao">
-              Tente buscar com outros termos ou remova os filtros.
+              Tente buscar de outra maneira.
             </p>
           </div>
         </div>
