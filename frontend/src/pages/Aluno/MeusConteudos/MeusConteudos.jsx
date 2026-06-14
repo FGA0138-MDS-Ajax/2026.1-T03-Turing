@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
 import { listarMeusConteudos } from '../../../services/alunoService';
+import { AlunoLayout } from '../../../components/aluno/AlunoLayout';
 import './MeusConteudos.css';
 
 const AREA_COLOR_MAP = {
@@ -48,8 +49,9 @@ function ConteudoCardSkeleton() {
 }
 
 function ConteudoCard({ conteudo, onAcessar }) {
+  // Puxa estritamente o que vem da API
   const titulo      = conteudo.titulo    || conteudo.nome           || 'Sem título';
-  const professor   = conteudo.professor || conteudo.nome_professor || '';
+  const professor   = conteudo.professor || conteudo.nome_professor || 'Professor não atribuído';
   const area        = conteudo.area      || '';
   const informacoes = conteudo.informacoes || [];
   const icone       = conteudo.icone     || null;
@@ -64,12 +66,16 @@ function ConteudoCard({ conteudo, onAcessar }) {
             <h3 className="mc-card-titulo">{titulo}</h3>
             <p className="mc-card-professor">{professor}</p>
           </div>
-          {icone && (
-            <span className="mc-card-icon" style={{ color }} aria-hidden="true">
-              {icone}
-            </span>
-          )}
+          <div 
+            className="mc-card-icon-box" 
+            style={{ backgroundColor: `${color}20`, color: color }} 
+            aria-hidden="true"
+          >
+            {icone || '📚'} 
+          </div>
         </div>
+        
+        {/* Só renderiza a lista se a API realmente enviar o array 'informacoes' com dados */}
         {informacoes.length > 0 && (
           <ul className="mc-card-infos" aria-label="Informações">
             {informacoes.map((info, i) => (
@@ -153,55 +159,57 @@ export function MeusConteudos() {
   };
 
   return (
-    <div className="mc-page">
-      {/* Props: user, loading, erro, conteudos, fetchConteudos, handleAcessarConteudo, handleInscrever */}
+    <AlunoLayout>
+      <div className="mc-page">
+        {/* Props: user, loading, erro, conteudos, fetchConteudos, handleAcessarConteudo, handleInscrever */}
 
-      <div className="mc-header">
-        <div>
-          <h1 className="mc-title">Meus conteúdos</h1>
-          <p className="mc-subtitle">
-            Acompanhe seus conteúdos e dê continuidade aos seus estudos.
-          </p>
-        </div>
-        <button className="mc-btn-inscrever" onClick={handleInscrever}>
-          + Se inscrever
-        </button>
-      </div>
-
-      {erro && (
-        <div className="mc-error" role="alert">
-          <span className="mc-error-icon">⚠</span>
-          <span className="mc-error-msg">{erro}</span>
-          <button className="mc-btn-retry" onClick={fetchConteudos}>
-            Tentar novamente
+        <div className="mc-header">
+          <div>
+            <h1 className="mc-title">Meus conteúdos</h1>
+            <p className="mc-subtitle">
+              Acompanhe seus conteúdos e dê continuidade aos seus estudos.
+            </p>
+          </div>
+          <button className="mc-btn-inscrever" onClick={handleInscrever}>
+            + Novo conteúdo
           </button>
         </div>
-      )}
 
-      {loading && (
-        <div className="mc-grid">
-          {Array.from({ length: 4 }).map((_, i) => (
-            <ConteudoCardSkeleton key={i} />
-          ))}
-        </div>
-      )}
+        {erro && (
+          <div className="mc-error" role="alert">
+            <span className="mc-error-icon">⚠</span>
+            <span className="mc-error-msg">{erro}</span>
+            <button className="mc-btn-retry" onClick={fetchConteudos}>
+              Tentar novamente
+            </button>
+          </div>
+        )}
 
-      {!loading && !erro && conteudos.length === 0 && (
-        <EmptyState onInscrever={handleInscrever} />
-      )}
+        {loading && (
+          <div className="mc-grid">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <ConteudoCardSkeleton key={i} />
+            ))}
+          </div>
+        )}
 
-      {!loading && !erro && conteudos.length > 0 && (
-        <div className="mc-grid">
-          {conteudos.map((c) => (
-            <ConteudoCard
-              key={c.conteudo_id ?? c.id}
-              conteudo={c}
-              onAcessar={() => handleAcessarConteudo(c)}
-            />
-          ))}
-        </div>
-      )}
+        {!loading && !erro && conteudos.length === 0 && (
+          <EmptyState onInscrever={handleInscrever} />
+        )}
 
-    </div>
+        {!loading && !erro && conteudos.length > 0 && (
+          <div className="mc-grid">
+            {conteudos.map((c) => (
+              <ConteudoCard
+                key={c.conteudo_id ?? c.id}
+                conteudo={c}
+                onAcessar={() => handleAcessarConteudo(c)}
+              />
+            ))}
+          </div>
+        )}
+
+      </div>
+    </AlunoLayout>
   );
 }
