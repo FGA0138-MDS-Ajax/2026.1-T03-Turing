@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useConteudoEspecifico } from '../../../hooks/useConteudoEspecifico';
+import { AlunoLayout } from '../../../components/aluno/AlunoLayout'; // ADICIONADO IMPORT
 import './ConteudoEspecifico.css';
 
 const TIPO_ICONE = {
@@ -139,166 +140,172 @@ export function ConteudoEspecifico() {
 
   if (loading) {
     return (
-      <div className="ce-page">
-        <div className="ce-breadcrumb">
-          <span>Disciplina</span>
-          <span className="ce-breadcrumb-sep">{'>'}</span>
-          <span className="ce-breadcrumb-current">Carregando...</span>
-        </div>
-        <div className="ce-skeleton-title" />
-        <div className="ce-skeleton-desc" />
-        <div className="ce-skeleton-desc ce-skeleton-desc--short" />
-
-        <section className="ce-section" style={{ marginTop: 32 }}>
-          <h2 className="ce-section-title">Materiais</h2>
-          <div className="ce-materiais-grid">
-            {[1, 2].map((i) => <MaterialCardSkeleton key={i} />)}
+      <AlunoLayout> {/* ADICIONADO ALUNOLAYOUT */}
+        <div className="ce-page">
+          <div className="ce-breadcrumb">
+            <span>Disciplina</span>
+            <span className="ce-breadcrumb-sep">{'>'}</span>
+            <span className="ce-breadcrumb-current">Carregando...</span>
           </div>
-        </section>
-      </div>
+          <div className="ce-skeleton-title" />
+          <div className="ce-skeleton-desc" />
+          <div className="ce-skeleton-desc ce-skeleton-desc--short" />
+
+          <section className="ce-section" style={{ marginTop: 32 }}>
+            <h2 className="ce-section-title">Materiais</h2>
+            <div className="ce-materiais-grid">
+              {[1, 2].map((i) => <MaterialCardSkeleton key={i} />)}
+            </div>
+          </section>
+        </div>
+      </AlunoLayout>
     );
   }
 
   if (erro) {
     return (
-      <div className="ce-page">
-        <div className="ce-breadcrumb">
-          <Link to="/aluno/conteudos">Conteúdos</Link>
+      <AlunoLayout> {/* ADICIONADO ALUNOLAYOUT */}
+        <div className="ce-page">
+          <div className="ce-breadcrumb">
+            <Link to="/aluno/conteudos">Conteúdos</Link>
+          </div>
+          <div className="ce-error" role="alert">
+            <span className="ce-error-icon">⚠</span>
+            <span className="ce-error-msg">{erro}</span>
+            <button className="ce-btn-retry" onClick={refetch}>
+              Tentar novamente
+            </button>
+          </div>
         </div>
-        <div className="ce-error" role="alert">
-          <span className="ce-error-icon">⚠</span>
-          <span className="ce-error-msg">{erro}</span>
-          <button className="ce-btn-retry" onClick={refetch}>
-            Tentar novamente
-          </button>
-        </div>
-      </div>
+      </AlunoLayout>
     );
   }
 
   return (
-    <div className="ce-page">
-      {/* Breadcrumb: Disciplina > Conteúdo */}
-      <nav className="ce-breadcrumb" aria-label="Navegação">
-          <Link to="/aluno/conteudos">{disciplina?.nome ?? 'Disciplina'}</Link>
-          <span className="ce-breadcrumb-sep">{'>'}</span>
-          <span className="ce-breadcrumb-current">{conteudo?.nome}</span>
-        </nav>
+    <AlunoLayout> {/* ADICIONADO ALUNOLAYOUT NO CASO DE SUCESSO */}
+      <div className="ce-page">
+        {/* Breadcrumb: Disciplina > Conteúdo */}
+        <nav className="ce-breadcrumb" aria-label="Navegação">
+            <Link to="/aluno/conteudos">{disciplina?.nome ?? 'Disciplina'}</Link>
+            <span className="ce-breadcrumb-sep">{'>'}</span>
+            <span className="ce-breadcrumb-current">{conteudo?.nome}</span>
+          </nav>
 
-        {/* Header */}
-        <div className="ce-header">
-          <div className="ce-header-main">
-            <h1 className="ce-title">{conteudo?.nome}</h1>
+          {/* Header */}
+          <div className="ce-header">
+            <div className="ce-header-main">
+              <h1 className="ce-title">{conteudo?.nome}</h1>
 
-            {conteudo?.descricao && (
-              <p className="ce-descricao-curta">{conteudo.descricao}</p>
+              {conteudo?.descricao && (
+                <p className="ce-descricao-curta">{conteudo.descricao}</p>
+              )}
+
+              <p className="ce-professores">
+                <strong>Professor(es):</strong>{' '}
+                {professores.length > 0
+                  ? professores.map((p) => p.nome).join(', ')
+                  : '—'}
+              </p>
+            </div>
+
+            {podeDesinscrever && (
+              <button
+                className="ce-btn-desinscrever"
+                onClick={handleDesinscrever}
+                disabled={desinscrevendo}
+              >
+                {desinscrevendo ? 'Desinscrevendo...' : 'Desinscrever-se'}
+              </button>
+            )}
+          </div>
+
+          {erroDesinscricao && (
+            <div className="ce-error" role="alert">
+              <span className="ce-error-icon">⚠</span>
+              <span className="ce-error-msg">{erroDesinscricao}</span>
+            </div>
+          )}
+
+          {/* Ementa */}
+          <section className="ce-section">
+            <h2 className="ce-ementa-label">Ementa:</h2>
+            <div className="ce-ementa">
+              {conteudo?.descricao || 'Sem ementa cadastrada para este conteúdo.'}
+            </div>
+          </section>
+
+          {/* Materiais */}
+          <section className="ce-section">
+            <h2 className="ce-section-title">Materiais</h2>
+
+            {materiais.length > 0 && (
+              <div className="ce-materiais-toolbar">
+                <div className="ce-search">
+                  <span className="ce-search-icon" aria-hidden="true">🔍</span>
+                  <input
+                    type="text"
+                    placeholder="Buscar materiais..."
+                    value={busca}
+                    onChange={(e) => setBusca(e.target.value)}
+                    aria-label="Buscar materiais"
+                  />
+                </div>
+                <div className="ce-ordenar">
+                  <span className="ce-ordenar-icon" aria-hidden="true">▽</span>
+                  <select
+                    className="ce-select"
+                    value={ordenacao}
+                    onChange={(e) => setOrdenacao(e.target.value)}
+                    aria-label="Ordenar materiais"
+                  >
+                    <option value="recentes">Ordenar por: Mais recentes</option>
+                    <option value="az">Ordenar por: Nome (A-Z)</option>
+                    <option value="za">Ordenar por: Nome (Z-A)</option>
+                    <option value="tipo">Ordenar por: Tipo</option>
+                  </select>
+                </div>
+              </div>
             )}
 
-            <p className="ce-professores">
-              <strong>Professor(es):</strong>{' '}
-              {professores.length > 0
-                ? professores.map((p) => p.nome).join(', ')
-                : '—'}
+            {materiais.length === 0 ? (
+              <div className="ce-materiais-empty">
+                <span className="ce-materiais-empty-icon" aria-hidden="true">📭</span>
+                <p className="ce-materiais-empty-text">
+                  Nenhum material disponível para este conteúdo ainda.
+                </p>
+              </div>
+            ) : materiaisFiltrados.length === 0 ? (
+              <div className="ce-materiais-empty">
+                <span className="ce-materiais-empty-icon" aria-hidden="true">🔍</span>
+                <p className="ce-materiais-empty-text">
+                  Nenhum material encontrado para "{busca}".
+                </p>
+              </div>
+            ) : (
+              <div className="ce-materiais-grid">
+                {materiaisFiltrados.map((material) => (
+                  <MaterialCard
+                    key={material.id}
+                    material={material}
+                    disciplinaNome={disciplina?.nome}
+                    professores={professores}
+                  />
+                ))}
+              </div>
+            )}
+          </section>
+
+          {/* Fórum */}
+          <section className="ce-forum-section">
+            <h2 className="ce-forum-titulo">Precisa de ajuda?</h2>
+            <p className="ce-forum-desc">
+              Caso tenha dúvidas sobre o conteúdo, poste suas perguntas no fórum do material
             </p>
-          </div>
-
-          {podeDesinscrever && (
-            <button
-              className="ce-btn-desinscrever"
-              onClick={handleDesinscrever}
-              disabled={desinscrevendo}
-            >
-              {desinscrevendo ? 'Desinscrevendo...' : 'Desinscrever-se'}
-            </button>
-          )}
-        </div>
-
-        {erroDesinscricao && (
-          <div className="ce-error" role="alert">
-            <span className="ce-error-icon">⚠</span>
-            <span className="ce-error-msg">{erroDesinscricao}</span>
-          </div>
-        )}
-
-        {/* Ementa */}
-        <section className="ce-section">
-          <h2 className="ce-ementa-label">Ementa:</h2>
-          <div className="ce-ementa">
-            {conteudo?.descricao || 'Sem ementa cadastrada para este conteúdo.'}
-          </div>
-        </section>
-
-        {/* Materiais */}
-        <section className="ce-section">
-          <h2 className="ce-section-title">Materiais</h2>
-
-          {materiais.length > 0 && (
-            <div className="ce-materiais-toolbar">
-              <div className="ce-search">
-                <span className="ce-search-icon" aria-hidden="true">🔍</span>
-                <input
-                  type="text"
-                  placeholder="Buscar materiais..."
-                  value={busca}
-                  onChange={(e) => setBusca(e.target.value)}
-                  aria-label="Buscar materiais"
-                />
-              </div>
-              <div className="ce-ordenar">
-                <span className="ce-ordenar-icon" aria-hidden="true">▽</span>
-                <select
-                  className="ce-select"
-                  value={ordenacao}
-                  onChange={(e) => setOrdenacao(e.target.value)}
-                  aria-label="Ordenar materiais"
-                >
-                  <option value="recentes">Ordenar por: Mais recentes</option>
-                  <option value="az">Ordenar por: Nome (A-Z)</option>
-                  <option value="za">Ordenar por: Nome (Z-A)</option>
-                  <option value="tipo">Ordenar por: Tipo</option>
-                </select>
-              </div>
-            </div>
-          )}
-
-          {materiais.length === 0 ? (
-            <div className="ce-materiais-empty">
-              <span className="ce-materiais-empty-icon" aria-hidden="true">📭</span>
-              <p className="ce-materiais-empty-text">
-                Nenhum material disponível para este conteúdo ainda.
-              </p>
-            </div>
-          ) : materiaisFiltrados.length === 0 ? (
-            <div className="ce-materiais-empty">
-              <span className="ce-materiais-empty-icon" aria-hidden="true">🔍</span>
-              <p className="ce-materiais-empty-text">
-                Nenhum material encontrado para "{busca}".
-              </p>
-            </div>
-          ) : (
-            <div className="ce-materiais-grid">
-              {materiaisFiltrados.map((material) => (
-                <MaterialCard
-                  key={material.id}
-                  material={material}
-                  disciplinaNome={disciplina?.nome}
-                  professores={professores}
-                />
-              ))}
-            </div>
-          )}
-        </section>
-
-        {/* Fórum */}
-        <section className="ce-forum-section">
-          <h2 className="ce-forum-titulo">Precisa de ajuda?</h2>
-          <p className="ce-forum-desc">
-            Caso tenha dúvidas sobre o conteúdo, poste suas perguntas no fórum do material
-          </p>
-          <Link className="ce-btn-forum" to={`/aluno/conteudos/${id}/forum`}>
-            ir para o fórum
-          </Link>
-        </section>
-    </div>
+            <Link className="ce-btn-forum" to={`/aluno/conteudos/${id}/forum`}>
+              ir para o fórum
+            </Link>
+          </section>
+      </div>
+    </AlunoLayout>
   );
 }

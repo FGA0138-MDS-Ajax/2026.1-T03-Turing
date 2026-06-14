@@ -4,12 +4,11 @@
 }
 
 .mc-page {
-  /* Padding zerado para delegar o espaçamento ao gs-aluno-main */
   padding: 0;
   width: 100%;
   height: 100%;
   min-height: 100%;
-  background-color: transparent; /* Deixando transparente para herdar o fundo do Layout */
+  background-color: transparent; 
   box-sizing: border-box;
 }
 
@@ -40,7 +39,7 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background-color: #386663; /* Verde escuro do protótipo */
+  background-color: #386663;
   color: #fff;
   border: none;
   border-radius: 8px;
@@ -52,6 +51,7 @@
   flex-shrink: 0;
   transition: opacity 0.2s ease, transform 0.12s ease;
 }
+
 .mc-btn-inscrever:hover  { opacity: 0.9; transform: translateY(-1px); }
 .mc-btn-inscrever:active { transform: translateY(0); }
 
@@ -82,6 +82,7 @@
   flex-shrink: 0;
   transition: background-color 0.15s ease, color 0.15s ease;
 }
+
 .mc-btn-retry:hover { background: #dc2626; color: #fff; }
 
 .mc-grid {
@@ -91,7 +92,7 @@
 }
 
 .mc-card {
-  background: #F8F7F3; 
+  background-color: #FFFFFF; /* Cartão branco */
   border-radius: 12px;
   border: none;
   display: flex;
@@ -99,16 +100,17 @@
   overflow: hidden;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
   transition: box-shadow 0.2s ease, transform 0.15s ease;
-  min-height: 250px; /* Garante que o cartão mantém uma boa altura mesmo sem a lista de informações */
-  justify-content: space-between; /* Empurra o botão "Acessar" para o fundo */
+  min-height: 250px; 
+  justify-content: space-between; 
 }
+
 .mc-card:hover { box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08); transform: translateY(-2px); }
 
 .mc-card-accent { 
   height: 8px; 
   width: 100%; 
   flex-shrink: 0; 
-  border-radius: 12px 12px 0 0; /* CORREÇÃO: Arredonda os cantos superiores da faixa de cor! */
+  border-radius: 12px 12px 0 0; 
 }
 
 .mc-card-body {
@@ -172,7 +174,7 @@
 .mc-info-icon { font-size: 0.85rem; flex-shrink: 0; opacity: 0.7; }
 
 .mc-card-footer {
-  padding: 0 20px 20px; /* Removida borda superior */
+  padding: 0 20px 20px; 
   border-top: none;
 }
 
@@ -180,7 +182,7 @@
   display: block;
   width: 100%;
   padding: 12px 0;
-  background: #F2EFE9; /* Fundo bege clarinho do protótipo */
+  background-color: #F2EFE9; /* Botão com a mesma cor do fundo */
   color: #1A1A2E;
   border: none;
   border-radius: 8px;
@@ -190,7 +192,8 @@
   text-align: center;
   transition: background-color 0.2s ease;
 }
-.mc-btn-acessar:hover  { background: #E4E0D6; }
+
+.mc-btn-acessar:hover  { background-color: #E4E0D6; }
 .mc-btn-acessar:active { opacity: 0.88; }
 
 .mc-skeleton-accent,
@@ -266,6 +269,7 @@
   cursor: pointer;
   transition: background-color 0.18s ease, transform 0.12s ease;
 }
+
 .mc-btn-explorar:hover { background: #2f5451; transform: translateY(-1px); }
 
 @media (max-width: 768px) {

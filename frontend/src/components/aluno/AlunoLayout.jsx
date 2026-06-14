@@ -42,11 +42,11 @@ export function AlunoLayout({ children }) {
       </header>
 
       {/* CORPO DA PÁGINA (SIDEBAR + CONTEÚDO) */}
-      <div className="gs-aluno-body-wrapper" style={{ display: 'flex', flex: 1, backgroundColor: '#F2EFE9', overflow: 'hidden' }}>
+      <div className="gs-aluno-body-wrapper">
         
         {/* SIDEBAR EMBUTIDA */}
-        <aside className="gs-sidebar" style={{ backgroundColor: '#F2EFE9', borderRight: 'none', width: '250px', padding: '32px 24px' }}>
-          <nav className="gs-sidebar-nav" style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+        <aside className="gs-sidebar">
+          <nav className="gs-sidebar-nav">
             <NavLink to="/aluno/dashboard" className={({ isActive }) => `gs-nav-item ${isActive ? 'gs-nav-item--active' : ''}`}>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
@@ -84,7 +84,7 @@ export function AlunoLayout({ children }) {
           </nav>
         </aside>
 
-        <main className="gs-aluno-main" style={{ flex: 1, padding: '40px', overflowY: 'auto', backgroundColor: '#F2EFE9', minWidth: 0 }}>
+        <main className="gs-aluno-main">
           {children}
         </main>
       </div>

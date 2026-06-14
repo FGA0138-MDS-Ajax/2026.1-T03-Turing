@@ -4,12 +4,13 @@
 }
 
 .ce-page {
-  padding: 32px 36px;
+  padding: 0;
+  width: 100%;
+  height: 100%;
   min-height: 100%;
-  background-color: #f0ede6;
+  background-color: transparent; 
   box-sizing: border-box;
 }
-
 /* Breadcrumb */
 .ce-breadcrumb {
   display: flex;
@@ -442,7 +443,7 @@
 
 /* Responsividade */
 @media (max-width: 768px) {
-  .ce-page { padding: 20px 18px; }
+  .ce-page { padding: 0; }
   .ce-title { font-size: 1.3rem; }
   .ce-header { flex-direction: column; align-items: stretch; }
   .ce-btn-desinscrever { justify-content: center; width: 100%; }
