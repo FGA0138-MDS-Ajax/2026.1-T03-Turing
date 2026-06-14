@@ -4,6 +4,7 @@ import { useAuth } from '../../context/AuthContext';
 import { ProfessorLayout } from '../../components/professor/ProfessorLayout';
 import api from '../../services/api';
 import './ProfessorDashboard.css';
+import '../../styles/dashboard-shared.css'
 
 //substituir por chamadas à API quando backend estiver pronto
 
@@ -22,14 +23,14 @@ const DUVIDAS_RECENTES = [
 
 function StatCard({ label, value, icon: Icon, color, loading }) {
   return (
-    <div className="prof-stat-card">
-      <div className="prof-stat-info">
-        <span className="prof-stat-label">{label}</span>
-        <span className="prof-stat-value">
-          {loading ? <span className="prof-stat-skeleton" /> : value}
+    <div className="ad-stat-card">
+      <div className="ad-stat-info">
+        <span className="ad-stat-label">{label}</span>
+        <span className="ad-stat-value">
+          {loading ? <span className="ad-stat-skeleton" /> : value}
         </span>
       </div>
-      <div className="prof-stat-icon" style={{ background: color }}>
+      <div className="ad-stat-icon" style={{ background: color }}>
         <Icon size={22} color="#fff" />
       </div>
     </div>
@@ -38,13 +39,13 @@ function StatCard({ label, value, icon: Icon, color, loading }) {
 
 function AtividadeItem({ titulo, disciplina }) {
   return (
-    <div className="prof-atividade-item">
-      <div className="prof-atividade-icon">
+    <div className="ad-atividade-item">
+      <div className="ad-atividade-icon">
         <FileText size={16} color="#2F5D62" />
       </div>
-      <div className="prof-atividade-info">
-        <span className="prof-atividade-titulo">{titulo}</span>
-        <span className="prof-atividade-disciplina">{disciplina}</span>
+      <div className="ad-atividade-info">
+        <span className="ad-atividade-titulo">{titulo}</span>
+        <span className="ad-atividade-disciplina">{disciplina}</span>
       </div>
     </div>
   );
@@ -52,13 +53,13 @@ function AtividadeItem({ titulo, disciplina }) {
 
 function DuvidaItem({ aluno, titulo, disciplina, tempo, respondida }) {
   return (
-    <div className="prof-duvida-item">
-      <div className="prof-duvida-info">
-        <span className="prof-duvida-aluno">{aluno}</span>
-        <span className="prof-duvida-titulo">{titulo}</span>
-        <span className="prof-duvida-meta">{disciplina} • {tempo}</span>
+    <div className="ad-duvida-item">
+      <div className="ad-duvida-info">
+        <span className="ad-duvida-aluno">{aluno}</span>
+        <span className="ad-duvida-titulo">{titulo}</span>
+        <span className="ad-duvida-meta">{disciplina} • {tempo}</span>
       </div>
-      <span className={`prof-duvida-badge ${respondida ? 'prof-duvida-badge--respondida' : ''}`}>
+      <span className={`ad-duvida-badge ${respondida ? 'ad-duvida-badge--respondida' : ''}`}>
         {respondida ? '✓ Respondida' : 'Responder'}
       </span>
     </div>
@@ -113,35 +114,21 @@ export function ProfessorDashboard() {
 
   return (
     <ProfessorLayout>
-      <header className="gs-topbar">
-        <div>
-          <h1 className="gs-page-title">Dashboard do Professor</h1>
-          <p className="gs-page-subtitle">Gerencie seus conteúdos e materiais</p>
-        </div>
-        <div className="gs-topbar-right">
-          <button className="gs-icon-btn" aria-label="Notificações">
-            <Bell size={18} />
-          </button>
-          <button className="gs-icon-btn" aria-label="Configurações">
-            <Settings size={18} />
-          </button>
-          <div className="gs-topbar-user">
-            <div className="gs-topbar-avatar">{iniciais}</div>
-            <div>
-              <p className="gs-topbar-name">{user?.nome ?? 'Professor'}</p>
-              <p className="gs-topbar-role">Professor</p>
-            </div>
-          </div>
-        </div>
-      </header>
+      <div className="gs-topbar">
+        <h1 className="gs-page-title">Dashboard do Professor</h1>
+        <p className="gs-page-subtitle">
+          Bem-vindo de volta, {user?.nome?.split(' ')[0] || 'Professor'}! Gerencie seus conteúdos e materiais.
+        </p>
+      </div>
+
 
 
       {erroStats && (
-        <div className="prof-erro-banner">{erroStats}</div>
+        <div className="ad-erro-banner">{erroStats}</div>
       )}
 
 
-      <section className="prof-stats-grid">
+      <section className="ad-stats-grid">
         <StatCard
           label="Conteúdos ativos"
           value={stats.conteudosAtivos ?? 0}
@@ -158,20 +145,20 @@ export function ProfessorDashboard() {
         />
       </section>
 
-      <section className="prof-panels">
+      <section className="ad-paineis">
 
-        <div className="prof-panel">
-          <h2 className="prof-panel-title">Atividades recentes</h2>
-          <div className="prof-panel-list">
+        <div className="ad-painel">
+          <h2 className="ad-painel-titulo">Atividades recentes</h2>
+          <div className="ad-painel-lista">
             {ATIVIDADES_RECENTES.map((item) => (
               <AtividadeItem key={item.id} {...item} />
             ))}
           </div>
         </div>
 
-        <div className="prof-panel">
-          <h2 className="prof-panel-title">Dúvidas recentes</h2>
-          <div className="prof-panel-list">''
+        <div className="ad-painel">
+          <h2 className="ad-painel-titulo">Dúvidas recentes</h2>
+          <div className="ad-painel-lista">
             {DUVIDAS_RECENTES.map((item) => (
               <DuvidaItem key={item.id} {...item} />
             ))}

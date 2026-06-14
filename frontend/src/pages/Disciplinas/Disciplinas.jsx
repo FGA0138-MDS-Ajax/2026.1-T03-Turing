@@ -3,6 +3,7 @@ import { AdminLayout } from '../../components/admin/AdminLayout';
 // [Integração]: Importa o hook que concentra as requisições pro Django
 import { useGerenciamentoDisciplinas } from '../../hooks/useGerenciamentoDisciplinas';
 import './Disciplinas.css';
+import ModalCriarMaterial from '../../components/professor/ModalCriarMaterial';
 
 function FileIcon({ tipo }) {
   if (tipo === 'video') return (
@@ -397,122 +398,8 @@ function ModalMatriculas({ conteudo, onClose, alunos, matriculas, onMatricular, 
 const CORES = ['#4A90D9', '#50B87A', '#C8A96E', '#E07A5F', '#9B72CF', '#3D9970'];
 const ICONES = ['⊞', '⚛', '🌐', '📐', '🔬', '📚'];
 
-const TIPOS_MATERIAL = [
-  { value: 'pdf', label: 'PDF' },
-  { value: 'video', label: 'Vídeo' },
-  { value: 'imagem', label: 'Imagem' },
-  { value: 'link', label: 'Link Externo' },
-  { value: 'apresentacao', label: 'Apresentação' },
-  { value: 'documento', label: 'Documento' },
-];
 
-function ModalMaterialCriar({ onClose, onSalvar, loading, conteudos }) {
-  const [form, setForm] = useState({ nome: '', descricao: '', tipo: '', conteudo: '', link: '' });
-  const [arquivo, setArquivo] = useState(null);
-  const [erros, setErros] = useState({});
-  const precisaArquivo = ['pdf', 'imagem', 'apresentacao', 'documento'].includes(form.tipo);
-  const precisaLink = ['video', 'link'].includes(form.tipo);
 
-  const validar = () => {
-    const e = {};
-    if (!form.nome.trim()) e.nome = 'Nome é obrigatório';
-    if (!form.tipo) e.tipo = 'Tipo é obrigatório';
-    if (!form.conteudo) e.conteudo = 'Conteúdo é obrigatório';
-    if (precisaLink && !form.link.trim()) e.link = 'Link é obrigatório para este tipo';
-    if (precisaArquivo && !arquivo) e.arquivo = 'Arquivo é obrigatório para este tipo';
-    setErros(e);
-    return Object.keys(e).length === 0;
-  };
-
-  const handleSubmit = async () => {
-    if (!validar()) return;
-    const formData = new FormData();
-    formData.append('nome', form.nome);
-    formData.append('descricao', form.descricao);
-    formData.append('tipo', form.tipo);
-    formData.append('conteudo', form.conteudo);
-    if (form.link) formData.append('link', form.link);
-    if (arquivo) formData.append('arquivo', arquivo);
-    const ok = await onSalvar(formData);
-    if (ok) onClose();
-  };
-
-  return (
-    <ModalOverlay onClose={onClose}>
-      <div className="disc-modal-header">
-        <h2 className="disc-modal-title">Novo Material</h2>
-        <button className="disc-modal-close" onClick={onClose}>✕</button>
-      </div>
-      <div className="disc-modal-body">
-        <label className="disc-label">Nome <span className="disc-required">*</span></label>
-        <input
-          className={`disc-input ${erros.nome ? 'disc-input--erro' : ''}`}
-          placeholder="Ex: Introdução às Funções Quadráticas"
-          value={form.nome}
-          onChange={e => { setForm({...form, nome: e.target.value}); setErros({...erros, nome: undefined}); }}
-        />
-        {erros.nome && <span className="disc-erro-msg">{erros.nome}</span>}
-        <label className="disc-label">Tipo <span className="disc-required">*</span></label>
-        <select
-          className={`disc-input disc-select ${erros.tipo ? 'disc-input--erro' : ''}`}
-          value={form.tipo}
-          onChange={e => { setForm({...form, tipo: e.target.value, link: ''}); setArquivo(null); setErros({...erros, tipo: undefined}); }}
-        >
-          <option value="">Selecione o tipo</option>
-          {TIPOS_MATERIAL.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
-        </select>
-        {erros.tipo && <span className="disc-erro-msg">{erros.tipo}</span>}
-        <label className="disc-label">Conteúdo <span className="disc-required">*</span></label>
-        <select
-          className={`disc-input disc-select ${erros.conteudo ? 'disc-input--erro' : ''}`}
-          value={form.conteudo}
-          onChange={e => { setForm({...form, conteudo: e.target.value}); setErros({...erros, conteudo: undefined}); }}
-        >
-          <option value="">Selecione o conteúdo</option>
-          {conteudos.map(c => <option key={c.id} value={c.id}>{c.nome}</option>)}
-        </select>
-        {erros.conteudo && <span className="disc-erro-msg">{erros.conteudo}</span>}
-        <label className="disc-label">Descrição</label>
-        <textarea
-          className="disc-input disc-textarea"
-          rows={2}
-          placeholder="Descrição opcional..."
-          value={form.descricao}
-          onChange={e => setForm({...form, descricao: e.target.value})}
-        />
-        {precisaLink && (
-          <>
-            <label className="disc-label">Link <span className="disc-required">*</span></label>
-            <input
-              className={`disc-input ${erros.link ? 'disc-input--erro' : ''}`}
-              placeholder="https://..."
-              value={form.link}
-              onChange={e => { setForm({...form, link: e.target.value}); setErros({...erros, link: undefined}); }}
-            />
-            {erros.link && <span className="disc-erro-msg">{erros.link}</span>}
-          </>
-        )}
-        {precisaArquivo && (
-          <>
-            <label className="disc-label">Arquivo <span className="disc-required">*</span></label>
-            <input
-              type="file"
-              className={`disc-input ${erros.arquivo ? 'disc-input--erro' : ''}`}
-              onChange={e => { setArquivo(e.target.files[0]); setErros({...erros, arquivo: undefined}); }}
-            />
-            {erros.arquivo && <span className="disc-erro-msg">{erros.arquivo}</span>}
-          </>
-        )}
-      </div>
-      <div className="disc-modal-actions">
-        <button className="disc-btn-cancel" onClick={onClose} disabled={loading}>Cancelar</button>
-        <button className="disc-btn-primary" onClick={handleSubmit} disabled={loading}>
-          {loading ? 'Enviando...' : 'Criar Material'}
-        </button>
-      </div>
-    </ModalOverlay>
-  );
-}
 
 function DisciplinaCard({ d, index, onEditar, onDeletar }) {
   const cor = CORES[index % CORES.length] || d.cor;
@@ -673,7 +560,7 @@ export function Disciplinas() {
     <AdminLayout>
       <div className="disc-topbar">
         <div>
-          <h1 className="disc-page-title">Gerenciamento de disciplina, conteudo e material</h1>
+          <h1 className="disc-page-title" style={{ fontFamily: 'Serif' }}>Gerenciamento de disciplina, conteudo e material</h1>
           <p className="disc-page-sub">todos os conteúdos e atividades da plataforma</p>
         </div>
       </div>
@@ -878,7 +765,7 @@ export function Disciplinas() {
       )}
 
       {modal === 'novo-mat' && (
-        <ModalMaterialCriar
+        <ModalCriarMaterial
           onClose={close}
           onSalvar={handleCriarMaterial}
           loading={loading}
