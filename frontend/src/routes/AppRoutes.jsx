@@ -15,6 +15,7 @@ import TeacherReview       from '../pages/admin/TeacherReview/TeacherReview';
 import ProfessorConteudo   from "../pages/Professor/ProfessorConteudo/ProfessorConteudo";
 import { Disciplinas }     from '../pages/Disciplinas/Disciplinas';
 import { MeusConteudos } from '../pages/Aluno/MeusConteudos/MeusConteudos';
+import InscreverConteudos from "../pages/Aluno/InscreverConteudos/InscreverConteudos";
 
 function AdminLayout() {
   return (
@@ -70,7 +71,7 @@ export function AppRoutes() {
       >
         <Route path="conteudos" element={<MeusConteudos />} />
         <Route path="conteudos/:id" element={<div>Conteúdo específico - a implementar</div>} />
-        <Route path="explorar" element={<div>Explorar Conteúdos</div>} />
+        <Route path="explorar" element={<InscreverConteudos />} />
       </Route>
 
       <Route
