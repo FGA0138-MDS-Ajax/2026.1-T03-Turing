@@ -61,6 +61,7 @@ export function AppRoutes() {
         <Route path="configuracoes"        element={<ProfessorConfiguracoes />} />
       </Route>
 
+
       <Route
         path="/403"
         element={
@@ -72,12 +73,18 @@ export function AppRoutes() {
           </div>
         }
       />
-      <Route path="/materiais" element={<MeusMateriais />} />
 
-        <Route
-          path="/materiais/:id"
-          element={<MaterialDetalhe />}
-        />
+      <Route
+        path="/aluno"
+        element={
+          <ProtectedRoute requiredRole="aluno">
+            <Outlet />
+          </ProtectedRoute>
+        }
+      >
+        <Route path="materiais" element={<MeusMateriais />} />
+        <Route path="materiais/:id" element={<MaterialDetalhe />} />
+      </Route>
 
       <Route path="/" element={<Navigate to="/login" replace />} />
     </Routes>
