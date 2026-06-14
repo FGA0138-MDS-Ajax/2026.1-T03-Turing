@@ -74,17 +74,12 @@ export function AppRoutes() {
         }
       />
 
-      <Route
-        path="/aluno"
-        element={
-          <ProtectedRoute requiredRole="aluno">
-            <Outlet />
-          </ProtectedRoute>
-        }
-      >
-        <Route path="materiais" element={<MeusMateriais />} />
-        <Route path="materiais/:id" element={<MaterialDetalhe />} />
-      </Route>
+      <Route path="/materiais" element={<MeusMateriais />} />
+
+        <Route
+          path="/materiais/:id"
+          element={<MaterialDetalhe />}
+        />
 
       <Route path="/" element={<Navigate to="/login" replace />} />
     </Routes>
