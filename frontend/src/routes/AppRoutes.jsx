@@ -14,6 +14,8 @@ import Register            from '../pages/Register/Register';
 import TeacherReview       from '../pages/admin/TeacherReview/TeacherReview';
 import ProfessorConteudo   from "../pages/Professor/ProfessorConteudo/ProfessorConteudo";
 import { Disciplinas }     from '../pages/Disciplinas/Disciplinas';
+import MeusMateriais from "../pages/Aluno/MeusMateriais/MeusMateriais";
+import MaterialDetalhe from "../pages/Aluno/MaterialDetalhe/MaterialDetalhe";
 
 function AdminLayout() {
   return (
@@ -70,6 +72,12 @@ export function AppRoutes() {
           </div>
         }
       />
+      <Route path="/materiais" element={<MeusMateriais />} />
+
+        <Route
+          path="/materiais/:id"
+          element={<MaterialDetalhe />}
+        />
 
       <Route path="/" element={<Navigate to="/login" replace />} />
     </Routes>
