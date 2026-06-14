@@ -12,14 +12,13 @@ import { ProfessorConfiguracoes } from '../pages/professor/ProfessorConfiguracoe
 import { AlunoDashboard }  from '../pages/aluno/AlunoDashboard';
 import { AlunoConteudos }   from '../pages/aluno/AlunoConteudos';
 import { AlunoMateriais }   from '../pages/aluno/AlunoMateriais';
+import { AlunoMaterialDetalhe } from '../pages/Aluno/AlunoMaterialDetalhe';
 import { AlunoConfiguracoes } from '../pages/aluno/AlunoConfiguracoes';
 import Login               from '../pages/Login/Login';
 import Register            from '../pages/Register/Register';
 import TeacherReview       from '../pages/admin/TeacherReview/TeacherReview';
 import ProfessorConteudo   from "../pages/Professor/ProfessorConteudo/ProfessorConteudo";
 import { Disciplinas }     from '../pages/Disciplinas/Disciplinas';
-import MeusMateriais from "../pages/Aluno/MeusMateriais/MeusMateriais";
-import MaterialDetalhe from "../pages/Aluno/MaterialDetalhe/MaterialDetalhe";
 
 function AdminLayout() {
   return (
@@ -77,6 +76,7 @@ export function AppRoutes() {
         <Route index element={<AlunoDashboard />} />
         <Route path="conteudos" element={<AlunoConteudos />} />
         <Route path="materiais" element={<AlunoMateriais />} />
+        <Route path="materiais/:id" element={<AlunoMaterialDetalhe />}/>
         <Route path="configuracoes" element={<AlunoConfiguracoes />} />
       </Route>
 
@@ -94,13 +94,6 @@ export function AppRoutes() {
           </div>
         }
       />
-
-      <Route path="/materiais" element={<MeusMateriais />} />
-
-        <Route
-          path="/materiais/:id"
-          element={<MaterialDetalhe />}
-        />
 
       <Route path="/" element={<Navigate to="/login" replace />} />
     </Routes>

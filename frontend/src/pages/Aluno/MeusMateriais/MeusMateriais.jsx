@@ -108,7 +108,7 @@ export default function MeusMateriais() {
   };
 
   const abrirMaterial = (materialId) => {
-    navigate(`/materiais/${materialId}`);
+    navigate(`/aluno/materiais/${materialId}`);
   };
 
   const disciplinas = [...new Set(materiais.map((m) => m.disciplina).filter(Boolean))];
