@@ -1,19 +1,18 @@
 import { Bell, Settings } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
-import { ProfessorSidebar } from './ProfessorSidebar';
+import { AlunoSidebar } from './AlunoSidebar';
 import '../../styles/layout-shared.css'
 
-
-export function ProfessorLayout({ children }) {
+export function AlunoLayout({ children }) {
   const { user } = useAuth();
 
   const iniciais = user?.nome
     ? user.nome.split(' ').slice(0, 2).map(n => n[0]).join('').toUpperCase()
-    : 'P';
+    : 'A';
 
   return (
     <div className="gs-professor-layout">
-      <ProfessorSidebar />
+      <AlunoSidebar />
 
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0, overflow: 'hidden' }}>
 
@@ -27,13 +26,14 @@ export function ProfessorLayout({ children }) {
             </button>
             <div className="gs-topbar-user">
               <div>
-                <p className="gs-topbar-name">{user?.nome ?? 'Professor'}</p>
-                <p className="gs-topbar-role">Professor</p>
+                <p className="gs-topbar-name">{user?.nome ?? 'Aluno'}</p>
+                <p className="gs-topbar-role">Aluno</p>
               </div>
               <div className="gs-topbar-avatar">{iniciais}</div>
             </div>
           </div>
         </header>
+
 
         <main className="gs-professor-main">
           <div className="gs-page-content">

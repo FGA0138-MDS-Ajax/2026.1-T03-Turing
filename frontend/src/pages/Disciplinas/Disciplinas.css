@@ -6,9 +6,9 @@
 }
 
 .disc-page-title {
-  font-size: 20px;
+  font-size: 2rem;
   font-weight: 700;
-  color: #1C2B3A;
+  color: #02373a;
   margin: 0 0 3px;
   letter-spacing: -0.01em;
 }
@@ -49,7 +49,7 @@
   border-radius: 8px;
   font-size: 13px;
   color: #1C2B3A;
-  background: #fff;
+  background: #FDFBF7;
   outline: none;
   transition: border-color 0.15s;
   box-sizing: border-box;
@@ -65,7 +65,7 @@
   padding: 9px 14px;
   border: 1px solid rgba(28,43,58,0.14);
   border-radius: 8px;
-  background: #fff;
+  background: #FDFBF7;
   font-size: 13px;
   color: #5A6A76;
   cursor: pointer;
@@ -105,7 +105,7 @@
 }
 
 .disc-card {
-  background: #fff;
+  background: #FDFBF7;
   border-radius: 10px;
   border: 1px solid rgba(28,43,58,0.10);
   overflow: hidden;
@@ -180,7 +180,7 @@
 
 .disc-btn-primary {
   background: #2672CE;
-  color: #fff;
+  color: #FDFBF7;
   border: none;
   border-radius: 8px;
   padding: 9px 16px;
@@ -203,7 +203,7 @@
 
 .disc-btn-outline {
   width: 100%;
-  background: #fff;
+  background: #FDFBF7;
   border: 1px solid rgba(28,43,58,0.18);
   border-radius: 8px;
   padding: 8px 0;
@@ -225,7 +225,7 @@
   padding: 8px 0;
   font-size: 12px;
   font-weight: 600;
-  color: #fff;
+  color: #FDFBF7;
   cursor: pointer;
   transition: background 0.15s;
   text-align: center;
@@ -285,7 +285,7 @@
 }
 
 .mat-card {
-  background: #fff;
+  background: #FDFBF7;
   border-radius: 10px;
   border: 1px solid rgba(28,43,58,0.10);
   padding: 14px 16px;
@@ -360,7 +360,7 @@
 .mat-btn--remover:hover { background: #FAD8D8; }
 .mat-btn--editar  { background: #EEF5FF; color: #2672CE; }
 .mat-btn--editar:hover  { background: #DDE9FA; }
-.mat-btn--abrir   { background: #2672CE; color: #fff; }
+.mat-btn--abrir   { background: #2672CE; color: #FDFBF7; }
 .mat-btn--abrir:hover   { background: #1E5FAD; }
 .mat-btn--download {
   background: none;
@@ -387,7 +387,7 @@
 .disc-overlay--nested { z-index: 1100; }
 
 .disc-modal {
-  background: #fff;
+  background: #FDFBF7;
   border-radius: 12px;
   width: 100%;
   max-width: 460px;
@@ -451,7 +451,7 @@
   border-radius: 8px;
   font-size: 13px;
   color: #1C2B3A;
-  background: #fff;
+  background: #FDFBF7;
   outline: none;
   box-sizing: border-box;
   transition: border-color 0.15s;
@@ -486,7 +486,7 @@
   border: 1px solid rgba(28,43,58,0.12);
   border-radius: 8px;
   overflow: hidden;
-  background: #fff;
+  background: #FDFBF7;
   margin-top: 4px;
   box-shadow: 0 4px 16px rgba(28,43,58,0.10);
 }
@@ -511,7 +511,7 @@
   height: 28px;
   border-radius: 50%;
   background: #2672CE;
-  color: #fff;
+  color: #FDFBF7;
   display: flex;
   align-items: center;
   justify-content: center;

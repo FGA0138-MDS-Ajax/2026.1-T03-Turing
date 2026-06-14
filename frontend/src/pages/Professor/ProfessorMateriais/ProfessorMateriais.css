@@ -8,10 +8,11 @@
 }
 
 .pm-titulo {
-  font-size: 1.4rem;
+  font-size: 2rem;
   font-weight: 700;
-  color: #101828;
+  color: #02373a;
   margin: 0 0 0.2rem 0;
+  font-family: 'Serif';
 }
 
 .pm-subtitulo {
