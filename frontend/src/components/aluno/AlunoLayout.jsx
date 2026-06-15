@@ -12,12 +12,10 @@ export function AlunoLayout({ children }) {
 
   return (
     <div className="gs-professor-layout">
-      {/* Sidebar separada que veio da developer */}
       <AlunoSidebar />
 
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0, overflow: 'hidden' }}>
 
-        {/* Cabeçalho superior (Topbar) */}
         <header className="gs-topbar-wrapper">
           <div className="gs-topbar-right">
             <button className="gs-icon-btn" aria-label="Notificações">
@@ -36,9 +34,9 @@ export function AlunoLayout({ children }) {
           </div>
         </header>
 
-        {/* Corpo principal onde suas páginas vão ser renderizadas */}
         <main className="gs-professor-main">
-          <div className="gs-page-content" style={{ flex: 1, padding: '40px', overflowY: 'auto', backgroundColor: '#F2EFE9', minWidth: 0 }}>
+          {/* Adicionei o fundo bege e o respiro aqui na div de conteúdo */}
+          <div className="gs-page-content" style={{ flex: 1, padding: '40px', overflowY: 'auto', backgroundColor: '#F2EFE9', minWidth: 0, height: '100%' }}>
             {children}
           </div>
         </main>
