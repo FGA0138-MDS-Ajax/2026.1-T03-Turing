@@ -7,6 +7,7 @@ import { Alunos }          from '../pages/admin/Alunos';
 import { Configuracoes }   from '../pages/admin/Configuracoes';
 import { ProfessorDashboard }  from '../pages/professor/ProfessorDashboard';
 import { ProfessorConteudos }    from '../pages/professor/ProfessorConteudos';
+import { AlunoConteudosExplorar } from '../pages/Aluno/AlunoConteudosExplorar';
 import { ProfessorMateriais }    from '../pages/professor/ProfessorMateriais';
 import { ProfessorConfiguracoes } from '../pages/professor/ProfessorConfiguracoes';
 import { AlunoDashboard }  from '../pages/aluno/AlunoDashboard';
@@ -18,8 +19,6 @@ import Register            from '../pages/Register/Register';
 import TeacherReview       from '../pages/admin/TeacherReview/TeacherReview';
 import ProfessorConteudo   from "../pages/Professor/ProfessorConteudo/ProfessorConteudo";
 import { Disciplinas }     from '../pages/Disciplinas/Disciplinas';
-import { MeusConteudos } from '../pages/Aluno/MeusConteudos/MeusConteudos';
-import InscreverConteudos from "../pages/Aluno/InscreverConteudos/InscreverConteudos";
 
 function AdminLayout() {
   return (
@@ -76,6 +75,8 @@ export function AppRoutes() {
       >
         <Route index element={<AlunoDashboard />} />
         <Route path="conteudos" element={<AlunoConteudos />} />
+        <Route path="conteudos/:id" element={<div>Conteúdo específico - a implementar</div>} />
+        <Route path="explorar" element={<AlunoConteudosExplorar />} />
         <Route path="materiais" element={<AlunoMateriais />} />
         <Route path="configuracoes" element={<AlunoConfiguracoes />} />
       </Route>
@@ -83,18 +84,9 @@ export function AppRoutes() {
 
 
 
-      <Route
-        path="/aluno"
-        element={
-          <ProtectedRoute requiredRole="aluno">
-            <Outlet />
-          </ProtectedRoute>
-        }
-      >
-        <Route path="conteudos" element={<MeusConteudos />} />
-        <Route path="conteudos/:id" element={<div>Conteúdo específico - a implementar</div>} />
-        <Route path="explorar" element={<InscreverConteudos />} />
-      </Route>
+
+
+
 
       <Route
         path="/403"

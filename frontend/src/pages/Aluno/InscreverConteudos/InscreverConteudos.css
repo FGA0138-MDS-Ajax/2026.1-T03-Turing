@@ -1,7 +1,5 @@
 .inscrever-page {
-  padding: 32px;
   max-width: 100%;
-  background: #f9f9f9;
 }
 
 .inscrever-page h1 {
@@ -73,7 +71,7 @@
 .conteudos-grid {
   display: grid;
   grid-template-columns:
-    repeat(auto-fill, minmax(300px, 1fr));
+    repeat(auto-fill, minmax(280px, 3fr));
 }
 
 .conteudo-card {
