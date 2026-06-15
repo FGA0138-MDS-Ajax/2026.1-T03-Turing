@@ -1,14 +1,14 @@
-import { ProfessorLayout } from '../../components/professor/ProfessorLayout';
+import { AlunoLayout } from '../../components/aluno/AlunoLayout';
 
-export function ProfessorConfiguracoes() {
+export function AlunoConteudos() {
   return (
-    <ProfessorLayout>
+    <AlunoLayout>
       <h1 style={{ fontSize: '2rem', fontWeight: 700, color: '#02373a', margin: 0, fontFamily: 'Serif' }}>
-        Configurações
+        Conteúdos
       </h1>
       <p style={{ color: '#6A7282', fontSize: '0.875rem', marginTop: '0.25rem' }}>
         Em construção.
       </p>
-    </ProfessorLayout>
+    </AlunoLayout>
   );
 }

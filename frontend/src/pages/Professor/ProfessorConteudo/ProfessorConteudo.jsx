@@ -130,8 +130,10 @@ export default function ProfessorConteudo() {
   return (
     <div className="professor-conteudo-container">
       <div className="conteudo-page-header">
-        <h1>Meus Conteúdos</h1>
-        <p>Visualize os conteúdos vinculados a você.</p>
+        <h1 style={{ fontSize: '2rem', fontWeight: 700, color: '#02373a', margin: 0, fontFamily: 'Serif' }}>Meus Conteúdos</h1>
+        <p style={{ color: '#6A7282', fontSize: '0.8rem', marginTop: '0.25rem' }}>
+          Visualize os conteúdos vinculados a você.
+        </p>
       </div>
 
       <div className="conteudo-filters">

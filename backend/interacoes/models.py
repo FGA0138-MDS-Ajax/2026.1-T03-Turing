@@ -1,44 +1,49 @@
 from django.db import models
 from django.core.exceptions import ValidationError
 
-class Pergunta(models.Model):
-    aluno = models.ForeignKey(
-        'usuarios.Aluno',
-        on_delete=models.CASCADE,
-        related_name='perguntas'
-    )
 
-    texto = models.TextField()
+class Forum(models.Model):
+    conteudo = models.OneToOneField(
+        'disciplinas.Conteudo',
+        on_delete=models.CASCADE,
+        related_name='forum'
+    )
     data_create = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.aluno}: {self.texto[:25]}..."
-    
+        return f"Forum do conteúdo: {self.conteudo.nome}"
+
     class Meta:
-        db_table = 'pergunta'
+        db_table = 'forum'
 
 
-class Resposta(models.Model):
-    pergunta = models.OneToOneField(
-        Pergunta,
+class Mensagem(models.Model):
+    forum = models.ForeignKey(
+        Forum,
         on_delete=models.CASCADE,
-        related_name='resposta'
+        related_name='mensagens'
     )
-    professor = models.ForeignKey(
-        'usuarios.Professor',
+    autor = models.ForeignKey(
+        'usuarios.Perfil',
         on_delete=models.CASCADE,
+        related_name='mensagens'
+    )
+    resposta_para = models.ForeignKey(
+        'self',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
         related_name='respostas'
     )
-
-    conteudo = models.TextField()
+    texto = models.TextField()
     data_create = models.DateTimeField(auto_now_add=True)
     data_update = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.professor}: {self.conteudo[:25]}..."
-    
+        return f"{self.autor}: {self.texto[:25]}..."
+
     class Meta:
-        db_table = 'resposta'
+        db_table = 'mensagem'
 
 
 class Inscricao(models.Model):
@@ -59,7 +64,6 @@ class Inscricao(models.Model):
         blank=True,
         related_name='inscricoes_analisadas'
     )
-
     analisado_em = models.DateTimeField(null=True, blank=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pendente')
     descricao = models.TextField()
@@ -74,14 +78,8 @@ class Denuncia(models.Model):
         ('recusado', 'Recusado')
     ]
 
-    pergunta = models.ForeignKey(
-        Pergunta,
-        on_delete=models.CASCADE,
-        null=True,
-        blank=True
-    )
-    resposta = models.ForeignKey(
-        Resposta,
+    mensagem = models.ForeignKey(
+        Mensagem,
         on_delete=models.CASCADE,
         null=True,
         blank=True
@@ -92,7 +90,7 @@ class Denuncia(models.Model):
         related_name='denuncias',
         null=True,
         blank=True
-    )   
+    )
     denunciado = models.ForeignKey(
         'usuarios.Perfil',
         on_delete=models.CASCADE,
@@ -110,14 +108,10 @@ class Denuncia(models.Model):
         blank=True,
         related_name='denuncias_analisadas'
     )
-
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pendente')
     descricao = models.TextField()
     data_create = models.DateTimeField(auto_now_add=True)
     data_update = models.DateTimeField(auto_now=True)
 
-    def clean(self):
-        if not self.pergunta and not self.resposta:
-            raise ValidationError("A denúncia deve estar ligada a uma pergunta ou resposta")
-        if self.pergunta and self.resposta:
-            raise ValidationError("A denúncia não pode estar ligada a uma pergunta e resposta ao mesmo tempo")
+    class Meta:
+        db_table = 'denuncia'

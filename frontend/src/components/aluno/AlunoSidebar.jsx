@@ -5,13 +5,13 @@ import '../../styles/layout-shared.css'
 import minhaLogo from '../../assets/minha-logo.png';
 
 const NAV_ITEMS = [
-  { to: '/professor', label: 'Dashboard', icon: LayoutDashboard, end: true },
-  { to: '/professor/conteudos', label: 'Conteúdos', icon: BookOpen },
-  { to: '/professor/materiais', label: 'Materiais', icon: FileText },
-  { to: '/professor/configuracoes', label: 'Configurações', icon: Settings },
+  { to: '/aluno', label: 'Dashboard', icon: LayoutDashboard, end: true },
+  { to: '/aluno/conteudos', label: 'Conteúdos', icon: BookOpen },
+  { to: '/aluno/materiais', label: 'Materiais', icon: FileText },
+  { to: '/aluno/configuracoes', label: 'Configurações', icon: Settings },
 ];
 
-export function ProfessorSidebar() {
+export function AlunoSidebar() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
@@ -22,7 +22,7 @@ export function ProfessorSidebar() {
 
   const iniciais = user?.nome
     ? user.nome.split(' ').slice(0, 2).map((n) => n[0]).join('').toUpperCase()
-    : 'P';
+    : 'A';
 
   return (
     <aside className="gs-sidebar">
