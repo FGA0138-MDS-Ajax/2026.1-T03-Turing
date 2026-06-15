@@ -4,7 +4,7 @@
 }
 
 .cabecalho {
-  margin-bottom: 1.5rem;
+  margin-bottom: 3.75rem;
 }
 
 .cabecalho__titulo {
@@ -21,7 +21,7 @@
 }
 
 .bloco {
-  background: #fff;
+  background: #FDFBF7;
   border: 1px solid #E5E7EB;
   border-radius: 12px;
   padding: 1.5rem;
@@ -52,7 +52,7 @@
   padding: 0.5rem 0.75rem;
   flex: 1;
   min-width: 180px;
-  background: #fff;
+  background: #FDFBF7;
 }
 
 .barra__icone {
@@ -106,7 +106,7 @@
   padding: 0.9rem 1rem;
   border: 1px solid #E5E7EB;
   border-radius: 10px;
-  background: #fff;
+  background: #FDFBF7;
   transition: box-shadow 0.15s;
 }
 

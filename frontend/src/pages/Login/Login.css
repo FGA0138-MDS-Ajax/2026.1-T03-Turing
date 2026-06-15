@@ -117,12 +117,11 @@ body {
   width: 56px;
   height: 56px;
   border-radius: 14px;
-  background: var(--accent);
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 18px;
-  box-shadow: 0 4px 18px rgba(92, 107, 192, 0.35);
+  box-shadow: 0 4px 18px rgba(76, 40, 158, 0.35);
   transition: transform 0.3s ease;
 }
 
