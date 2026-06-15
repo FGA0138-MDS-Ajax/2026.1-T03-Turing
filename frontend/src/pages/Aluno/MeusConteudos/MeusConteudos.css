@@ -1,3 +1,6 @@
+/* =========================================
+   ANIMAÇÕES E BASE
+========================================= */
 @keyframes shimmer {
   0%   { background-position: -600px 0; }
   100% { background-position:  600px 0; }
@@ -13,6 +16,9 @@
   box-sizing: border-box;
 }
 
+/* =========================================
+   CABEÇALHO DA PÁGINA (TÍTULO E BOTÃO)
+========================================= */
 .mc-header {
   display: flex;
   align-items: flex-start;
@@ -52,9 +58,13 @@
   flex-shrink: 0;
   transition: opacity 0.2s ease, transform 0.12s ease;
 }
+
 .mc-btn-inscrever:hover  { opacity: 0.9; transform: translateY(-1px); }
 .mc-btn-inscrever:active { transform: translateY(0); }
 
+/* =========================================
+   ESTADOS DE ERRO
+========================================= */
 .mc-error {
   display: flex;
   align-items: center;
@@ -82,14 +92,21 @@
   flex-shrink: 0;
   transition: background-color 0.15s ease, color 0.15s ease;
 }
+
 .mc-btn-retry:hover { background: #dc2626; color: #fff; }
 
+/* =========================================
+   GRID PRINCIPAL
+========================================= */
 .mc-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 20px;
 }
 
+/* =========================================
+   CARDS DE CONTEÚDO
+========================================= */
 .mc-card {
   background: #F8F7F3; 
   border-radius: 12px;
@@ -99,16 +116,20 @@
   overflow: hidden;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
   transition: box-shadow 0.2s ease, transform 0.15s ease;
-  min-height: 250px; /* Garante que o cartão mantém uma boa altura mesmo sem a lista de informações */
-  justify-content: space-between; /* Empurra o botão "Acessar" para o fundo */
+  min-height: 250px; /* Garante altura caso os dados faltem */
+  justify-content: space-between; /* Empurra o footer para o fundo do card */
 }
-.mc-card:hover { box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08); transform: translateY(-2px); }
+
+.mc-card:hover { 
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08); 
+  transform: translateY(-2px); 
+}
 
 .mc-card-accent { 
   height: 8px; 
   width: 100%; 
   flex-shrink: 0; 
-  border-radius: 12px 12px 0 0; /* CORREÇÃO: Arredonda os cantos superiores da faixa de cor! */
+  border-radius: 12px 12px 0 0; /* Arredonda cantos superiores da faixa */
 }
 
 .mc-card-body {
@@ -126,7 +147,10 @@
   gap: 10px;
 }
 
-.mc-card-text { flex: 1; min-width: 0; }
+.mc-card-text { 
+  flex: 1; 
+  min-width: 0; 
+}
 
 .mc-card-titulo {
   font-size: 1rem;
@@ -139,7 +163,11 @@
   text-overflow: ellipsis;
 }
 
-.mc-card-professor { font-size: 0.8rem; color: #6b7280; margin: 0; }
+.mc-card-professor { 
+  font-size: 0.8rem; 
+  color: #6b7280; 
+  margin: 0; 
+}
 
 .mc-card-icon-box {
   width: 36px;
@@ -152,6 +180,7 @@
   flex-shrink: 0;
 }
 
+/* Lista de informações (Informações de horário/calendário) */
 .mc-card-infos {
   list-style: none;
   padding: 0;
@@ -169,10 +198,17 @@
   color: #4b5563;
 }
 
-.mc-info-icon { font-size: 0.85rem; flex-shrink: 0; opacity: 0.7; }
+.mc-info-icon { 
+  font-size: 0.85rem; 
+  flex-shrink: 0; 
+  opacity: 0.7; 
+}
 
+/* =========================================
+   RODAPÉ DO CARD E BOTÃO
+========================================= */
 .mc-card-footer {
-  padding: 0 20px 20px; /* Removida borda superior */
+  padding: 0 20px 20px;
   border-top: none;
 }
 
@@ -190,9 +226,13 @@
   text-align: center;
   transition: background-color 0.2s ease;
 }
+
 .mc-btn-acessar:hover  { background: #E4E0D6; }
 .mc-btn-acessar:active { opacity: 0.88; }
 
+/* =========================================
+   SKELETONS (ESTADO DE CARREGAMENTO)
+========================================= */
 .mc-skeleton-accent,
 .mc-skeleton-line,
 .mc-skeleton-icon-box,
@@ -240,6 +280,9 @@
 
 .mc-skeleton-btn { height: 40px; width: 100%; border-radius: 8px; }
 
+/* =========================================
+   ESTADO VAZIO (EMPTY STATE)
+========================================= */
 .mc-empty {
   display: flex;
   flex-direction: column;
@@ -266,14 +309,48 @@
   cursor: pointer;
   transition: background-color 0.18s ease, transform 0.12s ease;
 }
+
 .mc-btn-explorar:hover { background: #2f5451; transform: translateY(-1px); }
 
+/* =========================================
+   RESPONSIVIDADE (MEDIA QUERIES)
+========================================= */
+
+/* Tablets (até 992px) */
+@media (max-width: 992px) {
+  .mc-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  
+  .mc-header button {
+    align-self: flex-start; /* Evita que o botão quebre para baixo de forma feia */
+  }
+
+  .mc-grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* Reduz o tamanho mínimo do card */
+  }
+}
+
+/* Celulares (até 768px) */
 @media (max-width: 768px) {
+  .gs-page-content {
+    padding: 20px !important; /* Reduz as margens gerais da tela no celular */
+  }
+
   .mc-page    { padding: 0; }
   .mc-title   { font-size: 1.3rem; }
-  .mc-grid    { grid-template-columns: 1fr; }
+  
+  .mc-grid    { grid-template-columns: 1fr; } /* Força 1 card por linha no celular */
   .mc-header  { flex-direction: column; align-items: stretch; }
+  
   .mc-btn-inscrever { justify-content: center; width: 100%; }
+
+  /* Ajuste no card para não espremer os dados */
+  .mc-card {
+    min-height: auto;
+  }
 }
 
 @media (max-width: 480px) {
