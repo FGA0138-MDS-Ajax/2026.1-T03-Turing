@@ -1,7 +1,7 @@
 import { Bell, Settings } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { AlunoSidebar } from './AlunoSidebar';
-import '../../styles/layout-shared.css'
+import '../../styles/layout-shared.css';
 
 export function AlunoLayout({ children }) {
   const { user } = useAuth();
@@ -34,12 +34,13 @@ export function AlunoLayout({ children }) {
           </div>
         </header>
 
-
         <main className="gs-professor-main">
-          <div className="gs-page-content">
+          {/* Adicionei o fundo bege e o respiro aqui na div de conteúdo */}
+          <div className="gs-page-content" style={{ flex: 1, padding: '40px', overflowY: 'auto', backgroundColor: '#F2EFE9', minWidth: 0, height: '100%' }}>
             {children}
           </div>
         </main>
+
       </div>
     </div>
   );
