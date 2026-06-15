@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
 import { listarMeusConteudos } from '../../../services/alunoService';
-import { AlunoLayout } from '../../../components/aluno/AlunoLayout';
+
 import './MeusConteudos.css';
 
 const AREA_COLOR_MAP = {
@@ -159,7 +159,6 @@ export function MeusConteudos() {
   };
 
   return (
-    <AlunoLayout>
       <div className="mc-page">
         {/* Props: user, loading, erro, conteudos, fetchConteudos, handleAcessarConteudo, handleInscrever */}
 
@@ -210,6 +209,5 @@ export function MeusConteudos() {
         )}
 
       </div>
-    </AlunoLayout>
   );
 }
