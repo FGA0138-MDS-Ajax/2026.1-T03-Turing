@@ -82,6 +82,7 @@ function ConteudoCard({ conteudo, onAcessar }) {
           </div>
         </div>
         
+        {/* Renderiza as informações da API ou o fallback */}
         <ul className="mc-card-infos" aria-label="Informações">
           {informacoesExibidas.map((info, i) => (
             <li key={i} className="mc-card-info-item">
@@ -133,6 +134,7 @@ export function MeusConteudos() {
     setLoading(true);
     setErro(null);
     try {
+      // 1. Busca a lista resumida e os professores gerais
       const [responseConteudos, responseProfessores] = await Promise.all([
         listarMeusConteudos(),
         listarProfessores()
@@ -141,15 +143,18 @@ export function MeusConteudos() {
       const dataConteudos = Array.isArray(responseConteudos.data) ? responseConteudos.data : [];
       const dataProfessores = Array.isArray(responseProfessores.data) ? responseProfessores.data : [];
 
+      // 2. Para CADA conteúdo resumido, vamos buscar os detalhes completos na API
       const conteudosCompletos = await Promise.all(
         dataConteudos.map(async (conteudoResumido) => {
           let nomeResolvido = 'Professor não atribuído';
           
           try {
+            // Busca o detalhe usando o ID correto
             const idParaBuscar = conteudoResumido.conteudo_id ?? conteudoResumido.id;
             const detalheRes = await buscarConteudo(idParaBuscar);
             const detalhe = detalheRes.data;
 
+            // Agora sim, o 'detalhe' tem a chave .professores! Vamos cruzar os dados:
             if (Array.isArray(detalhe.professores) && detalhe.professores.length > 0) {
               const profs = dataProfessores
                 .filter((p) => detalhe.professores.includes(p.id))
@@ -163,6 +168,7 @@ export function MeusConteudos() {
             console.error(`Erro ao buscar detalhes do conteudo ${conteudoResumido.id}`, error);
           }
 
+          // Junta o resumo com o nome do professor encontrado
           return {
             ...conteudoResumido,
             nome_professor: nomeResolvido
