@@ -10,10 +10,11 @@ import { ProfessorConteudos }    from '../pages/professor/ProfessorConteudos';
 import { ProfessorMateriais }    from '../pages/professor/ProfessorMateriais';
 import { ProfessorConfiguracoes } from '../pages/professor/ProfessorConfiguracoes';
 import { AlunoDashboard }  from '../pages/aluno/AlunoDashboard';
-import { AlunoConteudos }  from '../pages/Aluno/AlunoConteudos';
+import { AlunoConteudos }  from '../pages/aluno/AlunoConteudos';
 import { AlunoConteudosExplorar } from '../pages/Aluno/AlunoConteudosExplorar';
-import { AlunoMateriais }  from '../pages/Aluno/AlunoMateriais';
-import { AlunoConfiguracoes } from '../pages/Aluno/AlunoConfiguracoes';
+import { AlunoMateriais }  from '../pages/aluno/AlunoMateriais';
+import { AlunoMaterialDetalhe } from '../pages/Aluno/AlunoMaterialDetalhe';
+import { AlunoConfiguracoes } from '../pages/aluno/AlunoConfiguracoes';
 import Login               from '../pages/Login/Login';
 import Register            from '../pages/Register/Register';
 import TeacherReview       from '../pages/admin/TeacherReview/TeacherReview';
@@ -80,6 +81,7 @@ export function AppRoutes() {
         <Route path="conteudos/:id" element={<div>Conteúdo específico - a implementar</div>} />
         <Route path="explorar" element={<AlunoConteudosExplorar />} />
         <Route path="materiais" element={<AlunoMateriais />} />
+        <Route path="materiais/:id" element={<AlunoMaterialDetalhe />} />
         <Route path="configuracoes" element={<AlunoConfiguracoes />} />
       </Route>
 
