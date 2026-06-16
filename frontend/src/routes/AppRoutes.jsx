@@ -10,8 +10,8 @@ import { ProfessorConteudos }    from '../pages/professor/ProfessorConteudos';
 import { ProfessorMateriais }    from '../pages/professor/ProfessorMateriais';
 import { ProfessorConfiguracoes } from '../pages/professor/ProfessorConfiguracoes';
 import { AlunoDashboard }  from '../pages/aluno/AlunoDashboard';
-import { AlunoConteudos }   from '../pages/aluno/AlunoConteudos';
-import { AlunoMateriais }   from '../pages/aluno/AlunoMateriais';
+import { AlunoConteudosExplorar } from '../pages/Aluno/AlunoConteudosExplorar';
+import { AlunoMateriais }  from '../pages/aluno/AlunoMateriais';
 import { AlunoMaterialDetalhe } from '../pages/Aluno/AlunoMaterialDetalhe';
 import { AlunoConfiguracoes } from '../pages/aluno/AlunoConfiguracoes';
 import Login               from '../pages/Login/Login';
@@ -21,7 +21,7 @@ import ProfessorConteudo   from "../pages/Professor/ProfessorConteudo/ProfessorC
 import { Disciplinas }     from '../pages/Disciplinas/Disciplinas';
 import { MeusConteudos } from '../pages/Aluno/MeusConteudos/MeusConteudos';
 import { ConteudoEspecifico } from '../pages/Aluno/ConteudoEspecifico/ConteudoEspecifico';
-import { AlunoLayout } from '../components/aluno/AlunoLayout';
+import { AlunoLayout }      from '../components/aluno/AlunoLayout';
 
 function AdminLayout() {
   return (
@@ -71,17 +71,19 @@ export function AppRoutes() {
         path="/aluno"
         element={
           <ProtectedRoute requiredRole="aluno">
-            <Outlet />
+            <AlunoLayout>
+              <Outlet />
+            </AlunoLayout>
           </ProtectedRoute>
         }
       >
         <Route index element={<AlunoDashboard />} />
-        <Route path="conteudos" element={<MeusConteudos />} /> 
+        <Route path="conteudos" element={<MeusConteudos />} />
         <Route path="conteudos/:id" element={<ConteudoEspecifico />} />
         <Route path="conteudos/:id/forum" element={<div>Fórum - a implementar (depende de backend)</div>} />
-        <Route path="explorar" element={<div>Explorar conteúdos - a implementar</div>} />
+        <Route path="explorar" element={<AlunoConteudosExplorar />} />
         <Route path="materiais" element={<AlunoMateriais />} />
-        <Route path="materiais/:id" element={<AlunoMaterialDetalhe />}/>
+        <Route path="materiais/:id" element={<AlunoMaterialDetalhe />} />
         <Route path="configuracoes" element={<AlunoConfiguracoes />} />
       </Route>
 

@@ -4,7 +4,6 @@ import api from './api';
 export const listarMeusConteudos = async () => {
   const response = await api.get('/api/matriculas/');
   const data = Array.isArray(response.data) ? response.data : [];
-
   const conteudos = data.map((matricula) => ({
     id: matricula.conteudo,
     matricula_id: matricula.id,
@@ -13,6 +12,9 @@ export const listarMeusConteudos = async () => {
     status: matricula.conteudo_detalhes?.status,
     disciplina_id: matricula.disciplina_id,
   }));
-
   return { ...response, data: conteudos };
 };
+
+// Conteúdos disponíveis para inscrição (ativos e não matriculados)
+export const listarConteudosDisponiveis = () =>
+  api.get('/api/disciplinas/conteudos/disponiveis/');

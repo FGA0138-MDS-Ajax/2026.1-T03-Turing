@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
 import { listarMeusConteudos } from '../../../services/alunoService';
 import { listarProfessores, buscarConteudo } from '../../../services/conteudoService';
-import { AlunoLayout } from '../../../components/aluno/AlunoLayout';
 import './MeusConteudos.css';
 
 const AREA_COLOR_MAP = {
@@ -190,22 +189,17 @@ export function MeusConteudos() {
     fetchConteudos();
   }, [fetchConteudos]);
 
-  // Redireciona para a página do conteúdo específico passando o ID
   const handleAcessarConteudo = (conteudo) => {
     const id = conteudo.conteudo_id ?? conteudo.id;
     navigate(`/aluno/conteudos/${id}`);
   };
 
-  // Redireciona para a listagem geral de conteúdos (onde o aluno se inscreve)
   const handleInscrever = () => {
     navigate('/aluno/explorar');
   };
 
   return (
-    <AlunoLayout>
       <div className="mc-page">
-        {/* Props: user, loading, erro, conteudos, fetchConteudos, handleAcessarConteudo, handleInscrever */}
-
         <div className="mc-header">
           <div>
             <h1 className="mc-title">Meus conteúdos</h1>
@@ -253,6 +247,5 @@ export function MeusConteudos() {
         )}
 
       </div>
-    </AlunoLayout>
   );
 }

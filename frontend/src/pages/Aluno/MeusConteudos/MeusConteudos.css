@@ -7,6 +7,7 @@
 }
 
 .mc-page {
+  /* Padding zerado para delegar o espaçamento ao gs-aluno-main */
   padding: 0;
   width: 100%;
   height: 100%;
@@ -107,7 +108,7 @@
    CARDS DE CONTEÚDO
 ========================================= */
 .mc-card {
-  background-color: #FFFFFF; /* Cartão branco */
+  background: #F8F7F3; /* Mantido o seu fundo que diferencia o card */
   border-radius: 12px;
   border: none;
   display: flex;
@@ -215,7 +216,7 @@
   display: block;
   width: 100%;
   padding: 12px 0;
-  background-color: #F2EFE9; /* Botão com a mesma cor do fundo */
+  background: #F2EFE9; /* Botão com a mesma cor do fundo */
   color: #1A1A2E;
   border: none;
   border-radius: 8px;
