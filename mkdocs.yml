@@ -2,10 +2,14 @@ site_name: Documentação
 
 nav:
   - Instruções mkdocs: "index.md"
-  - Atas de Reunião:
-    - Ata 1: "atas-reuniao/ata-reuniao-1.md"
-  - Documento de visão: "visao-produto-projeto(1.1).md"
-  - Documento de arquitetura: "documento-arquitetura(1.0).md"
+  # - Atas de Reunião:
+  #   - Ata 1: "atas-reuniao/ata-reuniao-1.md"
+  - Documento de visão: "documento-visao-produto-projeto.md"
+  - Documento de arquitetura: "documento-arquitetura.md"
+  - Documento de testes: "documentacao-de-testes.md"
+  - Documento de integração: "integracao_back_front.md"
+  - Documento de padronização : "padronizacao.md"
+  - Setup de ambiente : setup_ambiente.md
 
 theme:
   name: material
