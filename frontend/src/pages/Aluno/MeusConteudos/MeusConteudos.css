@@ -12,7 +12,7 @@
   width: 100%;
   height: 100%;
   min-height: 100%;
-  background-color: transparent; /* Deixando transparente para herdar o fundo do Layout */
+  background-color: transparent; 
   box-sizing: border-box;
 }
 
@@ -46,7 +46,7 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background-color: #386663; /* Verde escuro do protótipo */
+  background-color: #386663;
   color: #fff;
   border: none;
   border-radius: 8px;
@@ -116,8 +116,8 @@
   overflow: hidden;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
   transition: box-shadow 0.2s ease, transform 0.15s ease;
-  min-height: 250px; /* Garante altura caso os dados faltem */
-  justify-content: space-between; /* Empurra o footer para o fundo do card */
+  min-height: 250px; 
+  justify-content: space-between; 
 }
 
 .mc-card:hover { 
@@ -129,7 +129,7 @@
   height: 8px; 
   width: 100%; 
   flex-shrink: 0; 
-  border-radius: 12px 12px 0 0; /* Arredonda cantos superiores da faixa */
+  border-radius: 12px 12px 0 0; 
 }
 
 .mc-card-body {
@@ -180,7 +180,6 @@
   flex-shrink: 0;
 }
 
-/* Lista de informações (Informações de horário/calendário) */
 .mc-card-infos {
   list-style: none;
   padding: 0;
@@ -216,7 +215,7 @@
   display: block;
   width: 100%;
   padding: 12px 0;
-  background: #F2EFE9; /* Fundo bege clarinho do protótipo */
+  background: #F2EFE9; 
   color: #1A1A2E;
   border: none;
   border-radius: 8px;
@@ -316,7 +315,6 @@
    RESPONSIVIDADE (MEDIA QUERIES)
 ========================================= */
 
-/* Tablets (até 992px) */
 @media (max-width: 992px) {
   .mc-header {
     flex-direction: column;
@@ -325,29 +323,27 @@
   }
   
   .mc-header button {
-    align-self: flex-start; /* Evita que o botão quebre para baixo de forma feia */
+    align-self: flex-start; 
   }
 
   .mc-grid {
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* Reduz o tamanho mínimo do card */
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
   }
 }
 
-/* Celulares (até 768px) */
 @media (max-width: 768px) {
   .gs-page-content {
-    padding: 20px !important; /* Reduz as margens gerais da tela no celular */
+    padding: 20px !important; 
   }
 
   .mc-page    { padding: 0; }
   .mc-title   { font-size: 1.3rem; }
   
-  .mc-grid    { grid-template-columns: 1fr; } /* Força 1 card por linha no celular */
+  .mc-grid    { grid-template-columns: 1fr; } 
   .mc-header  { flex-direction: column; align-items: stretch; }
   
   .mc-btn-inscrever { justify-content: center; width: 100%; }
 
-  /* Ajuste no card para não espremer os dados */
   .mc-card {
     min-height: auto;
   }
