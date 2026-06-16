@@ -1,19 +1,18 @@
 import { Bell, Settings } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
-import { ProfessorSidebar } from './ProfessorSidebar';
-import '../../styles/layout-shared.css'
+import { AlunoSidebar } from './AlunoSidebar';
+import '../../styles/layout-shared.css';
 
-
-export function ProfessorLayout({ children }) {
+export function AlunoLayout({ children }) {
   const { user } = useAuth();
 
   const iniciais = user?.nome
     ? user.nome.split(' ').slice(0, 2).map(n => n[0]).join('').toUpperCase()
-    : 'P';
+    : 'A';
 
   return (
     <div className="gs-professor-layout">
-      <ProfessorSidebar />
+      <AlunoSidebar />
 
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0, overflow: 'hidden' }}>
 
@@ -27,8 +26,8 @@ export function ProfessorLayout({ children }) {
             </button>
             <div className="gs-topbar-user">
               <div>
-                <p className="gs-topbar-name">{user?.nome ?? 'Professor'}</p>
-                <p className="gs-topbar-role">Professor</p>
+                <p className="gs-topbar-name">{user?.nome ?? 'Aluno'}</p>
+                <p className="gs-topbar-role">Aluno</p>
               </div>
               <div className="gs-topbar-avatar">{iniciais}</div>
             </div>
@@ -36,10 +35,12 @@ export function ProfessorLayout({ children }) {
         </header>
 
         <main className="gs-professor-main">
-          <div className="gs-page-content">
+          {/* Adicionei o fundo bege e o respiro aqui na div de conteúdo */}
+          <div className="gs-page-content" style={{ flex: 1, padding: '40px', overflowY: 'auto', backgroundColor: '#F2EFE9', minWidth: 0, height: '100%' }}>
             {children}
           </div>
         </main>
+
       </div>
     </div>
   );

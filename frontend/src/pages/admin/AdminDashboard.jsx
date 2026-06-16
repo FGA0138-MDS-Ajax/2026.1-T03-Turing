@@ -59,29 +59,13 @@ export function AdminDashboard() {
 
   return (
     <AdminLayout>
-      <header className="gs-topbar">
-        <div>
-          <h1 className="gs-page-title">Dashboard do Administrador</h1>
-          <p className="gs-page-subtitle">Visão geral do sistema</p>
-        </div>
-        <div className="gs-topbar-right">
-          <button className="gs-icon-btn" aria-label="Notificações">
-            <Bell size={18} />
-          </button>
-          <button className="gs-icon-btn" aria-label="Configurações">
-            <Settings size={18} />
-          </button>
-          <div className="gs-topbar-user">
-            <div className="gs-topbar-avatar">
-              {user?.name?.[0]?.toUpperCase() ?? 'A'}
-            </div>
-            <div>
-              <p className="gs-topbar-name">{user?.name ?? 'Admin'}</p>
-              <p className="gs-topbar-role">Admin</p>
-            </div>
-          </div>
-        </div>
-      </header>
+       <div className="gs-topbar">
+        <h1 className="gs-page-title">Dashboard do Administrador</h1>
+        <p className="gs-page-subtitle">
+          Visão geral do sistema
+        </p>
+      </div>
+
 
       <section className="gs-stats-section">
         {loadingStats ? (

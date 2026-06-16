@@ -167,7 +167,8 @@ export default function TeacherReview() {
         <>
             <div className="admin-review-header">
               <div>
-                <h1>Professores pendentes</h1>
+                <h1 style={{ fontSize: '2rem', fontWeight: 700, color: '#02373a', margin: -30, fontFamily: 'Serif' }}>
+                  Professores pendentes</h1>
 
                 <p className="admin-description">
                   Professores em espera de aprovação
@@ -179,7 +180,9 @@ export default function TeacherReview() {
 
             <div className="section-header">
 
-              <h2>Listar professores</h2>
+              <h2 style={{ fontSize: '0.95rem', fontWeight: 600, color: '#101828', margin: 0 }}>
+                Listar professores
+              </h2>
 
               <div className="section-actions">
 
