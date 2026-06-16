@@ -8,7 +8,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('disciplinas', '0004_alter_conteudo_professores'),
+        ('disciplinas', '0003_material_arquivo_material_descricao_material_link_and_more'),
         ('interacoes', '0004_remove_denuncia_admin_remove_inscricao_admin_and_more'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]

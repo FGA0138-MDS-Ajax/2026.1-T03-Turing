@@ -1,0 +1,368 @@
+/* =========================================
+   ANIMAÇÕES E BASE
+========================================= */
+@keyframes shimmer {
+  0%   { background-position: -600px 0; }
+  100% { background-position:  600px 0; }
+}
+
+.mc-page {
+  /* Padding zerado para delegar o espaçamento ao gs-aluno-main */
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  background-color: transparent; /* Deixando transparente para herdar o fundo do Layout */
+  box-sizing: border-box;
+}
+
+/* =========================================
+   CABEÇALHO DA PÁGINA (TÍTULO E BOTÃO)
+========================================= */
+.mc-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+}
+
+.mc-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin: 0 0 4px 0;
+  line-height: 1.2;
+}
+
+.mc-subtitle {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+.mc-btn-inscrever {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #386663; /* Verde escuro do protótipo */
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: opacity 0.2s ease, transform 0.12s ease;
+}
+
+.mc-btn-inscrever:hover  { opacity: 0.9; transform: translateY(-1px); }
+.mc-btn-inscrever:active { transform: translateY(0); }
+
+/* =========================================
+   ESTADOS DE ERRO
+========================================= */
+.mc-error {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #fff1f1;
+  border: 1px solid #fca5a5;
+  border-radius: 8px;
+  padding: 14px 18px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.mc-error-icon { font-size: 1.1rem; color: #dc2626; flex-shrink: 0; }
+.mc-error-msg  { font-size: 0.875rem; color: #991b1b; flex: 1; min-width: 180px; }
+
+.mc-btn-retry {
+  background: transparent;
+  border: 1px solid #dc2626;
+  color: #dc2626;
+  border-radius: 6px;
+  padding: 6px 14px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.mc-btn-retry:hover { background: #dc2626; color: #fff; }
+
+/* =========================================
+   GRID PRINCIPAL
+========================================= */
+.mc-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+/* =========================================
+   CARDS DE CONTEÚDO
+========================================= */
+.mc-card {
+  background: #F8F7F3; 
+  border-radius: 12px;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+  transition: box-shadow 0.2s ease, transform 0.15s ease;
+  min-height: 250px; /* Garante altura caso os dados faltem */
+  justify-content: space-between; /* Empurra o footer para o fundo do card */
+}
+
+.mc-card:hover { 
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08); 
+  transform: translateY(-2px); 
+}
+
+.mc-card-accent { 
+  height: 8px; 
+  width: 100%; 
+  flex-shrink: 0; 
+  border-radius: 12px 12px 0 0; /* Arredonda cantos superiores da faixa */
+}
+
+.mc-card-body {
+  padding: 20px 20px 16px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.mc-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.mc-card-text { 
+  flex: 1; 
+  min-width: 0; 
+}
+
+.mc-card-titulo {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin: 0 0 4px 0;
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mc-card-professor { 
+  font-size: 0.8rem; 
+  color: #6b7280; 
+  margin: 0; 
+}
+
+.mc-card-icon-box {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+/* Lista de informações (Informações de horário/calendário) */
+.mc-card-infos {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.mc-card-info-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+  color: #4b5563;
+}
+
+.mc-info-icon { 
+  font-size: 0.85rem; 
+  flex-shrink: 0; 
+  opacity: 0.7; 
+}
+
+/* =========================================
+   RODAPÉ DO CARD E BOTÃO
+========================================= */
+.mc-card-footer {
+  padding: 0 20px 20px;
+  border-top: none;
+}
+
+.mc-btn-acessar {
+  display: block;
+  width: 100%;
+  padding: 12px 0;
+  background: #F2EFE9; /* Fundo bege clarinho do protótipo */
+  color: #1A1A2E;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+  transition: background-color 0.2s ease;
+}
+
+.mc-btn-acessar:hover  { background: #E4E0D6; }
+.mc-btn-acessar:active { opacity: 0.88; }
+
+/* =========================================
+   SKELETONS (ESTADO DE CARREGAMENTO)
+========================================= */
+.mc-skeleton-accent,
+.mc-skeleton-line,
+.mc-skeleton-icon-box,
+.mc-skeleton-btn {
+  background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%);
+  background-size: 1200px 100%;
+  animation: shimmer 1.4s infinite linear;
+  border-radius: 4px;
+}
+
+.mc-skeleton-accent { height: 8px; border-radius: 0; }
+
+.mc-skeleton-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.mc-skeleton-texts {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.mc-skeleton-title { height: 16px; width: 75%; }
+.mc-skeleton-prof  { height: 12px; width: 50%; }
+
+.mc-skeleton-icon-box {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+.mc-skeleton-infos {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.mc-skeleton-info        { height: 12px; width: 80%; }
+.mc-skeleton-info--short { width: 60%; }
+
+.mc-skeleton-btn { height: 40px; width: 100%; border-radius: 8px; }
+
+/* =========================================
+   ESTADO VAZIO (EMPTY STATE)
+========================================= */
+.mc-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 64px 24px;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+.mc-empty-icon  { font-size: 3.5rem; margin-bottom: 20px; opacity: 0.6; display: block; }
+.mc-empty-title { font-size: 1.25rem; font-weight: 700; color: #1a1a2e; margin: 0 0 10px; }
+.mc-empty-desc  { font-size: 0.9rem; color: #6b7280; line-height: 1.6; margin: 0 0 28px; }
+
+.mc-btn-explorar {
+  background: #386663;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 11px 28px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.18s ease, transform 0.12s ease;
+}
+
+.mc-btn-explorar:hover { background: #2f5451; transform: translateY(-1px); }
+
+/* =========================================
+   RESPONSIVIDADE (MEDIA QUERIES)
+========================================= */
+
+/* Tablets (até 992px) */
+@media (max-width: 992px) {
+  .mc-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  
+  .mc-header button {
+    align-self: flex-start; /* Evita que o botão quebre para baixo de forma feia */
+  }
+
+  .mc-grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* Reduz o tamanho mínimo do card */
+  }
+}
+
+/* Celulares (até 768px) */
+@media (max-width: 768px) {
+  .gs-page-content {
+    padding: 20px !important; /* Reduz as margens gerais da tela no celular */
+  }
+
+  .mc-page    { padding: 0; }
+  .mc-title   { font-size: 1.3rem; }
+  
+  .mc-grid    { grid-template-columns: 1fr; } /* Força 1 card por linha no celular */
+  .mc-header  { flex-direction: column; align-items: stretch; }
+  
+  .mc-btn-inscrever { justify-content: center; width: 100%; }
+
+  /* Ajuste no card para não espremer os dados */
+  .mc-card {
+    min-height: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .mc-page { padding: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mc-skeleton-accent,
+  .mc-skeleton-line,
+  .mc-skeleton-icon-box,
+  .mc-skeleton-btn {
+    animation: none;
+    background: #e5e7eb;
+  }
+}
