@@ -101,6 +101,25 @@ class ConteudoViewSet(viewsets.ModelViewSet):
         # GET ou visualizar só precisa estar logado
         return [IsAuthenticated()]
     
+    @action(detail=False, methods=['get'], url_path='disponiveis', permission_classes=[IsAuthenticated])
+    def disponiveis(self, request):
+        # Só faz sentido pra aluno
+        if request.user.tipo != 'aluno':
+            return Response(
+                {'erro': 'Apenas alunos podem ver conteúdos disponíveis para matrícula'},
+                status=403
+            )
+
+        # Conteúdos ativos que o aluno não está matriculado
+        conteudos = Conteudo.objects.filter(
+            status='ativo'
+        ).exclude(
+            matriculas__aluno__perfil=request.user
+        ).distinct()
+
+        serializer = self.get_serializer(conteudos, many=True)
+        return Response(serializer.data)
+    
 
 
 class DisciplinaViewSet(viewsets.ModelViewSet):
