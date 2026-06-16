@@ -31,7 +31,7 @@ export default function InscreverConteudos() {
           listarProfessoresAprovados()
         ]);
 
-        setConteudos(Array.isArray(resConteudos) ? resConteudos : []);
+        setConteudos(Array.isArray(resConteudos.data) ? resConteudos.data : []);
         setListaDisciplinas(resDisciplinas.data.results || resDisciplinas.data);
         setListaProfessores(resProfessores.data.results || resProfessores.data);
 
