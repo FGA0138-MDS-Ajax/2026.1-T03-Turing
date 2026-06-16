@@ -20,6 +20,7 @@ import TeacherReview       from '../pages/admin/TeacherReview/TeacherReview';
 import ProfessorConteudo   from "../pages/Professor/ProfessorConteudo/ProfessorConteudo";
 import { Disciplinas }     from '../pages/Disciplinas/Disciplinas';
 import { MeusConteudos } from '../pages/Aluno/MeusConteudos/MeusConteudos';
+import { ConteudoEspecifico } from '../pages/Aluno/ConteudoEspecifico/ConteudoEspecifico';
 import { AlunoLayout } from '../components/aluno/AlunoLayout';
 
 function AdminLayout() {
@@ -66,7 +67,6 @@ export function AppRoutes() {
         <Route path="configuracoes"        element={<ProfessorConfiguracoes />} />
       </Route>
 
-
       <Route
         path="/aluno"
         element={
@@ -77,27 +77,12 @@ export function AppRoutes() {
       >
         <Route index element={<AlunoDashboard />} />
         <Route path="conteudos" element={<MeusConteudos />} /> 
-        <Route path="conteudos/:id" element={<div>Conteúdo específico - a implementar</div>} />
+        <Route path="conteudos/:id" element={<ConteudoEspecifico />} />
+        <Route path="conteudos/:id/forum" element={<div>Fórum - a implementar (depende de backend)</div>} />
         <Route path="explorar" element={<div>Explorar conteúdos - a implementar</div>} />
         <Route path="materiais" element={<AlunoMateriais />} />
         <Route path="materiais/:id" element={<AlunoMaterialDetalhe />}/>
         <Route path="configuracoes" element={<AlunoConfiguracoes />} />
-      </Route>
-
-
-
-
-      <Route
-        path="/aluno"
-        element={
-          <ProtectedRoute requiredRole="aluno">
-            <Outlet />
-          </ProtectedRoute>
-        }
-      >
-        <Route path="conteudos" element={<MeusConteudos />} />
-        <Route path="conteudos/:id" element={<div>Conteúdo específico - a implementar</div>} />
-        <Route path="explorar" element={<div>Explorar conteúdos - a implementar</div>} />
       </Route>
 
       <Route

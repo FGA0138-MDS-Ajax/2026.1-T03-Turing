@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
 import { listarMeusConteudos } from '../../../services/alunoService';
+import { listarProfessores, buscarConteudo } from '../../../services/conteudoService';
 import { AlunoLayout } from '../../../components/aluno/AlunoLayout';
 import './MeusConteudos.css';
 
@@ -49,12 +50,19 @@ function ConteudoCardSkeleton() {
 }
 
 function ConteudoCard({ conteudo, onAcessar }) {
-  // Puxa estritamente o que vem da API
-  const titulo      = conteudo.titulo    || conteudo.nome           || 'Sem título';
-  const professor   = conteudo.professor || conteudo.nome_professor || 'Professor não atribuído';
-  const area        = conteudo.area      || '';
-  const informacoes = conteudo.informacoes || [];
-  const icone       = conteudo.icone     || null;
+  const titulo      = conteudo.titulo || conteudo.nome || 'Sem título';
+  const professor   = conteudo.nome_professor || 'Professor não atribuído';
+  const area        = conteudo.area || '';
+  
+  const informacoesApi = Array.isArray(conteudo.informacoes) ? conteudo.informacoes : [];
+  const informacoesExibidas = informacoesApi.length > 0 
+    ? informacoesApi 
+    : [
+        { icone: '📅', texto: 'Início: Data a definir' },
+        { icone: '🕒', texto: 'Carga horária a definir' }
+      ];
+
+  const icone       = conteudo.icone || null;
   const color       = getAreaColor(area || titulo);
 
   return (
@@ -75,17 +83,15 @@ function ConteudoCard({ conteudo, onAcessar }) {
           </div>
         </div>
         
-        {/* Só renderiza a lista se a API realmente enviar o array 'informacoes' com dados */}
-        {informacoes.length > 0 && (
-          <ul className="mc-card-infos" aria-label="Informações">
-            {informacoes.map((info, i) => (
-              <li key={i} className="mc-card-info-item">
-                <span className="mc-info-icon" aria-hidden="true">{info.icone || '📋'}</span>
-                <span>{info.texto}</span>
-              </li>
-            ))}
-          </ul>
-        )}
+        {/* Renderiza as informações da API ou o fallback */}
+        <ul className="mc-card-infos" aria-label="Informações">
+          {informacoesExibidas.map((info, i) => (
+            <li key={i} className="mc-card-info-item">
+              <span className="mc-info-icon" aria-hidden="true">{info.icone || '📋'}</span>
+              <span>{info.texto}</span>
+            </li>
+          ))}
+        </ul>
       </div>
       <div className="mc-card-footer">
         <button
@@ -129,14 +135,51 @@ export function MeusConteudos() {
     setLoading(true);
     setErro(null);
     try {
-      const response = await listarMeusConteudos();
-      const data = Array.isArray(response.data) ? response.data : [];
-      setConteudos(data);
+      // 1. Busca a lista resumida e os professores gerais
+      const [responseConteudos, responseProfessores] = await Promise.all([
+        listarMeusConteudos(),
+        listarProfessores()
+      ]);
+
+      const dataConteudos = Array.isArray(responseConteudos.data) ? responseConteudos.data : [];
+      const dataProfessores = Array.isArray(responseProfessores.data) ? responseProfessores.data : [];
+
+      // 2. Para CADA conteúdo resumido, vamos buscar os detalhes completos na API
+      const conteudosCompletos = await Promise.all(
+        dataConteudos.map(async (conteudoResumido) => {
+          let nomeResolvido = 'Professor não atribuído';
+          
+          try {
+            // Busca o detalhe usando o ID correto
+            const idParaBuscar = conteudoResumido.conteudo_id ?? conteudoResumido.id;
+            const detalheRes = await buscarConteudo(idParaBuscar);
+            const detalhe = detalheRes.data;
+
+            // Agora sim, o 'detalhe' tem a chave .professores! Vamos cruzar os dados:
+            if (Array.isArray(detalhe.professores) && detalhe.professores.length > 0) {
+              const profs = dataProfessores
+                .filter((p) => detalhe.professores.includes(p.id))
+                .map((p) => p.perfil?.nome ?? 'Professor');
+
+              if (profs.length > 0) {
+                nomeResolvido = profs.join(', ');
+              }
+            }
+          } catch (error) {
+            console.error(`Erro ao buscar detalhes do conteudo ${conteudoResumido.id}`, error);
+          }
+
+          // Junta o resumo com o nome do professor encontrado
+          return {
+            ...conteudoResumido,
+            nome_professor: nomeResolvido
+          };
+        })
+      );
+
+      setConteudos(conteudosCompletos);
     } catch (err) {
-      if (err.response?.status === 401) {
-        // interceptor do api.js já redireciona para /login automaticamente
-        return;
-      }
+      if (err.response?.status === 401) return;
       setErro('Não foi possível carregar seus conteúdos. Tente novamente.');
     } finally {
       setLoading(false);

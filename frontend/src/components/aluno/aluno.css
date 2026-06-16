@@ -5,9 +5,13 @@
 }
 
 .gs-aluno-app {
+  display: flex;
+  flex-direction: column;
   min-height: 100vh;
+  background-color: #F2EFE9;
 }
 
+/* --- CABEÇALHO GLOBAL (TOP BAR) --- */
 .gs-aluno-header-global {
   display: flex;
   justify-content: space-between;
@@ -73,7 +77,31 @@
   margin-left: 8px;
   transition: color 0.2s;
 }
-.gs-header-logout:hover { color: #386663; }
+
+.gs-header-logout:hover { 
+  color: #386663; 
+}
+
+/* --- CORPO E SIDEBAR --- */
+.gs-aluno-body-wrapper {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  background-color: #F2EFE9 !important;
+}
+
+aside.gs-sidebar {
+  background-color: #F2EFE9 !important;
+  border-right: none;
+  width: 250px;
+  padding: 32px 24px;
+}
+
+.gs-sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
 
 .gs-nav-item {
   display: flex;
@@ -96,4 +124,12 @@
   background: #D1D7CD !important;
   color: #1A1A2E !important;
   font-weight: 600;
+}
+
+.gs-aluno-main {
+  flex: 1;
+  padding: 40px;
+  overflow-y: auto;
+  background-color: #F2EFE9 !important;
+  min-width: 0;
 }
