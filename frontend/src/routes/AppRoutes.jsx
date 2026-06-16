@@ -10,17 +10,16 @@ import { ProfessorConteudos }    from '../pages/professor/ProfessorConteudos';
 import { ProfessorMateriais }    from '../pages/professor/ProfessorMateriais';
 import { ProfessorConfiguracoes } from '../pages/professor/ProfessorConfiguracoes';
 import { AlunoDashboard }  from '../pages/aluno/AlunoDashboard';
-// Removi as antigas AlunoConteudos, AlunoMateriais, AlunoConfiguracoes para evitar conflito com as novas
+import { AlunoConteudos }  from '../pages/Aluno/AlunoConteudos';
+import { AlunoConteudosExplorar } from '../pages/Aluno/AlunoConteudosExplorar';
+import { AlunoMateriais }  from '../pages/Aluno/AlunoMateriais';
+import { AlunoConfiguracoes } from '../pages/Aluno/AlunoConfiguracoes';
 import Login               from '../pages/Login/Login';
 import Register            from '../pages/Register/Register';
 import TeacherReview       from '../pages/admin/TeacherReview/TeacherReview';
 import ProfessorConteudo   from "../pages/Professor/ProfessorConteudo/ProfessorConteudo";
 import { Disciplinas }     from '../pages/Disciplinas/Disciplinas';
-import { MeusConteudos } from '../pages/Aluno/MeusConteudos/MeusConteudos';
-import InscreverConteudos from "../pages/Aluno/InscreverConteudos/InscreverConteudos";
-
-// IMPORTANTE: Adicionei a importação do AlunoLayout aqui
-import { AlunoLayout } from '../components/aluno/AlunoLayout'; 
+import { AlunoLayout }     from '../components/aluno/AlunoLayout';
 
 function AdminLayout() {
   return (
@@ -66,12 +65,10 @@ export function AppRoutes() {
         <Route path="configuracoes"        element={<ProfessorConfiguracoes />} />
       </Route>
 
-      {/* ROTA CONSOLIDADA DO ALUNO */}
       <Route
         path="/aluno"
         element={
           <ProtectedRoute requiredRole="aluno">
-            {/* AQUI ESTÁ O SEGREDO: O AlunoLayout agora engloba as rotas do aluno */}
             <AlunoLayout>
               <Outlet />
             </AlunoLayout>
@@ -79,10 +76,11 @@ export function AppRoutes() {
         }
       >
         <Route index element={<AlunoDashboard />} />
-        
-        <Route path="conteudos" element={<MeusConteudos />} />
+        <Route path="conteudos" element={<AlunoConteudos />} />
         <Route path="conteudos/:id" element={<div>Conteúdo específico - a implementar</div>} />
-        <Route path="explorar" element={<InscreverConteudos />} />
+        <Route path="explorar" element={<AlunoConteudosExplorar />} />
+        <Route path="materiais" element={<AlunoMateriais />} />
+        <Route path="configuracoes" element={<AlunoConfiguracoes />} />
       </Route>
 
       <Route
