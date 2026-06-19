@@ -2,7 +2,6 @@ import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BookOpen, Clock, CheckCircle, MessageCircle } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
-import { AlunoLayout } from '../../components/aluno/AlunoLayout';
 import { listarConteudos, listarDisciplinas, listarMateriais } from '../../services/disciplinasService';
 import api from '../../services/api';
 import '../../styles/dashboard-shared.css'
@@ -138,7 +137,7 @@ export function AlunoDashboard() {
   useEffect(() => { carregar(); }, [carregar]);
 
   return (
-    <AlunoLayout>
+    <>
       <div className="gs-topbar">
         <h1 className="gs-page-title">Dashboard do Aluno</h1>
         <p className="gs-page-subtitle">
@@ -199,6 +198,6 @@ export function AlunoDashboard() {
           </div>
         </div>
       </section>
-    </AlunoLayout>
+    </>
   );
 }

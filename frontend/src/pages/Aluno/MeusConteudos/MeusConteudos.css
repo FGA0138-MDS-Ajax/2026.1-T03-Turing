@@ -12,7 +12,7 @@
   width: 100%;
   height: 100%;
   min-height: 100%;
-  background-color: transparent; /* Deixando transparente para herdar o fundo do Layout */
+  background-color: transparent; 
   box-sizing: border-box;
 }
 
@@ -46,7 +46,7 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background-color: #386663; /* Verde escuro do protótipo */
+  background-color: #386663;
   color: #fff;
   border: none;
   border-radius: 8px;
@@ -108,7 +108,7 @@
    CARDS DE CONTEÚDO
 ========================================= */
 .mc-card {
-  background: #F8F7F3; 
+  background: #F8F7F3; /* Mantido o seu fundo que diferencia o card */
   border-radius: 12px;
   border: none;
   display: flex;
@@ -216,7 +216,7 @@
   display: block;
   width: 100%;
   padding: 12px 0;
-  background: #F2EFE9; /* Fundo bege clarinho do protótipo */
+  background: #F2EFE9; /* Botão com a mesma cor do fundo */
   color: #1A1A2E;
   border: none;
   border-radius: 8px;

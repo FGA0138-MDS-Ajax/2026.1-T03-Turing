@@ -1,0 +1,342 @@
+/* =========================================
+   ESTRUTURA DA PÁGINA
+========================================= */
+.inscrever-page {
+  padding: 0;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  padding: 0 0 24px 0;
+}
+
+.header h1 {
+  font-size: 2.2rem;
+  color: #1a1a1a;
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+
+.header p {
+  color: #666666;
+  font-size: 1rem;
+  margin: 0;
+}
+
+/* =========================================
+   ABAS (Efeito Pasta / Folder)
+========================================= */
+.disciplinas-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 0; /* Remove a margem para colar no bloco verde */
+  overflow-x: auto;
+  /* Isso garante que a barra de rolagem (se existir) fique abaixo, não entre as abas e o bloco */
+  padding-bottom: 0; 
+  position: relative; /* Para garantir o empilhamento correto */
+  z-index: 2; /* Garante que as abas fiquem "por cima" da borda do bloco verde */
+}
+
+.tab {
+  border: none;
+  padding: 12px 24px;
+  border-radius: 12px 12px 0 0; /* Arredonda apenas os cantos superiores */
+  cursor: pointer;
+  background-color: #A9B4C0; /* Cor da aba inativa (cinza azulado) */
+  color: #ffffff;
+  font-weight: 600;
+  transition: 0.2s;
+  white-space: nowrap;
+}
+
+.tab:hover {
+  background-color: #8fa8a6;
+}
+
+.tab.active {
+  background-color: #2D5B5A; /* Mesma cor exata do bloco verde abaixo */
+  color: #ffffff; 
+}
+
+/* =========================================
+   BLOCO VERDE CENTRAL 
+========================================= */
+.conteudos-wrapper {
+  background-color: #2D5B5A; /* O verde escuro do fundo da pasta */
+  border-radius: 0 16px 16px 16px; /* Remove o arredondamento APENAS do topo-esquerdo para conectar a 1ª aba */
+  padding: 32px;
+  flex-grow: 1;
+  min-height: 80vh;
+  position: relative; 
+  z-index: 1;
+}
+
+/* =========================================
+   GRID
+========================================= */
+.conteudos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+}
+
+/* =========================================
+   CARDS
+========================================= */
+.conteudo-card {
+  background-color: #F2EFE9;
+  border-radius: 12px;
+  padding: 24px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  min-height: 280px;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.card-header h3 {
+  margin: 0;
+  color: #222;
+  font-size: 1.2rem;
+  line-height: 1.3;
+  padding-right: 16px;
+}
+
+.card-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 8px;
+  background-color: #C6D1CE; /* Cinza esverdeado do Figma */
+}
+
+.card-icon svg {
+  color: #2D5B5A;
+}
+
+.professor {
+  color: #888888;
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+  font-size: 0.85rem;
+}
+
+.infos {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: #555555;
+  margin-bottom: 24px;
+  font-size: 0.9rem;
+}
+
+.infos p {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+}
+
+/* =========================================
+   BOTÕES DO CARD
+========================================= */
+.acoes {
+  display: flex;
+  gap: 12px;
+  margin-top: auto;
+}
+
+.btn-preview,
+.btn-inscrever {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: .2s;
+  text-align: center;
+}
+
+.btn-preview {
+  background: transparent;
+  border: none;
+  color: #555555;
+}
+
+.btn-preview:hover {
+  text-decoration: underline;
+}
+
+.btn-inscrever {
+  border: 1px solid #2D5B5A;
+  background: white;
+  color: #2D5B5A;
+}
+
+.btn-inscrever:hover {
+  background: #2D5B5A;
+  color: white;
+}
+
+/* =========================================
+   MODAL (Figma Imagem 3)
+========================================= */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(30, 30, 30, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal {
+  background: #ffffff;
+  width: 90%;
+  max-width: 550px;
+  border-radius: 16px;
+  padding: 40px 32px 32px 32px; /* Mais espaço no topo para o botão caber */
+  position: relative;
+  box-sizing: border-box; /* Garante que o padding não quebre a caixa */
+}
+
+.btn-close {
+  position: absolute;
+  right: 16px;
+  top: 16px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: #a0a0a0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10; /* Garante que ele fique acima de outros elementos */
+}
+
+.btn-close:hover {
+  color: #222;
+}
+
+.modal-header {
+  margin-bottom: 24px;
+}
+
+.modal-title-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.modal-title-wrapper h2 {
+  font-size: 1.6rem;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.modal-icon-badge {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  background-color: #C6D1CE;
+  color: #2D5B5A;
+}
+
+.modal-desc {
+  color: #666666;
+  font-size: 0.9rem;
+  margin: 0 0 24px 0;
+}
+
+.modal-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.prof-name {
+  color: #888888;
+  font-size: 0.85rem;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #333333;
+  font-size: 0.9rem;
+}
+
+.ementa-box {
+  background-color: #D6D6D6; /* Fundo cinza da ementa */
+  border-radius: 8px;
+  padding: 20px;
+  min-height: 150px;
+  margin-bottom: 24px;
+}
+
+.ementa-box h4 {
+  color: #555555;
+  margin: 0 0 12px 0;
+  font-size: 1rem;
+}
+
+.ementa-box p {
+  color: #666666;
+  font-size: 0.9rem;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: center;
+}
+
+.btn-inscrever-modal {
+  background-color: #2D5B5A;
+  color: white;
+  border: none;
+  border-radius: 999px; /* Formato de pílula */
+  padding: 12px 48px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: .2s;
+}
+
+.btn-inscrever-modal:hover {
+  background: #1f4241;
+}
+
+/* =========================================
+   ESTADOS
+========================================= */
+.estado-container {
+  padding: 60px 20px;
+  text-align: center;
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .conteudos-grid { grid-template-columns: 1fr; }
+  .acoes { flex-direction: column; }
+}
