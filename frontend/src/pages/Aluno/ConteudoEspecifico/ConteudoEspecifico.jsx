@@ -1,7 +1,6 @@
 import { useState, useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useConteudoEspecifico } from '../../../hooks/useConteudoEspecifico';
-import { AlunoLayout } from '../../../components/aluno/AlunoLayout'; // ADICIONADO IMPORT
 import './ConteudoEspecifico.css';
 
 const TIPO_ICONE = {
@@ -140,7 +139,6 @@ export function ConteudoEspecifico() {
 
   if (loading) {
     return (
-      <AlunoLayout> {/* ADICIONADO ALUNOLAYOUT */}
         <div className="ce-page">
           <div className="ce-breadcrumb">
             <span>Disciplina</span>
@@ -158,13 +156,11 @@ export function ConteudoEspecifico() {
             </div>
           </section>
         </div>
-      </AlunoLayout>
     );
   }
 
   if (erro) {
     return (
-      <AlunoLayout> {/* ADICIONADO ALUNOLAYOUT */}
         <div className="ce-page">
           <div className="ce-breadcrumb">
             <Link to="/aluno/conteudos">Conteúdos</Link>
@@ -177,12 +173,10 @@ export function ConteudoEspecifico() {
             </button>
           </div>
         </div>
-      </AlunoLayout>
     );
   }
 
   return (
-    <AlunoLayout> {/* ADICIONADO ALUNOLAYOUT NO CASO DE SUCESSO */}
       <div className="ce-page">
         {/* Breadcrumb: Disciplina > Conteúdo */}
         <nav className="ce-breadcrumb" aria-label="Navegação">
@@ -306,6 +300,5 @@ export function ConteudoEspecifico() {
             </Link>
           </section>
       </div>
-    </AlunoLayout>
   );
 }
