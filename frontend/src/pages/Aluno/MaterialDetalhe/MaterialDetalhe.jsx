@@ -152,8 +152,8 @@ export default function MaterialDetalhe() {
             <p className="md-sidebar__duvida-texto">
               Caso tenha dúvidas sobre este material, poste suas perguntas para o professor.
             </p>
-            <button className="md-btn-ir" onClick={() => navigate("/aluno/conteudos")}>
-              Ir para conteúdos
+            <button className="md-btn-ir" onClick={() => navigate("/aluno/conteudos/${material.conteudo}/forum")}>
+              Ir para o fórum
             </button>
           </div>
 
