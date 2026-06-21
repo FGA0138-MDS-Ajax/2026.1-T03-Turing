@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback  } from "react";
 import { useNavigate } from "react-router-dom";
-import { listarMateriais } from "../../../services/materialService";
+import { listarMateriais, listarConteudos, listarDisciplinas } from "../../../services/disciplinasService";
 import "./MeusMateriais.css";
 
 const TIPO_ICONE = {
@@ -10,7 +10,7 @@ const TIPO_ICONE = {
   link: { label: "Link", cor: "tipo-link" },
 };
 
-function CardMaterial({ material, onAbrir }) {
+function CardMaterial({ material, onAbrir, conteudo, disciplina }) {
   const tipo = TIPO_ICONE[material.tipo?.toLowerCase()] || {
     label: material.tipo || "Arquivo",
     cor: "tipo-doc",
@@ -29,17 +29,15 @@ function CardMaterial({ material, onAbrir }) {
           <p className="card-material__descricao">{material.descricao}</p>
         )}
         <div className="card-material__meta">
-          {material.disciplina && (
-            <span className="card-material__tag">{material.disciplina}</span>
+          {disciplina?.nome && (
+            <span className="card-material__tag">{disciplina.nome}</span>
           )}
-          {material.professor && (
-            <span className="card-material__professor">
-              Prof. {material.professor}
-            </span>
+          {conteudo?.nome && (
+            <span className="card-material__professor">{conteudo.nome}</span>
           )}
-          {material.dataPublicacao && (
+          {material.data_create && (
             <span className="card-material__data">
-              {new Date(material.dataPublicacao).toLocaleDateString("pt-BR", {
+              {new Date(material.data_create).toLocaleDateString("pt-BR", {
                 day: "2-digit",
                 month: "short",
                 year: "numeric",
@@ -76,21 +74,25 @@ function CardMaterial({ material, onAbrir }) {
 export default function MeusMateriais() {
   const navigate = useNavigate();
   const [materiais, setMateriais] = useState([]);
+  const [conteudos, setConteudos] = useState([]);
+  const [disciplinas, setDisciplinas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [erro, setErro] = useState("");
   const [busca, setBusca] = useState("");
   const [filtroDisciplina, setFiltroDisciplina] = useState("");
 
-  useEffect(() => {
-    carregarMateriais();
-  }, []);
-
-  const carregarMateriais = async () => {
+  const carregarMateriais =  useCallback (async () => {
     try {
       setLoading(true);
       setErro("");
-      const response = await listarMateriais();
-      setMateriais(response.data);
+      const [materiaisRes, conteudosRes, disciplinasRes] = await Promise.all([
+        listarMateriais(),
+        listarConteudos(),
+        listarDisciplinas(),
+      ]);
+      setMateriais(Array.isArray(materiaisRes.data) ? materiaisRes.data : []);
+      setConteudos(Array.isArray(conteudosRes.data) ? conteudosRes.data : []);
+      setDisciplinas(Array.isArray(disciplinasRes.data) ? disciplinasRes.data : []);
     } catch (error) {
       console.error(error);
       if (error.response?.status === 401) {
@@ -105,23 +107,36 @@ export default function MeusMateriais() {
     } finally {
       setLoading(false);
     }
-  };
+   }, [navigate]);
+
+   useEffect(() => {
+    carregarMateriais();
+  }, [carregarMateriais]);
 
   const abrirMaterial = (materialId) => {
     navigate(`/aluno/materiais/${materialId}`);
   };
 
-  const disciplinas = [...new Set(materiais.map((m) => m.disciplina).filter(Boolean))];
+  // Cruza cada material com seu conteúdo e disciplina pelos IDs
+  const materiaisComContexto = materiais.map((m) => {
+    const conteudo = conteudos.find((c) => c.id === m.conteudo);
+    const disciplina = conteudo ? disciplinas.find((d) => d.id === conteudo.disciplina) : null;
+    return { material: m, conteudo, disciplina };
+  });
 
-  const materiaisFiltrados = materiais.filter((m) => {
+  const disciplinasDisponiveis = [
+    ...new Set(materiaisComContexto.map((mc) => mc.disciplina?.nome).filter(Boolean)),
+  ];
+
+  const materiaisFiltrados = materiaisComContexto.filter(({ material, disciplina }) => {
     const termoBusca = busca.toLowerCase();
     const coincideBusca =
       !busca ||
-      m.nome?.toLowerCase().includes(termoBusca) ||
-      m.descricao?.toLowerCase().includes(termoBusca) ||
-      m.disciplina?.toLowerCase().includes(termoBusca);
+      material.nome?.toLowerCase().includes(termoBusca) ||
+      material.descricao?.toLowerCase().includes(termoBusca) ||
+      disciplina?.nome?.toLowerCase().includes(termoBusca);
     const coincideDisciplina =
-      !filtroDisciplina || m.disciplina === filtroDisciplina;
+      !filtroDisciplina || disciplina?.nome === filtroDisciplina;
     return coincideBusca && coincideDisciplina;
   });
 
@@ -154,7 +169,7 @@ export default function MeusMateriais() {
           aria-label="Filtrar por disciplina"
         >
           <option value="">Filtrar por disciplina</option>
-          {disciplinas.map((d) => (
+          {disciplinasDisponiveis.map((d) => (
             <option key={d} value={d}>
               {d}
             </option>
@@ -210,11 +225,13 @@ export default function MeusMateriais() {
 
       {!loading && !erro && materiaisFiltrados.length > 0 && (
         <div className="meus-materiais__grid">
-          {materiaisFiltrados.map((material) => (
+          {materiaisFiltrados.map(({material, conteudo, disciplina}) => (
             <CardMaterial
               key={material.id}
               material={material}
               onAbrir={abrirMaterial}
+              conteudo={conteudo}
+              disciplina={disciplina}
             />
           ))}
         </div>
