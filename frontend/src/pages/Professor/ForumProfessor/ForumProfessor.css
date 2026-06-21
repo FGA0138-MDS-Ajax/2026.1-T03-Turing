@@ -411,3 +411,34 @@
   color: #27500A;
   font-size: 13px;
 }
+
+.forum-breadcrumb {
+  font-size: 12px;
+  color: #999;
+  margin-bottom: 8px;
+}
+
+.forum-breadcrumb span {
+  margin: 0 4px;
+}
+
+.forum-response-preview {
+  padding: 8px 0;
+  min-height: 90px;
+  overflow-y: auto;
+}
+
+.forum-response-preview pre {
+  background: #f5f3ef;
+  padding: 8px;
+  border-radius: 6px;
+  overflow-x: auto;
+  font-size: 12px;
+}
+
+.forum-response-preview code {
+  background: #f0ede8;
+  padding: 1px 4px;
+  border-radius: 4px;
+  font-size: 12px;
+}

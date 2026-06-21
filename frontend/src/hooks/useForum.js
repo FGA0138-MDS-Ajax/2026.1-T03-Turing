@@ -1,9 +1,12 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { listarForuns, listarMensagensDoForum, responderPergunta as responderPerguntaAPI } from '../services/forumService';
+import { buscarConteudo, buscarDisciplina } from '../services/disciplinasService';
 
 export function useForum(conteudoId) {
   const [forumId, setForumId] = useState(null);
   const [mensagens, setMensagens] = useState([]);
+  const [conteudo, setConteudo] = useState(null);
+  const [disciplina, setDisciplina] = useState(null);
 
   const [loading, setLoading] = useState(true);
   const [erro, setErro] = useState(null);
@@ -15,13 +18,31 @@ export function useForum(conteudoId) {
 
   const [enviando, setEnviando] = useState(false);
   const [erroEnvio, setErroEnvio] = useState(null);
+  const [sucessoEnvio, setSucessoEnvio] = useState(false);
 
-  // 1. Resolve o forumId encontrando, entre os fóruns do professor, o que pertence a este conteúdo
+  // 1. Resolve o forumId encontrando, entre os fóruns do professor, o que pertence a este conteúdo.
+  //    Em paralelo, busca o conteúdo (nome, disciplina) para o título e o breadcrumb.
   const fetchDados = useCallback(async () => {
     setLoading(true);
     setErro(null);
     try {
-      const forunsRes = await listarForuns();
+      const [forunsRes, conteudoRes] = await Promise.all([
+        listarForuns(),
+        buscarConteudo(conteudoId),
+      ]);
+
+      const conteudoData = conteudoRes.data;
+      setConteudo(conteudoData);
+
+      if (conteudoData?.disciplina) {
+        try {
+          const disciplinaRes = await buscarDisciplina(conteudoData.disciplina);
+          setDisciplina(disciplinaRes.data);
+        } catch {
+          setDisciplina(null);
+        }
+      }
+
       const foruns = Array.isArray(forunsRes.data)
         ? forunsRes.data
         : forunsRes.data?.results ?? [];
@@ -109,10 +130,13 @@ export function useForum(conteudoId) {
 
       setEnviando(true);
       setErroEnvio(null);
+      setSucessoEnvio(false);
       try {
         const res = await responderPerguntaAPI(forumId, perguntaSelecionadaId, texto.trim());
         // Atualiza localmente sem recarregar a página/lista inteira
         setMensagens((prev) => [...prev, res.data]);
+        setSucessoEnvio(true);
+        setTimeout(() => setSucessoEnvio(false), 3500);
       } catch (err) {
         if (err.response?.status === 401) {
           return;
@@ -128,6 +152,8 @@ export function useForum(conteudoId) {
   return {
     loading,
     erro,
+    conteudo,
+    disciplina,
     perguntas: perguntasFiltradas,
     perguntaSelecionada,
     selecionarPergunta: setPerguntaSelecionadaId,
@@ -137,6 +163,7 @@ export function useForum(conteudoId) {
     setBusca,
     enviando,
     erroEnvio,
+    sucessoEnvio,
     handleResponder,
     refetch: fetchDados,
   };
