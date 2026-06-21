@@ -401,9 +401,10 @@ const ICONES = ['⊞', '⚛', '🌐', '📐', '🔬', '📚'];
 
 
 
-function DisciplinaCard({ d, index, onEditar, onDeletar }) {
+function DisciplinaCard({ d, index, onEditar, onDeletar, conteudos }) {
   const cor = CORES[index % CORES.length] || d.cor;
   const icone = ICONES[index % ICONES.length] || d.icone;
+  const qtdConteudos = conteudos ? conteudos.filter(c => c.disciplina === d.id).length : 0;
   return (
     <div className="disc-card">
       <div className="disc-card-header" style={{ borderTopColor: cor }}>
@@ -418,7 +419,7 @@ function DisciplinaCard({ d, index, onEditar, onDeletar }) {
         </div>
         <div className="disc-card-meta">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.8"/><polyline points="12,7 12,12 15,15" stroke="currentColor" strokeWidth="1.8"/></svg>
-          {d.conteudos_count ?? d.conteudos ?? 0} conteúdos vinculados
+          {qtdConteudos} conteúdos vinculados
         </div>
         {d.descricao && <p className="disc-card-desc">{d.descricao}</p>}
       </div>
@@ -621,7 +622,7 @@ export function Disciplinas() {
       )}
       <div className="disc-grid">
         {listaDisciplinasRender.map((d, i) => (
-          <DisciplinaCard key={d.id} d={d} index={i} onEditar={d => open('editar-disc', d)} onDeletar={d => open('deletar-disc', d)} />
+          <DisciplinaCard key={d.id} d={d} index={i} conteudos={conteudos} onEditar={d => open('editar-disc', d)} onDeletar={d => open('deletar-disc', d)} />
         ))}
       </div>
       </section>
