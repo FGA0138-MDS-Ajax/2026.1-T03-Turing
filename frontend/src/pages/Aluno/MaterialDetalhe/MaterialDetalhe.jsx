@@ -81,7 +81,7 @@ export default function MaterialDetalhe() {
 
         <main className="md-main">
           <h1 className="md-titulo">{material.nome}</h1>
-          <p className="md-subtitulo">Breve descrição do material</p>
+          {material.descricao && <p className="md-subtitulo">{material.descricao}</p>}
 
           <div className="md-corpo">
             {material.conteudoHtml ? (
@@ -109,8 +109,8 @@ export default function MaterialDetalhe() {
               <div className="md-meta__row">
                 <dt className="md-meta__label">Publicado em</dt>
                 <dd className="md-meta__valor">
-                  {material.dataPublicacao
-                    ? new Date(material.dataPublicacao).toLocaleDateString("pt-BR", {
+                  {material.data_create
+                    ? new Date(material.data_create).toLocaleDateString("pt-BR", {
                         day: "2-digit",
                         month: "short",
                         year: "numeric",
