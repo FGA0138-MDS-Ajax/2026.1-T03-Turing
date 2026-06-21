@@ -84,14 +84,30 @@ export default function MaterialDetalhe() {
           {material.descricao && <p className="md-subtitulo">{material.descricao}</p>}
 
           <div className="md-corpo">
-            {material.conteudoHtml ? (
-              <div
-                className="md-corpo__html"
-                dangerouslySetInnerHTML={{ __html: material.conteudoHtml }}
-              />
+            {material.tipo === 'pdf' && material.arquivo ? (
+              <div className="md-corpo__pdf-aviso">
+                <p style={{ fontSize: '0.9rem',  color: '#02373a', margin: 105.2, fontFamily: 'Serif' }}>Visualização embutida não disponível. Abra o PDF em uma nova aba:</p>
+                
+                <a
+                  className="md-btn-arquivo"
+                  href={material.arquivo}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Abrir PDF ↗
+                </a>
+              </div>
+            ) : material.tipo === 'link' && material.link ? (
+              <div className="md-corpo__placeholder">
+                <span className="md-corpo__placeholder-label">
+                  Este material é um link externo. Use o botão "Abrir link" ao lado.
+                </span>
+              </div>
             ) : (
               <div className="md-corpo__placeholder">
-                <span className="md-corpo__placeholder-label">Conteúdo escrito</span>
+                <span className="md-corpo__placeholder-label">
+                  {material.descricao || 'Sem conteúdo adicional para exibir.'}
+                </span>
               </div>
             )}
           </div>
@@ -152,8 +168,8 @@ export default function MaterialDetalhe() {
             <p className="md-sidebar__duvida-texto">
               Caso tenha dúvidas sobre este material, poste suas perguntas para o professor.
             </p>
-            <button className="md-btn-ir" onClick={() => navigate("/aluno/conteudos/${material.conteudo}/forum")}>
-              Ir para o fórum
+            <button className="md-btn-ir" onClick={() => navigate('/aluno/conteudos/${material.conteudo}/forum')}>
+              Ir para o forúm
             </button>
           </div>
 
