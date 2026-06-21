@@ -335,7 +335,7 @@ function ModalMatriculas({ conteudo, onClose, alunos, matriculas, onMatricular, 
                 // [Integração]: Clicou no aluno da lista -> Chama a API pra criar a matrícula
                 <div key={a.id} className="disc-dropdown-item" onClick={async () => { await onMatricular(conteudo.id, a.id); setBusca(''); }}>
                   <span className="disc-prof-avatar">{nome[0]}</span>
-                  <div><div style={{fontSize:13, fontWeight:600}}>{nome}</div><div style={{fontSize:11,color:'#7A8A96'}}>Mat: {a.matricula || '—'}</div></div>
+                  <div><div style={{fontSize:13, fontWeight:600}}>{nome}</div><div style={{fontSize:11,color:'#7A8A96'}}>Mat: {a.perfil?.cpf || '—'}</div></div>
                 </div>
               );
             })}
@@ -357,7 +357,7 @@ function ModalMatriculas({ conteudo, onClose, alunos, matriculas, onMatricular, 
                   <span className="disc-prof-avatar">{nome[0]}</span>
                   <div style={{flex:1}}>
                     <div style={{fontSize:13,fontWeight:600,color:'#1C2B3A'}}>{nome}</div>
-                    <div style={{fontSize:11,color:'#7A8A96'}}>Matrícula: {a?.matricula || '—'}</div>
+                    <div style={{fontSize:11,color:'#7A8A96'}}>Matrícula: {a?.perfil?.cpf || '—'}</div>
                   </div>
                   <button className="disc-aluno-remove" onClick={() => setConfirmRemover(m)}>Cancelar matrícula</button>
                 </div>
