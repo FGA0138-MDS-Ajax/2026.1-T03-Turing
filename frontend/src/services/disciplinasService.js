@@ -88,3 +88,6 @@ export const editarMensagem = (id, dados) =>
 
 export const deletarMensagem = (id) =>
   api.delete(`/api/interacoes/mensagens/${id}/`);
+
+export const listarMinhasMensagens = () =>
+  api.get('/api/interacoes/mensagens/');
