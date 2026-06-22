@@ -72,5 +72,22 @@ export const editarMaterial = (id, formData) =>
 export const deletarMaterial = (id) =>
   api.delete(`/api/disciplinas/materiais/${id}/`);
 
+// Fórum 
+
+export const buscarForumDoConteudo = (conteudoId) =>
+  api.get('/api/interacoes/foruns/');;
+
+export const listarMensagensDoForum = (forumId) =>
+  api.get(`/api/interacoes/mensagens/?forum=${forumId}`);
+
+export const criarMensagem = (dados) =>
+  api.post('/api/interacoes/mensagens/', dados);
+
+export const editarMensagem = (id, dados) =>
+  api.patch(`/api/interacoes/mensagens/${id}/`, dados);
+
+export const deletarMensagem = (id) =>
+  api.delete(`/api/interacoes/mensagens/${id}/`);
+
 export const listarMinhasMensagens = () =>
   api.get('/api/interacoes/mensagens/');

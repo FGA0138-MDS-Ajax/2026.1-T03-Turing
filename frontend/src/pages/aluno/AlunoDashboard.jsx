@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { BookOpen, Clock, CheckCircle, MessageCircle } from 'lucide-react';
+import { BookOpen, Clock, CheckCircle, MessageCircle} from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
-import { listarConteudos, listarDisciplinas, listarMateriais, listarMinhasMensagens } from '../../services/disciplinasService';
+import { listarConteudos, listarDisciplinas, listarMateriais, listarMinhasMensagens} from '../../services/disciplinasService';
 import api from '../../services/api';
 import '../../styles/dashboard-shared.css'
 
@@ -106,7 +106,7 @@ export function AlunoDashboard() {
     setLoadingStats(true);
     setErroStats(null);
     try {
-      const [conteudosRes, disciplinasRes, matriculasRes, materiaisRes, mensagensRe] = await Promise.all([
+      const [conteudosRes, disciplinasRes, matriculasRes, materiaisRes, mensagensRes] = await Promise.all([
         listarConteudos(),
         listarDisciplinas(),
         api.get('/api/matriculas/'),
@@ -120,10 +120,13 @@ export function AlunoDashboard() {
       const todosMat  = Array.isArray(materiaisRes.data)   ? materiaisRes.data   : [];
       const disciplinasUnicas = new Set(conteudos.map(c => c.disciplina)).size;
       const todasMensagens = Array.isArray(mensagensRes.data) ? mensagensRes.data : [];
-      const perguntasFeitas = todasMensagens.filter(m => m.resposta_para === null).length;
-      const perguntasRespondidas = todasMensagens.filter(m =>
-        m.resposta_para === null &&
-        todasMensagens.some(r => r.resposta_para === m.id)
+      const nomeAluno = user?.nome;
+      const minhasPerguntas = todasMensagens.filter(
+        m => m.resposta_para === null && m.autor_nome === nomeAluno
+      );
+      const perguntasFeitas = minhasPerguntas.length;
+      const perguntasRespondidas = minhasPerguntas.filter(p =>
+        todasMensagens.some(r => r.resposta_para === p.id)
       ).length;
 
       setStats({ disciplinasAtivas: disciplinasUnicas, perguntasFeitas, perguntasRespondidas, });
