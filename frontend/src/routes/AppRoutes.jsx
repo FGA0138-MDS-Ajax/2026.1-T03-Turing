@@ -22,6 +22,7 @@ import { Disciplinas }     from '../pages/Disciplinas/Disciplinas';
 import { MeusConteudos } from '../pages/Aluno/MeusConteudos/MeusConteudos';
 import { ConteudoEspecifico } from '../pages/Aluno/ConteudoEspecifico/ConteudoEspecifico';
 import { AlunoLayout }      from '../components/aluno/AlunoLayout';
+import { ForumConteudo } from '../pages/Aluno/Forum/ForumConteudo';
 
 function AdminLayout() {
   return (
@@ -80,11 +81,11 @@ export function AppRoutes() {
         <Route index element={<AlunoDashboard />} />
         <Route path="conteudos" element={<MeusConteudos />} />
         <Route path="conteudos/:id" element={<ConteudoEspecifico />} />
-        <Route path="conteudos/:id/forum" element={<div>Fórum - a implementar (depende de backend)</div>} />
         <Route path="explorar" element={<AlunoConteudosExplorar />} />
         <Route path="materiais" element={<AlunoMateriais />} />
         <Route path="materiais/:id" element={<AlunoMaterialDetalhe />} />
         <Route path="configuracoes" element={<AlunoConfiguracoes />} />
+        <Route path="conteudos/:id/forum" element={<ForumConteudo />} />
       </Route>
 
       <Route
