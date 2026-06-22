@@ -97,10 +97,13 @@ export default function MaterialDetalhe() {
                   Abrir PDF ↗
                 </a>
               </div>
-            ) : material.tipo === 'link' && material.link ? (
+            ) : (material.tipo === 'link' || material.tipo === 'video') && material.link ? (
               <div className="md-corpo__placeholder">
                 <span className="md-corpo__placeholder-label">
-                  Este material é um link externo. Use o botão "Abrir link" ao lado.
+                  {material.tipo === 'video'
+                    ? 'Este material é um vídeo externo. Use o botão "Abrir link" ao lado.'
+                    : 'Este material é um link externo. Use o botão "Abrir link" ao lado.'
+                  }
                 </span>
               </div>
             ) : (
