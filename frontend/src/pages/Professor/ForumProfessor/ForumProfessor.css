@@ -1,6 +1,5 @@
 .forum-page {
   padding: 24px;
-  background: #f0ede8;
   min-height: 100vh;
 }
 
@@ -39,6 +38,7 @@
   grid-template-columns: 1fr 1fr;
   gap: 24px;
   align-items: start;
+  min-width: 0;
 }
 
 
@@ -138,7 +138,10 @@
 
 /* ===== CARD BODY ===== */
 
-.forum-card-body { flex: 1; min-width: 0; }
+.forum-card-body {
+  min-width: 0;
+  overflow: hidden;
+}
 
 .forum-card-top {
   display: flex;
@@ -441,4 +444,84 @@
   padding: 1px 4px;
   border-radius: 4px;
   font-size: 12px;
+}
+
+/* Flag dentro do header, sem position absolute */
+.forum-detail-header .forum-flag-icon {
+  position: static;
+  margin-left: auto;
+  font-size: 16px;
+  color: #ccc;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0 4px;
+}
+
+.forum-detail-header .forum-flag-icon:hover {
+  color: #e24b4a;
+}
+
+/* Texto da pergunta em negrito no detalhe */
+.forum-pergunta-texto {
+  font-weight: 600;
+  margin-top: 12px;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-size: 13px;
+  color: #444;
+  line-height: 1.5;
+}
+
+.forum-pergunta-texto {
+  font-weight: 700 !important;
+}
+
+.forum-response-preview ul,
+.forum-detail-desc ul {
+  list-style: disc;
+  padding-left: 20px;
+  margin: 4px 0;
+}
+
+.forum-response-preview ol,
+.forum-detail-desc ol {
+  list-style: decimal;
+  padding-left: 20px;
+  margin: 4px 0;
+}
+
+.forum-response-preview li,
+.forum-detail-desc li {
+  margin: 2px 0;
+}
+
+.forum-left-panel {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.forum-question-card {
+  overflow: visible;
+}
+
+.forum-card-top {
+  min-width: 0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.forum-card-title {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: block;
+}
+
+.forum-card-top .forum-badge {
+  flex-shrink: 0;
 }
