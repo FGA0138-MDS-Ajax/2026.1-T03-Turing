@@ -71,3 +71,6 @@ export const editarMaterial = (id, formData) =>
 
 export const deletarMaterial = (id) =>
   api.delete(`/api/disciplinas/materiais/${id}/`);
+
+export const listarMinhasMensagens = () =>
+  api.get('/api/interacoes/mensagens/');

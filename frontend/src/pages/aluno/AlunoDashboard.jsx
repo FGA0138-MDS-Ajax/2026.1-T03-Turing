@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BookOpen, Clock, CheckCircle, MessageCircle } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
-import { listarConteudos, listarDisciplinas, listarMateriais } from '../../services/disciplinasService';
+import { listarConteudos, listarDisciplinas, listarMateriais, listarMinhasMensagens } from '../../services/disciplinasService';
 import api from '../../services/api';
 import '../../styles/dashboard-shared.css'
 
@@ -95,7 +95,7 @@ function MaterialDisponivel({ material }) {
 export function AlunoDashboard() {
   const { user } = useAuth();
 
-  const [stats, setStats]                     = useState({ disciplinasAtivas: null });
+  const [stats, setStats] = useState({ disciplinasAtivas: null, perguntasFeitas: null, perguntasRespondidas: null });
   const [conteudosRecentes, setConteudosRecentes] = useState([]);
   const [disciplinas, setDisciplinas]         = useState([]);
   const [materiais, setMateriais] = useState([]);
@@ -106,19 +106,27 @@ export function AlunoDashboard() {
     setLoadingStats(true);
     setErroStats(null);
     try {
-      const [conteudosRes, disciplinasRes, matriculasRes, materiaisRes] = await Promise.all([
+      const [conteudosRes, disciplinasRes, matriculasRes, materiaisRes, mensagensRe] = await Promise.all([
         listarConteudos(),
         listarDisciplinas(),
         api.get('/api/matriculas/'),
         listarMateriais(),
+        listarMinhasMensagens(),
       ]);
 
       const conteudos  = Array.isArray(conteudosRes.data)   ? conteudosRes.data   : [];
       const todasDisc  = Array.isArray(disciplinasRes.data) ? disciplinasRes.data : [];
       const matriculas = Array.isArray(matriculasRes.data)  ? matriculasRes.data  : [];
       const todosMat  = Array.isArray(materiaisRes.data)   ? materiaisRes.data   : [];
+      const disciplinasUnicas = new Set(conteudos.map(c => c.disciplina)).size;
+      const todasMensagens = Array.isArray(mensagensRes.data) ? mensagensRes.data : [];
+      const perguntasFeitas = todasMensagens.filter(m => m.resposta_para === null).length;
+      const perguntasRespondidas = todasMensagens.filter(m =>
+        m.resposta_para === null &&
+        todasMensagens.some(r => r.resposta_para === m.id)
+      ).length;
 
-      setStats({ disciplinasAtivas: conteudos.length });
+      setStats({ disciplinasAtivas: disciplinasUnicas, perguntasFeitas, perguntasRespondidas, });
       setDisciplinas(todasDisc);
       setMateriais(todosMat.slice(0, 5)); 
 
@@ -157,17 +165,17 @@ export function AlunoDashboard() {
         />
         <StatCard
           label="Perguntas feitas"
-          value={0}
+          value={stats.perguntasFeitas}
           icon={MessageCircle}
           color="#C46A3C"
-          loading={false}
+          loading={loadingStats}
         />
         <StatCard
           label="Perguntas respondidas"
-          value={0}
+          value={stats.perguntasRespondidas}
           icon={CheckCircle}
           color="#2F5D62"
-          loading={false}
+          loading={loadingStats}
         />
       </section>
 
