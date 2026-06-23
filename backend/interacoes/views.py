@@ -159,6 +159,7 @@ class MensagemViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 class StandartResultsSetPagination(PageNumberPagination):
+    #Paginação padrão
     page_size = 10
     page_size_query_param = 'page_size'
     max_page_size = 100
@@ -169,11 +170,14 @@ class DenunciaViewSet(viewsets.ModelViewSet):
     pagination_class = StandartResultsSetPagination
 
     def get_permissions(self):
+        # O usuário logado pode criar uma denúncia
         if self.action == 'create':
             return [IsAuthenticated()]
+        # Só Admins podem listar, ver, editar ou deletar as denúncias
         return [IsAuthenticated(), IsGoStudyAdmin()]
 
     def perform_create(self, serializer):
+        # Registra, identifica e salva as denuncias
         mensagem = serializer.validated_data.get('mensagem')
         denunciante_perfil = self.request.user.perfil
         denunciado_perfil = mensagem.autor

@@ -12,6 +12,7 @@ def criar_forum_ao_criar_conteudo(sender, instance, created, **kwargs):
 
 @receiver(pre_delete, sender=Forum)
 def barrar_exclusao_forum_denuncias(sender, instance, **kwargs):
+    # Aqui pensei em fazer uma checagem se existe alguma denúncia pendente vinculada a mensagens dentro do fórum
     tem_denuncia_aberta= Denuncia.objects.filter(mensagem__forum=instance, status='pendente').exists()
     if tem_denuncia_aberta:
         raise ValidationError("Este fórum não pode ser excluído porque existem denúncias pendentes em aberto.")
