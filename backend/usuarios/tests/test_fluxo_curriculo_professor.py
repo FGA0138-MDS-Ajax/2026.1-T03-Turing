@@ -79,7 +79,7 @@ class ProfessorTestCase(APITestCase):
 
     ## como professor
     def test_professor_criar_professor(self):
-        self.get_token('aleatorio@email.com')
+        self.get_token('professor@email.com')
         response = self.client.post('/api/usuarios/professores/create_by_admin/', {
             'perfil': {
                 "nome": "aleatorio",

@@ -152,7 +152,7 @@ class ConteudoTestCase(APITestCase):
             "descricao": "integrais",
             'status': 'encerrado',
             "disciplina": self.disciplina.id,
-            'professores':[professor2.data['id']]
+            'professores':[self.professor['id']]
         },format='json')
         print(response.data)
         self.assertEqual(response.status_code, 200)
