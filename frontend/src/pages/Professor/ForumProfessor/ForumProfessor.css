@@ -525,3 +525,72 @@
 .forum-card-top .forum-badge {
   flex-shrink: 0;
 }
+
+.forum-voltar-mobile {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .forum-container {
+    grid-template-columns: 1fr;
+  }
+
+  .forum-right-panel {
+    display: none;
+  }
+
+  .forum-page {
+    padding: 12px;
+  }
+
+  .forum-search-bar {
+    flex-direction: column;
+  }
+
+  .forum-filter-btn {
+    width: 100%;
+  }
+
+  .forum-search-input {
+    width: 100%;
+  }
+
+  .forum-card-top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .forum-card-title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+  }
+
+  .forum-painel-oculto-mobile {
+    display: none;
+  }
+
+  .forum-painel-visivel-mobile {
+    display: flex !important;
+    flex-direction: column;
+  }
+
+  .forum-voltar-mobile {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 13px;
+    color: #555;
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-bottom: 12px;
+    padding: 0;
+  }
+
+  .forum-voltar-mobile:hover {
+    color: #111;
+  }
+}

@@ -12,6 +12,7 @@ export default function ForumProfessor() {
   const navigate = useNavigate();
   const [resposta, setResposta] = useState("");
   const [prevVisualizando, setPrevVisualizando] = useState(false);
+  const [mostrandoDetalhe, setMostrandoDetalhe] = useState(false);
   const textareaRef = useRef(null);
 
   const inserirMarkdown = (antes, depois = antes) => {
@@ -97,7 +98,7 @@ export default function ForumProfessor() {
 
       <div className="forum-container">
         {/* Painel esquerdo */}
-        <div className="forum-left-panel">
+        <div className={`forum-left-panel ${mostrandoDetalhe ? "forum-painel-oculto-mobile" : ""}`}>
           <div className="forum-search-bar">
             <input
               className="forum-search-input"
@@ -128,7 +129,7 @@ export default function ForumProfessor() {
               <div
                 key={pergunta.id}
                 className={`forum-question-card ${perguntaSelecionada?.id === pergunta.id ? "selected" : ""}`}
-                onClick={() => selecionarPergunta(pergunta.id)}
+                onClick={() => { selecionarPergunta(pergunta.id); setMostrandoDetalhe(true); }}
               >
                 <span className="forum-avatar">
                   {pergunta.autor_nome?.[0]?.toUpperCase() ?? "?"}
@@ -151,7 +152,14 @@ export default function ForumProfessor() {
         </div>
 
         {/* Painel direito */}
-        <div className="forum-right-panel">
+        <div className={`forum-right-panel ${mostrandoDetalhe ? "forum-painel-visivel-mobile" : ""}`}>
+          <button
+            className="forum-voltar-mobile"
+            onClick={() => setMostrandoDetalhe(false)}
+          >
+            ← Voltar às perguntas
+          </button>
+
           {!perguntaSelecionada && (
             <div className="forum-empty">Selecione uma pergunta para visualizar o detalhe.</div>
           )}
@@ -176,8 +184,8 @@ export default function ForumProfessor() {
                   </span>
                   <button className="forum-flag-icon" type="button" title="Marcar">⚑</button>
                 </div>
-                <p className="forum-pergunta-texto">
-                    {perguntaSelecionada.texto}
+                <p className="forum-detail-desc" style={{ fontWeight: 600, marginTop: 12, whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
+                  {perguntaSelecionada.texto}
                 </p>
 
                 <div className="forum-participants">
