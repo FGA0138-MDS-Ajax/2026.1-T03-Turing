@@ -35,6 +35,7 @@ function BadgeStatus({ respondida }) {
 
 function CardPergunta({ mensagem, respostas, ativo, onClick }) {
   const respondida = respostas && respostas.length > 0;
+  const descricao = mensagem.texto.slice(0, 80) + (mensagem.texto.length > 80 ? '...' : '');
   return (
     <div
       className={`fc-card-pergunta ${ativo ? 'fc-card-pergunta--ativo' : ''}`}
@@ -46,7 +47,8 @@ function CardPergunta({ mensagem, respostas, ativo, onClick }) {
       <div className="fc-card-topo">
         <Avatar nome={mensagem.autor_nome} tipo="aluno" />
         <div className="fc-card-info">
-          <span className="fc-card-titulo">{mensagem.texto.slice(0, 80)}{mensagem.texto.length > 80 ? '...' : ''}</span>
+          <span className="fc-card-titulo">Pergunta</span>
+          <span className="fc-card-descricao">{descricao}</span>
           <BadgeStatus respondida={respondida} />
         </div>
         <span className="fc-card-seta">›</span>
