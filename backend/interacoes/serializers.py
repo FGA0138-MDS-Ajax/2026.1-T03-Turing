@@ -76,7 +76,7 @@ class ForumSerializer(serializers.ModelSerializer):
 
 class DenunciaSerializer(serializers.ModelSerializer):
     denunciante_nome = serializers.CharField(source='denunciante.nome', read_only=True)
-    denuncia_nome = serializers.CharField(source='denunciado.nome', read_only=True)
+    denunciado_nome = serializers.CharField(source='denunciado.nome', read_only=True)
 
     class Meta:
         model = Denuncia
@@ -85,7 +85,7 @@ class DenunciaSerializer(serializers.ModelSerializer):
             'mensagem',
             'motivo',
             'evidencias',
-            'denunciante'
+            'denunciante',
             'denunciante_nome',
             'denunciado',
             'denunciado_nome',
