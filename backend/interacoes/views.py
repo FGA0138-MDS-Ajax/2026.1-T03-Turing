@@ -1,14 +1,15 @@
 from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.exceptions import PermissionDenied
 from .models import Inscricao, Forum, Mensagem, Denuncia
-from .serializers import InscricaoSerializer, ForumSerializer, MensagemSerializer
+from .serializers import InscricaoSerializer, ForumSerializer, MensagemSerializer, DenunciaSerializer
 from usuarios.permissions import IsGoStudyAdmin, IsGoStudyProf, IsGoStudyAluno
 from services.email_service import enviar_email_aprovacao_professor, enviar_email_rejeicao_professor
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import status
 from django.utils import timezone
+from rest_framework.pagination import PageNumberPagination
 from turmas.models import Matricula
 
 
@@ -156,3 +157,36 @@ class MensagemViewSet(viewsets.ModelViewSet):
 
         serializer = self.get_serializer(perguntas, many=True)
         return Response(serializer.data)
+
+class StandartResultsSetPagination(PageNumberPagination):
+    page_size = 10
+    page_size_query_param = 'page_size'
+    max_page_size = 100
+
+class DenunciaViewSet(viewsets.ModelViewSet):
+    queryset = Denuncia.objects.all().order_by('-data_create')
+    serializer_class = DenunciaSerializer
+    pagination_class = StandartResultsSetPagination
+
+    def get_permissions(self):
+        if self.action == 'create':
+            return [IsAuthenticated()]
+        return [IsAuthenticated(), IsGoStudyAdmin()]
+
+    def perform_create(self, serializer):
+        mensagem = serializer.validated_data.get('mensagem')
+        denunciante_perfil = self.request.user.perfil
+        denunciado_perfil = mensagem.autor
+
+        serializer.save(
+            denunciante=denunciante_perfil,
+            denunciado=denunciado_perfil,
+            status='pendente'
+        )
+
+
+
+
+
+
+
