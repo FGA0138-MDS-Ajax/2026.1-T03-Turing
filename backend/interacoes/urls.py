@@ -7,7 +7,7 @@ router = DefaultRouter()
 router.register(r'inscricoes', InscricaoViewSet, basename='inscricao')
 router.register(r'foruns', ForumViewSet, basename='forum')
 router.register(r'mensagens', MensagemViewSet, basename='mensagem')
-router.register(r'denuncias', DenunciaViewSet, basename='denuncia')
+router.register(r'denuncias', DenunciaViewSet, basename='denuncias')
 
 urlpatterns = [
     path('', include(router.urls)),
