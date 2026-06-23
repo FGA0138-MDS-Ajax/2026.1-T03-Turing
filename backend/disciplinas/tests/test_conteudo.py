@@ -2,11 +2,13 @@ from django.contrib.auth.hashers import make_password
 from rest_framework.test import APIClient, APITestCase
 from usuarios.models import Admin, Perfil, Aluno, Professor
 from disciplinas.models import Conteudo, Disciplina
+from interacoes.models import Inscricao
 
 
 class ConteudoTestCase(APITestCase):
     @classmethod
     def setUpTestData(cls):
+        client = APIClient()
         Perfil.objects.create(
             nome='Admin',
             email='admin@email.com',
@@ -15,6 +17,23 @@ class ConteudoTestCase(APITestCase):
             tipo='admin',
             password=make_password('123456')
         )
+        login = client.post('/api/usuarios/login/', {
+            'email': 'admin@email.com',
+            'password': '123456'
+        }, format='json')
+        client.credentials(HTTP_AUTHORIZATION=f'Bearer {login.data["access"]}')
+
+        response = client.post('/api/usuarios/professores/', {
+            "perfil": {
+                "nome": "aleatorio",
+                "email": "professor1@email.com",
+                "cpf": "12345678901",
+                "data_nascimento": "2005-05-12",
+                "tipo": "professor",
+                "password": "123456"
+            }
+        }, format='json')
+        cls.professor = response.data
         Perfil.objects.create(
             nome='Aluno Teste',
             email='aluno@email.com',
@@ -23,17 +42,8 @@ class ConteudoTestCase(APITestCase):
             tipo='aluno',
             password=make_password('123456')
         )
-        perfil_professor=Perfil.objects.create(
-            nome='professor teste',
-            email='professor@email.com',
-            cpf='22222222222',
-            data_nascimento='2000-01-01',
-            tipo='professor',
-            password=make_password('123456')
-        )
-        cls.professor=Professor.objects.create(
-            perfil=perfil_professor
-        )
+
+
         cls.disciplina = Disciplina.objects.create(
             nome='Cálculo I',
             descricao='Introdução a limites, derivadas e integrais.',
@@ -57,6 +67,14 @@ class ConteudoTestCase(APITestCase):
     def setUp(self):
         self.get_token('admin@email.com')
 
+        professor = Professor.objects.get(id=self.professor['id'])
+        inscricao = Inscricao.objects.get(professor=professor)
+        inscricao.status = 'aprovado'
+        inscricao.perfil_aprovado = True
+        inscricao.save()
+        professor.perfil.is_active = True
+        professor.perfil.save()
+
 ### get anonimo
     def test_listar_conteudo_GET(self):
         self.client.credentials()
@@ -72,7 +90,7 @@ class ConteudoTestCase(APITestCase):
         print(response.data)
 
     def test_post_conteudo(self):
-        self.get_token('professor@email.com')
+        self.get_token('professor1@email.com')
         response = self.client.post('/api/disciplinas/conteudos/', {
             "nome": "Derivadas",
             "descricao": "Derivadas",
@@ -83,7 +101,7 @@ class ConteudoTestCase(APITestCase):
         self.assertEqual(response.status_code, 403)
 
     def test_put_conteudo(self):
-        self.get_token('professor@email.com')
+        self.get_token('professor1@email.com')
         response = self.client.put('/api/disciplinas/conteudos/1/', {
             "nome": "Derivadas",
             "descricao": "Derivadas",
@@ -95,7 +113,7 @@ class ConteudoTestCase(APITestCase):
         print(response.data)
 
     def test_delete_conteudo(self):
-        self.get_token('professor@email.com')
+        self.get_token('professor1@email.com')
         response = self.client.delete('/api/disciplinas/conteudos/1/')
         self.assertEqual(response.status_code, 403)
         print(response.data)
@@ -115,7 +133,7 @@ class ConteudoTestCase(APITestCase):
         self.assertEqual(response.data['nome'], 'integrais')
 
     def test_put_admin(self):
-        response = self.client.put('/api/disciplinas/conteudos/1/', {
+        response = self.client.put(f'/api/disciplinas/conteudos/{self.professor['id']}/', {
             "nome": "integrais",
             "descricao": "integrais",
             'status': 'encerrado',
