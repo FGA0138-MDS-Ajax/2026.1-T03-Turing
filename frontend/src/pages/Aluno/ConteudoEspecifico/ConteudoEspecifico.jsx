@@ -290,6 +290,7 @@ export function ConteudoEspecifico() {
           </section>
 
           {/* Fórum */}
+          
           <section className="ce-forum-section">
             <h2 className="ce-forum-titulo">Precisa de ajuda?</h2>
             <p className="ce-forum-desc">
