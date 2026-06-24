@@ -1,0 +1,203 @@
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 16px;
+}
+
+.modal-box {
+  background: #f0ede8;
+  border-radius: 16px;
+  padding: 32px 28px;
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+}
+
+
+.modal-title {
+  font-size: 22px;
+  font-weight: 600;
+  color: #1a2e2a;
+  margin: 0;
+}
+
+
+.modal-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.modal-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #2c3a36;
+}
+
+.modal-input,
+.modal-select,
+.modal-textarea {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #d0cdc8;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #333;
+  background: #faf9f7;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.15s;
+  box-sizing: border-box;
+}
+
+.modal-input:focus,
+.modal-select:focus,
+.modal-textarea:focus {
+  border-color: #1a2e2a;
+}
+
+.modal-input::placeholder {
+  color: #b0ada8;
+}
+
+.modal-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 36px;
+  cursor: pointer;
+}
+
+.modal-select option[value=""] {
+  color: #b0ada8;
+}
+
+.modal-textarea {
+  resize: vertical;
+  min-height: 120px;
+  line-height: 1.5;
+}
+
+
+.modal-field + .modal-field {
+  padding-top: 4px;
+  border-top: 0.5px solid #dedad4;
+}
+
+.modal-hint {
+  font-size: 12px;
+  color: #999;
+  line-height: 1.4;
+}
+
+.modal-error-msg {
+  font-size: 12px;
+  color: #a32d2d;
+}
+
+.modal-input-error {
+  border-color: #e24b4a !important;
+  background: #fff8f8;
+}
+
+.modal-feedback {
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.modal-feedback-success {
+  background: #EAF3DE;
+  border: 0.5px solid #97C459;
+  color: #27500A;
+}
+
+.modal-feedback-error {
+  background: #FCEBEB;
+  border: 0.5px solid #F09595;
+  color: #791F1F;
+}
+
+/* ===== Botoees===== */
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.modal-btn-cancel {
+  padding: 10px 24px;
+  border-radius: 100px;
+  border: 1px solid #aaa;
+  background: transparent;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  color: #444;
+  transition: background 0.15s, border-color 0.15s;
+  font-family: inherit;
+}
+
+.modal-btn-cancel:hover:not(:disabled) {
+  background: #e8e4dd;
+  border-color: #888;
+}
+
+.modal-btn-cancel:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.modal-btn-primary {
+  padding: 10px 24px;
+  border-radius: 100px;
+  border: none;
+  background: #1a2e2a;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  color: #fff;
+  transition: opacity 0.15s;
+  font-family: inherit;
+  min-width: 140px;
+}
+
+.modal-btn-primary:hover:not(:disabled) {
+  opacity: 0.85;
+}
+
+.modal-btn-primary:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/*====Responsividade=== */
+
+@media (max-width: 520px) {
+  .modal-box {
+    padding: 24px 20px;
+    border-radius: 12px;
+  }
+
+  .modal-actions {
+    flex-direction: column-reverse;
+  }
+
+  .modal-btn-cancel,
+  .modal-btn-primary {
+    width: 100%;
+    text-align: center;
+  }
+}
