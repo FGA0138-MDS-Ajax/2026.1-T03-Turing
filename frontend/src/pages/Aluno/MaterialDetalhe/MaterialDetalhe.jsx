@@ -107,7 +107,7 @@ export default function MaterialDetalhe() {
           <div className="md-corpo">
             {material.tipo === 'pdf' && material.arquivo ? (
               <div className="md-corpo__pdf-aviso">
-                <p style={{ fontSize: '0.9rem', margin: 150.2, textAlign: 'center' }}>Visualização embutida não disponível. <br></br>Faça o download do arquivo.</p>
+                <p style={{ fontSize: '0.9rem', margin: 150.2, textAlign: 'center' }}>Visualização embutida não disponível. <br></br>Use o botão "↓ Download do arquivo" ao lado.</p>
                 
                 
               </div>
