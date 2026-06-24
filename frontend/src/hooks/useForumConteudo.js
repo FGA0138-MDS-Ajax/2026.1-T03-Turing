@@ -43,17 +43,18 @@ export function useForumConteudo(conteudoId) {
     carregar();
   }, [carregar]);
 
-  const enviarPergunta = useCallback(async (texto) => {
+  const enviarPergunta = useCallback(async ({ titulo, texto }) => {
     if (!forumId) return false;
     setEnviando(true);
     setErroEnvio(null);
     try {
-      await criarMensagem({ forum: forumId, texto });
+      await criarMensagem({ forum: forumId, titulo, texto });
       await carregar(); 
       return true;
     } catch (err) {
       console.error(err);
-      const msg = err.response?.data?.texto?.[0]
+      const msg = err.response?.data?.titulo?.[0]
+        || err.response?.data?.texto?.[0]
         || err.response?.data?.detail
         || 'Erro ao enviar pergunta.';
       setErroEnvio(msg);

@@ -1,7 +1,5 @@
-
-
 .fc-page {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;s
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   color: #1F2937;
 }
 
@@ -425,8 +423,25 @@
   color: #9CA3AF;
 }
 
-.fc-detalhe-autor .fc-badge {
+.fc-btn-flag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
   margin-left: auto;
+  background: transparent;
+    border: none;
+    border-radius: 6px;
+    color: #9CA3AF;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  
+  .fc-btn-flag:hover {
+    background: #F3F4F6;
+    color: #DC2626;
 }
 
 .fc-detalhe-titulo {
@@ -437,6 +452,13 @@
   line-height: 1.5;
 }
 
+.fc-detalhe-texto {
+  font-size: 13.5px;
+  font-weight: 400;
+  color: #4B5563;
+  margin: 0;
+  line-height: 1.5;
+}
 /* ---------- Respostas ---------- */
 
 .fc-respostas-label {
@@ -563,10 +585,41 @@
   margin-bottom: 8px;
 }
 
+.fc-label--espaco {
+  margin-top: 16px;
+}
 .fc-required {
   color: #DC2626;
 }
 
+.fc-input {
+  width: 100%;
+  font-family: inherit;
+  font-size: 13.5px;
+  color: #1F2937;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  padding: 10px 12px;
+  box-sizing: border-box;
+}
+
+.fc-input::placeholder {
+  color: #9CA3AF;
+}
+
+.fc-input:focus {
+  outline: none;
+  border-color: #2F5D62;
+  box-shadow: 0 0 0 3px rgba(47, 93, 98, 0.12);
+}
+
+.fc-input--erro {
+  border-color: #DC2626;
+}
+
+.fc-input--erro:focus {
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.12);
+}
 .fc-textarea {
   width: 100%;
   font-family: inherit;

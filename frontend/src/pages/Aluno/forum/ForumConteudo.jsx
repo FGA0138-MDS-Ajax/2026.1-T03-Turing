@@ -2,6 +2,8 @@ import { useState, useMemo } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useForumConteudo } from '../../../hooks/useForumConteudo';
 import { useConteudoEspecifico } from '../../../hooks/useConteudoEspecifico';
+import ModalPergunta from '../../../components/ModalPergunta';
+import ModalDenuncia from '../../../components/ModalDenuncia';
 import './ForumConteudo.css';
 
 function formatarData(iso) {
@@ -35,6 +37,7 @@ function BadgeStatus({ respondida }) {
 
 function CardPergunta({ mensagem, respostas, ativo, onClick }) {
   const respondida = respostas && respostas.length > 0;
+  const titulo = mensagem.titulo?.trim() || 'Pergunta';
   const descricao = mensagem.texto.slice(0, 80) + (mensagem.texto.length > 80 ? '...' : '');
   return (
     <div
@@ -47,7 +50,7 @@ function CardPergunta({ mensagem, respostas, ativo, onClick }) {
       <div className="fc-card-topo">
         <Avatar nome={mensagem.autor_nome} tipo="aluno" />
         <div className="fc-card-info">
-          <span className="fc-card-titulo">Pergunta</span>
+          <span className="fc-card-titulo">{titulo}</span>
           <span className="fc-card-descricao">{descricao}</span>
           <BadgeStatus respondida={respondida} />
         </div>
@@ -62,7 +65,23 @@ function CardPergunta({ mensagem, respostas, ativo, onClick }) {
 }
 
 
-function PainelDetalhe({ pergunta, respostas }) {
+function IconeFlag({ onClick, label }) {
+  return (
+    <button
+      type="button"
+      className="fc-btn-flag"
+      onClick={onClick}
+      aria-label={label}
+      title="Denunciar"
+    >
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+        <path d="M5 21V4a1 1 0 0 1 1-1h11.5a1 1 0 0 1 .8 1.6L15 9l3.3 4.4a1 1 0 0 1-.8 1.6H6" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
+      </svg>
+    </button>
+  );
+}
+
+function PainelDetalhe({ pergunta, respostas, onDenunciar }) {
   if (!pergunta) {
     return (
       <div className="fc-detalhe-vazio">
@@ -81,8 +100,15 @@ function PainelDetalhe({ pergunta, respostas }) {
             <span className="fc-detalhe-data">{formatarData(pergunta.data_create)}</span>
           </div>
           <BadgeStatus respondida={respostas.length > 0} />
+          <IconeFlag
+            label="Denunciar pergunta"
+            onClick={() => onDenunciar(pergunta.id)}
+          />
         </div>
-        <h3 className="fc-detalhe-titulo">{pergunta.texto}</h3>
+        <h3 className="fc-detalhe-titulo">{pergunta.titulo?.trim() || pergunta.texto}</h3>
+        {pergunta.titulo?.trim() && (
+          <p className="fc-detalhe-texto">{pergunta.texto}</p>
+        )}
       </div>
 
       {respostas.length > 0 && (
@@ -96,6 +122,10 @@ function PainelDetalhe({ pergunta, respostas }) {
                   <span className="fc-detalhe-nome">{r.autor_nome}</span>
                   <span className="fc-detalhe-data">{formatarData(r.data_create)}</span>
                 </div>
+                <IconeFlag
+                  label="Denunciar resposta"
+                  onClick={() => onDenunciar(r.id)}
+                />
               </div>
               <p className="fc-resposta-texto">{r.texto}</p>
             </div>
@@ -110,51 +140,9 @@ function PainelDetalhe({ pergunta, respostas }) {
   );
 }
 
-function ModalNovaPergunta({ onFechar, onEnviar, enviando, erroEnvio }) {
-  const [texto, setTexto] = useState('');
-  const [erroLocal, setErroLocal] = useState('');
 
-  const handleEnviar = async () => {
-    if (!texto.trim()) {
-      setErroLocal('A pergunta não pode estar vazia.');
-      return;
-    }
-    const ok = await onEnviar(texto.trim());
-    if (ok) onFechar();
-  };
 
-  return (
-    <div className="fc-overlay" onClick={e => e.target === e.currentTarget && onFechar()}>
-      <div className="fc-modal">
-        <div className="fc-modal-header">
-          <h2 className="fc-modal-titulo">Nova pergunta</h2>
-          <button className="fc-modal-fechar" onClick={onFechar}>✕</button>
-        </div>
-        <div className="fc-modal-body">
-          <label className="fc-label">Sua dúvida <span className="fc-required">*</span></label>
-          <textarea
-            className={`fc-textarea ${erroLocal || erroEnvio ? 'fc-textarea--erro' : ''}`}
-            rows={5}
-            placeholder="Descreva sua dúvida com detalhes. Seja claro e objetivo, contextualize e dê exemplos do que já fez..."
-            value={texto}
-            onChange={e => { setTexto(e.target.value); setErroLocal(''); }}
-          />
-          {(erroLocal || erroEnvio) && (
-            <span className="fc-erro-msg">{erroLocal || erroEnvio}</span>
-          )}
-        </div>
-        <div className="fc-modal-acoes">
-          <button className="fc-btn-cancelar" onClick={onFechar} disabled={enviando}>
-            Cancelar
-          </button>
-          <button className="fc-btn-enviar" onClick={handleEnviar} disabled={enviando}>
-            {enviando ? 'Enviando...' : 'Perguntar'}
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
+
 
 
 export function ForumConteudo() {
@@ -175,6 +163,7 @@ export function ForumConteudo() {
   const [busca, setBusca] = useState('');
   const [filtroStatus, setFiltroStatus] = useState('todos');
   const [modalAberto, setModalAberto] = useState(false);
+  const [denunciaId, setDenunciaId] = useState(null);
 
   useMemo(() => {
     if (perguntas.length > 0 && !perguntaSelecionada) {
@@ -186,6 +175,7 @@ export function ForumConteudo() {
     return perguntas.filter(p => {
       const respondida = (respostasMap[p.id] || []).length > 0;
       const buscaOk = !busca || p.texto.toLowerCase().includes(busca.toLowerCase())
+        || p.titulo?.toLowerCase().includes(busca.toLowerCase())
         || p.autor_nome?.toLowerCase().includes(busca.toLowerCase());
       const statusOk =
         filtroStatus === 'todos' ||
@@ -280,6 +270,7 @@ export function ForumConteudo() {
               <PainelDetalhe
                 pergunta={perguntaSelecionada}
                 respostas={perguntaSelecionada ? (respostasMap[perguntaSelecionada.id] || []) : []}
+                onDenunciar={(itemId) => setDenunciaId(itemId)}
               />
 
               <div className="fc-orientacoes">
@@ -296,14 +287,19 @@ export function ForumConteudo() {
         )}
       </div>
 
-      {modalAberto && (
-        <ModalNovaPergunta
-          onFechar={() => setModalAberto(false)}
-          onEnviar={enviarPergunta}
-          enviando={enviando}
-          erroEnvio={erroEnvio}
-        />
-      )}
+      <ModalPergunta
+        isOpen={modalAberto}
+        onClose={() => setModalAberto(false)}
+        onEnviar={enviarPergunta}
+        enviando={enviando}
+        erroEnvio={erroEnvio}
+      />
+
+      <ModalDenuncia
+        isOpen={denunciaId !== null}
+        onClose={() => setDenunciaId(null)}
+        forumId={denunciaId}
+      />
     </>
   );
 }
