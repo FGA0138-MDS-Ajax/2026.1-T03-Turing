@@ -1,5 +1,5 @@
-import { useState, useMemo } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useState, useMemo, useEffect } from 'react';
+import { useParams, Link } from 'react-router-dom';
 import { useForumConteudo } from '../../../hooks/useForumConteudo';
 import { useConteudoEspecifico } from '../../../hooks/useConteudoEspecifico';
 import ModalPergunta from '../../../components/ModalPergunta';
@@ -8,10 +8,21 @@ import './ForumConteudo.css';
 
 function formatarData(iso) {
   if (!iso) return '';
-  return new Date(iso).toLocaleDateString('pt-BR', {
-    day: '2-digit', month: 'short', year: 'numeric',
-    hour: '2-digit', minute: '2-digit',
-  });
+  const data = new Date(iso);
+  if (Number.isNaN(data.getTime())) return '';
+
+  const dataParte = new Intl.DateTimeFormat('pt-BR', {
+    day: '2-digit',
+    month: '2-digit',
+  }).format(data);
+
+  const horaParte = new Intl.DateTimeFormat('pt-BR', {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  }).format(data);
+
+  return `${dataParte} ${horaParte}`;
 }
 
 function iniciais(nome) {
@@ -35,10 +46,36 @@ function BadgeStatus({ respondida }) {
     : <span className="fc-badge fc-badge--aguardando">Aguardando resposta</span>;
 }
 
+function separarTituloDescricao(mensagem) {
+  const tituloOriginal = mensagem?.titulo?.trim();
+  const textoCompleto = mensagem?.texto?.trim() || '';
+
+  if (tituloOriginal) {
+    return { titulo: tituloOriginal, descricao: textoCompleto };
+  }
+
+  if (!textoCompleto) {
+    return { titulo: 'Sem título', descricao: '' };
+  }
+
+  const partes = textoCompleto.split(/\n\s*\n/);
+  if (partes.length > 1) {
+    const [tituloExtraido, ...descricaoPartes] = partes;
+    return {
+      titulo: tituloExtraido.trim(),
+      descricao: descricaoPartes.join('\n\n').trim(),
+    };
+  }
+
+  return { titulo: textoCompleto, descricao: '' };
+}
+
 function CardPergunta({ mensagem, respostas, ativo, onClick }) {
   const respondida = respostas && respostas.length > 0;
-  const titulo = mensagem.titulo?.trim() || 'Pergunta';
-  const descricao = mensagem.texto.slice(0, 80) + (mensagem.texto.length > 80 ? '...' : '');
+  const { titulo, descricao } = separarTituloDescricao(mensagem);
+  const descricaoResumo = descricao
+    ? descricao.slice(0, 80) + (descricao.length > 80 ? '...' : '')
+    : '';
   return (
     <div
       className={`fc-card-pergunta ${ativo ? 'fc-card-pergunta--ativo' : ''}`}
@@ -51,8 +88,10 @@ function CardPergunta({ mensagem, respostas, ativo, onClick }) {
         <Avatar nome={mensagem.autor_nome} tipo="aluno" />
         <div className="fc-card-info">
           <span className="fc-card-titulo">{titulo}</span>
-          <span className="fc-card-descricao">{descricao}</span>
           <BadgeStatus respondida={respondida} />
+          {descricaoResumo && (
+            <span className="fc-card-descricao">{descricaoResumo}</span>
+          )}
         </div>
         <span className="fc-card-seta">›</span>
       </div>
@@ -90,6 +129,8 @@ function PainelDetalhe({ pergunta, respostas, onDenunciar }) {
     );
   }
 
+  const { titulo, descricao } = separarTituloDescricao(pergunta);
+
   return (
     <div className="fc-detalhe">
       <div className="fc-detalhe-pergunta">
@@ -105,9 +146,9 @@ function PainelDetalhe({ pergunta, respostas, onDenunciar }) {
             onClick={() => onDenunciar(pergunta.id)}
           />
         </div>
-        <h3 className="fc-detalhe-titulo">{pergunta.titulo?.trim() || pergunta.texto}</h3>
-        {pergunta.titulo?.trim() && (
-          <p className="fc-detalhe-texto">{pergunta.texto}</p>
+        <h3 className="fc-detalhe-titulo">{titulo}</h3>
+        {descricao && (
+          <p className="fc-detalhe-texto">{descricao}</p>
         )}
       </div>
 
@@ -149,23 +190,22 @@ export function ForumConteudo() {
   const { id } = useParams();
   const { conteudo, disciplina } = useConteudoEspecifico(id);
   const {
+    forumId,
     perguntas,
     respostasMap,
     loading,
     erro,
     refetch,
-    enviarPergunta,
-    enviando,
-    erroEnvio,
   } = useForumConteudo(id);
 
   const [perguntaSelecionada, setPerguntaSelecionada] = useState(null);
   const [busca, setBusca] = useState('');
   const [filtroStatus, setFiltroStatus] = useState('todos');
   const [modalAberto, setModalAberto] = useState(false);
-  const [denunciaId, setDenunciaId] = useState(null);
+  const [modalDenunciaAberto, setModalDenunciaAberto] = useState(false);
+  const [mobileModo, setMobileModo] = useState('lista');
 
-  useMemo(() => {
+  useEffect(() => {
     if (perguntas.length > 0 && !perguntaSelecionada) {
       setPerguntaSelecionada(perguntas[0]);
     }
@@ -185,6 +225,17 @@ export function ForumConteudo() {
     });
   }, [perguntas, respostasMap, busca, filtroStatus]);
 
+  const selecionarPergunta = (pergunta) => {
+    setPerguntaSelecionada(pergunta);
+    setMobileModo('detalhe');
+
+    // Sempre sobe para o topo da página ao selecionar uma pergunta.
+    // Assim o usuário vê o detalhe imediatamente em qualquer tamanho de tela.
+    window.requestAnimationFrame(() => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  };
+
   return (
     <>
       <div className="fc-page">
@@ -199,9 +250,9 @@ export function ForumConteudo() {
 
         <div className="fc-header">
           <div>
+            <Link className="fc-voltar" to={`/aluno/conteudos/${id}`}>← Voltar ao conteúdo</Link>
             <h1 className="fc-titulo">{conteudo?.nome ?? 'Carregando...'}</h1>
             <p className="fc-subtitulo">Fórum de dúvidas desse conteúdo com professor e colegas</p>
-            <Link className="fc-voltar" to={`/aluno/conteudos/${id}`}>← Voltar ao conteúdo</Link>
           </div>
           <button className="fc-btn-perguntar" onClick={() => setModalAberto(true)}>
             + Perguntar algo
@@ -219,7 +270,16 @@ export function ForumConteudo() {
         {!loading && !erro && (
           <div className="fc-conteudo">
 
-            <div className="fc-coluna-lista">
+            <div className={`fc-coluna-lista ${mobileModo === 'detalhe' ? 'fc-mobile-hide' : ''}`}>
+              <div className="fc-orientacoes fc-orientacoes--mobile">
+                <h4 className="fc-orientacoes-titulo">Orientações para melhores perguntas</h4>
+                <ul className="fc-orientacoes-lista">
+                  <li>Seja claro e objetivo</li>
+                  <li>Contextualize</li>
+                  <li>Dê exemplos do que já fez</li>
+                </ul>
+              </div>
+
               <div className="fc-filtros">
                 <div className="fc-busca-wrap">
                   <svg className="fc-busca-icone" width="14" height="14" viewBox="0 0 24 24" fill="none">
@@ -259,21 +319,29 @@ export function ForumConteudo() {
                       mensagem={p}
                       respostas={respostasMap[p.id] || []}
                       ativo={perguntaSelecionada?.id === p.id}
-                      onClick={() => setPerguntaSelecionada(p)}
+                      onClick={() => selecionarPergunta(p)}
                     />
                   ))}
                 </div>
               )}
             </div>
 
-            <div className="fc-coluna-detalhe">
+            <div className={`fc-coluna-detalhe ${mobileModo === 'lista' ? 'fc-mobile-hide' : ''}`}>
+              <button
+                type="button"
+                className="fc-mobile-voltar"
+                onClick={() => setMobileModo('lista')}
+              >
+                ← Ver perguntas
+              </button>
+
               <PainelDetalhe
                 pergunta={perguntaSelecionada}
                 respostas={perguntaSelecionada ? (respostasMap[perguntaSelecionada.id] || []) : []}
-                onDenunciar={(itemId) => setDenunciaId(itemId)}
+                onDenunciar={() => setModalDenunciaAberto(true)}
               />
 
-              <div className="fc-orientacoes">
+              <div className="fc-orientacoes fc-orientacoes--desktop">
                 <h4 className="fc-orientacoes-titulo">Orientações para melhores perguntas</h4>
                 <ul className="fc-orientacoes-lista">
                   <li>Seja claro e objetivo</li>
@@ -290,15 +358,14 @@ export function ForumConteudo() {
       <ModalPergunta
         isOpen={modalAberto}
         onClose={() => setModalAberto(false)}
-        onEnviar={enviarPergunta}
-        enviando={enviando}
-        erroEnvio={erroEnvio}
+        conteudoId={id}
+        onSuccess={refetch}
       />
 
       <ModalDenuncia
-        isOpen={denunciaId !== null}
-        onClose={() => setDenunciaId(null)}
-        forumId={denunciaId}
+        isOpen={modalDenunciaAberto}
+        onClose={() => setModalDenunciaAberto(false)}
+        forumId={forumId}
       />
     </>
   );

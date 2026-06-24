@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import api from "../services/api";
 import "./Modal.css";
 
 export default function ModalPergunta({ isOpen, onClose, conteudoId, onSuccess }) {
@@ -38,22 +39,32 @@ export default function ModalPergunta({ isOpen, onClose, conteudoId, onSuccess }
     setLoading(true);
     setFeedback(null);
     try {
-      const token = localStorage.getItem("token");
-      const response = await fetch("/forum/perguntas/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ conteudo_id: conteudoId, titulo, mensagem }),
+      const forunsRes = await api.get("/api/interacoes/foruns/");
+      const foruns = Array.isArray(forunsRes.data) ? forunsRes.data : [];
+      const forum = foruns.find((f) => String(f.conteudo) === String(conteudoId));
+
+      if (!forum) {
+        throw new Error("Fórum não encontrado para este conteúdo.");
+      }
+
+      const textoFinal = titulo.trim()
+        ? `${titulo.trim()}\n\n${mensagem.trim()}`
+        : mensagem.trim();
+
+      const response = await api.post("/api/interacoes/mensagens/", {
+        forum: forum.id,
+        texto: textoFinal,
       });
-      if (!response.ok) throw new Error("Erro ao enviar pergunta.");
-      const data = await response.json();
+
       setFeedback({ type: "success", msg: "Pergunta enviada com sucesso!" });
-      if (onSuccess) onSuccess(data);
+      if (onSuccess) onSuccess(response.data);
       setTimeout(handleClose, 1800);
-    } catch {
-      setFeedback({ type: "error", msg: "Falha ao enviar. Tente novamente." });
+    } catch (err) {
+      const msg = err.response?.data?.texto?.[0]
+        || err.response?.data?.detail
+        || err.message
+        || "Falha ao enviar. Tente novamente.";
+      setFeedback({ type: "error", msg });
     } finally {
       setLoading(false);
     }

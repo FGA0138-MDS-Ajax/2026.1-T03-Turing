@@ -49,7 +49,8 @@ export function useForumConteudo(conteudoId) {
     setErroEnvio(null);
     try {
       await criarMensagem({ forum: forumId, titulo, texto });
-      await carregar(); 
+      await carregar();
+
       return true;
     } catch (err) {
       console.error(err);
@@ -64,7 +65,9 @@ export function useForumConteudo(conteudoId) {
     }
   }, [forumId, carregar]);
 
-  const perguntas = mensagens.filter(m => m.resposta_para === null);
+  const perguntas = mensagens
+    .filter(m => m.resposta_para === null)
+    .sort((a, b) => new Date(b.data_create) - new Date(a.data_create));
   const respostasMap = mensagens.reduce((acc, m) => {
     if (m.resposta_para !== null) {
       if (!acc[m.resposta_para]) acc[m.resposta_para] = [];

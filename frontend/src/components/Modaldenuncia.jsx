@@ -46,24 +46,8 @@ export default function ModalDenuncia({ isOpen, onClose, forumId }) {
     if (!validate()) return;
     setLoading(true);
     setFeedback(null);
-    try {
-      const token = localStorage.getItem("token");
-      const response = await fetch("/forum/denuncia/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ forum_id: forumId, motivo, mensagem }),
-      });
-      if (!response.ok) throw new Error("Erro ao enviar denúncia.");
-      setFeedback({ type: "success", msg: "Denúncia enviada com sucesso!" });
-      setTimeout(handleClose, 1800);
-    } catch {
-      setFeedback({ type: "error", msg: "Falha ao enviar. Tente novamente." });
-    } finally {
-      setLoading(false);
-    }
+    setFeedback({ type: "error", msg: "Endpoint não encontrado. Tente novamente mais tarde." });
+    setLoading(false);
   };
 
   const isDisabled = !motivo || !mensagem.trim() || loading;
