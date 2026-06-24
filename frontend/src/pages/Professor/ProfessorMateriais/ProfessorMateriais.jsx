@@ -134,7 +134,7 @@ function ModalMaterialEditar({ material, onClose, onSalvar, loading, conteudos }
               <span className="pm-tipo-sub">{t.sub}</span>
             </button>
           ))}
-        </div>
+      </div>
 
         <label className="pm-label">Título do material</label>
         <input
@@ -172,6 +172,9 @@ function ModalMaterialEditar({ material, onClose, onSalvar, loading, conteudos }
           </>
         )}
 
+
+    {!['video', 'link'].includes(tipo) && (
+      <>
         <label className="pm-label">Substituir arquivo</label>
         <div
           className={`pm-dropzone ${dragging ? 'pm-dropzone--drag' : ''}`}
@@ -201,12 +204,14 @@ function ModalMaterialEditar({ material, onClose, onSalvar, loading, conteudos }
           style={{ display: 'none' }}
           onChange={e => setArquivo(e.target.files?.[0] || null)}
         />
-      </div>
+      </>
+    )}
 
       <div className="pm-modal-acoes">
         <button className="pm-btn-adicionar pm-modal-acoes--center" onClick={handleSubmit} disabled={loading}>
           {loading ? 'Salvando...' : 'Salvar alterações'}
         </button>
+      </div>
       </div>
     </ModalOverlay>
   );

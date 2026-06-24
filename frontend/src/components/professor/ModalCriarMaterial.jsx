@@ -144,6 +144,9 @@ function ModalCriarMaterial({ onClose, onSalvar, loading, conteudos }) {
             <input
               className={`pm-input ${erros.link ? 'pm-input--erro' : ''}`}
               placeholder="https://..."
+              type ="url"
+              autoComplete="off"
+              name="material-url"
               value={form.link}
               onChange={e => { setForm({ ...form, link: e.target.value }); setErros(prev => ({ ...prev, link: undefined })); }}
             />
