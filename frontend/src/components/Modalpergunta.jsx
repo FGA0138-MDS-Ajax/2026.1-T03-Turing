@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import "./Modal.css";
+import { buscarForumPorConteudo, criarMensagem } from "../../services/forumService";
 
 export default function ModalPergunta({ isOpen, onClose, conteudoId, onSuccess }) {
   const [titulo, setTitulo] = useState("");
@@ -38,22 +39,18 @@ export default function ModalPergunta({ isOpen, onClose, conteudoId, onSuccess }
     setLoading(true);
     setFeedback(null);
     try {
-      const token = localStorage.getItem("token");
-      const response = await fetch("/forum/perguntas/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ conteudo_id: conteudoId, titulo, mensagem }),
-      });
-      if (!response.ok) throw new Error("Erro ao enviar pergunta.");
-      const data = await response.json();
+      const { data: foruns } = await buscarForumPorConteudo(conteudoId);
+      const forumId = Array.isArray(foruns) ? foruns[0]?.id : foruns?.id;
+      if (!forumId) throw new Error("Fórum não encontrado.");
+
+      const { data } = await criarMensagem(forumId, `**${titulo}**\n\n${mensagem}`);
+
       setFeedback({ type: "success", msg: "Pergunta enviada com sucesso!" });
       if (onSuccess) onSuccess(data);
       setTimeout(handleClose, 1800);
-    } catch {
-      setFeedback({ type: "error", msg: "Falha ao enviar. Tente novamente." });
+    } catch (err) {
+      const msg = err?.response?.data?.detail ?? "Falha ao enviar. Tente novamente.";
+      setFeedback({ type: "error", msg });
     } finally {
       setLoading(false);
     }
@@ -73,7 +70,7 @@ export default function ModalPergunta({ isOpen, onClose, conteudoId, onSuccess }
           <input
             type="text"
             className={`modal-input ${errors.titulo ? "modal-input-error" : ""}`}
-            placeholder="Ex: duvida sobre derivadas"
+            placeholder="Ex: dúvida sobre derivadas"
             value={titulo}
             onChange={(e) => { setTitulo(e.target.value); setErrors((p) => ({ ...p, titulo: "" })); }}
           />

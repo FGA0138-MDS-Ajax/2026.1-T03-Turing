@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import "./Modal.css";
+import { criarDenuncia } from "../../services/forumService";
 
 const MOTIVOS = [
   { value: "", label: "Selecione um motivo" },
@@ -47,20 +48,12 @@ export default function ModalDenuncia({ isOpen, onClose, forumId }) {
     setLoading(true);
     setFeedback(null);
     try {
-      const token = localStorage.getItem("token");
-      const response = await fetch("/forum/denuncia/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ forum_id: forumId, motivo, mensagem }),
-      });
-      if (!response.ok) throw new Error("Erro ao enviar denúncia.");
+      await criarDenuncia(forumId, motivo, mensagem);
       setFeedback({ type: "success", msg: "Denúncia enviada com sucesso!" });
       setTimeout(handleClose, 1800);
-    } catch {
-      setFeedback({ type: "error", msg: "Falha ao enviar. Tente novamente." });
+    } catch (err) {
+      const msg = err?.response?.data?.detail ?? "Falha ao enviar. Tente novamente.";
+      setFeedback({ type: "error", msg });
     } finally {
       setLoading(false);
     }
@@ -73,10 +66,10 @@ export default function ModalDenuncia({ isOpen, onClose, forumId }) {
   return (
     <div className="modal-overlay" onClick={handleClose}>
       <div className="modal-box" onClick={(e) => e.stopPropagation()}>
-        <h2 className="modal-title">Denuncia</h2>
+        <h2 className="modal-title">Denúncia</h2>
 
         <div className="modal-field">
-          <label className="modal-label">motivo da denuncia</label>
+          <label className="modal-label">Motivo da denúncia</label>
           <select
             className={`modal-select ${errors.motivo ? "modal-input-error" : ""}`}
             value={motivo}
@@ -101,7 +94,7 @@ export default function ModalDenuncia({ isOpen, onClose, forumId }) {
           />
           {errors.mensagem
             ? <span className="modal-error-msg">{errors.mensagem}</span>
-            : <span className="modal-hint">explique o motivo da denuncia, o que aconteceu para que os moderadores possam verificar</span>
+            : <span className="modal-hint">Explique o motivo da denúncia</span>
           }
         </div>
 
@@ -116,7 +109,7 @@ export default function ModalDenuncia({ isOpen, onClose, forumId }) {
             Cancelar
           </button>
           <button className="modal-btn-primary" onClick={handleSubmit} disabled={isDisabled}>
-            {loading ? "Enviando..." : "Enviar denuncia"}
+            {loading ? "Enviando..." : "Enviar denúncia"}
           </button>
         </div>
       </div>
