@@ -129,7 +129,7 @@ class MensagemViewSet(viewsets.ModelViewSet):
         # Qualquer autenticado pode tentar; checagem de autor é feita em perform_update/destroy
         return [IsAuthenticated()]
 
-    # admins são livres para mandar msg; alunos e professores precisam pertencer ao conteudo (Vindo da Developer)
+    # admins são livres para mandar msg; alunos e professores precisam pertencer ao conteudo
     def perform_create(self, serializer):
         forum = serializer.validated_data.get('forum')
         user = self.request.user
@@ -147,17 +147,17 @@ class MensagemViewSet(viewsets.ModelViewSet):
 
     def _verificar_autor_e_denuncia(self, instance):
         user = self.request.user
-        # Só o autor ou o admin pode editar/deletar (Vindo da Developer)
+        # Só o autor ou o admin pode editar/deletar
         if user.tipo != 'admin' and instance.autor != self.request.user:
             raise PermissionDenied("Você só pode editar ou deletar suas próprias mensagens.")
 
-        # Não pode editar/deletar se houver denúncia pendente sobre a mensagem (Vindo da sua Branch)
-        denuncia_pendente = Denuncia.objects.filter(
+        # Não pode editar/deletar se houver denúncia pendente sobre a mensagem
+        denuncia_ativa = Denuncia.objects.filter(
             mensagem=instance,
-            status='pendente'
+            status__in=['pendente', 'analisado']
         ).exists()
-        if denuncia_pendente:
-            raise PermissionDenied("Esta mensagem possui uma denúncia em análise e não pode ser alterada ou excluída.")
+        if denuncia_ativa:
+            raise PermissionDenied("Esta mensagem possui uma denúncia ativa/em análise e não pode ser alterada ou excluída.")
 
     def perform_update(self, serializer):
         self._verificar_autor_e_denuncia(serializer.instance)
@@ -184,7 +184,7 @@ class MensagemViewSet(viewsets.ModelViewSet):
             respostas__autor__tipo='professor'
         ).distinct().order_by('data_create')
 
-        # paginação para mensagens pendentes (Vindo da Developer)
+        # paginação para mensagens pendentes
         page = self.paginate_queryset(perguntas)
         if page is not None:
             serializer = self.get_serializer(page, many=True)
@@ -194,14 +194,14 @@ class MensagemViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-# Paginação padrão para Denúncias (Vindo da sua Branch)
+# Paginação padrão para Denúncias
 class StandartResultsSetPagination(PageNumberPagination):
     page_size = 10
     page_size_query_param = 'page_size'
     max_page_size = 100
 
 
-# ViewSet de Denúncias (Vindo da sua Branch)
+# ViewSet de Denúncias
 class DenunciaViewSet(viewsets.ModelViewSet):
     queryset = Denuncia.objects.all().order_by('-data_create')
     serializer_class = DenunciaSerializer
