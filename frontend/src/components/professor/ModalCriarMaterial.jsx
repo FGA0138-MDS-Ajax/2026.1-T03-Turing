@@ -1,10 +1,9 @@
 import { useState } from "react";
 
 const TIPOS = [
-  { value: 'pdf',          label: 'Documento',    sub: 'PDF, DOC, PPT, etc' },
+  { value: 'pdf',          label: 'Documento',    sub: 'PDF' },
   { value: 'video',        label: 'Vídeo',        sub: 'Link do youtube' },
-  { value: 'link',         label: 'Texto',        sub: 'Conteúdo escrito' },
-  { value: 'apresentacao', label: 'Link externo', sub: 'Site ou artigo online' },
+  { value: 'link',       label: 'Link externo', sub: 'Site ou artigo online' },
 ];
 
 function TipoIcone({ tipo }) {
@@ -52,7 +51,7 @@ function ModalCriarMaterial({ onClose, onSalvar, loading, conteudos }) {
   const [erros, setErros] = useState({});
   const [dragging, setDragging] = useState(false);
 
-  const precisaArquivo = ['pdf', 'imagem', 'apresentacao', 'documento'].includes(tipo);
+  const precisaArquivo = ['pdf', 'documento'].includes(tipo);
   const precisaLink = ['video', 'link'].includes(tipo);
 
   const validar = () => {
@@ -145,6 +144,9 @@ function ModalCriarMaterial({ onClose, onSalvar, loading, conteudos }) {
             <input
               className={`pm-input ${erros.link ? 'pm-input--erro' : ''}`}
               placeholder="https://..."
+              type ="url"
+              autoComplete="off"
+              name="material-url"
               value={form.link}
               onChange={e => { setForm({ ...form, link: e.target.value }); setErros(prev => ({ ...prev, link: undefined })); }}
             />

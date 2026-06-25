@@ -54,12 +54,20 @@ function ConteudoCard({ conteudo, onAcessar }) {
   const area        = conteudo.area || '';
   
   const informacoesApi = Array.isArray(conteudo.informacoes) ? conteudo.informacoes : [];
-  const informacoesExibidas = informacoesApi.length > 0 
-    ? informacoesApi 
-    : [
-        { icone: '📅', texto: 'Início: Data a definir' },
-        { icone: '🕒', texto: 'Carga horária a definir' }
-      ];
+  const informacoesExibidas =  informacoesApi.length > 0 
+  ? informacoesApi 
+  : [
+      {
+        icone: '📅',
+        texto: conteudo.matriculado_em
+          ? `Inscrito em: ${new Date(conteudo.matriculado_em).toLocaleDateString('pt-BR')}`
+          : 'Data de inscrição indisponível',
+      },
+      {
+        icone: '📊',
+        texto: conteudo.status === 'ativo' ? 'Conteúdo ativo' : 'Conteúdo encerrado',
+      },
+    ];
 
   const icone       = conteudo.icone || null;
   const color       = getAreaColor(area || titulo);

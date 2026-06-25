@@ -56,12 +56,13 @@ class InscricaoViewSet(viewsets.ModelViewSet):
 
 
 class ForumViewSet(
-    mixins.RetrieveModelMixin,  # Permite GET /api/foruns/{id}/
-    mixins.UpdateModelMixin,  # Permite PUT/PATCH /api/foruns/{id}/
+    mixins.RetrieveModelMixin, # Permite GET /api/foruns/{id}/
+    mixins.UpdateModelMixin,   # Permite PUT/PATCH /api/foruns/{id}/
     mixins.DestroyModelMixin,  # Permite DELETE /api/foruns/{id}/
-    mixins.ListModelMixin,  # Permite GET /api/foruns/
+    mixins.ListModelMixin,     #  Permite GET /api/foruns/ 
     viewsets.GenericViewSet  # Bloqueia o CreateModelMixin removendo o post
-):
+    ):
+
     serializer_class = ForumSerializer
     permission_classes = [IsAuthenticated]
 
@@ -90,12 +91,11 @@ class ForumViewSet(
         return [IsAuthenticated()]
 
 
-# definição da paginação para as mensangens (Vindo da Developer)
+#definição da paginação para as mensangens
 class MensagemPagination(PageNumberPagination):
-    page_size = 10  # numero de msgs por pagina
-    page_size_query_param = 'page_size'
+    page_size = 10  # numero de msgs por pagina 
+    page_size_query_param = 'page_size'  
     max_page_size = 100
-
 
 class MensagemViewSet(viewsets.ModelViewSet):
     serializer_class = MensagemSerializer
@@ -125,11 +125,13 @@ class MensagemViewSet(viewsets.ModelViewSet):
 
         return queryset.distinct().order_by('data_create')
 
+
     def get_permissions(self):
         # Qualquer autenticado pode tentar; checagem de autor é feita em perform_update/destroy
         return [IsAuthenticated()]
 
-    # admins são livres para mandar msg; alunos e professores precisam pertencer ao conteudo (Vindo da Developer)
+
+    #admins são livres para mandar msg; alunos e professores precisam pertencer ao conteudo
     def perform_create(self, serializer):
         forum = serializer.validated_data.get('forum')
         user = self.request.user
@@ -138,16 +140,17 @@ class MensagemViewSet(viewsets.ModelViewSet):
             tem_acesso = forum.conteudo.matriculas.filter(aluno=user.aluno).exists()
             if not tem_acesso:
                 raise PermissionDenied("Você não está matriculado neste conteúdo.")
-
+            
         elif user.tipo == 'professor':
             if user.professor not in forum.conteudo.professores.all():
                 raise PermissionDenied("Você não é professor desta disciplina.")
-
+            
         serializer.save(autor=self.request.user)
+
 
     def _verificar_autor_e_denuncia(self, instance):
         user = self.request.user
-        # Só o autor ou o admin pode editar/deletar (Vindo da Developer)
+        # Só o autor ou o admin pode editar/deletar 
         if user.tipo != 'admin' and instance.autor != self.request.user:
             raise PermissionDenied("Você só pode editar ou deletar suas próprias mensagens.")
 
@@ -159,13 +162,16 @@ class MensagemViewSet(viewsets.ModelViewSet):
         if denuncia_pendente:
             raise PermissionDenied("Esta mensagem possui uma denúncia em análise e não pode ser alterada ou excluída.")
 
+
     def perform_update(self, serializer):
         self._verificar_autor_e_denuncia(serializer.instance)
         serializer.save()
 
+
     def perform_destroy(self, instance):
         self._verificar_autor_e_denuncia(instance)
         instance.delete()
+
 
     @action(detail=False, methods=['get'], url_path='pendentes')
     def pendentes(self, request):
@@ -184,7 +190,7 @@ class MensagemViewSet(viewsets.ModelViewSet):
             respostas__autor__tipo='professor'
         ).distinct().order_by('data_create')
 
-        # paginação para mensagens pendentes (Vindo da Developer)
+        # paginação para mensagens pendentes
         page = self.paginate_queryset(perguntas)
         if page is not None:
             serializer = self.get_serializer(page, many=True)
