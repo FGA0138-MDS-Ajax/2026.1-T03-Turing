@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { buscarMaterial } from "../../../services/materialService";
+import { buscarConteudo, buscarDisciplina } from "../../../services/conteudoService";
 import "./MaterialDetalhe.css";
 
 export default function MaterialDetalhe() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [material, setMaterial] = useState(null);
+  const [conteudo, setConteudo] = useState(null);
+  const [disciplina, setDisciplina] = useState(null);
   const [loading, setLoading] = useState(true);
   const [erro, setErro] = useState("");
 
@@ -19,6 +22,12 @@ export default function MaterialDetalhe() {
       setLoading(true);
       const response = await buscarMaterial(id);
       setMaterial(response.data);
+      const conteudoRes = await buscarConteudo(response.data.conteudo);
+      setConteudo(conteudoRes.data);
+      if (conteudoRes.data.disciplina) {
+        const disciplinaRes = await buscarDisciplina(conteudoRes.data.disciplina);
+        setDisciplina(disciplinaRes.data);
+      }
       setErro("");
     } catch (error) {
       console.error(error);
@@ -70,28 +79,52 @@ export default function MaterialDetalhe() {
     <div className="md-page">
 
       <nav className="md-breadcrumb" aria-label="Navegação">
-        <span className="md-breadcrumb__crumb">Disciplina</span>
+        <span
+         className="md-breadcrumb__crumb md-breadcrumb__crumb--link"
+          onClick={() => navigate('/aluno/conteudos')}
+          style={{ cursor: 'pointer' }}
+        >
+          {disciplina?.nome || 'Disciplina'}
+        </span>
         <span className="md-breadcrumb__sep" aria-hidden="true">›</span>
-        <span className="md-breadcrumb__crumb">Conteúdo</span>
+        <span
+          className="md-breadcrumb__crumb md-breadcrumb__crumb--link"
+          onClick={() => navigate(`/aluno/conteudos/${material.conteudo}`)}
+          style={{ cursor: 'pointer' }}
+        >
+       {conteudo?.nome || 'Conteúdo'}
+        </span>
         <span className="md-breadcrumb__sep" aria-hidden="true">›</span>
-        <span className="md-breadcrumb__crumb md-breadcrumb__crumb--atual">material</span>
+        <span className="md-breadcrumb__crumb md-breadcrumb__crumb--atual">{material.nome}</span>
       </nav>
 
       <div className="md-layout">
 
         <main className="md-main">
           <h1 className="md-titulo">{material.nome}</h1>
-          <p className="md-subtitulo">Breve descrição do material</p>
+          {material.descricao && <p className="md-subtitulo">{material.descricao}</p>}
 
           <div className="md-corpo">
-            {material.conteudoHtml ? (
-              <div
-                className="md-corpo__html"
-                dangerouslySetInnerHTML={{ __html: material.conteudoHtml }}
-              />
+            {material.tipo === 'pdf' && material.arquivo ? (
+              <div className="md-corpo__pdf-aviso">
+                <p style={{ fontSize: '0.9rem', margin: 150.2, textAlign: 'center' }}>Visualização embutida não disponível. <br></br>Use o botão "↓ Download do arquivo" ao lado.</p>
+                
+                
+              </div>
+            ) : (material.tipo === 'link' || material.tipo === 'video') && material.link ? (
+              <div className="md-corpo__placeholder">
+                <span className="md-corpo__placeholder-label">
+                  {material.tipo === 'video'
+                    ? 'Este material é um vídeo externo. Use o botão "Abrir link" ao lado.'
+                    : 'Este material é um link externo. Use o botão "Abrir link" ao lado.'
+                  }
+                </span>
+              </div>
             ) : (
               <div className="md-corpo__placeholder">
-                <span className="md-corpo__placeholder-label">Conteúdo escrito</span>
+                <span className="md-corpo__placeholder-label">
+                  {material.descricao || 'Sem conteúdo adicional para exibir.'}
+                </span>
               </div>
             )}
           </div>
@@ -109,8 +142,8 @@ export default function MaterialDetalhe() {
               <div className="md-meta__row">
                 <dt className="md-meta__label">Publicado em</dt>
                 <dd className="md-meta__valor">
-                  {material.dataPublicacao
-                    ? new Date(material.dataPublicacao).toLocaleDateString("pt-BR", {
+                  {material.data_create
+                    ? new Date(material.data_create).toLocaleDateString("pt-BR", {
                         day: "2-digit",
                         month: "short",
                         year: "numeric",
@@ -124,22 +157,18 @@ export default function MaterialDetalhe() {
 
           {(material.link || material.arquivo) && (
             <div className="md-sidebar__card md-sidebar__card--acoes">
-              {material.link && (
-                <a
-                  className="md-btn-arquivo"
-                  href={material.link}
-                  target="_blank"
-                  rel="noreferrer"
-                >
+              {material.link && !material.arquivo && (
+                <a className="md-btn-arquivo" href={material.link} target="_blank" rel="noreferrer">
                   Abrir link ↗
                 </a>
               )}
               {material.arquivo && (
                 <a
-                  className="md-btn-arquivo md-btn-arquivo--secundario"
+                  className="md-btn-arquivo"
                   href={material.arquivo}
                   target="_blank"
                   rel="noreferrer"
+                  download
                 >
                   ↓ Download do arquivo
                 </a>
@@ -152,8 +181,8 @@ export default function MaterialDetalhe() {
             <p className="md-sidebar__duvida-texto">
               Caso tenha dúvidas sobre este material, poste suas perguntas para o professor.
             </p>
-            <button className="md-btn-ir" onClick={() => navigate("/aluno/conteudos")}>
-              Ir para conteúdos
+            <button className="md-btn-ir" onClick={() => navigate(`/aluno/conteudos/${material.conteudo}/forum`)}>
+              Ir para o forúm
             </button>
           </div>
 

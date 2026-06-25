@@ -70,10 +70,9 @@ function ModalConfirmacao({ nome, onConfirmar, onCancelar, loading }) {
 }
 
 const TIPOS = [
-  { value: 'pdf',          label: 'Documento',    sub: 'PDF, DOC, PPT, etc' },
+  { value: 'pdf',          label: 'Documento',    sub: 'PDF' },
   { value: 'video',        label: 'Vídeo',        sub: 'Link do youtube' },
-  { value: 'link',         label: 'Texto',        sub: 'Conteúdo escrito' },
-  { value: 'apresentacao', label: 'Link externo', sub: 'Site ou artigo online' },
+  { value: 'link',         label: 'Link externo',        sub: 'Site ou artigo online' },
 ];
 
 
@@ -89,7 +88,7 @@ function ModalMaterialEditar({ material, onClose, onSalvar, loading, conteudos }
   const [erros, setErros] = useState({});
   const [dragging, setDragging] = useState(false);
 
-  const precisaArquivo = ['pdf', 'imagem', 'apresentacao', 'documento'].includes(tipo);
+  const precisaArquivo = ['pdf','documento'].includes(tipo);
   const precisaLink = ['video', 'link'].includes(tipo);
 
   const validar = () => {
@@ -135,7 +134,7 @@ function ModalMaterialEditar({ material, onClose, onSalvar, loading, conteudos }
               <span className="pm-tipo-sub">{t.sub}</span>
             </button>
           ))}
-        </div>
+      </div>
 
         <label className="pm-label">Título do material</label>
         <input
@@ -173,6 +172,9 @@ function ModalMaterialEditar({ material, onClose, onSalvar, loading, conteudos }
           </>
         )}
 
+
+    {!['video', 'link'].includes(tipo) && (
+      <>
         <label className="pm-label">Substituir arquivo</label>
         <div
           className={`pm-dropzone ${dragging ? 'pm-dropzone--drag' : ''}`}
@@ -202,12 +204,14 @@ function ModalMaterialEditar({ material, onClose, onSalvar, loading, conteudos }
           style={{ display: 'none' }}
           onChange={e => setArquivo(e.target.files?.[0] || null)}
         />
-      </div>
+      </>
+    )}
 
       <div className="pm-modal-acoes">
         <button className="pm-btn-adicionar pm-modal-acoes--center" onClick={handleSubmit} disabled={loading}>
           {loading ? 'Salvando...' : 'Salvar alterações'}
         </button>
+      </div>
       </div>
     </ModalOverlay>
   );
