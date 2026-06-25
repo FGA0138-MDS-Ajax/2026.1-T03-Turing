@@ -11,6 +11,7 @@ export const listarMeusConteudos = async () => {
     descricao: matricula.conteudo_detalhes?.descricao,
     status: matricula.conteudo_detalhes?.status,
     disciplina_id: matricula.disciplina_id,
+    matriculado_em: matricula.matriculado_em,
   }));
   return { ...response, data: conteudos };
 };
