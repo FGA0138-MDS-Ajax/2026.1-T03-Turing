@@ -22,10 +22,11 @@ class ProfessorTestCase(APITestCase):
             'password': '123456'
         }, format='json')
         client.credentials(HTTP_AUTHORIZATION=f'Bearer {login.data["access"]}')
+
         response = client.post('/api/usuarios/professores/', {
             "perfil": {
                 "nome": "aleatorio",
-                "email": "aleatorio@email.com",
+                "email": "professor@email.com",
                 "cpf": "12345678901",
                 "data_nascimento": "2005-05-12",
                 "tipo": "professor",
@@ -78,7 +79,7 @@ class ProfessorTestCase(APITestCase):
 
     ## como professor
     def test_professor_criar_professor(self):
-        self.get_token('aleatorio@email.com')
+        self.get_token('professor@email.com')
         response = self.client.post('/api/usuarios/professores/create_by_admin/', {
             'perfil': {
                 "nome": "aleatorio",
@@ -96,7 +97,7 @@ class ProfessorTestCase(APITestCase):
         response = self.client.post('/api/usuarios/professores/create_by_admin/', {
             'perfil': {
                 "nome": "gabriel",
-                "email": "professor@email.com",
+                "email": "professor12@email.com",
                 "cpf": "1234567894",
                 "data_nascimento": "2005-05-12",
                 "tipo": "professor",
