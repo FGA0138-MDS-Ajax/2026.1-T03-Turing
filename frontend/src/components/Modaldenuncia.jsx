@@ -47,13 +47,15 @@ export default function ModalDenuncia({ isOpen, onClose, mensagemId }) {
     setLoading(true);
     setFeedback(null);
     try {
+      const mensagemTrim = mensagem.trim();
       const payload = {
         mensagem: mensagemId,
         motivo,
+        descricao: mensagemTrim || motivo,
       };
 
-      if (mensagem.trim()) {
-        payload.evidencias = mensagem.trim();
+      if (mensagemTrim) {
+        payload.evidencias = mensagemTrim;
       }
 
       await api.post("/api/interacoes/denuncias/", payload);
@@ -62,6 +64,7 @@ export default function ModalDenuncia({ isOpen, onClose, mensagemId }) {
     } catch (err) {
       const msg =
         err.response?.data?.motivo?.[0] ||
+        err.response?.data?.descricao?.[0] ||
         err.response?.data?.evidencias?.[0] ||
         err.response?.data?.mensagem?.[0] ||
         err.response?.data?.detail ||

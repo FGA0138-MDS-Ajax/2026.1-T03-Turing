@@ -221,7 +221,7 @@ class DenunciaViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         # Registra, identifica e salva as denuncias
         mensagem = serializer.validated_data.get('mensagem')
-        denunciante_perfil = self.request.user.perfil
+        denunciante_perfil = self.request.user
         denunciado_perfil = mensagem.autor
 
         serializer.save(
@@ -229,6 +229,13 @@ class DenunciaViewSet(viewsets.ModelViewSet):
             denunciado=denunciado_perfil,
             status='pendente'
         )
+
+    def perform_update(self, serializer):
+        # Apenas admins podem mudar o status
+        if self.request.user.tipo != 'admin':
+            raise PermissionDenied("Apenas administradores podem modificar o status de uma denúncia.")
+        # Coloca qual admin salvou a decisão
+        serializer.save(analisado_por = self.request.user.admin)
 
 
 
