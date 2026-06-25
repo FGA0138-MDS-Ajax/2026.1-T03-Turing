@@ -38,7 +38,6 @@ export default function ModalDenuncia({ isOpen, onClose, mensagemId }) {
   const validate = () => {
     const errs = {};
     if (!motivo) errs.motivo = "Selecione um motivo para a denúncia.";
-    if (!mensagem.trim()) errs.mensagem = "A mensagem é obrigatória.";
     setErrors(errs);
     return Object.keys(errs).length === 0;
   };
@@ -48,11 +47,16 @@ export default function ModalDenuncia({ isOpen, onClose, mensagemId }) {
     setLoading(true);
     setFeedback(null);
     try {
-      await api.post("/api/interacoes/denuncias/", {
+      const payload = {
         mensagem: mensagemId,
         motivo,
-        evidencias: mensagem,
-      });
+      };
+
+      if (mensagem.trim()) {
+        payload.evidencias = mensagem.trim();
+      }
+
+      await api.post("/api/interacoes/denuncias/", payload);
       setFeedback({ type: "success", msg: "Denúncia enviada com sucesso!" });
       setTimeout(handleClose, 1800);
     } catch (err) {
@@ -68,7 +72,7 @@ export default function ModalDenuncia({ isOpen, onClose, mensagemId }) {
     }
   };
 
-  const isDisabled = !motivo || !mensagem.trim() || loading;
+  const isDisabled = !motivo || loading;
 
   if (!isOpen) return null;
 
@@ -94,18 +98,15 @@ export default function ModalDenuncia({ isOpen, onClose, mensagemId }) {
         </div>
 
         <div className="modal-field">
-          <label className="modal-label">Mensagem</label>
+          <label className="modal-label">Mensagem adicional (opcional)</label>
           <textarea
             className={`modal-textarea ${errors.mensagem ? "modal-input-error" : ""}`}
             value={mensagem}
             onChange={(e) => { setMensagem(e.target.value); setErrors((p) => ({ ...p, mensagem: "" })); }}
             rows={5}
-            placeholder="Explique o que aconteceu para que os moderadores possam verificar"
+            placeholder="Se quiser, adicione mais detalhes para ajudar na análise"
           />
-          {errors.mensagem
-            ? <span className="modal-error-msg">{errors.mensagem}</span>
-            : <span className="modal-hint">Inclua contexto para facilitar a análise da denúncia</span>
-          }
+          <span className="modal-hint">Esse campo é opcional.</span>
         </div>
 
         {feedback && (
