@@ -15,7 +15,9 @@ backend/http-client.private.env.json
 backend/professor.http
 .idea/
 .vscode/
-
+frontend/.vite
+frontend/playwright-report/
+frontend/test-results
 .venv/
 venv/
 source/

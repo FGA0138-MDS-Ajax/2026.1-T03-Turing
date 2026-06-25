@@ -18,6 +18,7 @@ import Login               from '../pages/Login/Login';
 import Register            from '../pages/Register/Register';
 import TeacherReview       from '../pages/admin/TeacherReview/TeacherReview';
 import ProfessorConteudo   from "../pages/Professor/ProfessorConteudo/ProfessorConteudo";
+import ForumProfessor      from "../pages/Professor/ForumProfessor/ForumProfessor";
 import { Disciplinas }     from '../pages/Disciplinas/Disciplinas';
 import { MeusConteudos } from '../pages/Aluno/MeusConteudos/MeusConteudos';
 import { ConteudoEspecifico } from '../pages/Aluno/ConteudoEspecifico/ConteudoEspecifico';
@@ -64,6 +65,8 @@ export function AppRoutes() {
       >
         <Route index element={<ProfessorDashboard />} />
         <Route path="conteudos"            element={<ProfessorConteudos />} />
+        <Route path="conteudos/:id"        element={<ProfessorConteudo />} />
+        <Route path="conteudos/:id/forum"  element={<ForumProfessor />} />
         <Route path="materiais"            element={<ProfessorMateriais />} />
         <Route path="configuracoes"        element={<ProfessorConfiguracoes />} />
       </Route>
