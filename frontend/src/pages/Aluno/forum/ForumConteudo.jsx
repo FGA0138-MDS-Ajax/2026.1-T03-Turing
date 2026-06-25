@@ -202,7 +202,7 @@ export function ForumConteudo() {
   const [busca, setBusca] = useState('');
   const [filtroStatus, setFiltroStatus] = useState('todos');
   const [modalAberto, setModalAberto] = useState(false);
-  const [modalDenunciaAberto, setModalDenunciaAberto] = useState(false);
+  const [denunciaAberta, setDenunciaAberta] = useState(null);
   const [mobileModo, setMobileModo] = useState('lista');
 
   useEffect(() => {
@@ -338,7 +338,7 @@ export function ForumConteudo() {
               <PainelDetalhe
                 pergunta={perguntaSelecionada}
                 respostas={perguntaSelecionada ? (respostasMap[perguntaSelecionada.id] || []) : []}
-                onDenunciar={() => setModalDenunciaAberto(true)}
+                onDenunciar={(itemId) => setDenunciaAberta(itemId)}
               />
 
               <div className="fc-orientacoes fc-orientacoes--desktop">
@@ -363,9 +363,9 @@ export function ForumConteudo() {
       />
 
       <ModalDenuncia
-        isOpen={modalDenunciaAberto}
-        onClose={() => setModalDenunciaAberto(false)}
-        forumId={forumId}
+        isOpen={denunciaAberta !== null}
+        onClose={() => setDenunciaAberta(null)}
+        mensagemId={denunciaAberta}
       />
     </>
   );
