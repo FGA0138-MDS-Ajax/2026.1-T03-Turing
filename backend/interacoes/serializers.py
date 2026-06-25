@@ -98,8 +98,23 @@ class DenunciaSerializer(serializers.ModelSerializer):
         ]
         # Esses campos são preenchidos pelo sistema, o usuário não pode enviar no POST
         read_only_fields = ['id', 'denunciante', 'denunciado', 'data_create', 'data_update']
+
+        extra_kwargs = {
+            'motivo': {
+                'required': True,       # Torna o campo obrigatório no POST
+                'allow_blank': False,   # Não permite enviar string vazia ""
+                'allow_null': False,    # Não deixa enviar null
+
+                'error_messages': {
+                    'required': 'O motivo da denúncia não pode estar vazio.',
+                    'blank': 'O motivo da denúncia não pode estar vazio.',
+                    'null': 'O motivo da denúncia não pode estar vazio.'
+                }
+            }
+        }
+
     def validate_motivo(self,value):
-        if not value.strip():
+        if not value or not value.strip():
             raise serializers.ValidationError("O motivo da denúncia não pode estar vazio.")
         return value
 
