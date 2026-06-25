@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import Inscricao, Forum, Mensagem
+from .models import Inscricao, Forum, Mensagem, Denuncia
+
 class InscricaoSerializer(serializers.ModelSerializer):
     professor_nome = serializers.CharField(
         source = 'professor.perfil.nome',
@@ -72,3 +73,33 @@ class ForumSerializer(serializers.ModelSerializer):
             'data_create'
         ]
         read_only_fields = ['id', 'data_create']
+
+class DenunciaSerializer(serializers.ModelSerializer):
+    denunciante_nome = serializers.CharField(source='denunciante.nome', read_only=True)
+    denunciado_nome = serializers.CharField(source='denunciado.nome', read_only=True)
+
+    class Meta:
+        model = Denuncia
+        fields = [
+            'id',
+            'mensagem',
+            'motivo',
+            'evidencias',
+            'denunciante',
+            'denunciante_nome',
+            'denunciado',
+            'denunciado_nome',
+            'status',
+            'parecer_admin',
+            'analisado_por',
+            'data_create',
+            'data_update'
+        ]
+        # Esses campos são preenchidos pelo sistema, o usuário não pode enviar no POST
+        read_only_fields = ['id', 'denunciante', 'denunciado', 'status', 'parecer_admin', 'analisado_por', 'data_create', 'data_update']
+    def validate_motivo(self,value):
+        if not value.strip():
+            raise serializers.ValidationError("O motivo da denúncia não pode estar vazio.")
+        return value
+
+
