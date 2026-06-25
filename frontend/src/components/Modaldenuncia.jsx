@@ -1,17 +1,17 @@
 import { useState, useEffect } from "react";
+import api from "../services/api";
 import "./Modal.css";
-import { criarDenuncia } from "../../services/forumService";
 
 const MOTIVOS = [
   { value: "", label: "Selecione um motivo" },
-  { value: "spam", label: "Spam ou propaganda" },
-  { value: "ofensivo", label: "Conteúdo ofensivo ou inadequado" },
-  { value: "irrelevante", label: "Pergunta irrelevante ao conteúdo" },
-  { value: "duplicado", label: "Pergunta duplicada" },
-  { value: "outro", label: "Outro" },
+  { value: "Spam ou propaganda", label: "Spam ou propaganda" },
+  { value: "Conteúdo ofensivo ou inadequado", label: "Conteúdo ofensivo ou inadequado" },
+  { value: "Pergunta irrelevante ao conteúdo", label: "Pergunta irrelevante ao conteúdo" },
+  { value: "Pergunta duplicada", label: "Pergunta duplicada" },
+  { value: "Outro", label: "Outro" },
 ];
 
-export default function ModalDenuncia({ isOpen, onClose, forumId }) {
+export default function ModalDenuncia({ isOpen, onClose, mensagemId }) {
   const [motivo, setMotivo] = useState("");
   const [mensagem, setMensagem] = useState("");
   const [errors, setErrors] = useState({});
@@ -38,7 +38,6 @@ export default function ModalDenuncia({ isOpen, onClose, forumId }) {
   const validate = () => {
     const errs = {};
     if (!motivo) errs.motivo = "Selecione um motivo para a denúncia.";
-    if (!mensagem.trim()) errs.mensagem = "A mensagem é obrigatória.";
     setErrors(errs);
     return Object.keys(errs).length === 0;
   };
@@ -48,18 +47,32 @@ export default function ModalDenuncia({ isOpen, onClose, forumId }) {
     setLoading(true);
     setFeedback(null);
     try {
-      await criarDenuncia(forumId, motivo, mensagem);
+      const payload = {
+        mensagem: mensagemId,
+        motivo,
+      };
+
+      if (mensagem.trim()) {
+        payload.evidencias = mensagem.trim();
+      }
+
+      await api.post("/api/interacoes/denuncias/", payload);
       setFeedback({ type: "success", msg: "Denúncia enviada com sucesso!" });
       setTimeout(handleClose, 1800);
     } catch (err) {
-      const msg = err?.response?.data?.detail ?? "Falha ao enviar. Tente novamente.";
+      const msg =
+        err.response?.data?.motivo?.[0] ||
+        err.response?.data?.evidencias?.[0] ||
+        err.response?.data?.mensagem?.[0] ||
+        err.response?.data?.detail ||
+        "Falha ao enviar. Tente novamente.";
       setFeedback({ type: "error", msg });
     } finally {
       setLoading(false);
     }
   };
 
-  const isDisabled = !motivo || !mensagem.trim() || loading;
+  const isDisabled = !motivo || loading;
 
   if (!isOpen) return null;
 
@@ -85,17 +98,15 @@ export default function ModalDenuncia({ isOpen, onClose, forumId }) {
         </div>
 
         <div className="modal-field">
-          <label className="modal-label">Mensagem</label>
+          <label className="modal-label">Mensagem adicional (opcional)</label>
           <textarea
             className={`modal-textarea ${errors.mensagem ? "modal-input-error" : ""}`}
             value={mensagem}
             onChange={(e) => { setMensagem(e.target.value); setErrors((p) => ({ ...p, mensagem: "" })); }}
             rows={5}
+            placeholder="Se quiser, adicione mais detalhes para ajudar na análise"
           />
-          {errors.mensagem
-            ? <span className="modal-error-msg">{errors.mensagem}</span>
-            : <span className="modal-hint">Explique o motivo da denúncia</span>
-          }
+          <span className="modal-hint">Esse campo é opcional.</span>
         </div>
 
         {feedback && (

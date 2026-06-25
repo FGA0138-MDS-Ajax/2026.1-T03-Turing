@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
+import api from "../services/api";
 import "./Modal.css";
-import { buscarForumPorConteudo, criarMensagem } from "../../services/forumService";
 
 export default function ModalPergunta({ isOpen, onClose, conteudoId, onSuccess }) {
   const [titulo, setTitulo] = useState("");
@@ -39,17 +39,31 @@ export default function ModalPergunta({ isOpen, onClose, conteudoId, onSuccess }
     setLoading(true);
     setFeedback(null);
     try {
-      const { data: foruns } = await buscarForumPorConteudo(conteudoId);
-      const forumId = Array.isArray(foruns) ? foruns[0]?.id : foruns?.id;
-      if (!forumId) throw new Error("Fórum não encontrado.");
+      const forunsRes = await api.get("/api/interacoes/foruns/");
+      const foruns = Array.isArray(forunsRes.data) ? forunsRes.data : [];
+      const forum = foruns.find((f) => String(f.conteudo) === String(conteudoId));
 
-      const { data } = await criarMensagem(forumId, `**${titulo}**\n\n${mensagem}`);
+      if (!forum) {
+        throw new Error("Fórum não encontrado para este conteúdo.");
+      }
+
+      const textoFinal = titulo.trim()
+        ? `${titulo.trim()}\n\n${mensagem.trim()}`
+        : mensagem.trim();
+
+      const response = await api.post("/api/interacoes/mensagens/", {
+        forum: forum.id,
+        texto: textoFinal,
+      });
 
       setFeedback({ type: "success", msg: "Pergunta enviada com sucesso!" });
-      if (onSuccess) onSuccess(data);
+      if (onSuccess) onSuccess(response.data);
       setTimeout(handleClose, 1800);
     } catch (err) {
-      const msg = err?.response?.data?.detail ?? "Falha ao enviar. Tente novamente.";
+      const msg = err.response?.data?.texto?.[0]
+        || err.response?.data?.detail
+        || err.message
+        || "Falha ao enviar. Tente novamente.";
       setFeedback({ type: "error", msg });
     } finally {
       setLoading(false);
@@ -70,7 +84,7 @@ export default function ModalPergunta({ isOpen, onClose, conteudoId, onSuccess }
           <input
             type="text"
             className={`modal-input ${errors.titulo ? "modal-input-error" : ""}`}
-            placeholder="Ex: dúvida sobre derivadas"
+            placeholder="Ex: duvida sobre derivadas"
             value={titulo}
             onChange={(e) => { setTitulo(e.target.value); setErrors((p) => ({ ...p, titulo: "" })); }}
           />
