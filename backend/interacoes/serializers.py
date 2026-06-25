@@ -56,9 +56,9 @@ class MensagemSerializer(serializers.ModelSerializer):
         resposta_para = data.get('resposta_para')
         if resposta_para:
             request = self.context.get('request')
-            if request and request.user.tipo != 'professor':
+            if request and request.user.tipo not in ['professor','admin']:
                 raise serializers.ValidationError(
-                    "Apenas professores podem responder mensagens."
+                    "Apenas professores ou admins podem responder mensagens"
                 )
         return data
 
