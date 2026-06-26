@@ -57,10 +57,12 @@ class MaterialSerializer(serializers.ModelSerializer):
         return data
 
 class ConteudoSerializer(serializers.ModelSerializer):
+
+    forum_id = serializers.IntegerField(source='forum.id', read_only=True)
+
     class Meta:
         model = Conteudo
         fields = '__all__'
-        #disciplina já é obrigatorio pq é FK sem null=True
 
     def validate(self, data):
         professores = data.get('professores')

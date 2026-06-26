@@ -18,10 +18,12 @@ import Login               from '../pages/Login/Login';
 import Register            from '../pages/Register/Register';
 import TeacherReview       from '../pages/admin/TeacherReview/TeacherReview';
 import ProfessorConteudo   from "../pages/Professor/ProfessorConteudo/ProfessorConteudo";
+import ForumProfessor      from "../pages/Professor/ForumProfessor/ForumProfessor";
 import { Disciplinas }     from '../pages/Disciplinas/Disciplinas';
 import { MeusConteudos } from '../pages/Aluno/MeusConteudos/MeusConteudos';
 import { ConteudoEspecifico } from '../pages/Aluno/ConteudoEspecifico/ConteudoEspecifico';
 import { AlunoLayout }      from '../components/aluno/AlunoLayout';
+import { ForumConteudo } from '../pages/Aluno/Forum/ForumConteudo';
 
 function AdminLayout() {
   return (
@@ -63,6 +65,8 @@ export function AppRoutes() {
       >
         <Route index element={<ProfessorDashboard />} />
         <Route path="conteudos"            element={<ProfessorConteudos />} />
+        <Route path="conteudos/:id"        element={<ProfessorConteudo />} />
+        <Route path="conteudos/:id/forum"  element={<ForumProfessor />} />
         <Route path="materiais"            element={<ProfessorMateriais />} />
         <Route path="configuracoes"        element={<ProfessorConfiguracoes />} />
       </Route>
@@ -80,11 +84,11 @@ export function AppRoutes() {
         <Route index element={<AlunoDashboard />} />
         <Route path="conteudos" element={<MeusConteudos />} />
         <Route path="conteudos/:id" element={<ConteudoEspecifico />} />
-        <Route path="conteudos/:id/forum" element={<div>Fórum - a implementar (depende de backend)</div>} />
         <Route path="explorar" element={<AlunoConteudosExplorar />} />
         <Route path="materiais" element={<AlunoMateriais />} />
         <Route path="materiais/:id" element={<AlunoMaterialDetalhe />} />
         <Route path="configuracoes" element={<AlunoConfiguracoes />} />
+        <Route path="conteudos/:id/forum" element={<ForumConteudo />} />
       </Route>
 
       <Route
