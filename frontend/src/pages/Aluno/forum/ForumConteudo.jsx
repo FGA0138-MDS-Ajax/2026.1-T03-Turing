@@ -196,6 +196,7 @@ export function ForumConteudo() {
     loading,
     erro,
     refetch,
+    inserirMensagemLocal,
   } = useForumConteudo(id);
 
   const [perguntaSelecionada, setPerguntaSelecionada] = useState(null);
@@ -335,11 +336,13 @@ export function ForumConteudo() {
                 ← Ver perguntas
               </button>
 
-              <PainelDetalhe
-                pergunta={perguntaSelecionada}
-                respostas={perguntaSelecionada ? (respostasMap[perguntaSelecionada.id] || []) : []}
-                onDenunciar={(itemId) => setDenunciaAberta(itemId)}
-              />
+              <div className="fc-detalhe-scroll">
+                <PainelDetalhe
+                  pergunta={perguntaSelecionada}
+                  respostas={perguntaSelecionada ? (respostasMap[perguntaSelecionada.id] || []) : []}
+                  onDenunciar={(itemId) => setDenunciaAberta(itemId)}
+                />
+              </div>
 
               <div className="fc-orientacoes fc-orientacoes--desktop">
                 <h4 className="fc-orientacoes-titulo">Orientações para melhores perguntas</h4>
@@ -359,7 +362,7 @@ export function ForumConteudo() {
         isOpen={modalAberto}
         onClose={() => setModalAberto(false)}
         conteudoId={id}
-        onSuccess={refetch}
+        onSuccess={(novaMensagem) => inserirMensagemLocal(novaMensagem)}
       />
 
       <ModalDenuncia

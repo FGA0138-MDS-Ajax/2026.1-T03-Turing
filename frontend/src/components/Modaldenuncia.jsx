@@ -51,7 +51,7 @@ export default function ModalDenuncia({ isOpen, onClose, mensagemId }) {
       const payload = {
         mensagem: mensagemId,
         motivo,
-        descricao: mensagemTrim || motivo,
+        descricao: mensagemTrim || "Sem descrição adicional.",
       };
 
       if (mensagemTrim) {

@@ -39,11 +39,10 @@ export default function ModalPergunta({ isOpen, onClose, conteudoId, onSuccess }
     setLoading(true);
     setFeedback(null);
     try {
-      const forunsRes = await api.get("/api/interacoes/foruns/");
-      const foruns = Array.isArray(forunsRes.data) ? forunsRes.data : [];
-      const forum = foruns.find((f) => String(f.conteudo) === String(conteudoId));
+      const conteudoRes = await api.get(`/api/disciplinas/conteudos/${conteudoId}/`);
+      const forumId = conteudoRes.data?.forum_id;
 
-      if (!forum) {
+      if (!forumId) {
         throw new Error("Fórum não encontrado para este conteúdo.");
       }
 
@@ -52,7 +51,7 @@ export default function ModalPergunta({ isOpen, onClose, conteudoId, onSuccess }
         : mensagem.trim();
 
       const response = await api.post("/api/interacoes/mensagens/", {
-        forum: forum.id,
+        forum: forumId,
         texto: textoFinal,
       });
 

@@ -65,7 +65,7 @@ class ForumTestCase(APITestCase):
 
         )
         cls.conteudo_terceiro = Conteudo.objects.create(
-            nome='Derivadas',
+            nome='Derivadas2',
             descricao='Derivadas',
             disciplina=cls.disciplina,
             status='ativo',

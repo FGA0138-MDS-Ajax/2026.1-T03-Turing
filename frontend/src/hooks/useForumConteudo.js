@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import {
-  buscarForumDoConteudo,
+  buscarConteudo,
   listarMensagensDoForum,
   criarMensagem,
 } from '../services/disciplinasService';
@@ -17,20 +17,23 @@ export function useForumConteudo(conteudoId) {
     setLoading(true);
     setErro(null);
     try {
-      const forumRes = await buscarForumDoConteudo(conteudoId);
-      const foruns = Array.isArray(forumRes.data) ? forumRes.data : [];
+      const conteudoRes = await buscarConteudo(conteudoId);
+      const forumIdDoConteudo = conteudoRes.data?.forum_id;
 
-      const forum = foruns.find(f => String(f.conteudo) === String(conteudoId));
-
-      if (!forum) {
+      if (!forumIdDoConteudo) {
         setErro('Fórum não encontrado para este conteúdo.');
+        setForumId(null);
+        setMensagens([]);
         return;
       }
 
-      setForumId(forum.id);
+      setForumId(forumIdDoConteudo);
 
-      const mensagensRes = await listarMensagensDoForum(forum.id);
-      setMensagens(Array.isArray(mensagensRes.data) ? mensagensRes.data : []);
+      const mensagensRes = await listarMensagensDoForum(forumIdDoConteudo);
+      const mensagensData = Array.isArray(mensagensRes.data)
+        ? mensagensRes.data
+        : mensagensRes.data?.results ?? [];
+      setMensagens(mensagensData);
     } catch (err) {
       console.error(err);
       setErro('Não foi possível carregar o fórum. Tente novamente.');
@@ -65,6 +68,15 @@ export function useForumConteudo(conteudoId) {
     }
   }, [forumId, carregar]);
 
+  const inserirMensagemLocal = useCallback((mensagem) => {
+    if (!mensagem?.id) return;
+
+    setMensagens((prev) => {
+      if (prev.some((m) => m.id === mensagem.id)) return prev;
+      return [...prev, mensagem];
+    });
+  }, []);
+
   const perguntas = mensagens
     .filter(m => m.resposta_para === null)
     .sort((a, b) => new Date(b.data_create) - new Date(a.data_create));
@@ -86,5 +98,6 @@ export function useForumConteudo(conteudoId) {
     enviarPergunta,
     enviando,
     erroEnvio,
+    inserirMensagemLocal,
   };
 }
