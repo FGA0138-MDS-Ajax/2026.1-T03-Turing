@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import Inscricao, Forum, Mensagem
+from .models import Inscricao, Forum, Mensagem, Denuncia
+
 class InscricaoSerializer(serializers.ModelSerializer):
     professor_nome = serializers.CharField(
         source = 'professor.perfil.nome',
@@ -72,3 +73,49 @@ class ForumSerializer(serializers.ModelSerializer):
             'data_create'
         ]
         read_only_fields = ['id', 'data_create']
+
+class DenunciaSerializer(serializers.ModelSerializer):
+    denunciante_nome = serializers.CharField(source='denunciante.nome', read_only=True)
+    denunciado_nome = serializers.CharField(source='denunciado.nome', read_only=True)
+
+    class Meta:
+        model = Denuncia
+        fields = [
+            'id',
+            'mensagem',
+            'motivo',
+            'descricao',
+            'evidencias',
+            'denunciante',
+            'denunciante_nome',
+            'denunciado',
+            'denunciado_nome',
+            'status',
+            'parecer_admin',
+            'analisado_por',
+            'data_create',
+            'data_update'
+        ]
+        # Esses campos são preenchidos pelo sistema, o usuário não pode enviar no POST
+        read_only_fields = ['id', 'denunciante', 'denunciado', 'data_create', 'data_update']
+
+        extra_kwargs = {
+            'motivo': {
+                'required': True,       # Torna o campo obrigatório no POST
+                'allow_blank': False,   # Não permite enviar string vazia ""
+                'allow_null': False,    # Não deixa enviar null
+
+                'error_messages': {
+                    'required': 'O motivo da denúncia não pode estar vazio.',
+                    'blank': 'O motivo da denúncia não pode estar vazio.',
+                    'null': 'O motivo da denúncia não pode estar vazio.'
+                }
+            }
+        }
+
+    def validate_motivo(self,value):
+        if not value or not value.strip():
+            raise serializers.ValidationError("O motivo da denúncia não pode estar vazio.")
+        return value
+
+
