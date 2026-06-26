@@ -106,7 +106,7 @@ class DenunciasTestCase(APITestCase):
 
     def test_user_nao_autenticado(self):
         response = self.client.post('/api/interacoes/denuncias/', {
-            'status': 'pendente',
+            'motivo': 'motivo',
             'descricao': 'testando',
             'mensagem': self.mensagem.id
         })
@@ -150,7 +150,7 @@ class DenunciasTestCase(APITestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data['status'], 'analisado')
 
-    def test_nao_deve_editar_mensagem_com_denuncia_pendente(self):
+    def test_nao_deve_delete_mensagem_com_denuncia_pendente(self):
         self.get_token('admin@email.com')
         Denuncia.objects.create(
             mensagem=self.mensagem,
@@ -167,9 +167,10 @@ class DenunciasTestCase(APITestCase):
     def test_admin_em_analise_DELETE(self):
         denuncia=DenunciasTestCase.cria_denuncia(self)
         self.get_token('admin@email.com')
+        print("status da denuncia:" ,Denuncia.objects.get(id=denuncia).status)
         response = self.client.delete(f'/api/interacoes/denuncias/{denuncia}/')
-        print(response.data)
-        self.assertEqual(response.status_code, 200)
+        print(response.status_code)
+        self.assertEqual(response.status_code, 204)
 
     ###Como outros Users
     def test_aluno_list_GET(self):

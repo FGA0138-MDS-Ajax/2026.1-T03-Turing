@@ -1,16 +1,15 @@
 from rest_framework import viewsets, mixins
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import PermissionDenied
 from .models import Inscricao, Forum, Mensagem, Denuncia
 from .serializers import InscricaoSerializer, ForumSerializer, MensagemSerializer, DenunciaSerializer
-from usuarios.permissions import IsGoStudyAdmin, IsGoStudyProf, IsGoStudyAluno
+from usuarios.permissions import IsGoStudyAdmin
 from services.email_service import enviar_email_aprovacao_professor, enviar_email_rejeicao_professor
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import status
 from django.utils import timezone
 from rest_framework.pagination import PageNumberPagination
-from turmas.models import Matricula
 
 
 class InscricaoViewSet(viewsets.ModelViewSet):
@@ -57,13 +56,12 @@ class InscricaoViewSet(viewsets.ModelViewSet):
 
 
 class ForumViewSet(
-    mixins.RetrieveModelMixin, # Permite GET /api/foruns/{id}/
-    mixins.UpdateModelMixin,   # Permite PUT/PATCH /api/foruns/{id}/
+    mixins.RetrieveModelMixin,  # Permite GET /api/foruns/{id}/
+    mixins.UpdateModelMixin,  # Permite PUT/PATCH /api/foruns/{id}/
     mixins.DestroyModelMixin,  # Permite DELETE /api/foruns/{id}/
-    mixins.ListModelMixin,     #  Permite GET /api/foruns/ 
+    mixins.ListModelMixin,  # Permite GET /api/foruns/
     viewsets.GenericViewSet  # Bloqueia o CreateModelMixin removendo o post
-    ):
-
+):
     serializer_class = ForumSerializer
     permission_classes = [IsAuthenticated]
 
@@ -86,17 +84,18 @@ class ForumViewSet(
         return Forum.objects.none()
 
     def get_permissions(self):
-        #somente admins poderão: listar todos, atualizar, e deletar
-        if self.action in [ 'update', 'partial_update', 'destroy', 'list']:
+        # somente admins poderão: listar todos, atualizar, e deletar
+        if self.action in ['update', 'partial_update', 'destroy', 'list']:
             return [IsGoStudyAdmin()]
         return [IsAuthenticated()]
 
 
-#definição da paginação para as mensangens
+# definição da paginação para as mensangens (Vindo da Developer)
 class MensagemPagination(PageNumberPagination):
-    page_size = 10  # numero de msgs por pagina 
-    page_size_query_param = 'page_size'  
+    page_size = 10  # numero de msgs por pagina
+    page_size_query_param = 'page_size'
     max_page_size = 100
+
 
 class MensagemViewSet(viewsets.ModelViewSet):
     serializer_class = MensagemSerializer
@@ -126,13 +125,11 @@ class MensagemViewSet(viewsets.ModelViewSet):
 
         return queryset.distinct().order_by('data_create')
 
-
     def get_permissions(self):
         # Qualquer autenticado pode tentar; checagem de autor é feita em perform_update/destroy
         return [IsAuthenticated()]
 
-
-    #admins são livres para mandar msg; alunos e professores precisam pertencer ao conteudo
+    # admins são livres para mandar msg; alunos e professores precisam pertencer ao conteudo
     def perform_create(self, serializer):
         forum = serializer.validated_data.get('forum')
         user = self.request.user
@@ -141,38 +138,34 @@ class MensagemViewSet(viewsets.ModelViewSet):
             tem_acesso = forum.conteudo.matriculas.filter(aluno=user.aluno).exists()
             if not tem_acesso:
                 raise PermissionDenied("Você não está matriculado neste conteúdo.")
-            
+
         elif user.tipo == 'professor':
             if user.professor not in forum.conteudo.professores.all():
                 raise PermissionDenied("Você não é professor desta disciplina.")
-            
-        serializer.save(autor=self.request.user)
 
+        serializer.save(autor=self.request.user)
 
     def _verificar_autor_e_denuncia(self, instance):
         user = self.request.user
-        # Só o autor ou o admin pode editar/deletar 
+        # Só o autor ou o admin pode editar/deletar
         if user.tipo != 'admin' and instance.autor != self.request.user:
             raise PermissionDenied("Você só pode editar ou deletar suas próprias mensagens.")
 
         # Não pode editar/deletar se houver denúncia pendente sobre a mensagem
-        denuncia_pendente = Denuncia.objects.filter(
+        denuncia_ativa = Denuncia.objects.filter(
             mensagem=instance,
-            status='pendente'
+            status__in=['pendente', 'analisado']
         ).exists()
-        if denuncia_pendente:
-            raise PermissionDenied("Esta mensagem possui uma denúncia em análise e não pode ser alterada ou excluída.")
-
+        if denuncia_ativa:
+            raise PermissionDenied("Esta mensagem possui uma denúncia ativa/em análise e não pode ser alterada ou excluída.")
 
     def perform_update(self, serializer):
         self._verificar_autor_e_denuncia(serializer.instance)
         serializer.save()
 
-
     def perform_destroy(self, instance):
         self._verificar_autor_e_denuncia(instance)
         instance.delete()
-
 
     @action(detail=False, methods=['get'], url_path='pendentes')
     def pendentes(self, request):
@@ -200,12 +193,15 @@ class MensagemViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(perguntas, many=True)
         return Response(serializer.data)
 
+
+# Paginação padrão para Denúncias
 class StandartResultsSetPagination(PageNumberPagination):
-    #Paginação padrão
     page_size = 10
     page_size_query_param = 'page_size'
     max_page_size = 100
 
+
+# ViewSet de Denúncias
 class DenunciaViewSet(viewsets.ModelViewSet):
     queryset = Denuncia.objects.all().order_by('-data_create')
     serializer_class = DenunciaSerializer
@@ -235,11 +231,4 @@ class DenunciaViewSet(viewsets.ModelViewSet):
         if self.request.user.tipo != 'admin':
             raise PermissionDenied("Apenas administradores podem modificar o status de uma denúncia.")
         # Coloca qual admin salvou a decisão
-        serializer.save(analisado_por = self.request.user.admin)
-
-
-
-
-
-
-
+        serializer.save(analisado_por=self.request.user.admin)
