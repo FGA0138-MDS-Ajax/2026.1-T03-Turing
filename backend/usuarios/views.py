@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from .models import Professor, Admin, Aluno, Perfil
-from .serializers import AdminSerializer, ProfessorSerializer, AlunoSerializer, PasswordResetRequestSerializer
+from .serializers import AdminSerializer, ProfessorSerializer, AlunoSerializer, PasswordResetRequestSerializer, PasswordResetConfirmSerializer
 from .permissions import IsGoStudyProf, IsGoStudyAdmin
 from interacoes.models import Inscricao
 from django.utils import timezone
@@ -130,5 +130,18 @@ class PasswordResetRequestView(APIView):
 
         return Response(
             {"detail": "Se o email informado estiver cadastrado, enviaremos um link para redefinição de senha."},
+            status=status.HTTP_200_OK
+        )
+
+class PasswordResetConfirmView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        serializer = PasswordResetConfirmSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(
+            {"detail": "Senha redefinida com sucesso."},
             status=status.HTTP_200_OK
         )    
