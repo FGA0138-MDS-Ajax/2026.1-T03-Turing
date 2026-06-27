@@ -143,7 +143,7 @@ npm run dev
 
 ## Observações importantes
 
-- O arquivo `.env` **nunca** deve ser commitado
+- O arquivo `.env` *não deve ser commitado
 - Se novas dependências forem adicionadas: `pip install -r requirements.txt`
 - Se novas migrations forem adicionadas: `python manage.py migrate`
 - Se novos pacotes frontend forem adicionados: `npm install`

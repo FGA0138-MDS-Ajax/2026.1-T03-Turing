@@ -125,9 +125,9 @@ git commit -m "docs: atualiza documento de integracao back-front"
 
 ## Backend — boas práticas
 
-- Toda mudança no banco exige migration — nunca alterar diretamente
+- Toda mudança no banco exige migration 
 - Usar `.distinct()` em queries com relações ManyToMany
-- Permissões sempre verificadas nas views — nunca confiar só no frontend
+- Permissões sempre verificadas nas views 
 - Serializers validam dados de entrada — campos obrigatórios, formatos, unicidade
 
 ---
