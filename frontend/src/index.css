@@ -9,5 +9,5 @@ body {
   color: #e8e8ee;
   font-family: "Segoe UI", system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
+  font-size: calc(16px * var(--gs-font-scale, 1));
 }
- 
