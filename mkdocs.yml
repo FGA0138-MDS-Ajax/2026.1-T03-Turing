@@ -1,6 +1,8 @@
 site_name: GoStudy - Documentação
 site_description: Documentação do projeto GoStudy - Plataforma educacional gratuita
 repo_url: https://github.com/FGA0138-MDS-Ajax/2026.1-T03-Turing
+markdown_extensions:
+  - attr_list
 
 theme:
   name: material

@@ -41,3 +41,10 @@
 | Admin | Todos | Todos |
 | Professor | Conteúdos que ministra | Materiais dos seus conteúdos |
 | Aluno | Conteúdos em que está matriculado | Materiais dos conteúdos matriculados |
+
+---
+
+## Telas
+
+### Dashboard do Aluno
+![Dashboard do Aluno](../assets/images/image10.png){ width="900" }

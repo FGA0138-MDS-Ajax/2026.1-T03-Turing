@@ -49,3 +49,10 @@
 | PATCH | `/api/interacoes/inscricoes/{id}/aprovar/` | Aprova inscrição |
 | PATCH | `/api/interacoes/inscricoes/{id}/rejeitar/` | Rejeita inscrição |
 | POST | `/api/usuarios/professores/create_by_admin/` | Cria professor diretamente via admin |
+
+---
+
+## Telas
+
+### Dashboard do Administrador
+![Dashboard do Administrador](../assets/images/image8.png){ width="900" }

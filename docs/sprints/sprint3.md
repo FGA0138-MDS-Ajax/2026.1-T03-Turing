@@ -60,3 +60,10 @@
 | GET/POST | `/api/interacoes/mensagens/` | Lista e envia mensagens |
 | GET | `/api/interacoes/mensagens/?forum={id}` | Mensagens de um fórum |
 | GET | `/api/interacoes/mensagens/pendentes/` | Perguntas pendentes do professor |
+
+---
+
+## Telas
+
+### Dashboard do Professor
+![Dashboard do Professor](../assets/images/image9.png){ width="900" }

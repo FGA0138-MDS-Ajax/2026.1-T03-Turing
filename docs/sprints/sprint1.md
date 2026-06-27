@@ -42,3 +42,9 @@
 | GET | `/api/usuarios/professores/` | Listagem de professores |
 | POST | `/api/usuarios/login/` | Login — retorna JWT |
 | POST | `/api/usuarios/login/refresh/` | Refresh do token JWT |
+
+---
+
+## Telas
+
+![Tela de Login](../assets/images/image.png){ width="500" }    ![Tela de Cadastro](../assets/images/image_copy.png){ width="505" }
