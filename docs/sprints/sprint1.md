@@ -47,4 +47,4 @@
 
 ## Telas
 
-![Tela de Login](../assets/images/image.png){ width="500" }    ![Tela de Cadastro](../assets/images/image_copy.png){ width="505" }
+![Tela de Login](../assets/images/image.png){ width="500" }    ![Tela de Cadastro](../assets/images/image_copy.png){ width="525" }

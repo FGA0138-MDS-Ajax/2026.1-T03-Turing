@@ -56,3 +56,6 @@
 
 ### Dashboard do Administrador
 ![Dashboard do Administrador](../assets/images/image8.png){ width="900" }
+
+### Gerenciamento de Professores
+![Gerenciamento de Professores](../assets/images/image11.png){ width="900" }

@@ -67,3 +67,12 @@
 
 ### Dashboard do Professor
 ![Dashboard do Professor](../assets/images/image9.png){ width="900" }
+
+### Tela de Conteúdos do Professor
+![Tela de Conteúdos do Professor](../assets/images/image12.png){ width="900" }
+
+### Tela de Criação de Material
+![Tela de Criação de Material](../assets/images/image13.png){ width="400" }
+
+### Tela de Materiais do Professor
+![Tela de Materiais do Professor](../assets/images/image14.png){ width="900" }

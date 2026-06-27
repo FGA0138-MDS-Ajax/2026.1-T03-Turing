@@ -48,3 +48,9 @@
 
 ### Dashboard do Aluno
 ![Dashboard do Aluno](../assets/images/image10.png){ width="900" }
+
+### Tela de Conteúdos do Aluno
+![Tela de Conteúdos do Aluno](../assets/images/image15.png){ width="900" }
+
+### Tela de Materiais do Aluno
+![Tela de Materiais do Aluno](../assets/images/image16.png){ width="900" }
