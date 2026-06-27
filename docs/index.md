@@ -1,3 +1,6 @@
+<p align="left">
+  <img src="assets/images/logo_gostudy.png" width="150">
+</p>
 # GoStudy 
 
 Bem-vindo à documentação oficial do **GoStudy** — plataforma educacional gratuita para ensino médio.
