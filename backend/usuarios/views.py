@@ -15,6 +15,7 @@ from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import default_token_generator
 from services.email_service import enviar_email_redefinicao_senha
+import logging
 
 class PerfilViewSet(viewsets.ModelViewSet):
     
@@ -103,6 +104,7 @@ class AlunoViewSet(PerfilViewSet):
             return [IsAuthenticated()]
     
 User = get_user_model()
+logger = logging.getLogger(__name__)
 
 class PasswordResetRequestView(APIView):
     permission_classes = [AllowAny]
@@ -127,6 +129,8 @@ class PasswordResetRequestView(APIView):
                 email=user.email,
                 reset_link=reset_link
             )
+        
+        logger.info("Solicitação de recuperacao de senha recebida para email: %s", email)
 
         return Response(
             {"detail": "Se o email informado estiver cadastrado, enviaremos um link para redefinição de senha."},
