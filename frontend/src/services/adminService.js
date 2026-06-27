@@ -23,8 +23,34 @@ export const adminService = {
     };
   },
   async getRecentActivity() {
-    const response = await api.get('/admin/activity/recent');
-    return response.data;
+    const response = await api.get('/api/interacoes/denuncias/');
+    const dados = Array.isArray(response.data)
+      ? response.data
+      : response.data?.results ?? [];
+
+    return dados.slice(0, 10).map(d => {
+      const statusLabel = {
+        pendente: '🔴 Pendente',
+        analisado: '🟡 Em análise',
+        recusado: '🟢 Recusado',
+      }[d.status] || d.status;
+
+      const data = d.data_create
+        ? new Date(d.data_create).toLocaleDateString('pt-BR', {
+            day: '2-digit', month: 'short', year: 'numeric',
+            hour: '2-digit', minute: '2-digit',
+          })
+        : '—';
+
+      return {
+        id: d.id,
+        actor: d.denunciante_nome || 'Usuário',
+        type: 'aluno',
+        description: `Denúncia contra ${d.denunciado_nome || 'usuário'} — ${d.motivo || 'sem motivo'}`,
+        subject: statusLabel,
+        timeAgo: data,
+      };
+    });
   },
 
   async createAdmin(data) {
