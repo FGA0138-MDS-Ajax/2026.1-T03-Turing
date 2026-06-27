@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from config.views import servir_arquivo_inline
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -25,7 +26,8 @@ urlpatterns = [
 
     path('api/disciplinas/', include('disciplinas.urls')),
     path('api/interacoes/', include('interacoes.urls')),
-    path("api/matriculas/", include('turmas.urls'))
+    path("api/matriculas/", include('turmas.urls')),
+    path('media-inline/<path:caminho>/', servir_arquivo_inline, name='servir-arquivo-inline'),
 ]
 
 
