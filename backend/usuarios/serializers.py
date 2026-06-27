@@ -6,7 +6,7 @@ from services.email_service import enviar_email_boas_vindas_professor, enviar_em
 from datetime import date
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 import json
-
+from django.contrib.auth import get_user_model
 
 #   customizando como o token será pego
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -231,4 +231,12 @@ class AlunoSerializer(serializers.ModelSerializer):
 
             perfil.save()
         return instance
-    
+
+# usa como base a user model definida nas configs em auth_user_model    
+User = get_user_model()
+
+#verifica o email que ta solicitando recuperacao de senha
+class PasswordResetRequestSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    def validate_email(self, email):
+        return email.strip()
