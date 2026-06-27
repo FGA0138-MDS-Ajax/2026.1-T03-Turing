@@ -167,6 +167,9 @@ EMAIL_BACKEND = os.getenv(
     "django.core.mail.backends.console.EmailBackend"
 )
 
+# tempo de expiracao pra token
+PASSWORD_RESET_TIMEOUT = int(os.getenv("PASSWORD_RESET_TIMEOUT", 3600))
+
 # faz conexao do back ao front
 FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:5173")
 
