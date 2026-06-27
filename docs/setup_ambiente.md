@@ -58,6 +58,51 @@ isso vai criar as tabelas locais no banco de dados a partir dos scripts migratio
 `python manage.py runserver`
 isso vai deixar o backend disponível localmente na porta indicada no terminal. pra executar comandos git ou python enquanto o servidor estiver rodando, abra um novo terminal no vscode e mantenha esse terminal do servidor aberto
 
+## Configuração do Frontend
+
+### Primeira vez
+
+1. Entrar na pasta frontend:
+```bash
+cd frontend
+```
+
+2. Instalar dependências:
+```bash
+npm install
+```
+
+3. Iniciar servidor de desenvolvimento:
+```bash
+npm run dev
+```
+
+O frontend ficará disponível em `http://localhost:5173/`
+
+---
+
+## Rotina diária — Frontend
+
+Sempre que abrir o projeto de novo:
+
+1. Entrar na pasta frontend:
+```bash
+cd frontend
+```
+
+2. Iniciar servidor:
+```bash
+npm run dev
+```
+
+---
+
+## Observações importantes
+
+- Backend e frontend precisam estar rodando simultaneamente para o sistema funcionar
+- Backend: `http://localhost:8000/`
+- Frontend: `http://localhost:5173/`
+- Caso novos pacotes sejam adicionados, executar novamente `npm install`
 
 ## Rotina diária de uso do projeto
 
