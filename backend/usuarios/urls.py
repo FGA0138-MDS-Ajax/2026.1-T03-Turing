@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import ProfessorViewSet, AdminViewSet, AlunoViewSet
+from .views import ProfessorViewSet, AdminViewSet, AlunoViewSet, PasswordResetRequestView
 from .serializers import CustomTokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
@@ -23,4 +23,6 @@ urlpatterns = [
     path('login/', CustomTokenObtainPairView.as_view(), name ='token_obtain_pair'), # rota para gerar os tokens
 
     path("login/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
+
+    path("recuperar-senha/", PasswordResetRequestView.as_view(), name="password_reset_request"),
 ]
