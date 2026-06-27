@@ -1,83 +1,149 @@
-# Setup do ambiente
+# Setup do Ambiente
 
-## Pré requisitos
+## Pré-requisitos
 
-Antes de iniciar o projeto e clonar o repositório, é preciso ter instalado na máquina local:
+Antes de iniciar o projeto, instale na sua máquina:
+
 - Git
-- Python 3.12 (vamos padronizar especificamente essa versão; versões 3.13+ atualmente apresentam problemas de compatibilidade com algumas dependências do projeto)
-Se já existir outra versão do Python instalada, não tem problema. as versões podem coexistir normalmente. só instalar também a 3.12 e garantir que o PATH foi configurado corretamente.
+- Python 3.12 (versões 3.13+ têm problemas de compatibilidade com algumas dependências)
 - PostgreSQL
 - Node.js
 
-## Configuração inicial do projeto
-para um primeiro uso
+> Se já tiver outra versão do Python instalada, não tem problema — as versões coexistem normalmente. Só instale a 3.12 e garanta que o PATH está configurado corretamente.
 
-1. Criar o banco de dados
+---
 
-Abrir o pgAdmin e criar um banco PostgreSQL com o nome
-`gostudy`
+## Configuração inicial do Backend
 
-2. Clonar repositório
+### 1. Criar o banco de dados
 
-Abrir o terminal no vscode dentro da pasta onde o projeto ficará, e executar:
-`git clone <url-do-repo>`
+Abra o pgAdmin e crie um banco PostgreSQL com o nome `gostudy`.
 
-3. entrar na pasta backend:
-`cd backend`
+### 2. Clonar o repositório
 
-4. Criar ambiente virtual Python
-vamos usar a venv para lidar com credenciais e o gerenciamento de desenvolvimento local
-no mesmo terminal, primeiro verifique a versão do python com:
-`python --version`
-e garanta que a versão 3.12 está sendo utilizada. se sim, crie o ambiente virtual:
-`py -3.12 -m venv venv`
+```bash
+git clone <url-do-repo>
+```
 
-4. Ativar o ambiente virtual
-isso vai ativar o ambiente virtual do python para o desenvolvimento. sempre confiram se a (venv) está no terminal após ativar
-`venv/Scripts/activate`
+### 3. Entrar na pasta backend
 
-5. Instalar dependências
-`pip install -r requirements.txt`
+```bash
+cd backend
+```
 
-6. Criar o arquivo .env na máquina local
-`cp .env.example .env`
-alternativamente, pode copiar manualmente o arquivo `.env.example` e renomear para `.env`
+### 4. Criar ambiente virtual Python
 
-7. Configurar credenciais do banco
-abrir o novo arquivo .env criado e alterar:
-`DB_USER` para o usuário correto
-`DB_PASSWORD` para a senha
-após editar, salvar o arquivo .env
+Verifique a versão do Python:
 
-8. Executar migrations
-de volta ao terminal:
-`python manage.py migrate`
-isso vai criar as tabelas locais no banco de dados a partir dos scripts migrations modelados e implementados
+```bash
+python --version
+```
 
-9. Iniciar servidor backend
-`python manage.py runserver`
-isso vai deixar o backend disponível localmente na porta indicada no terminal. pra executar comandos git ou python enquanto o servidor estiver rodando, abra um novo terminal no vscode e mantenha esse terminal do servidor aberto
+Crie o ambiente virtual:
 
+```bash
+py -3.12 -m venv venv
+```
 
-## Rotina diária de uso do projeto
+### 5. Ativar o ambiente virtual
 
-Sempre que abrir o projeto de novo
+**Windows:**
+```bash
+venv/Scripts/activate
+```
 
-1. Abrir terminal na pasta backend
-`cd backend`
+**Linux/Mac:**
+```bash
+source venv/bin/activate
+```
 
-2. Ativar ambiente virtual
-`venv/Scripts/activate`
+> Sempre confirme que a `(venv)` aparece no terminal após ativar.
 
-3. Iniciar servidor
-`python manage.py runserver`
+### 6. Instalar dependências
 
-caso preciso, verifiquem a versão do python para garantir que não haverá problemas de compatibilidade
+```bash
+pip install -r requirements.txt
+```
+
+### 7. Criar o arquivo .env
+
+```bash
+cp .env.example .env
+```
+
+### 8. Configurar credenciais do banco
+
+Abra o arquivo `.env` e altere:
+
+- `DB_USER` — usuário do PostgreSQL
+- `DB_PASSWORD` — senha do PostgreSQL
+
+### 9. Executar migrations
+
+```bash
+python manage.py migrate
+```
+
+### 10. Iniciar servidor backend
+
+```bash
+python manage.py runserver
+```
+
+O backend ficará disponível em `http://localhost:8000/`
+
+---
+
+## Configuração inicial do Frontend
+
+### 1. Entrar na pasta frontend
+
+```bash
+cd frontend
+```
+
+### 2. Instalar dependências
+
+```bash
+npm install
+```
+
+### 3. Iniciar servidor de desenvolvimento
+
+```bash
+npm run dev
+```
+
+O frontend ficará disponível em `http://localhost:5173/`
+
+---
+
+## Rotina diária
+
+### Backend
+
+```bash
+cd backend
+venv/Scripts/activate  # Windows
+# ou
+source venv/bin/activate  # Linux/Mac
+python manage.py runserver
+```
+
+### Frontend
+
+```bash
+cd frontend
+npm run dev
+```
+
+> Backend e frontend precisam estar rodando simultaneamente para o sistema funcionar.
+
+---
 
 ## Observações importantes
 
-- o arquivo .env **não deve** ser enviado para o github
-- caso novas dependências sejam adicionadas ao projeto, executar novamente:
-`pip install -r requirements.txt`
-- caso novas migrations sejam adicionadas por outros membros da equipe, executar novamente:
-`python manage.py migrate`
+- O arquivo `.env` *não deve ser commitado
+- Se novas dependências forem adicionadas: `pip install -r requirements.txt`
+- Se novas migrations forem adicionadas: `python manage.py migrate`
+- Se novos pacotes frontend forem adicionados: `npm install`

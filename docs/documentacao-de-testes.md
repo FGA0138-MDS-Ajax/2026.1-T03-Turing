@@ -1,25 +1,9 @@
 # Documentação de Testes 
- 
-**Projeto:** GoStudy  
-**Equipe:** P.O, Desenvolvedores e Cliente  
-**Ferramenta de testes automatizados:** Django REST Framework — `APITestCase`
 
-## Estrutura dos testes automatizados
- 
 Os testes foram implementados com `APITestCase` do Django REST Framework, usando `setUpTestData` para criação compartilhada de fixtures e autenticação JWT via endpoint `/api/usuarios/login/`.
 Eles se encontram em cada pasta do backend, e são atualizados a cada sprint
 
 ---
- 
-## Sumário
- 
-1. [Sprint 1 — Cadastro e Autenticação](#sprint-1)
-2. [Sprint 2 — Administração](#sprint-2)
-3. [Sprint 3 — Matrículas](#sprint-3)
-4. [Requisitos Funcionais e Não Funcionais](#requisitos)
-5. [Casos de Teste](#casos-de-teste)
----
- 
 ## Sprint 1 — Cadastro e Autenticação {#sprint-1}
  
 **Período:** 04/05/2026 a 14/05/2026 (com atraso de 2 dias)
@@ -62,7 +46,7 @@ Foco em operações administrativas: gerenciamento de perfis, aprovação de pro
  
 ## Sprint 3 — Matrículas {#sprint-3}
  
-**Período:** Em andamento  
+**Período:** 28/05/2026 a 06/06/2026  
 **Escopo:** Módulo de matrículas: criar, listar e deletar matrículas por perfil (admin, aluno, professor).
  
 
@@ -123,7 +107,37 @@ Foco em operações administrativas: gerenciamento de perfis, aprovação de pro
 | T19 | Criar matrícula passando aluno terceiro | Automatizado | Funcional | Aluno autenticado | HTTP 201 |
 | T20 | Listar matrículas (professor) | Automatizado | Funcional | Professor autenticado | HTTP 200, lista |
  
+## Sprint 4 — Visualização e Interação {#sprint-4}
+
+**Período:** 06/06/2026 a 15/06/2026  
+**Escopo:** Testes de visualização de conteúdos e materiais pelo aluno após matrícula.
+
+### O que foi testado
+
+| ID | Teste | Tipo | Resultado Esperado |
+|----|-------|------|--------------------|
+| T21 | Listar conteúdos matriculados (aluno) | Automatizado / Funcional | HTTP 200, lista filtrada |
+| T22 | Listar conteúdos disponíveis para matrícula | Automatizado / Funcional | HTTP 200, lista sem matriculados |
+| T23 | Listar materiais de conteúdo matriculado | Automatizado / Funcional | HTTP 200, materiais visíveis |
+| T24 | Listar materiais de conteúdo não matriculado | Automatizado / Funcional | HTTP 403 ou lista vazia |
+
 ---
- 
-*Documentação gerada com base nos testes implementados até a Sprint 3.*
-*Última atualização: 02/06/2026*
+
+## Sprint 5 — Fórum {#sprint-5}
+
+**Período:** 15/06/2026 a 24/06/2026  
+**Escopo:** Testes do sistema de fórum de dúvidas por conteúdo.
+
+### O que foi testado
+
+| ID | Teste | Tipo | Resultado Esperado |
+|----|-------|------|--------------------|
+| T25 | Listar fóruns (aluno matriculado) | Automatizado / Funcional | HTTP 200, fóruns dos conteúdos matriculados |
+| T26 | Listar fóruns (professor) | Automatizado / Funcional | HTTP 200, fóruns dos conteúdos que ministra |
+| T27 | Enviar mensagem no fórum | Automatizado / Funcional | HTTP 201 |
+| T28 | Enviar mensagem vazia | Automatizado / Funcional | HTTP 400 |
+| T29 | Aluno tentar responder mensagem | Automatizado / Funcional | HTTP 400 |
+| T30 | Professor responder mensagem | Automatizado / Funcional | HTTP 201 |
+| T31 | Listar perguntas pendentes (professor) | Automatizado / Funcional | HTTP 200, lista de pendentes |
+| T32 | Editar mensagem de outro usuário | Automatizado / Funcional | HTTP 403 |
+| T33 | Deletar mensagem com denúncia pendente | Automatizado / Funcional | HTTP 403 |
