@@ -1,54 +1,108 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AdminLayout } from '../../components/admin/AdminLayout';
+import { Users, GraduationCap, User, BookX, Search, Filter, BookOpen, Loader2, ChevronDown } from 'lucide-react';
+import api from '../../services/api';
+
+// Funções de conversão (Frontend <-> Backend)
+const mapStatusParaFront = (statusDb) => {
+  if (statusDb === 'analisado') return 'Resolvida';
+  if (statusDb === 'recusado') return 'Negada';
+  return 'Pendente';
+};
+
+const mapStatusParaDb = (statusFront) => {
+  if (statusFront === 'Resolvida') return 'analisado';
+  if (statusFront === 'Negada') return 'recusado';
+  return 'pendente';
+};
+
+const calcularTempoDecorrido = (dataIso) => {
+  if (!dataIso) return '';
+  const dataPost = new Date(dataIso);
+  const agora = new Date();
+  const diff = agora - dataPost;
+  
+  if (diff < 60000) return 'agora mesmo';
+
+  const minutos = Math.floor(diff / (1000 * 60));
+  const horas = Math.floor(diff / (1000 * 60 * 60));
+  const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+  if (dias > 0) return `${dias} dia${dias > 1 ? 's' : ''} atrás`;
+  if (horas > 0) return `${horas} hora${horas > 1 ? 's' : ''} atrás`;
+  return `${minutos} min atrás`;
+};
 
 export default function Denuncias() {
-  // Estados para controlar a abertura dos modais
+  // Estados de Modais e Seleção
   const [modalDetalhesAberto, setModalDetalhesAberto] = useState(false);
   const [modalParecerAberto, setModalParecerAberto] = useState(false);
-  
-  // Estado para saber qual denúncia foi clicada
   const [denunciaSelecionada, setDenunciaSelecionada] = useState(null);
-
-  // Estados do formulário de parecer
   const [statusParecer, setStatusParecer] = useState('');
   const [observacaoParecer, setObservacaoParecer] = useState('');
+  const [observacaoSalva, setObservacaoSalva] = useState({});
 
-  // Mock de dados para garantir o visual enquanto não ligamos à API
-  const mockStats = {
-    total: '1,284',
-    resolvidas: '48',
-    pendentes: '1,236',
-    negadas: '32'
+  // Estados de Dados e UI
+  const [listaDenuncias, setListaDenuncias] = useState([]);
+  const [carregando, setCarregando] = useState(true);
+
+  // Estados de Filtro e Busca
+  const [termoBusca, setTermoBusca] = useState('');
+  const [filtroStatus, setFiltroStatus] = useState('');
+  const [filtroCategoria, setFiltroCategoria] = useState('');
+
+  // 1. CARREGAMENTO DOS DADOS (GET)
+  useEffect(() => {
+    const carregarDenuncias = async () => {
+      setCarregando(true);
+      try {
+        const resposta = await api.get('/api/interacoes/denuncias/');
+        const dadosDoBanco = resposta.data.results ? resposta.data.results : resposta.data;
+
+        const denunciasFormatadas = dadosDoBanco.map(d => ({
+          id: d.id,
+          titulo: `Denúncia #${d.id} - ${d.motivo || 'Geral'}`, 
+          autor: d.nome_denunciante || d.denunciante_nome || (d.denunciante ? `ID: ${d.denunciante}` : 'Desconhecido'),
+          resumo: d.descricao,
+          dataCriacao: d.data_create, 
+          dataAtualizacao: d.data_update || d.updated_at || d.data_create, 
+          status: mapStatusParaFront(d.status)
+        }));
+
+        setListaDenuncias(denunciasFormatadas);
+      } catch (erro) {
+        console.error("Erro ao buscar denúncias:", erro);
+        alert("Erro ao carregar os dados. Verifique a sua conexão.");
+      } finally {
+        setCarregando(false);
+      }
+    };
+    carregarDenuncias();
+  }, []);
+
+  // 2. LÓGICA DE FILTRAGEM
+  const denunciasFiltradas = listaDenuncias.filter(denuncia => {
+    const textoBusca = termoBusca.toLowerCase();
+    const bateBusca = denuncia.titulo.toLowerCase().includes(textoBusca) || 
+                      denuncia.autor.toLowerCase().includes(textoBusca) ||
+                      denuncia.resumo.toLowerCase().includes(textoBusca);
+    
+    const bateStatus = filtroStatus ? denuncia.status === filtroStatus : true;
+    
+    // A categoria verifica se o título/motivo contém a palavra selecionada
+    const bateCategoria = filtroCategoria ? denuncia.titulo.toLowerCase().includes(filtroCategoria.toLowerCase()) : true;
+
+    return bateBusca && bateStatus && bateCategoria;
+  });
+
+  // Indicadores atualizados dinamicamente
+  const stats = {
+    total: denunciasFiltradas.length,
+    resolvidas: denunciasFiltradas.filter(d => d.status === 'Resolvida').length,
+    pendentes: denunciasFiltradas.filter(d => d.status === 'Pendente').length,
+    negadas: denunciasFiltradas.filter(d => d.status === 'Negada').length
   };
 
-  const mockDenuncias = [
-    {
-      id: 1,
-      titulo: 'Como resolver essa integral?',
-      autor: 'usuario_55',
-      resumo: 'Comportamento inadequado nos comentários.',
-      tempo: '5 min atrás',
-      status: 'Pendente',
-    },
-    {
-      id: 2,
-      titulo: 'Reclamações',
-      autor: 'usuario_55',
-      resumo: 'Spam no fórum.',
-      tempo: '5 min atrás',
-      status: 'Negado',
-    },
-    {
-      id: 3,
-      titulo: 'Algo errado',
-      autor: 'usuario_55',
-      resumo: 'Conteúdo incorreto.',
-      tempo: '5 min atrás',
-      status: 'Resolvida',
-    }
-  ];
-
-  // Funções para abrir os modais e guardar os dados da linha clicada
   const abrirDetalhes = (denuncia) => {
     setDenunciaSelecionada(denuncia);
     setModalDetalhesAberto(true);
@@ -56,110 +110,149 @@ export default function Denuncias() {
 
   const abrirParecer = (denuncia) => {
     setDenunciaSelecionada(denuncia);
-    setStatusParecer(''); // Limpa o formulário anterior
+    setStatusParecer(denuncia.status === 'Pendente' ? '' : denuncia.status); 
     setObservacaoParecer('');
     setModalParecerAberto(true);
   };
 
-  // Simulação de submissão do parecer (O feedback visual pedido na Issue)
-  const salvarParecer = () => {
-    if (!statusParecer) {
-      alert("Por favor, selecione um resultado para a análise.");
-      return;
-    }
-    // Aqui entrará a lógica de ligar à API (Endpoint de atualização) na Fase 4
-    alert(`Parecer guardado com sucesso!\nStatus definido: ${statusParecer}`);
-    setModalParecerAberto(false);
-  };
+  // 3. ENVIO DO PARECER (PATCH)
+  const salvarParecer = async () => {
+    if (!statusParecer) { alert("Selecione um resultado."); return; }
+    if (!window.confirm("Confirmar parecer?")) return;
+
+    try {
+        await api.patch(`/api/interacoes/denuncias/${denunciaSelecionada.id}/`, { 
+        status: mapStatusParaDb(statusParecer) 
+        });
+
+        // Atualiza a lista E guarda a observação específica dessa denúncia
+        setListaDenuncias(prev => prev.map(d => d.id === denunciaSelecionada.id ? { 
+        ...d, status: statusParecer, dataAtualizacao: new Date().toISOString() 
+        } : d));
+
+        setObservacaoSalva(prev => ({ ...prev, [denunciaSelecionada.id]: observacaoParecer }));
+
+        setModalParecerAberto(false);
+    } catch (e) { alert("Erro ao salvar."); }
+    };
 
   return (
     <AdminLayout>
       <div className="denuncias-container" style={{ padding: '24px' }}>
         
-        {/* Cabeçalho */}
         <div className="header" style={{ marginBottom: '24px' }}>
-          <h1 style={{ fontSize: '24px', fontWeight: 'bold', color: '#1A1A1A', margin: 0 }}>Denúncias</h1>
-          <p style={{ fontSize: '14px', color: '#666', margin: 0 }}>gerenciamento de denuncias</p>
+          <h1 style={{ fontSize: '24px', fontWeight: '800', color: '#111827', margin: 0 }}>Denúncias</h1>
+          <p style={{ fontSize: '14px', color: '#4B5563', margin: 0, fontWeight: '500' }}>gerenciamento de denuncias</p>
         </div>
 
-        {/* Indicadores (Cards) */}
+        {/* INDICADORES */}
         <div className="stats-grid" style={{ display: 'flex', gap: '16px', marginBottom: '32px' }}>
-          <div style={{ flex: 1, background: '#fff', padding: '16px', borderRadius: '8px', border: '1px solid #EAEAEA' }}>
-            <span style={{ fontSize: '24px' }}>👥</span>
-            <p style={{ margin: '8px 0 4px', fontSize: '12px', color: '#666' }}>Total de Denúncias</p>
-            <h2 style={{ margin: 0, fontSize: '20px' }}>{mockStats.total}</h2>
-          </div>
-          <div style={{ flex: 1, background: '#fff', padding: '16px', borderRadius: '8px', border: '1px solid #EAEAEA' }}>
-            <span style={{ fontSize: '24px' }}>🎓</span>
-            <p style={{ margin: '8px 0 4px', fontSize: '12px', color: '#666' }}>Resolvidas</p>
-            <h2 style={{ margin: 0, fontSize: '20px' }}>{mockStats.resolvidas}</h2>
-          </div>
-          <div style={{ flex: 1, background: '#fff', padding: '16px', borderRadius: '8px', border: '1px solid #EAEAEA' }}>
-            <span style={{ fontSize: '24px' }}>👤</span>
-            <p style={{ margin: '8px 0 4px', fontSize: '12px', color: '#666' }}>Pendente</p>
-            <h2 style={{ margin: 0, fontSize: '20px' }}>{mockStats.pendentes}</h2>
-          </div>
-          <div style={{ flex: 1, background: '#fff', padding: '16px', borderRadius: '8px', border: '1px solid #EAEAEA', position: 'relative' }}>
-            <span style={{ fontSize: '24px' }}>📖</span>
-            <span style={{ position: 'absolute', top: '16px', right: '16px', color: '#4CAF50', fontSize: '12px', fontWeight: 'bold' }}>+3%</span>
-            <p style={{ margin: '8px 0 4px', fontSize: '12px', color: '#666' }}>Negadas</p>
-            <h2 style={{ margin: 0, fontSize: '20px' }}>{mockStats.negadas}</h2>
-          </div>
+          {[
+            { label: 'Total de Denúncias', valor: stats.total, icon: Users },
+            { label: 'Resolvidas', valor: stats.resolvidas, icon: GraduationCap },
+            { label: 'Pendente', valor: stats.pendentes, icon: User },
+            { label: 'Negadas', valor: stats.negadas, icon: BookX }
+          ].map((stat, i) => (
+            <div key={i} style={{ flex: 1, background: '#fff', padding: '20px', borderRadius: '12px', border: '1px solid #EAEAEA', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
+              <div style={{ display: 'inline-flex', padding: '10px', background: '#FDF1E8', borderRadius: '8px', color: '#E87C28', marginBottom: '12px' }}>
+                <stat.icon size={20} />
+              </div>
+              <p style={{ margin: '0 0 4px', fontSize: '13px', color: '#4B5563', fontWeight: '600' }}>{stat.label}</p>
+              <h2 style={{ margin: 0, fontSize: '28px', color: '#111827', fontWeight: '800' }}>{stat.valor}</h2>
+            </div>
+          ))}
         </div>
 
-        {/* Busca e Filtros */}
+        {/* BUSCA E FILTROS */}
         <div className="filters-container" style={{ display: 'flex', gap: '16px', marginBottom: '24px' }}>
-          <div style={{ flex: 2, display: 'flex', alignItems: 'center', background: '#fff', border: '1px solid #EAEAEA', borderRadius: '8px', padding: '8px 12px' }}>
-            <span style={{ marginRight: '8px', color: '#999' }}>🔍</span>
+          
+          <div style={{ flex: 2, display: 'flex', alignItems: 'center', background: '#fff', border: '1px solid #EAEAEA', borderRadius: '8px', padding: '12px 16px', boxShadow: '0 1px 2px rgba(0,0,0,0.02)' }}>
+            <Search size={18} color="#9CA3AF" style={{ marginRight: '12px', minWidth: '18px' }} />
             <input 
               type="text" 
               placeholder="Buscar por conteúdo ou autor..." 
-              style={{ border: 'none', outline: 'none', width: '100%', background: 'transparent' }} 
+              value={termoBusca}
+              onChange={(e) => setTermoBusca(e.target.value)}
+              style={{ border: 'none', outline: 'none', width: '100%', background: 'transparent', fontSize: '14px', color: '#111827', fontWeight: '500' }} 
             />
           </div>
-          <div style={{ flex: 1, display: 'flex', alignItems: 'center', background: '#fff', border: '1px solid #EAEAEA', borderRadius: '8px', padding: '8px 12px' }}>
-            <span style={{ marginRight: '8px', color: '#999' }}>⏳</span>
-            <select style={{ border: 'none', outline: 'none', width: '100%', background: 'transparent' }}>
-              <option value="">categoria</option>
+
+          <div style={{ flex: 1, display: 'flex', alignItems: 'center', background: '#fff', border: '1px solid #EAEAEA', borderRadius: '8px', padding: '12px 16px', position: 'relative', boxShadow: '0 1px 2px rgba(0,0,0,0.02)' }}>
+            <Filter size={18} color="#9CA3AF" style={{ marginRight: '12px', minWidth: '18px' }} />
+            <select 
+              value={filtroCategoria}
+              onChange={(e) => setFiltroCategoria(e.target.value)}
+              style={{ border: 'none', outline: 'none', width: '100%', background: 'transparent', fontSize: '14px', color: '#4B5563', cursor: 'pointer', fontWeight: '500', appearance: 'none', WebkitAppearance: 'none', MozAppearance: 'none', paddingRight: '20px' }}>
+              <option value="">Todas as categorias</option>
+              <option value="ofensiv">Ofensivo</option>
+              <option value="spam">Spam</option>
             </select>
+            <ChevronDown size={16} color="#9CA3AF" style={{ position: 'absolute', right: '16px', pointerEvents: 'none' }} />
           </div>
-          <div style={{ flex: 1, display: 'flex', alignItems: 'center', background: '#fff', border: '1px solid #EAEAEA', borderRadius: '8px', padding: '8px 12px' }}>
-            <span style={{ marginRight: '8px', color: '#999' }}>⏳</span>
-            <select style={{ border: 'none', outline: 'none', width: '100%', background: 'transparent' }}>
-              <option value="">status</option>
-              <option value="pendente">Pendente</option>
-              <option value="resolvida">Resolvida</option>
-              <option value="negado">Negado</option>
+
+          <div style={{ flex: 1, display: 'flex', alignItems: 'center', background: '#fff', border: '1px solid #EAEAEA', borderRadius: '8px', padding: '12px 16px', position: 'relative', boxShadow: '0 1px 2px rgba(0,0,0,0.02)' }}>
+            <Filter size={18} color="#9CA3AF" style={{ marginRight: '12px', minWidth: '18px' }} />
+            <select 
+              value={filtroStatus}
+              onChange={(e) => setFiltroStatus(e.target.value)}
+              style={{ border: 'none', outline: 'none', width: '100%', background: 'transparent', fontSize: '14px', color: '#4B5563', cursor: 'pointer', fontWeight: '500', appearance: 'none', WebkitAppearance: 'none', MozAppearance: 'none', paddingRight: '20px' }}>
+              <option value="">Todos os status</option>
+              <option value="Pendente">Pendente</option>
+              <option value="Resolvida">Resolvida</option>
+              <option value="Negada">Negada</option>
             </select>
+            <ChevronDown size={16} color="#9CA3AF" style={{ position: 'absolute', right: '16px', pointerEvents: 'none' }} />
           </div>
+
         </div>
 
-        {/* Listagem de Denúncias */}
+        {/* LISTAGEM DE DENÚNCIAS */}
         <div className="list-container" style={{ background: '#fff', borderRadius: '8px', padding: '16px', border: '1px solid #EAEAEA' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px', fontWeight: 'bold', fontSize: '14px', borderBottom: '1px solid #EAEAEA', paddingBottom: '12px' }}>
-            <div style={{ flex: 2 }}>Post</div>
-            <div style={{ flex: 1, textAlign: 'center' }}>Status</div>
-            <div style={{ flex: 1, textAlign: 'right' }}>Ações</div>
+          <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: '16px', marginBottom: '16px', fontWeight: '800', fontSize: '14px', borderBottom: '1px solid #EAEAEA', paddingBottom: '12px', color: '#111827' }}>
+            <div>Post</div>
+            <div style={{ textAlign: 'center' }}>Status</div>
+            <div style={{ textAlign: 'center' }}>Ações</div>
           </div>
           
-          <div className="list-items" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            {mockDenuncias.map((denuncia) => (
-              <div key={denuncia.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: '#F9F9F7', padding: '16px', borderRadius: '8px', border: '1px solid #EAEAEA' }}>
-                <div style={{ flex: 2, display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-                  <div style={{ background: '#E0E7E9', padding: '8px', borderRadius: '4px' }}>📖</div>
+          <div className="list-items" style={{ display: 'flex', flexDirection: 'column', gap: '8px', minHeight: '200px', position: 'relative' }}>
+            
+            {/* ESTADO DE LOADING */}
+            {carregando && (
+              <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', display: 'flex', flexDirection: 'column', alignItems: 'center', color: '#9CA3AF' }}>
+                <Loader2 className="spinner" size={32} style={{ animation: 'spin 1s linear infinite', marginBottom: '8px', color: '#E87C28' }} />
+                <span style={{ fontSize: '14px', fontWeight: '500' }}>Carregando denúncias...</span>
+              </div>
+            )}
+
+            {/* ESTADO VAZIO */}
+            {!carregando && denunciasFiltradas.length === 0 && (
+              <div style={{ textAlign: 'center', padding: '32px', color: '#6B7280', fontSize: '14px' }}>
+                Nenhuma denúncia encontrada para os filtros atuais.
+              </div>
+            )}
+
+            {/* LINHAS DA TABELA */}
+            {!carregando && denunciasFiltradas.map((denuncia) => (
+              <div key={denuncia.id} style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: '16px', alignItems: 'center', background: '#F9F9F7', padding: '16px', borderRadius: '8px', border: '1px solid #EAEAEA' }}>
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+                  <div style={{ background: '#DBEAFE', color: '#3B82F6', padding: '10px', borderRadius: '6px' }}>
+                    <BookOpen size={20} />
+                  </div>
                   <div>
-                    <h4 style={{ margin: '0 0 4px 0', fontSize: '14px' }}>{denuncia.titulo}</h4>
-                    <p style={{ margin: 0, fontSize: '12px', color: '#666' }}>por: {denuncia.autor}</p>
-                    <p style={{ margin: '2px 0 0 0', fontSize: '10px', color: '#999' }}>{denuncia.resumo}</p>
+                    <h4 style={{ margin: '0 0 4px 0', fontSize: '14px', fontWeight: '600', color: '#111827' }}>{denuncia.titulo}</h4>
+                    <p style={{ margin: 0, fontSize: '12px', color: '#4B5563', fontWeight: '500' }}>por: {denuncia.autor}</p>
+                    <p style={{ margin: '2px 0 0 0', fontSize: '11px', color: '#6B7280', fontWeight: '500' }}>{denuncia.resumo}</p>
                   </div>
                 </div>
-                <div style={{ flex: 1, textAlign: 'center', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px' }}>
-                  <span style={{ fontSize: '10px', color: '#999' }}>{denuncia.tempo}</span>
-                  <span style={{ fontWeight: 'bold', fontSize: '14px' }}>{denuncia.status}</span>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                  <span style={{ fontSize: '11px', color: '#6B7280', fontWeight: '500' }}>
+                    {calcularTempoDecorrido(denuncia.dataCriacao)}
+                  </span>
+                  <span style={{ fontWeight: '700', fontSize: '13px', color: '#111827' }}>{denuncia.status}</span>
                 </div>
-                <div style={{ flex: 1, textAlign: 'right', display: 'flex', justifyContent: 'flex-end', gap: '16px' }}>
-                  <button onClick={() => abrirDetalhes(denuncia)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontWeight: 'bold', fontSize: '14px', color: '#333' }}>Detalhes</button>
-                  <button onClick={() => abrirParecer(denuncia)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontWeight: 'bold', fontSize: '14px', color: '#4CAF50' }}>Parecer</button>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '24px' }}>
+                  <button onClick={() => abrirDetalhes(denuncia)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontWeight: '600', fontSize: '14px', color: '#111827', padding: 0 }}>Detalhes</button>
+                  <button onClick={() => abrirParecer(denuncia)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontWeight: '600', fontSize: '14px', color: '#111827', padding: 0 }}>Parecer</button>
                 </div>
               </div>
             ))}
@@ -167,83 +260,100 @@ export default function Denuncias() {
         </div>
       </div>
 
-      {/* ========================================= */}
-      {/* MODAL 1: DETALHES DA DENÚNCIA             */}
-      {/* ========================================= */}
+      {/* MODAL: DETALHES */}
       {modalDetalhesAberto && denunciaSelecionada && (
         <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 9999, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <div style={{ background: '#fff', width: '500px', maxWidth: '90%', borderRadius: '8px', padding: '24px', boxShadow: '0 4px 20px rgba(0,0,0,0.15)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-              <h2 style={{ margin: 0, fontSize: '20px', color: '#1A1A1A' }}>Detalhes da Denúncia</h2>
-              <button onClick={() => setModalDetalhesAberto(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '16px' }}>✖</button>
+              <h2 style={{ margin: 0, fontSize: '20px', color: '#111827', fontWeight: '700' }}>Detalhes da Denúncia</h2>
+              <button onClick={() => setModalDetalhesAberto(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '16px', color: '#111827' }}>✖</button>
             </div>
             
             <div style={{ marginBottom: '16px' }}>
-              <h4 style={{ margin: '0 0 8px 0', fontSize: '14px', color: '#666' }}>Informações da Publicação</h4>
-              <p style={{ margin: '0 0 4px 0', fontSize: '14px' }}><strong>Título:</strong> {denunciaSelecionada.titulo}</p>
-              <p style={{ margin: '0', fontSize: '14px' }}><strong>Autor do post:</strong> {denunciaSelecionada.autor}</p>
+              <h4 style={{ margin: '0 0 8px 0', fontSize: '14px', color: '#4B5563', fontWeight: '600' }}>Informações da Publicação</h4>
+              <p style={{ margin: '0 0 4px 0', fontSize: '14px', color: '#111827' }}><strong>Título:</strong> {denunciaSelecionada.titulo}</p>
+              <p style={{ margin: '0', fontSize: '14px', color: '#111827' }}><strong>Autor do post:</strong> {denunciaSelecionada.autor}</p>
             </div>
 
             <div style={{ marginBottom: '16px', padding: '12px', background: '#F9F9F7', borderRadius: '4px' }}>
-              <h4 style={{ margin: '0 0 8px 0', fontSize: '14px', color: '#666' }}>Dados da Denúncia</h4>
-              <p style={{ margin: '0 0 4px 0', fontSize: '14px' }}><strong>Motivo:</strong> {denunciaSelecionada.resumo}</p>
-              <p style={{ margin: '0 0 4px 0', fontSize: '14px' }}><strong>Data:</strong> {denunciaSelecionada.tempo}</p>
-              <p style={{ margin: '0', fontSize: '14px' }}><strong>Status Atual:</strong> <span style={{ fontWeight: 'bold' }}>{denunciaSelecionada.status}</span></p>
+              <h4 style={{ margin: '0 0 8px 0', fontSize: '14px', color: '#4B5563', fontWeight: '600' }}>Dados da Denúncia</h4>
+              <p style={{ margin: '0 0 4px 0', fontSize: '14px', color: '#111827' }}><strong>Motivo:</strong> {denunciaSelecionada.resumo}</p>
+              
+              <p style={{ margin: '0 0 4px 0', fontSize: '14px', color: '#111827' }}>
+                <strong>Criada há:</strong> {calcularTempoDecorrido(denunciaSelecionada.dataCriacao)}
+              </p>
+              
+              {/* Só mostra o tempo de resolução se a denúncia já foi processada */}
+              {denunciaSelecionada.status !== 'Pendente' && (
+                <p style={{ margin: '0 0 4px 0', fontSize: '14px', color: '#111827' }}>
+                  <strong>{denunciaSelecionada.status === 'Resolvida' ? 'Resolvida' : 'Negada'} há:</strong> {calcularTempoDecorrido(denunciaSelecionada.dataAtualizacao)}
+                </p>
+              )}
+
+              <p style={{ margin: '0 0 4px 0', fontSize: '14px', color: '#111827' }}><strong>Status Atual:</strong> <span style={{ fontWeight: 'bold' }}>{denunciaSelecionada.status}</span></p>
+              <p style={{ margin: '0', fontSize: '14px', color: '#111827' }}>
+                <strong>Histórico:</strong> {observacaoSalva[denunciaSelecionada.id] || "A denúncia foi registrada e aguarda ou já passou por revisão."}
+              </p>
             </div>
 
             <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '24px' }}>
-              <button onClick={() => setModalDetalhesAberto(false)} style={{ padding: '8px 16px', background: '#EAEAEA', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}>Fechar</button>
+              <button onClick={() => setModalDetalhesAberto(false)} style={{ padding: '8px 16px', background: '#EAEAEA', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', color: '#111827' }}>Fechar</button>
             </div>
           </div>
         </div>
       )}
 
-      {/* ========================================= */}
-      {/* MODAL 2: EMISSÃO DE PARECER               */}
-      {/* ========================================= */}
+      {/* MODAL: PARECER */}
       {modalParecerAberto && denunciaSelecionada && (
         <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 9999, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <div style={{ background: '#fff', width: '500px', maxWidth: '90%', borderRadius: '8px', padding: '24px', boxShadow: '0 4px 20px rgba(0,0,0,0.15)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-              <h2 style={{ margin: 0, fontSize: '20px', color: '#1A1A1A' }}>Emitir Parecer</h2>
-              <button onClick={() => setModalParecerAberto(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '16px' }}>✖</button>
+              <h2 style={{ margin: 0, fontSize: '20px', color: '#111827', fontWeight: '700' }}>Emitir Parecer</h2>
+              <button onClick={() => setModalParecerAberto(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '16px', color: '#111827' }}>✖</button>
             </div>
             
-            <p style={{ margin: '0 0 16px 0', fontSize: '14px', color: '#666' }}>Denúncia referida: <strong>{denunciaSelecionada.titulo}</strong></p>
+            <p style={{ margin: '0 0 16px 0', fontSize: '14px', color: '#4B5563', fontWeight: '500' }}>Denúncia referida: <strong>{denunciaSelecionada.titulo}</strong></p>
 
             <div style={{ marginBottom: '16px' }}>
-              <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', fontWeight: 'bold' }}>Resultado da Análise</label>
+              <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', fontWeight: '600', color: '#111827' }}>Resultado da Análise</label>
               <select 
                 value={statusParecer}
                 onChange={(e) => setStatusParecer(e.target.value)}
-                style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #CCC', fontSize: '14px' }}
+                style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #CCC', fontSize: '14px', color: '#111827', fontWeight: '500' }}
               >
                 <option value="">Selecione um status...</option>
                 <option value="Resolvida">Resolvida (Aprovar denúncia)</option>
-                <option value="Negado">Negada (Rejeitar denúncia)</option>
+                <option value="Negada">Negada (Rejeitar denúncia)</option>
                 <option value="Pendente">Manter Pendente</option>
               </select>
             </div>
 
             <div style={{ marginBottom: '24px' }}>
-              <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', fontWeight: 'bold' }}>Observações (opcional)</label>
+              <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', fontWeight: '600', color: '#111827' }}>Observações (opcional)</label>
               <textarea 
                 value={observacaoParecer}
                 onChange={(e) => setObservacaoParecer(e.target.value)}
                 rows="4"
                 placeholder="Descreva o motivo da sua decisão..."
-                style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #CCC', fontSize: '14px', resize: 'vertical' }}
+                style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #CCC', fontSize: '14px', resize: 'vertical', color: '#111827', fontWeight: '500' }}
               ></textarea>
             </div>
 
             <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px' }}>
-              <button onClick={() => setModalParecerAberto(false)} style={{ padding: '10px 16px', background: 'transparent', border: '1px solid #CCC', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}>Cancelar</button>
-              <button onClick={salvarParecer} style={{ padding: '10px 16px', background: '#4CAF50', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}>Confirmar Parecer</button>
+              <button onClick={() => setModalParecerAberto(false)} style={{ padding: '10px 16px', background: 'transparent', border: '1px solid #CCC', borderRadius: '4px', cursor: 'pointer', fontWeight: '600', color: '#111827' }}>Cancelar</button>
+              <button onClick={salvarParecer} style={{ padding: '10px 16px', background: '#4CAF50', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: '600' }}>Confirmar Parecer</button>
             </div>
           </div>
         </div>
       )}
 
+      {/* CSS para a animação do spinner de loading */}
+      <style>{`
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+      `}</style>
     </AdminLayout>
   );
 }
