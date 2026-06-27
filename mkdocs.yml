@@ -13,7 +13,6 @@ theme:
   features:
     - navigation.tabs
     - navigation.sections
-    - toc.integrate
     - search.suggest
 
 nav:

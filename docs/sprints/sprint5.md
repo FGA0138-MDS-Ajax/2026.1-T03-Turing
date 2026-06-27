@@ -56,3 +56,14 @@
 | Admin | Todos | Sim | Sim |
 | Professor | Conteúdos que ministra | Sim | Sim |
 | Aluno | Conteúdos matriculados | Sim | Não |
+
+## Telas
+
+### Fórum do Professor
+![Fórum do Professor](../assets/images/image17.png){ width="1000" }
+
+### Fórum do Aluno
+![Fórum do Aluno](../assets/images/image18.png){ width="1000" }
+
+### Tela de Denúncia
+![Tela de Denúncia](../assets/images/image19.png){ width="500" }
