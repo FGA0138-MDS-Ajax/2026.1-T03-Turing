@@ -1,11 +1,38 @@
-site_name: Documentação
-
-nav:
-  - Instruções mkdocs: "index.md"
-  - Atas de Reunião:
-    - Ata 1: "atas-reuniao/ata-reuniao-1.md"
-  - Documento de visão: "visao-produto-projeto(1.1).md"
-  - Documento de arquitetura: "documento-arquitetura(1.0).md"
+site_name: GoStudy - Documentação
+site_description: Documentação do projeto GoStudy - Plataforma educacional gratuita
+repo_url: https://github.com/FGA0138-MDS-Ajax/2026.1-T03-Turing
 
 theme:
   name: material
+  language: pt
+  palette:
+    primary: teal
+    accent: teal
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - toc.integrate
+    - search.suggest
+
+nav:
+  - Início: index.md
+  - Equipe: equipe.md
+  - Configuração:
+    - Setup do Ambiente: setup_ambiente.md
+    - Como Contribuir: como_contribuir.md
+  - Documentação Técnica:
+    - Padronização: padronizacao.md
+    - Arquitetura: documento-arquitetura.md
+    - Visão do Produto: documento-visao-produto-projeto.md
+    - Integração Back-Front: integracao_back_front.md
+    - Endpoints: endpoints.md
+    - Banco de Dados: banco_de_dados.md
+  - Sprints:
+    - Sprint 1 - Cadastro: sprints/sprint1.md
+    - Sprint 2 - Administração: sprints/sprint2.md
+    - Sprint 3 - Postagem de material: sprints/sprint3.md
+    - Sprint 4 - Visualização e interação: sprints/sprint4.md
+    - Sprint 5 - Fórum: sprints/sprint5.md
+    - Sprint 6 - Acessibilidade: sprints/sprint6.md
+  - Testes:
+    - Documentação de Testes: documentacao-de-testes.md
