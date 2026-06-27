@@ -26,11 +26,11 @@
 }
 
 .md-titulo {
-  font-size: 1.5rem;
+  margin: 0 0 0.3rem 0;
+  font-size: 2rem;
   font-weight: 700;
-  color: #111827;
-  margin: 0 0 0.35rem;
-  line-height: 1.3;
+  color: #02373a;
+  font-family: 'Serif'
 }
 .md-subtitulo {
   font-size: 0.85rem;
