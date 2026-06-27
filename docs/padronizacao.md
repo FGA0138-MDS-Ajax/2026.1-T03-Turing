@@ -15,7 +15,7 @@ O projeto utilizará as seguintes branches principais: 
     
 - `developer` -> integração das funcionalidades em desenvolvimento 
     
-- `feature/*` -> desenvolvimento das funcionalidades completas específicas 
+- `feat/*` -> desenvolvimento das funcionalidades completas específicas 
     
 - `fix/*` -> correções e ajustes 
 
@@ -26,7 +26,7 @@ O projeto utilizará as seguintes branches principais: 
 As branches devem ser nomeadas de acordo com suas issues relacionadas 
 
 Exemplos: 
-* **Funcionalidades**:  feature/nome-da-feature 
+* **Funcionalidades**:  feat/nome-da-feature 
 
 * **Correções**: fix/nome-da-correcao 
 
