@@ -1,5 +1,6 @@
 import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import { ProtectedRoute }  from './ProtectedRoute';
+import { Home } from '../pages/Home/Home';
 import { AdminProvider }   from '../context/AdminContext';
 import { AdminDashboard }  from '../pages/admin/AdminDashboard';
 import { Professores }     from '../pages/admin/Professores';
@@ -36,6 +37,10 @@ function AdminLayout() {
 export function AppRoutes() {
   return (
     <Routes>
+
+      <Route path="/home" element={<Home />} />
+      <Route path="/" element={<Navigate to="/home" replace />} />
+
       <Route path="/login"    element={<Login />} />
       <Route path="/register" element={<Register />} />
 
