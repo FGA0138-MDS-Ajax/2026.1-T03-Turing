@@ -40,13 +40,13 @@ function StatCard({ label, value, icon: Icon, color, loading }) {
 
 function AtividadeItem({ titulo, disciplina }) {
   return (
-    <div className="ad-atividade-item">
-      <div className="ad-atividade-icon">
+    <div className="prof-atividade-item">
+      <div className="prof-atividade-icon">
         <FileText size={16} color="#2F5D62" />
       </div>
-      <div className="ad-atividade-info">
-        <span className="ad-atividade-titulo">{titulo}</span>
-        <span className="ad-atividade-disciplina">{disciplina}</span>
+      <div className="prof-atividade-info">
+        <span className="prof-atividade-titulo">{titulo}</span>
+        <span className="profgit-atividade-disciplina">{disciplina}</span>
       </div>
     </div>
   );
