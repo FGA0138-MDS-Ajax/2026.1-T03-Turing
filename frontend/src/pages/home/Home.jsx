@@ -34,6 +34,11 @@ const FEATURES = [
     descricao: 'Materiais separados por disciplina e conteúdo, tudo em um só lugar.',
   },
   {
+    icon: CircleCheck,
+    titulo: 'Professores qualificados',
+    descricao: 'Docentes aprovados podem compartilhar conteúdos e acompanhar os alunos.',
+  },
+  {
     icon: FileText,
     titulo: 'Materiais de estudo',
     descricao: 'PDFs, vídeos, links e documentos disponíveis para download.',
@@ -48,15 +53,11 @@ const FEATURES = [
     titulo: 'Professores',
     descricao: 'Publique conteúdos e materiais de forma simples e rápida.',
   },
-  {
-    icon: Clock,
-    titulo: 'Organização dos estudos',
-    descricao: 'Estruture seus estudos com cronogramas e planejamento.',
-  },
+  
   {
     icon: CircleCheck,
-    titulo: 'Acompanhamento do progresso',
-    descricao: 'Visualize seu desempenho e evolução acadêmica.',
+    titulo: 'Ensino acessível',
+    descricao: 'Todo o conteúdo da plataforma é gratuito para estudantes do ensino médio.',
   },
 ];
 
