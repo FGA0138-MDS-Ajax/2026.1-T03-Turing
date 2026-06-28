@@ -571,3 +571,193 @@
     transform: translateX(0);
   }
 }
+
+.gs-home-section {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding: 100px 0;
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.gs-home-section--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.gs-home-section--alt {
+  background: #fff;
+}
+
+.gs-home-section__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  width: 100%;
+}
+
+.gs-home-section__header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.gs-home-section__tag {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #2F5D62;
+  background: rgba(47, 93, 98, 0.08);
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.gs-home-section__titulo {
+  font-size: 2.3rem;
+  font-weight: 800;
+  color: #1a1a2e;
+  margin: 0 0 0.75rem 0;
+  letter-spacing: -0.5px;
+}
+
+.gs-home-section__sub {
+  font-size: 1.05rem;
+  color: #4a4a5a;
+  margin: 0;
+}
+
+.gs-home-about {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+.gs-home-about__content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.gs-home-about__text {
+  font-size: 1rem;
+  color: #4a4a5a;
+  line-height: 1.8;
+  margin: 0;
+}
+
+.gs-home-about__text strong {
+  color: #2F5D62;
+}
+
+.gs-home-about__stats {
+  display: flex;
+  gap: 3rem;
+  margin-top: 1rem;
+}
+
+.gs-home-about__stat {
+  display: flex;
+  flex-direction: column;
+}
+
+.gs-home-about__stat-value {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #2F5D62;
+}
+
+.gs-home-about__stat-label {
+  font-size: 0.85rem;
+  color: #4a4a5a;
+}
+
+.gs-home-about__visual {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.gs-home-about__logos {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 2rem;
+  background: #fafafa;
+  border-radius: 16px;
+  border: 1px solid #f0f0f0;
+}
+
+.gs-home-about__logo--gostudy {
+  height: 250px;  
+  width: auto;
+  object-fit: contain;
+  margin-left: -80px;
+}
+
+.gs-home-about__logo--unb {
+  height: 60px; 
+  width: auto;
+  object-fit: contain;
+}
+
+.gs-home-about__logo-divider {
+  font-size: 1.5rem;
+  color: #ccc;
+  margin-left: -80px;
+
+}
+
+.gs-home-about__logo {
+  height: 60px;
+  width: auto;
+  object-fit: contain;
+}
+
+.gs-home-about__logo-divider {
+  font-size: 1.5rem;
+  color: #ccc;
+}
+
+.gs-home-about__cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.gs-home-about__card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.gs-home-about__card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+}
+
+.gs-home-about__card-icon {
+  color: #2F5D62;
+  margin-bottom: 0.75rem;
+}
+
+.gs-home-about__card h4 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin: 0 0 0.4rem 0;
+}
+
+.gs-home-about__card p {
+  font-size: 0.85rem;
+  color: #4a4a5a;
+  margin: 0;
+}

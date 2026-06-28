@@ -314,11 +314,11 @@ export function Home() {
           </div>
           <div className="gs-home-about__visual">
             <div className="gs-home-about__logos">
-              <img src={logo} alt="GoStudy" className="gs-home-about__logo" />
+              <img src={logo} alt="GoStudy" className="gs-home-about__logo--gostudy" />
               <div className="gs-home-about__logo-divider">
                 <span>+</span>
               </div>
-              <img src={logoUnb} alt="UnB" className="gs-home-about__logo" />
+              <img src={logoUnb} alt="UnB" className="gs-home-about__logo--unb" />
             </div>
             <div className="gs-home-about__cards">
               <div className="gs-home-about__card">
