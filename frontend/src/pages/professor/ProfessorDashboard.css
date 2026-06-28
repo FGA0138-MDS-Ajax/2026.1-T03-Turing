@@ -207,3 +207,15 @@
   font-size: 0.875rem;
   margin-bottom: 1.25rem;
 }
+
+.ad-duvida-badge--pendente {
+  background: #FEF3C7;
+  color: #92400E;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: background 0.15s;
+}
+.ad-duvida-badge--pendente:hover { background: #FDE68A; }

@@ -10,6 +10,7 @@ import {
 import "./ProfessorConteudo.css";
 import { BookOpen, CalendarDays, FolderOpen, Filter } from "lucide-react";
 import ModalCriarMaterial from "../../../components/professor/ModalCriarMaterial";
+import { useNavigate } from "react-router-dom";
 
 export default function ProfessorConteudo() {
   const { user } = useAuth();
@@ -22,6 +23,7 @@ export default function ProfessorConteudo() {
   const [filtroDisciplina, setFiltroDisciplina] = useState("");
   const [modalCriar, setModalCriar] = useState(false);
   const [conteudoSelecionado, setConteudoSelecionado] = useState(null);
+  const navigate = useNavigate();
 
   if (user?.tipo !== "professor") {
     return (
@@ -183,6 +185,12 @@ export default function ProfessorConteudo() {
               <div className="conteudo-footer">
                 <button className="btn-material" onClick={() => abrirModalParaConteudo(conteudo)}>
                   + Adicionar material
+                </button>
+                <button
+                  className="btn-forum"
+                  onClick={() => navigate(`/professor/conteudos/${conteudo.id}/forum`)}
+                >
+                  Ir para o fórum
                 </button>
               </div>
             </article>
