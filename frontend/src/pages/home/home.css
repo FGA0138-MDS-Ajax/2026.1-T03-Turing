@@ -452,3 +452,122 @@
   align-items: center;
   gap: 0.3rem;
 }
+
+.gs-home-hero__particles {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.gs-home-hero__particle {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: #41676A;
+  border-radius: 50%;
+  opacity: 0.08;
+  animation: particleFloat 8s ease-in-out infinite;
+}
+
+.gs-home-hero__particle:nth-child(1) {
+  top: 20%;
+  left: 10%;
+  animation-delay: 0s;
+}
+.gs-home-hero__particle:nth-child(2) {
+  top: 60%;
+  left: 80%;
+  animation-delay: 1.5s;
+  width: 4px;
+  height: 4px;
+}
+.gs-home-hero__particle:nth-child(3) {
+  top: 80%;
+  left: 20%;
+  animation-delay: 3s;
+  width: 8px;
+  height: 8px;
+}
+.gs-home-hero__particle:nth-child(4) {
+  top: 30%;
+  left: 70%;
+  animation-delay: 4.5s;
+  width: 5px;
+  height: 5px;
+}
+
+.gs-home-hero__blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.08;
+  pointer-events: none;
+}
+
+.gs-home-hero__blob--1 {
+  width: 350px;
+  height: 350px;
+  background: #41676A;
+  top: -100px;
+  right: -50px;
+  animation: blobFloat 8s ease-in-out infinite;
+}
+
+.gs-home-hero__blob--2 {
+  width: 250px;
+  height: 250px;
+  background: #4A9EA8;
+  bottom: -50px;
+  left: 10%;
+  animation: blobFloat 10s ease-in-out infinite reverse;
+}
+
+.gs-home-hero__blob--3 {
+  width: 200px;
+  height: 200px;
+  background: #41676A;
+  top: 50%;
+  left: 30%;
+  animation: blobFloat 12s ease-in-out infinite alternate;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes blobFloat {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(30px, -20px) scale(1.1); }
+}
+
+@keyframes particleFloat {
+  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.08; }
+  50% { transform: translate(20px, -30px) scale(1.5); opacity: 0.15; }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
