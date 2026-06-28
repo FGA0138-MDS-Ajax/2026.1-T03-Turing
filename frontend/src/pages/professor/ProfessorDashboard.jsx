@@ -46,7 +46,7 @@ function AtividadeItem({ titulo, disciplina }) {
       </div>
       <div className="prof-atividade-info">
         <span className="prof-atividade-titulo">{titulo}</span>
-        <span className="profgit-atividade-disciplina">{disciplina}</span>
+        <span className="prof-atividade-disciplina">{disciplina}</span>
       </div>
     </div>
   );
