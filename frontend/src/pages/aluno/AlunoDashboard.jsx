@@ -119,7 +119,9 @@ export function AlunoDashboard() {
       const matriculas = Array.isArray(matriculasRes.data)  ? matriculasRes.data  : [];
       const todosMat  = Array.isArray(materiaisRes.data)   ? materiaisRes.data   : [];
       const disciplinasUnicas = new Set(conteudos.map(c => c.disciplina)).size;
-      const todasMensagens = Array.isArray(mensagensRes.data) ? mensagensRes.data : [];
+      const todasMensagens = Array.isArray(mensagensRes.data)
+        ? mensagensRes.data
+        : mensagensRes.data?.results ?? [];
       const nomeAluno = user?.nome;
       const minhasPerguntas = todasMensagens.filter(
         m => m.resposta_para === null && m.autor_nome === nomeAluno
