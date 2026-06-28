@@ -291,3 +291,164 @@
   height: 550px;
   z-index: 1;
 }
+
+.gs-home-hero__logo-container {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 250px;
+  height: 200px;
+  z-index: 5;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+  background: #fff;
+  padding: 16px;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gs-home-hero__logo-gif {
+  width: auto;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.2);
+}
+
+.gs-home-float-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
+  position: absolute;
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.4s ease;
+  animation: float 6s ease-in-out infinite;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  padding: 0;
+}
+
+.gs-home-float-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+}
+
+.gs-home-float-card--main {
+  width: 320px;
+  top: 240px;
+  right: 10px;
+  animation-delay: 0s;
+  z-index: 3;
+}
+
+.gs-home-float-card--small {
+  width: 260px;
+  bottom: 30px;
+  left: 10px;
+  animation-delay: 2s;
+  z-index: 2;
+}
+
+.gs-home-float-card__header {
+  padding: 14px 18px;
+  border-bottom: 1px solid #f0f0f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.gs-home-float-card__dots {
+  display: flex;
+  gap: 6px;
+}
+
+.gs-home-float-card__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.gs-home-float-card__badge {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #2F5D62;
+  background: rgba(47, 93, 98, 0.08);
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.gs-home-float-card__badge--green {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.gs-home-float-card__body {
+  padding: 16px 18px;
+}
+
+.gs-home-float-card__title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin: 0 0 0.75rem 0;
+}
+
+.gs-home-float-card__progress {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.gs-home-float-card__progress-bar {
+  height: 6px;
+  background: linear-gradient(90deg, #2F5D62, #4A9EA8);
+  border-radius: 3px;
+  flex: 1;
+  transition: width 0.3s ease;
+}
+
+.gs-home-float-card__progress-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #2F5D62;
+}
+
+.gs-home-float-card__materials {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.gs-home-float-card__materials span {
+  font-size: 0.8rem;
+  color: #4a4a5a;
+  background: #f8f8f8;
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.gs-home-float-card__question {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #1a1a2e;
+  margin: 0 0 0.4rem 0;
+}
+
+.gs-home-float-card__professor {
+  font-size: 0.75rem;
+  color: #2F5D62;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
