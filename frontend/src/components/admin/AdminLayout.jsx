@@ -1,10 +1,12 @@
 import { Sidebar } from './Sidebar';
 import { Bell, Settings } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { useNavigate } from "react-router-dom";
 import '../../styles/layout-shared.css'
 
 export function AdminLayout({ children }) {
  const { user } = useAuth();
+ const navigate = useNavigate();
 
   const iniciais = user?.nome
     ? user.nome.split(' ').slice(0, 2).map(n => n[0]).join('').toUpperCase()
@@ -21,8 +23,12 @@ export function AdminLayout({ children }) {
             <button className="gs-icon-btn" aria-label="Notificações">
               <Bell size={17} />
             </button>
-            <button className="gs-icon-btn" aria-label="Configurações">
-              <Settings size={17} />
+            <button
+                className="gs-icon-btn"
+                aria-label="Configurações"
+                onClick={() => navigate("/admin/configuracoes")}
+            >
+                <Settings size={17} />
             </button>
             <div className="gs-topbar-user">
               <div>
