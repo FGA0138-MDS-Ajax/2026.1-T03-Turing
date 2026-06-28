@@ -585,3 +585,30 @@
     width: 100%;
   }
 }
+
+.resume-loading,
+.resume-empty,
+.resume-error {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  color: #666;
+}
+
+.resume-loading p,
+.resume-empty p,
+.resume-error p {
+  margin: 0;
+}
+
+.resume-error {
+  flex-direction: column;
+  gap: 16px;
+}
+
+.resume-iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}

@@ -8,11 +8,13 @@
 }
 
 .meus-materiais__titulo {
-  font-size: 1.5rem;
+  margin: -32px 0 0.3rem -35px;
+  font-size: 2rem;
   font-weight: 700;
-  color: #1a1a1a;
-  margin: 0 0 0.25rem;
+  color: #02373a;
+  font-family: 'Serif'
 }
+
 
 .meus-materiais__subtitulo {
   font-size: 0.875rem;

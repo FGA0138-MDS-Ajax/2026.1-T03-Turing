@@ -73,7 +73,7 @@
   gap: 0.75rem;
 }
 
-.prof-atividade-item {
+item {
   display: flex;
   align-items: center;
   gap: 0.85rem;
@@ -81,37 +81,64 @@
   border-bottom: 1px solid #F3F4F6;
 }
 
+.prof-atividade-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  padding: 14px 0;
+  border-bottom: 1px solid #EEF2F6;
+
+  transition: background 0.2s;
+}
+
 .prof-atividade-item:last-child {
   border-bottom: none;
-  padding-bottom: 0;
+}
+
+.prof-atividade-item:hover {
+  background: #fafafa;
 }
 
 .prof-atividade-icon {
-  width: 36px;
-  height: 36px;
-  border-radius: 8px;
+  width: 42px;
+  height: 42px;
+  min-width: 42px;
+
+  border-radius: 10px;
+
   background: #E0F2F1;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
+}
+
+.prof-atividade-icon svg {
+  color: #2F5D62;
 }
 
 .prof-atividade-info {
+  flex: 1;
+
   display: flex;
   flex-direction: column;
-  gap: 0.15rem;
+  gap: 4px;
 }
 
 .prof-atividade-titulo {
-  font-size: 0.875rem;
+  font-size: 15px;
   font-weight: 600;
-  color: #101828;
+  color: #1F2937;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .prof-atividade-disciplina {
-  font-size: 0.78rem;
-  color: #6A7282;
+  font-size: 13px;
+  color: #6B7280;
 }
 
 .prof-duvida-item {
@@ -207,3 +234,15 @@
   font-size: 0.875rem;
   margin-bottom: 1.25rem;
 }
+
+.ad-duvida-badge--pendente {
+  background: #FEF3C7;
+  color: #92400E;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: background 0.15s;
+}
+.ad-duvida-badge--pendente:hover { background: #FDE68A; }

@@ -516,3 +516,32 @@
     opacity: 0.5;
     cursor: not-allowed;
   }
+
+    .gs-activity-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+
+  .gs-activity-count {
+    font-size: 0.75rem;
+    color: #99A1AF;
+    font-weight: 500;
+  }
+
+  .gs-activity-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.35rem;
+    flex-shrink: 0;
+  }
+
+  .gs-activity-badge {
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 0.2rem 0.6rem;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
