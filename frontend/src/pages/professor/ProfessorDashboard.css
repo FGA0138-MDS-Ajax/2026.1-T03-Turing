@@ -156,7 +156,7 @@
   border-radius: 20px;
   font-size: 0.75rem;
   font-weight: 600;
-  background: #2F5D62;
+  background: var(--gs-accent, #2F5D62);
   color: #fff;
   white-space: nowrap;
   margin-top: 0.1rem;
@@ -164,7 +164,7 @@
 
 .prof-duvida-badge--respondida {
   background: #E0F2F1;
-  color: #2F5D62;
+  color: var(--gs-accent, #2F5D62);
 }
 
 /* Responsividade */

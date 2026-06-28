@@ -26,7 +26,8 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  font-size: 1.4rem;
+  /* px fixo de propósito: a logo não deve escalar com Acessibilidade. */
+  font-size: 22.4px;
   font-weight: 700;
 }
 
@@ -44,13 +45,13 @@
 }
 
 .gs-header-user-name {
-  font-size: 0.85rem;
+  font-size: 13.6px;
   font-weight: 700;
   color: #101828;
 }
 
 .gs-header-user-role {
-  font-size: 0.75rem;
+  font-size: 12px;
   color: #6A7282;
 }
 
@@ -58,12 +59,12 @@
   width: 34px;
   height: 34px;
   border-radius: 50%;
-  background: #386663;
+  background: var(--gs-accent, #386663);
   color: #FFFFFF;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.85rem;
+  font-size: 13.6px;
   font-weight: 600;
 }
 
@@ -79,7 +80,7 @@
 }
 
 .gs-header-logout:hover { 
-  color: #386663; 
+  color: var(--gs-accent, #386663); 
 }
 
 /* --- CORPO E SIDEBAR --- */
@@ -121,8 +122,8 @@ aside.gs-sidebar {
 }
 
 .gs-nav-item--active {
-  background: #D1D7CD !important;
-  color: #1A1A2E !important;
+  background: color-mix(in srgb, var(--gs-accent, #386663) 18%, #F2EFE9) !important;
+  color: var(--gs-accent, #1A1A2E) !important;
   font-weight: 600;
 }
 

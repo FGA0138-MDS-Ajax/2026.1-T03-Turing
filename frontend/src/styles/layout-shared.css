@@ -43,7 +43,9 @@ border-bottom: 1px solid var(--gs-border, #e5eff0);
 
 .gs-logo-text {
 font-family: 'Serif';
-  font-size: 1.6rem;
+  /* px fixo de propósito: a logo não deve escalar com as preferências
+     de tamanho de fonte de Acessibilidade. */
+  font-size: 25.6px;
 font-weight: 500;
 color: var(--gs-text-secondary, #4a4f58);
   letter-spacing: -0.02em;
@@ -55,7 +57,7 @@ transform: translateY(-7px);
 font-weight: 900;
 color: var(--gs-accent, #52787B);
   transform: translateY(-10px);
-  font-size: 1.9rem;
+  font-size: 30.4px;
 }
 
 .gs-sidebar-nav {
@@ -131,7 +133,7 @@ background: color-mix(in srgb, var(--gs-accent, #F3F4F6) 10%, transparent);
   border-radius: 50%;
 background: var(--gs-accent, #2F5D62);
   color: #fff;
-  font-size: 0.78rem;
+  font-size: 12.48px;
   font-weight: 700;
   display: flex;
   align-items: center;
@@ -205,7 +207,8 @@ background: color-mix(in srgb, var(--gs-accent, #F3F4F6) 10%, transparent);
   border-radius: 50%;
 background: var(--gs-accent, #2F5D62);
   color: #fff;
-  font-size: 0.78rem;
+  /* px fixo de propósito: o header não deve escalar com Acessibilidade. */
+  font-size: 12.48px;
   font-weight: 700;
   display: flex;
   align-items: center;
@@ -214,14 +217,14 @@ background: var(--gs-accent, #2F5D62);
 }
 
 .gs-topbar-name {
-  font-size: 0.875rem;
+  font-size: 14px;
   font-weight: 600;
 color: var(--gs-text-primary, #101828);
   line-height: 1.2;
 }
 
 .gs-topbar-role {
-  font-size: 0.75rem;
+  font-size: 12px;
 color: var(--gs-text-secondary, #6A7282);
   line-height: 1.2;
 }
@@ -229,9 +232,6 @@ color: var(--gs-text-secondary, #6A7282);
 .gs-page-content {
   padding: 36px 40px;
 flex: 1;
-  /* Escala de fonte das Configuracoes de Acessibilidade. Padrao 1 = sem
-     mudanca nenhuma. So afeta o conteudo da pagina, nao a sidebar/topbar. */
-  font-size: calc(1rem * var(--gs-font-scale, 1));
 }
 
 .gs-topbar {

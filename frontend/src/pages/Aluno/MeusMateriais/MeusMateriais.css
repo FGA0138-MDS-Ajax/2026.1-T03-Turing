@@ -10,7 +10,7 @@
 .meus-materiais__titulo {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #1a1a1a;
+  color: var(--gs-accent, #1a1a1a);
   margin: 0 0 0.25rem;
 }
 
@@ -71,7 +71,7 @@
 }
 
 .filtro-select:focus {
-  border-color: #2d6a4f;
+  border-color: var(--gs-accent, #2d6a4f);
 }
 
 /* Grid de materiais */
@@ -176,7 +176,7 @@
 .card-material__tag {
   font-size: 0.75rem;
   font-weight: 500;
-  color: #2d6a4f;
+  color: var(--gs-accent, #2d6a4f);
 }
 
 .card-material__professor,
@@ -226,7 +226,7 @@
 }
 
 .btn-abrir {
-  background: #2d6a4f;
+  background: var(--gs-accent, #2d6a4f);
   color: #fff;
   border: none;
   border-radius: 6px;
@@ -239,7 +239,7 @@
 }
 
 .btn-abrir:hover {
-  background: #1b4332;
+  background: var(--gs-accent-hover, #1b4332);
 }
 
 /* Estados */

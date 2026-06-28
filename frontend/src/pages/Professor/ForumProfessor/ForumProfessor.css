@@ -133,7 +133,7 @@
   font-weight: 600;
   color: #fff;
   flex-shrink: 0;
-  background: #1D9E75;
+  background: var(--gs-accent, #1D9E75);
 }
 
 /* ===== CARD BODY ===== */
@@ -276,7 +276,7 @@
   font-size: 11px;
   font-weight: 600;
   color: #fff;
-  background: #D4537E;
+  background: var(--gs-accent, #D4537E);
 }
 
 /* ===== ÁREA DE RESPOSTA ===== */
@@ -367,7 +367,7 @@
   padding: 8px 22px;
   border-radius: 8px;
   border: none;
-  background: #1a2e2a;
+  background: var(--gs-accent, #1a2e2a);
   font-size: 14px;
   cursor: pointer;
   color: #fff;

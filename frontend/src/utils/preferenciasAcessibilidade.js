@@ -8,21 +8,28 @@ export const DEFAULT_ACCESSIBILITY_PREFERENCES = {
   screenReader: false,
 };
 
-// Escala aplicada apenas ao conteudo (via --gs-font-scale), nunca ao
-// <html> inteiro. Isso evita que logo/icones/sidebar (que usam rem)
-// cresçam ou diminuam junto com o texto do conteudo.
+// Escala aplicada ao <html>, que afeta tudo que usa rem/em no app
+// (titulos, paragrafos, itens de menu, etc). Elementos que NAO devem
+// escalar (logo, avatar, nome do usuario no header) foram convertidos
+// para px fixo nos respectivos CSS (layout-shared.css e aluno.css),
+// entao ficam isentos desta escala mesmo estando dentro do <html>.
 const FONT_SCALE_BY_SIZE = {
-  pequeno: '0.875',
-  medio: '1',
-  grande: '1.125',
-  'muito-grande': '1.25',
+  pequeno: 0.875,
+  medio: 1,
+  grande: 1.125,
+  'muito-grande': 1.25,
 };
 
-// Paletas color-blind-safe (baseadas em referencias tipo ColorBrewer /
-// Okabe-Ito) usadas para substituir a cor de destaque (--gs-accent) em
-// toda a plataforma, nao so dentro do painel. Mantemos os MESMOS nomes
-// de variavel que ja existem em layout-shared.css / dashboard-shared.css
-// para nao quebrar nada que o resto do time fez.
+// IMPORTANTE: isto NAO e uma simulacao de como uma pessoa daltonica veria
+// as cores originais (isso seria um filtro tipo hue-rotate, util so para
+// designers testarem, e que reduz contraste para quem realmente tem
+// daltonismo). Isto e uma correcao/realce: trocamos a cor de destaque por
+// uma que a pessoa com aquele tipo de daltonismo distingue melhor dos
+// outros elementos da tela (ex.: azul para quem tem dificuldade com
+// vermelho/verde). Paletas baseadas em referencias color-blind-safe
+// (Okabe-Ito / ColorBrewer). Mantemos os MESMOS nomes de variavel que ja
+// existem em layout-shared.css / dashboard-shared.css para nao quebrar
+// nada que o resto do time fez.
 export const COLOR_VISION_THEMES = {
   nenhum: {
     accent: '#2F5D62',
@@ -35,8 +42,8 @@ export const COLOR_VISION_THEMES = {
   },
   deuteranopia: {
     // Dificuldade em perceber verde -> prioriza azul/ciano.
-    accent: '#0072B2',
-    accentHover: '#005A8C',
+    accent: '#00a3b2',
+    accentHover: '#00858c',
   },
   tritanopia: {
     // Dificuldade em perceber azul -> evita azul como referencia
@@ -91,8 +98,12 @@ export function applyAccessibilityPreferences(preferences) {
   const normalized = normalize(preferences);
   const root = document.documentElement;
 
-  // --- Tamanho da fonte: so escala o conteudo, nunca a raiz do documento ---
-  root.style.setProperty('--gs-font-scale', FONT_SCALE_BY_SIZE[normalized.fontSize]);
+  // --- Tamanho da fonte: escala o <html>, que afeta tudo em rem/em.
+  // Logo, avatar e nome do usuario no header usam px fixo nos CSS de
+  // layout e por isso nao sao afetados por esta escala. ---
+  const scale = FONT_SCALE_BY_SIZE[normalized.fontSize];
+  root.style.fontSize = `${scale * 100}%`;
+  root.style.setProperty('--gs-font-scale', String(scale));
 
   // --- Cor (daltonismo): aplica nas MESMAS variaveis que o tema global ja usa ---
   const colorTheme = COLOR_VISION_THEMES[normalized.colorVisionMode];

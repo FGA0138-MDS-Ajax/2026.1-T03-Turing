@@ -56,7 +56,7 @@
 }
 
 .tab.active {
-  background-color: #2D5B5A; /* Mesma cor exata do bloco verde abaixo */
+  background-color: var(--gs-accent, #2D5B5A); /* Mesma cor exata do bloco verde abaixo */
   color: #ffffff; 
 }
 
@@ -64,7 +64,7 @@
    BLOCO VERDE CENTRAL 
 ========================================= */
 .conteudos-wrapper {
-  background-color: #2D5B5A; /* O verde escuro do fundo da pasta */
+  background-color: var(--gs-accent, #2D5B5A); /* O verde escuro do fundo da pasta */
   border-radius: 0 16px 16px 16px; /* Remove o arredondamento APENAS do topo-esquerdo para conectar a 1ª aba */
   padding: 32px;
   flex-grow: 1;
@@ -121,7 +121,7 @@
 }
 
 .card-icon svg {
-  color: #2D5B5A;
+  color: var(--gs-accent, #2D5B5A);
 }
 
 .professor {
@@ -180,13 +180,13 @@
 }
 
 .btn-inscrever {
-  border: 1px solid #2D5B5A;
+  border: 1px solid var(--gs-accent, #2D5B5A);
   background: white;
-  color: #2D5B5A;
+  color: var(--gs-accent, #2D5B5A);
 }
 
 .btn-inscrever:hover {
-  background: #2D5B5A;
+  background: var(--gs-accent, #2D5B5A);
   color: white;
 }
 
@@ -256,7 +256,7 @@
   height: 48px;
   border-radius: 10px;
   background-color: #C6D1CE;
-  color: #2D5B5A;
+  color: var(--gs-accent, #2D5B5A);
 }
 
 .modal-desc {
@@ -313,7 +313,7 @@
 }
 
 .btn-inscrever-modal {
-  background-color: #2D5B5A;
+  background-color: var(--gs-accent, #2D5B5A);
   color: white;
   border: none;
   border-radius: 999px; /* Formato de pílula */
@@ -324,7 +324,7 @@
 }
 
 .btn-inscrever-modal:hover {
-  background: #1f4241;
+  background: var(--gs-accent-hover, #1f4241);
 }
 
 /* =========================================

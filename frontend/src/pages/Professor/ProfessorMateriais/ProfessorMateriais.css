@@ -10,7 +10,7 @@
 .pm-titulo {
   font-size: 2rem;
   font-weight: 700;
-  color: #02373a;
+  color: var(--gs-accent, #02373a);
   margin: 0 0 0.2rem 0;
   font-family: 'Serif';
 }
@@ -23,7 +23,7 @@
 
 .pm-btn-novo {
   padding: 0.5rem 1.1rem;
-  background: #2F5D62;
+  background: var(--gs-accent, #2F5D62);
   color: #fff;
   border: none;
   border-radius: 8px;
@@ -35,7 +35,7 @@
   flex-shrink: 0;
 }
 
-.pm-btn-novo:hover { background: #224548; }
+.pm-btn-novo:hover { background: var(--gs-accent-hover, #224548); }
 
 
 .pm-filtros {
@@ -74,7 +74,7 @@
   transition: border-color 0.15s;
 }
 
-.pm-busca:focus { border-color: #2F5D62; }
+.pm-busca:focus { border-color: var(--gs-accent, #2F5D62); }
 .pm-busca::placeholder { color: #99A1AF; }
 
 .pm-filtro-select {
@@ -93,7 +93,7 @@
   transition: border-color 0.15s;
 }
 
-.pm-filtro-select:focus { border-color: #2F5D62; }
+.pm-filtro-select:focus { border-color: var(--gs-accent, #2F5D62); }
 
 .pm-grid {
   display: grid;
@@ -155,7 +155,7 @@
 .pm-card-disciplina {
   font-size: 0.75rem;
   font-weight: 600;
-  color: #2F5D62;
+  color: var(--gs-accent, #2F5D62);
 }
 
 .pm-meta-sep { font-size: 0.75rem; color: #D1D5DC; }
@@ -174,12 +174,12 @@
   border-radius: 7px;
   font-size: 0.78rem;
   font-weight: 600;
-  background: #2F5D62;
+  background: var(--gs-accent, #2F5D62);
   color: #fff;
   cursor: pointer;
   transition: background 0.15s;
 }
-.pm-btn-remover:hover { background: #224548; }
+.pm-btn-remover:hover { background: var(--gs-accent-hover, #224548); }
 
 .pm-btn-editar {
   padding: 0.32rem 0.85rem;
@@ -187,12 +187,12 @@
   border-radius: 7px;
   font-size: 0.78rem;
   font-weight: 600;
-  background: #2F5D62;
+  background: var(--gs-accent, #2F5D62);
   color: #fff;
   cursor: pointer;
   transition: background 0.15s;
 }
-.pm-btn-editar:hover { background: #224548; }
+.pm-btn-editar:hover { background: var(--gs-accent-hover, #224548); }
 
 .pm-btn-download {
   padding: 0.32rem 0.6rem;
@@ -213,12 +213,12 @@
   border-radius: 7px;
   font-size: 0.78rem;
   font-weight: 600;
-  background: #2F5D62;
+  background: var(--gs-accent, #2F5D62);
   color: #fff;
   cursor: pointer;
   transition: background 0.15s;
 }
-.pm-btn-abrir:hover { background: #224548; }
+.pm-btn-abrir:hover { background: var(--gs-accent-hover, #224548); }
 
 .pm-tipo-icone {
   width: 36px;
@@ -255,7 +255,7 @@
   box-shadow: 0 4px 16px rgba(0,0,0,0.15);
   animation: pmSlide 0.25s ease;
 }
-.pm-toast--sucesso { background: #2F5D62; color: #fff; }
+.pm-toast--sucesso { background: var(--gs-accent, #2F5D62); color: #fff; }
 .pm-toast--erro    { background: #e63946; color: #fff; }
 
 @keyframes pmSlide {
@@ -359,8 +359,8 @@
   text-align: center;
 }
 
-.pm-tipo-card:hover { border-color: #2F5D62; background: #F0F9F9; }
-.pm-tipo-card--ativo { border-color: #2F5D62; background: #E0F2F1; }
+.pm-tipo-card:hover { border-color: var(--gs-accent, #2F5D62); background: #F0F9F9; }
+.pm-tipo-card--ativo { border-color: var(--gs-accent, #2F5D62); background: #E0F2F1; }
 
 .pm-tipo-label {
   font-size: 0.78rem;
@@ -399,7 +399,7 @@
   font-family: inherit;
 }
 
-.pm-input:focus { border-color: #2F5D62; }
+.pm-input:focus { border-color: var(--gs-accent, #2F5D62); }
 .pm-input::placeholder { color: #99A1AF; font-size: 0.82rem; }
 .pm-input--erro { border-color: #e63946 !important; }
 
@@ -435,25 +435,25 @@
   margin-top: 0.3rem;
 }
 
-.pm-dropzone:hover { border-color: #2F5D62; background: #F0F9F9; }
-.pm-dropzone--drag { border-color: #2F5D62; background: #E0F2F1; }
+.pm-dropzone:hover { border-color: var(--gs-accent, #2F5D62); background: #F0F9F9; }
+.pm-dropzone--drag { border-color: var(--gs-accent, #2F5D62); background: #E0F2F1; }
 .pm-dropzone--erro { border-color: #e63946; }
 
 .pm-dropzone-hint { font-size: 0.75rem; color: #99A1AF; }
-.pm-dropzone-nome { font-size: 0.82rem; font-weight: 600; color: #2F5D62; }
+.pm-dropzone-nome { font-size: 0.82rem; font-weight: 600; color: var(--gs-accent, #2F5D62); }
 
 .pm-btn-adicionar {
   padding: 0.55rem 2.5rem;
   border: none;
   border-radius: 8px;
-  background: #2F5D62;
+  background: var(--gs-accent, #2F5D62);
   color: #fff;
   font-size: 0.875rem;
   font-weight: 600;
   cursor: pointer;
   transition: background 0.15s;
 }
-.pm-btn-adicionar:hover { background: #224548; }
+.pm-btn-adicionar:hover { background: var(--gs-accent-hover, #224548); }
 .pm-btn-adicionar:disabled { opacity: 0.6; cursor: not-allowed; }
 
 .pm-btn-cancelar {

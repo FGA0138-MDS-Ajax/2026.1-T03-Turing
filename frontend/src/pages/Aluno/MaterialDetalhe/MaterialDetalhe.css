@@ -28,7 +28,7 @@
 .md-titulo {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #111827;
+  color: var(--gs-accent, #111827);
   margin: 0 0 0.35rem;
   line-height: 1.3;
 }
@@ -109,7 +109,7 @@
 .md-btn-marcar {
   display: block;
   width: 100%;
-  background: #2d6a4f;
+  background: var(--gs-accent, #2d6a4f);
   color: #fff;
   border: none;
   border-radius: 6px;
@@ -121,7 +121,7 @@
   transition: background 0.15s;
   box-sizing: border-box;
 }
-.md-btn-marcar:hover { background: #1b4332; }
+.md-btn-marcar:hover { background: var(--gs-accent-hover, #1b4332); }
 
 .md-sidebar__card--acoes {
   display: flex;
@@ -131,7 +131,7 @@
 .md-btn-arquivo {
   display: block;
   text-align: center;
-  background: #2d6a4f;
+  background: var(--gs-accent, #2d6a4f);
   color: #fff;
   border-radius: 6px;
   padding: 0.5rem 1rem;
@@ -141,7 +141,7 @@
   transition: background 0.15s;
   box-sizing: border-box;
 }
-.md-btn-arquivo:hover { background: #1b4332; }
+.md-btn-arquivo:hover { background: var(--gs-accent-hover, #1b4332); }
 .md-btn-arquivo--secundario {
   background: transparent;
   color: #374151;

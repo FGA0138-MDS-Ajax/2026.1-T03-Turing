@@ -31,7 +31,7 @@
 .mc-title {
   font-size: 1.6rem;
   font-weight: 700;
-  color: #1a1a2e;
+  color: var(--gs-accent, #1a1a2e);
   margin: 0 0 4px 0;
   line-height: 1.2;
 }
@@ -46,7 +46,7 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background-color: #386663;
+  background-color: var(--gs-accent, #386663);
   color: #fff;
   border: none;
   border-radius: 8px;
@@ -299,7 +299,7 @@
 .mc-empty-desc  { font-size: 0.9rem; color: #6b7280; line-height: 1.6; margin: 0 0 28px; }
 
 .mc-btn-explorar {
-  background: #386663;
+  background: var(--gs-accent, #386663);
   color: #fff;
   border: none;
   border-radius: 8px;

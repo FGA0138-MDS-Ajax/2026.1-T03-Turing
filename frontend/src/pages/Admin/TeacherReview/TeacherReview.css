@@ -149,7 +149,7 @@
 
 /* APROVAR */
 .btn-primary-admin {
-  background: #2F5D62;
+  background: var(--gs-accent, #2F5D62);
   color: white;
   border: none;
   padding: 0px 22px;
@@ -165,12 +165,12 @@
 }
 
 .btn-primary-admin:hover {
-  background: #182f31;
+  background: var(--gs-accent-hover, #182f31);
 }
 
 /* VER CURRÍCULO */
 .btn-secondary-admin {
-  background: #2F5D62;
+  background: var(--gs-accent, #2F5D62);
   color: white;
   border: none;
   padding: 8px 16px;
@@ -485,12 +485,12 @@
 }
 
 .btn-primary-confirm {
-  background: #2F5D62;
+  background: var(--gs-accent, #2F5D62);
   color: white;
 }
 
 .btn-primary-confirm:hover {
-  background: #25494d;
+  background: var(--gs-accent-hover, #25494d);
 }
 
 /* RESPONSIVO */

@@ -22,7 +22,7 @@
 }
 
 .fc-breadcrumb a:hover {
-  color: #2F5D62;
+  color: var(--gs-accent, #2F5D62);
   text-decoration: underline;
 }
 
@@ -47,7 +47,7 @@
 .fc-titulo {
   font-size: 22px;
   font-weight: 700;
-  color: #111827;
+  color: var(--gs-accent, #111827);
   margin: 0 0 4px;
 }
 
@@ -60,7 +60,7 @@
 .fc-voltar {
   display: inline-block;
   font-size: 13px;
-  color: #2F5D62;
+  color: var(--gs-accent, #2F5D62);
   text-decoration: none;
   font-weight: 500;
 }
@@ -71,7 +71,7 @@
 
 .fc-btn-perguntar {
   flex-shrink: 0;
-  background: #2F5D62;
+  background: var(--gs-accent, #2F5D62);
   color: #FFFFFF;
   border: none;
   border-radius: 8px;
@@ -250,7 +250,7 @@
 
 .fc-busca:focus {
   outline: none;
-  border-color: #2F5D62;
+  border-color: var(--gs-accent, #2F5D62);
   box-shadow: 0 0 0 3px rgba(47, 93, 98, 0.12);
 }
 
@@ -268,7 +268,7 @@
 
 .fc-filtro-select:focus {
   outline: none;
-  border-color: #2F5D62;
+  border-color: var(--gs-accent, #2F5D62);
 }
 
 /* ---------- Lista vazia ---------- */
@@ -289,8 +289,8 @@
 
 .fc-btn-perguntar-sm {
   background: transparent;
-  border: 1px solid #2F5D62;
-  color: #2F5D62;
+  border: 1px solid var(--gs-accent, #2F5D62);
+  color: var(--gs-accent, #2F5D62);
   border-radius: 6px;
   padding: 7px 14px;
   font-size: 12px;
@@ -349,7 +349,7 @@
 
 .fc-card-pergunta--ativo {
   background: #EEF2EF;
-  border-color: #2F5D62;
+  border-color: var(--gs-accent, #2F5D62);
 }
 
 .fc-card-topo {
@@ -893,7 +893,7 @@
 
 .fc-input:focus {
   outline: none;
-  border-color: #2F5D62;
+  border-color: var(--gs-accent, #2F5D62);
   box-shadow: 0 0 0 3px rgba(47, 93, 98, 0.12);
 }
 
@@ -923,7 +923,7 @@
 
 .fc-textarea:focus {
   outline: none;
-  border-color: #2F5D62;
+  border-color: var(--gs-accent, #2F5D62);
   box-shadow: 0 0 0 3px rgba(47, 93, 98, 0.12);
 }
 
@@ -972,7 +972,7 @@
 }
 
 .fc-btn-enviar {
-  background: #2F5D62;
+  background: var(--gs-accent, #2F5D62);
   border: none;
   color: #FFFFFF;
   border-radius: 8px;

@@ -26,7 +26,7 @@
   text-decoration: none;
   transition: color 0.15s ease;
 }
-.ce-breadcrumb a:hover { color: #2e7d52; }
+.ce-breadcrumb a:hover { color: var(--gs-accent, #2e7d52); }
 
 .ce-breadcrumb-sep { opacity: 0.6; }
 
@@ -54,7 +54,7 @@
 .ce-title {
   font-size: 1.6rem;
   font-weight: 700;
-  color: #1a1a2e;
+  color: var(--gs-accent, #1a1a2e);
   margin: 0 0 8px 0;
   line-height: 1.25;
 }
@@ -79,7 +79,7 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: #2e5b52;
+  background: var(--gs-accent, #2e5b52);
   color: #fff;
   border: none;
   border-radius: 8px;
@@ -92,7 +92,7 @@
   transition: background-color 0.18s ease, transform 0.12s ease;
 }
 .ce-btn-desinscrever:hover:not(:disabled) {
-  background: #23463f;
+  background: var(--gs-accent-hover, #23463f);
   transform: translateY(-1px);
 }
 .ce-btn-desinscrever:disabled {
@@ -326,7 +326,7 @@
   align-items: center;
   justify-content: center;
   padding: 8px 22px;
-  background: #2e5b52;
+  background: var(--gs-accent, #2e5b52);
   color: #fff;
   border: none;
   border-radius: 7px;
@@ -336,7 +336,7 @@
   cursor: pointer;
   transition: background-color 0.18s ease;
 }
-.ce-btn-abrir:hover { background: #23463f; }
+.ce-btn-abrir:hover { background: var(--gs-accent-hover, #23463f); }
 .ce-btn-abrir:disabled { opacity: 0.6; cursor: not-allowed; }
 
 /* Materiais vazio */
@@ -385,8 +385,8 @@
   align-items: center;
   justify-content: center;
   background: transparent;
-  color: #2e5b52;
-  border: 1.5px solid #2e5b52;
+  color: var(--gs-accent, #2e5b52);
+  border: 1.5px solid var(--gs-accent, #2e5b52);
   border-radius: 24px;
   padding: 9px 28px;
   font-size: 0.875rem;
@@ -395,7 +395,7 @@
   text-decoration: none;
   transition: background-color 0.18s ease, color 0.18s ease;
 }
-.ce-btn-forum:hover { background: #2e5b52; color: #fff; }
+.ce-btn-forum:hover { background: var(--gs-accent, #2e5b52); color: #fff; }
 
 /* Skeleton */
 .ce-skeleton-line {

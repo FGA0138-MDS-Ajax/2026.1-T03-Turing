@@ -11,7 +11,7 @@
   box-shadow: 0 4px 16px rgba(0,0,0,0.15);
   animation: gsSlideIn 0.25s ease;
 }
-.gs-toast--sucesso { background: #2F5D62; color: #fff; }
+.gs-toast--sucesso { background: var(--gs-accent, #2F5D62); color: #fff; }
 .gs-toast--erro    { background: #e63946; color: #fff; }
 
 @keyframes gsSlideIn {
@@ -80,14 +80,14 @@
   padding: 0.45rem 1rem;
   border: none;
   border-radius: 7px;
-  background: #2F5D62;
+  background: var(--gs-accent, #2F5D62);
   color: #fff;
   font-size: 0.82rem;
   font-weight: 600;
   cursor: pointer;
   transition: background 0.15s;
 }
-.gs-modal-confirm:hover { background: #224548; }
+.gs-modal-confirm:hover { background: var(--gs-accent-hover, #224548); }
 
 .gs-modal-danger {
   padding: 0.45rem 1rem;
@@ -134,7 +134,7 @@
 }
 
 .gs-modal-input:focus {
-  border-color: #2F5D62;
+  border-color: var(--gs-accent, #2F5D62);
 }
 
 .gs-modal-input--erro {

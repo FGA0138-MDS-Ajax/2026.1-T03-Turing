@@ -90,7 +90,7 @@
 
   .gs-create-admin-btn {
     width: 100%;
-    background: #2E8B57;
+    background: var(--gs-accent, #2E8B57);
     color: #fff;
     border: none;
     border-radius: 8px;
@@ -103,7 +103,7 @@
   }
 
   .gs-create-admin-btn:hover {
-    background: #257A4A;
+    background: var(--gs-accent-hover, #257A4A);
   }
 
   .gs-sidebar-user {
@@ -457,7 +457,7 @@
   }
 
   .gs-modal-input:focus {
-    border-color: #2E8B57;
+    border-color: var(--gs-accent, #2E8B57);
   }
 
   .gs-modal-error {
@@ -468,7 +468,7 @@
 
   .gs-modal-success {
     font-size: 14px;
-    color: #2E8B57;
+    color: var(--gs-accent, #2E8B57);
     text-align: center;
     padding: 16px 0;
     font-weight: 600;
@@ -496,7 +496,7 @@
   }
 
   .gs-modal-confirm {
-    background: #2E8B57;
+    background: var(--gs-accent, #2E8B57);
     border: none;
     border-radius: 8px;
     padding: 8px 20px;
@@ -508,7 +508,7 @@
   }
 
   .gs-modal-confirm:hover:not(:disabled) {
-    background: #257A4A;
+    background: var(--gs-accent-hover, #257A4A);
   }
 
   .gs-modal-confirm:disabled,
