@@ -120,19 +120,31 @@ export default function Denuncias() {
         const resposta = await api.get('/api/interacoes/denuncias/');
         const dadosDoBanco = resposta.data.results ? resposta.data.results : resposta.data;
 
-        const denunciasFormatadas = dadosDoBanco.map(d => ({
+        const denunciasFormatadas = await Promise.all(dadosDoBanco.map(async (d) => {
+        let textoMensagem = 'Mensagem não vinculada a esta denúncia.';
+        
+        if (d.mensagem) {
+          try {
+            const msgRes = await api.get(`/api/interacoes/mensagens/${d.mensagem}/`);
+            textoMensagem = msgRes.data.texto || 'Sem conteúdo.';
+          } catch {
+            textoMensagem = 'Não foi possível carregar o conteúdo da mensagem.';
+          }
+        }
+
+        return {
           id: d.id,
-          titulo: `Denúncia #${d.id} - ${d.motivo || 'Geral'}`, 
-          categoriaMotivo: d.motivo || 'Outros', 
-          autor: d.nome_denunciante || d.denunciante_nome || (d.denunciante ? `ID: ${d.denunciante}` : 'Desconhecido'),
+          mensagemId: d.mensagem ?? null,
+          titulo: `Denúncia #${d.id} - ${d.motivo || 'Geral'}`,
+          categoriaMotivo: d.motivo || 'Outros',
+          autor: d.denunciante_nome || (d.denunciante ? `ID: ${d.denunciante}` : 'Desconhecido'),
           resumo: d.descricao || 'Sem descrição adicional.',
-          
-          mensagemDenunciada: d.mensagem_denunciada || d.conteudo_denunciado || d.texto_publicacao || 'Conteúdo da mensagem não disponibilizado pela API.', 
-          
-          dataCriacao: d.data_create, 
-          dataAtualizacao: d.data_update || d.updated_at || d.data_create, 
+          mensagemDenunciada: textoMensagem,
+          dataCriacao: d.data_create,
+          dataAtualizacao: d.data_update || d.data_create,
           status: mapStatusParaFront(d.status)
-        }));
+        };
+    }));
 
         setListaDenuncias(denunciasFormatadas);
       } catch (erro) {
@@ -168,9 +180,19 @@ export default function Denuncias() {
     negadas: denunciasFiltradas.filter(d => d.status === 'Negada').length
   };
 
-  const abrirDetalhes = (denuncia) => {
-    setDenunciaSelecionada(denuncia);
-    setModalDetalhesAberto(true);
+  const abrirDetalhes = async (denuncia) => {
+  setDenunciaSelecionada(denuncia);
+  setModalDetalhesAberto(true);
+
+  if (denuncia.mensagemId) {
+    try {
+      const msgRes = await api.get(`/api/interacoes/mensagens/${denuncia.mensagemId}/`);
+      const texto = msgRes.data.texto || 'Sem conteúdo.';
+      setDenunciaSelecionada(prev => ({ ...prev, mensagemDenunciada: texto }));
+    } catch {
+      // mantém o fallback já exibido
+    }
+    }
   };
 
   const abrirParecer = (denuncia) => {
