@@ -33,6 +33,10 @@ class MensagemSerializer(serializers.ModelSerializer):
         source='autor.nome',
         read_only=True
     )
+    autor_tipo = serializers.CharField(
+        source='autor.tipo',
+        read_only=True
+    )
 
     class Meta:
         model = Mensagem
@@ -41,6 +45,7 @@ class MensagemSerializer(serializers.ModelSerializer):
             'forum',
             'autor',
             'autor_nome',
+            'autor_tipo',
             'resposta_para',
             'texto',
             'data_create',
