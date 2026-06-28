@@ -71,7 +71,7 @@ export default function ProfessorConteudo() {
         conteudosDoProfessor.some(c => c.disciplina === d.id)
       );
       setDisciplinas(disciplinasDoProfessor);
-      
+
       setMateriais(materiaisResponse.data);
     } catch (err) {
       console.log(err);
@@ -193,7 +193,7 @@ export default function ProfessorConteudo() {
                   + Adicionar material
                 </button>
                 <button className="btn-forum" onClick={() => navigate(`/professor/conteudos/${conteudo.id}/forum`)}>
-                  💬 Fórum
+                   Fórum
                 </button>
               </div>
             </article>
