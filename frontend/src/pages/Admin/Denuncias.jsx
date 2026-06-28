@@ -100,6 +100,8 @@ export default function Denuncias() {
   const [statusParecer, setStatusParecer] = useState('');
   const [observacaoParecer, setObservacaoParecer] = useState('');
   const [observacaoSalva, setObservacaoSalva] = useState({});
+  const [textoMensagemOriginal, setTextoMensagemOriginal] = useState("");
+  const [carregandoMensagem, setCarregandoMensagem] = useState(false);
 
   // Estados de Dados e UI
   const [listaDenuncias, setListaDenuncias] = useState([]);
