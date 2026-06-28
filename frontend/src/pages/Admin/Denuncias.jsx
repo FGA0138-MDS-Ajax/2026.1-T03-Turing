@@ -188,11 +188,27 @@ export default function Denuncias() {
     try {
       const msgRes = await api.get(`/api/interacoes/mensagens/${denuncia.mensagemId}/`);
       const texto = msgRes.data.texto || 'Sem conteúdo.';
-      setDenunciaSelecionada(prev => ({ ...prev, mensagemDenunciada: texto }));
+      const forumId = msgRes.data.forum;
+
+      let nomeConteudo = 'Não identificado';
+      if (forumId) {
+        try {
+          const forumRes = await api.get(`/api/interacoes/foruns/${forumId}/`);
+          const conteudoId = forumRes.data.conteudo;
+          if (conteudoId) {
+            const conteudoRes = await api.get(`/api/disciplinas/conteudos/${conteudoId}/`);
+            nomeConteudo = conteudoRes.data.nome || 'Não identificado';
+          }
+        } catch {
+          // mantém 'Não identificado'
+        }
+      }
+
+      setDenunciaSelecionada(prev => ({ ...prev, mensagemDenunciada: texto, nomeConteudo }));
     } catch {
-      // mantém o fallback já exibido
+      // mantém o fallback
     }
-    }
+  }
   };
 
   const abrirParecer = (denuncia) => {
@@ -364,7 +380,13 @@ export default function Denuncias() {
             <div style={{ marginBottom: '16px' }}>
               <h4 style={{ margin: '0 0 8px 0', fontSize: '14px', color: '#4B5563', fontWeight: '600' }}>Informações da Publicação</h4>
               <p style={{ margin: '0 0 4px 0', fontSize: '14px', color: '#111827' }}><strong>Título:</strong> {denunciaSelecionada.titulo}</p>
-              <p style={{ margin: '0 0 12px 0', fontSize: '14px', color: '#111827' }}><strong>Autor do post:</strong> {denunciaSelecionada.autor}</p>
+
+              <p style={{ margin: '0 0 4px 0', fontSize: '14px', color: '#111827' }}>
+                <strong>Autor do post:</strong> {denunciaSelecionada.autor}
+              </p>
+              <p style={{ margin: '0 0 4px 0', fontSize: '14px', color: '#111827' }}>
+                <strong>Conteúdo vinculado:</strong> {denunciaSelecionada.nomeConteudo || 'Não vinculado'}
+              </p>
               
               {/* CAIXA COM A MENSAGEM DENUNCIADA */}
               <div style={{ padding: '12px', background: '#F3F4F6', borderRadius: '4px', borderLeft: '4px solid #E87C28' }}>
