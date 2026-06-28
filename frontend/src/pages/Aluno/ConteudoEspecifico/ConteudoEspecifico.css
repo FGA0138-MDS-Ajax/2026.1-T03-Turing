@@ -52,11 +52,11 @@
 .ce-header-main { flex: 1; min-width: 0; }
 
 .ce-title {
-  font-size: 1.6rem;
+  margin: 0 0 0.3rem 0;
+  font-size: 2rem;
   font-weight: 700;
-  color: #1a1a2e;
-  margin: 0 0 8px 0;
-  line-height: 1.25;
+  color: #02373a;
+  font-family: 'Serif'
 }
 
 .ce-descricao-curta {

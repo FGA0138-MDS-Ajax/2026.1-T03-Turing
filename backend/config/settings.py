@@ -161,10 +161,16 @@ SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
 
-# configura o backend pra envio de email no console
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# configura o backend pra envio de email ou fallback no console
+EMAIL_BACKEND = os.getenv(
+    "EMAIL_BACKEND",
+    "django.core.mail.backends.console.EmailBackend"
+)
 
+# tempo de expiracao pra token
+PASSWORD_RESET_TIMEOUT = int(os.getenv("PASSWORD_RESET_TIMEOUT", 3600))
 
-
+# faz conexao do back ao front
+FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:5173")
 
 

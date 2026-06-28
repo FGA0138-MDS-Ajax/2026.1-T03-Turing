@@ -8,10 +8,11 @@
 }
 
 .forum-header h1 {
-  font-size: 24px;
-  font-weight: 600;
-  color: #1a1a1a;
-  margin-bottom: 4px;
+  margin: 0 0 0.3rem 0;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #02373a;
+  font-family: 'Serif'
 }
 
 .forum-header p {

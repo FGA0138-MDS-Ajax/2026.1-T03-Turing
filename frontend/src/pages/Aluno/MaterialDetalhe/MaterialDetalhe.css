@@ -26,11 +26,11 @@
 }
 
 .md-titulo {
-  font-size: 1.5rem;
+  margin: 0 0 0.3rem 0;
+  font-size: 2rem;
   font-weight: 700;
-  color: #111827;
-  margin: 0 0 0.35rem;
-  line-height: 1.3;
+  color: #02373a;
+  font-family: 'Serif'
 }
 .md-subtitulo {
   font-size: 0.85rem;
@@ -223,3 +223,43 @@
 }
 .md-erro__icone { font-size: 2rem; }
 .md-erro__msg { font-size: 1rem; color: #374151; margin: 0; }
+
+.md-corpo__pdf-viewer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.md-pdf-iframe {
+  width: 100%;
+  height: 620px;
+  border: none;
+  border-radius: 8px;
+  background: #f3f4f6;
+}
+
+.md-pdf-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.md-btn-pdf-externo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 1rem;
+  background: transparent;
+  color: #2e5b52;
+  border: 1.5px solid #2e5b52;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-decoration: none;
+  align-self: flex-start;
+  transition: background 0.15s, color 0.15s;
+}
+.md-btn-pdf-externo:hover { background: #2e5b52; color: #fff; }

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { User } from "lucide-react";
 import { useAuth } from "../../../context/AuthContext";
 import api from "../../../services/api";
+import { gerarBlobUrlPdf } from "../../../utils/pdfUtils";
 import "./TeacherReview.css";
 
 export default function TeacherReview() {
@@ -10,6 +11,9 @@ export default function TeacherReview() {
   const [inscricoesPendentes, setInscricoesPendentes] = useState([]);
   const [selectedProfessor, setSelectedProfessor] = useState(null);
   const [search, setSearch] = useState("");
+
+  const [curriculoBlobUrl, setCurriculoBlobUrl] = useState(null);
+  const [loadingCurriculo, setLoadingCurriculo] = useState(false);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -79,6 +83,34 @@ export default function TeacherReview() {
     );
   };
 
+  const abrirCurriculo = async (inscricao) => {
+    setSelectedProfessor(inscricao);
+
+    if (inscricao.curriculo) {
+      setLoadingCurriculo(true);
+      setCurriculoBlobUrl(null);
+
+      try {
+        const url = await gerarBlobUrlPdf(inscricao.curriculo);
+        setCurriculoBlobUrl(url);
+      } catch {
+        setCurriculoBlobUrl(null);
+      } finally {
+        setLoadingCurriculo(false);
+      }
+    }
+  };
+
+  const fecharModal = () => {
+    setSelectedProfessor(null);
+
+    if (curriculoBlobUrl) {
+      URL.revokeObjectURL(curriculoBlobUrl);
+    }
+
+    setCurriculoBlobUrl(null);
+  };
+
   const requestAction = (professor, type) => {
     setConfirmAction({ professor, type });
   };
@@ -108,7 +140,7 @@ export default function TeacherReview() {
 
       setInscricoesPendentes((prev) => prev.filter((item) => item.id !== professor.id));
       
-      setSelectedProfessor(null);
+      fecharModal();
 
       window.dispatchEvent(new Event('professores-atualizados'));
 
@@ -266,11 +298,9 @@ export default function TeacherReview() {
                   <div className="admin-card-right">
 
                     <button
-                    type="button"
-                    className="btn-secondary-admin"
-                    onClick={() =>
-
-                      setSelectedProfessor(inscricao)}
+                      type="button"
+                      className="btn-secondary-admin"
+                      onClick={() => abrirCurriculo(inscricao)}
                     >
                       Ver currículo
                     </button>
@@ -314,7 +344,7 @@ export default function TeacherReview() {
 
                 <button
                   className="close-button"
-                  onClick={() => setSelectedProfessor(null)}
+                  onClick={fecharModal}
                 >
                   ✕
                 </button>
@@ -323,22 +353,34 @@ export default function TeacherReview() {
             </div>
 
             <div className="resume-modal-content">
-               {selectedProfessor.curriculo ? (
-                 <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", height: "100%", color: "#666", gap: "16px" }}>
-                   <p>A pré-visualização direta está bloqueada por definições de segurança do servidor.</p>
-                   <button
-                     className="btn-secondary-admin"
-                     onClick={() => showResume(selectedProfessor.curriculo)}
-                     style={{ padding: "10px 20px", fontSize: "14px", cursor: "pointer" }}
-                   >
-                     Abrir Currículo em Nova Guia ↗
-                   </button>
-                 </div>
-               ) : (
-                 <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%", color: "#666" }}>
-                   <p>Este professor não anexou um currículo.</p>
-                 </div>
-               )}
+              {selectedProfessor.curriculo ? (
+                loadingCurriculo ? (
+                  <div className="resume-loading">
+                    <p>Carregando currículo...</p>
+                  </div>
+                ) : curriculoBlobUrl ? (
+                  <iframe
+                    src={curriculoBlobUrl}
+                    title="Currículo"
+                    style={{ width: '100%', height: '100%', border: 'none' }}
+                    frameBorder="0"
+                  />
+                ) : (
+                  <div className="resume-error">
+                    <p>Não foi possível carregar o currículo.</p>
+                    <button
+                      className="btn-secondary-admin"
+                      onClick={() => showResume(selectedProfessor.curriculo)}
+                    >
+                      Abrir em nova guia ↗
+                    </button>
+                  </div>
+                )
+              ) : (
+                <div className="resume-empty">
+                  <p>Este professor não anexou um currículo.</p>
+                </div>
+              )}
             </div>
 
             <div className="resume-modal-actions">

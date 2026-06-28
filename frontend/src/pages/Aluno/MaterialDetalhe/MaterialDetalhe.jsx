@@ -2,7 +2,23 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { buscarMaterial } from "../../../services/materialService";
 import { buscarConteudo, buscarDisciplina } from "../../../services/conteudoService";
+import { gerarBlobUrlPdf } from '../../../utils/pdfUtils';
 import "./MaterialDetalhe.css";
+
+
+function urlParaInline(urlOriginal) {
+  if (!urlOriginal) return null;
+  try {
+    const url = new URL(urlOriginal);
+    const caminho = url.pathname.replace('/media/', '');
+    return `${url.origin}/media-inline/${caminho}/`;
+  } catch {
+    // fallback para URL relativa
+    const caminho = urlOriginal.replace(/^.*\/media\//, '');
+    return `http://localhost:8000/media-inline/${caminho}/`;
+  }
+}
+
 
 export default function MaterialDetalhe() {
   const { id } = useParams();
@@ -12,6 +28,21 @@ export default function MaterialDetalhe() {
   const [disciplina, setDisciplina] = useState(null);
   const [loading, setLoading] = useState(true);
   const [erro, setErro] = useState("");
+  const [pdfBlobUrl, setPdfBlobUrl] = useState(null);
+  const [loadingPdf, setLoadingPdf] = useState(false);
+
+  useEffect(() => {
+    if (material?.tipo === 'pdf' && material?.arquivo) {
+      setLoadingPdf(true);
+      gerarBlobUrlPdf(material.arquivo)
+        .then(url => setPdfBlobUrl(url))
+        .catch(() => setPdfBlobUrl(null))
+        .finally(() => setLoadingPdf(false));
+    }
+    return () => {
+      if (pdfBlobUrl) URL.revokeObjectURL(pdfBlobUrl);
+    };
+  }, [material]);
 
   useEffect(() => {
     carregarMaterial();
@@ -106,10 +137,31 @@ export default function MaterialDetalhe() {
 
           <div className="md-corpo">
             {material.tipo === 'pdf' && material.arquivo ? (
-              <div className="md-corpo__pdf-aviso">
-                <p style={{ fontSize: '0.9rem', margin: 150.2, textAlign: 'center' }}>Visualização embutida não disponível. <br></br>Use o botão "↓ Download do arquivo" ao lado.</p>
-                
-                
+              <div className="md-corpo__pdf-viewer">
+                {loadingPdf && (
+                  <div className="md-pdf-loading">Carregando PDF...</div>
+                )}
+                {!loadingPdf && pdfBlobUrl && (
+                  <iframe
+                    src={pdfBlobUrl}
+                    title={material.nome}
+                    className="md-pdf-iframe"
+                    frameBorder="0"
+                  />
+                )}
+                {!loadingPdf && !pdfBlobUrl && (
+                  <div className="md-corpo__pdf-aviso">
+                    <p>Não foi possível carregar a visualização.</p>
+                    <a href={material.arquivo} target="_blank" rel="noreferrer" className="md-btn-pdf">
+                      Abrir PDF ↗
+                    </a>
+                  </div>
+                )}
+                {pdfBlobUrl && (
+                  <a href={material.arquivo} target="_blank" rel="noreferrer" className="md-btn-pdf-externo">
+                    Abrir em nova aba ↗
+                  </a>
+                )}
               </div>
             ) : (material.tipo === 'link' || material.tipo === 'video') && material.link ? (
               <div className="md-corpo__placeholder">
