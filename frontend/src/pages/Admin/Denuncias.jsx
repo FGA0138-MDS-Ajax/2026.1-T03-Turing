@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { AdminLayout } from '../../components/admin/AdminLayout';
 import { Users, GraduationCap, User, BookX, Search, Filter, BookOpen, Loader2, ChevronDown } from 'lucide-react';
 import api from '../../services/api';
@@ -33,6 +33,65 @@ const calcularTempoDecorrido = (dataIso) => {
   return `${minutos} min atrás`;
 };
 
+// Componente de Dropdown Bonito
+const DropdownCustomizado = ({ icone: Icone, valor, opcoes, onChange, placeholder }) => {
+  const [aberto, setAberto] = useState(false);
+  const containerRef = useRef(null);
+
+  // Fecha o dropdown ao clicar fora
+  useEffect(() => {
+    const lidarComCliqueFora = (event) => {
+      if (containerRef.current && !containerRef.current.contains(event.target)) {
+        setAberto(false);
+      }
+    };
+    document.addEventListener('mousedown', lidarComCliqueFora);
+    return () => document.removeEventListener('mousedown', lidarComCliqueFora);
+  }, []);
+
+  const opcaoSelecionada = opcoes.find(opt => opt.valor === valor);
+
+  return (
+    <div ref={containerRef} style={{ flex: 1, position: 'relative' }}>
+      <div 
+        onClick={() => setAberto(!aberto)}
+        style={{ display: 'flex', alignItems: 'center', background: '#fff', border: '1px solid #EAEAEA', borderRadius: '8px', padding: '12px 16px', cursor: 'pointer', boxShadow: '0 1px 2px rgba(0,0,0,0.02)', height: '45px' }}
+      >
+        {Icone && <Icone size={18} color="#9CA3AF" style={{ marginRight: '12px', minWidth: '18px' }} />}
+        <span style={{ flex: 1, fontSize: '14px', color: opcaoSelecionada?.valor ? '#111827' : '#4B5563', fontWeight: '500', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', userSelect: 'none' }}>
+          {opcaoSelecionada ? opcaoSelecionada.label : placeholder}
+        </span>
+        <ChevronDown size={16} color="#9CA3AF" style={{ transform: aberto ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s ease' }} />
+      </div>
+
+      {aberto && (
+        <div style={{ position: 'absolute', top: '100%', left: 0, right: 0, marginTop: '8px', background: '#fff', border: '1px solid #EAEAEA', borderRadius: '8px', boxShadow: '0 10px 25px rgba(0,0,0,0.1)', zIndex: 50, overflow: 'hidden' }}>
+          {opcoes.map((opt, i) => (
+            <div 
+              key={i}
+              onClick={() => { onChange(opt.valor); setAberto(false); }}
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#F9FAFB'}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#fff'}
+              style={{ 
+                padding: '12px 16px', 
+                fontSize: '14px', 
+                color: valor === opt.valor ? '#E87C28' : '#4B5563', // Fica laranja se estiver selecionado
+                fontWeight: valor === opt.valor ? '600' : '500', 
+                cursor: 'pointer', 
+                transition: 'background 0.2s',
+                borderBottom: i < opcoes.length - 1 ? '1px solid #F3F4F6' : 'none',
+                userSelect: 'none'
+              }}
+            >
+              {opt.label}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
 export default function Denuncias() {
   // Estados de Modais e Seleção
   const [modalDetalhesAberto, setModalDetalhesAberto] = useState(false);
@@ -62,8 +121,12 @@ export default function Denuncias() {
         const denunciasFormatadas = dadosDoBanco.map(d => ({
           id: d.id,
           titulo: `Denúncia #${d.id} - ${d.motivo || 'Geral'}`, 
+          categoriaMotivo: d.motivo || 'Outros', 
           autor: d.nome_denunciante || d.denunciante_nome || (d.denunciante ? `ID: ${d.denunciante}` : 'Desconhecido'),
-          resumo: d.descricao,
+          resumo: d.descricao || 'Sem descrição adicional.',
+          
+          mensagemDenunciada: d.mensagem_denunciada || d.conteudo_denunciado || d.texto_publicacao || 'Conteúdo da mensagem não disponibilizado pela API.', 
+          
           dataCriacao: d.data_create, 
           dataAtualizacao: d.data_update || d.updated_at || d.data_create, 
           status: mapStatusParaFront(d.status)
@@ -136,6 +199,22 @@ export default function Denuncias() {
     } catch (e) { alert("Erro ao salvar."); }
     };
 
+    const opcoesCategoria = [
+    { valor: "", label: "Todas as categorias" },
+    { valor: "Spam ou propaganda", label: "Spam ou propaganda" },
+    { valor: "Conteúdo ofensivo ou inadequado", label: "Conteúdo ofensivo ou inadequado" },
+    { valor: "Pergunta irrelevante ao conteúdo", label: "Pergunta irrelevante ao conteúdo" },
+    { valor: "Pergunta duplicada", label: "Pergunta duplicada" },
+    { valor: "Outro", label: "Outro" }
+  ];
+
+  const opcoesStatus = [
+    { valor: "", label: "Todos os status" },
+    { valor: "Pendente", label: "Pendente" },
+    { valor: "Resolvida", label: "Resolvida" },
+    { valor: "Negada", label: "Negada" }
+  ];
+
   return (
     <AdminLayout>
       <div className="denuncias-container" style={{ padding: '24px' }}>
@@ -166,43 +245,32 @@ export default function Denuncias() {
         {/* BUSCA E FILTROS */}
         <div className="filters-container" style={{ display: 'flex', gap: '16px', marginBottom: '24px' }}>
           
-          <div style={{ flex: 2, display: 'flex', alignItems: 'center', background: '#fff', border: '1px solid #EAEAEA', borderRadius: '8px', padding: '12px 16px', boxShadow: '0 1px 2px rgba(0,0,0,0.02)' }}>
+          <div style={{ flex: 2, display: 'flex', alignItems: 'center', background: '#fff', border: '1px solid #EAEAEA', borderRadius: '8px', padding: '0 16px', height: '45px', boxShadow: '0 1px 2px rgba(0,0,0,0.02)' }}>
             <Search size={18} color="#9CA3AF" style={{ marginRight: '12px', minWidth: '18px' }} />
             <input 
               type="text" 
               placeholder="Buscar por conteúdo ou autor..." 
               value={termoBusca}
               onChange={(e) => setTermoBusca(e.target.value)}
-              style={{ border: 'none', outline: 'none', width: '100%', background: 'transparent', fontSize: '14px', color: '#111827', fontWeight: '500' }} 
+              style={{ border: 'none', outline: 'none', width: '100%', background: 'transparent', fontSize: '14px', color: '#111827', fontWeight: '500', height: '100%' }} 
             />
           </div>
 
-          <div style={{ flex: 1, display: 'flex', alignItems: 'center', background: '#fff', border: '1px solid #EAEAEA', borderRadius: '8px', padding: '12px 16px', position: 'relative', boxShadow: '0 1px 2px rgba(0,0,0,0.02)' }}>
-            <Filter size={18} color="#9CA3AF" style={{ marginRight: '12px', minWidth: '18px' }} />
-            <select 
-              value={filtroCategoria}
-              onChange={(e) => setFiltroCategoria(e.target.value)}
-              style={{ border: 'none', outline: 'none', width: '100%', background: 'transparent', fontSize: '14px', color: '#4B5563', cursor: 'pointer', fontWeight: '500', appearance: 'none', WebkitAppearance: 'none', MozAppearance: 'none', paddingRight: '20px' }}>
-              <option value="">Todas as categorias</option>
-              <option value="ofensiv">Ofensivo</option>
-              <option value="spam">Spam</option>
-            </select>
-            <ChevronDown size={16} color="#9CA3AF" style={{ position: 'absolute', right: '16px', pointerEvents: 'none' }} />
-          </div>
+          <DropdownCustomizado 
+            icone={Filter} 
+            valor={filtroCategoria} 
+            opcoes={opcoesCategoria} 
+            onChange={setFiltroCategoria} 
+            placeholder="Todas as categorias"
+          />
 
-          <div style={{ flex: 1, display: 'flex', alignItems: 'center', background: '#fff', border: '1px solid #EAEAEA', borderRadius: '8px', padding: '12px 16px', position: 'relative', boxShadow: '0 1px 2px rgba(0,0,0,0.02)' }}>
-            <Filter size={18} color="#9CA3AF" style={{ marginRight: '12px', minWidth: '18px' }} />
-            <select 
-              value={filtroStatus}
-              onChange={(e) => setFiltroStatus(e.target.value)}
-              style={{ border: 'none', outline: 'none', width: '100%', background: 'transparent', fontSize: '14px', color: '#4B5563', cursor: 'pointer', fontWeight: '500', appearance: 'none', WebkitAppearance: 'none', MozAppearance: 'none', paddingRight: '20px' }}>
-              <option value="">Todos os status</option>
-              <option value="Pendente">Pendente</option>
-              <option value="Resolvida">Resolvida</option>
-              <option value="Negada">Negada</option>
-            </select>
-            <ChevronDown size={16} color="#9CA3AF" style={{ position: 'absolute', right: '16px', pointerEvents: 'none' }} />
-          </div>
+          <DropdownCustomizado 
+            icone={Filter} 
+            valor={filtroStatus} 
+            opcoes={opcoesStatus} 
+            onChange={setFiltroStatus} 
+            placeholder="Todos os status"
+          />
 
         </div>
 
@@ -272,7 +340,15 @@ export default function Denuncias() {
             <div style={{ marginBottom: '16px' }}>
               <h4 style={{ margin: '0 0 8px 0', fontSize: '14px', color: '#4B5563', fontWeight: '600' }}>Informações da Publicação</h4>
               <p style={{ margin: '0 0 4px 0', fontSize: '14px', color: '#111827' }}><strong>Título:</strong> {denunciaSelecionada.titulo}</p>
-              <p style={{ margin: '0', fontSize: '14px', color: '#111827' }}><strong>Autor do post:</strong> {denunciaSelecionada.autor}</p>
+              <p style={{ margin: '0 0 12px 0', fontSize: '14px', color: '#111827' }}><strong>Autor do post:</strong> {denunciaSelecionada.autor}</p>
+              
+              {/* CAIXA COM A MENSAGEM DENUNCIADA */}
+              <div style={{ padding: '12px', background: '#F3F4F6', borderRadius: '4px', borderLeft: '4px solid #E87C28' }}>
+                <span style={{ fontSize: '12px', fontWeight: '600', color: '#6B7280', display: 'block', marginBottom: '4px' }}>Conteúdo da publicação:</span>
+                <p style={{ margin: 0, fontSize: '13px', color: '#4B5563', fontStyle: 'italic', wordBreak: 'break-word' }}>
+                  "{denunciaSelecionada.mensagemDenunciada}"
+                </p>
+              </div>
             </div>
 
             <div style={{ marginBottom: '16px', padding: '12px', background: '#F9F9F7', borderRadius: '4px' }}>
