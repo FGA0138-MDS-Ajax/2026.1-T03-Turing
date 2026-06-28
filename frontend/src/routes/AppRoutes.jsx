@@ -24,6 +24,8 @@ import { MeusConteudos } from '../pages/Aluno/MeusConteudos/MeusConteudos';
 import { ConteudoEspecifico } from '../pages/Aluno/ConteudoEspecifico/ConteudoEspecifico';
 import { AlunoLayout }      from '../components/aluno/AlunoLayout';
 import { ForumConteudo } from '../pages/Aluno/Forum/ForumConteudo';
+import Rec_Senha from '../pages/RecSenha/RecSenha'
+import Red_Senha from '../pages/RedSenha/RedSenha'
 
 function AdminLayout() {
   return (
@@ -38,6 +40,8 @@ export function AppRoutes() {
     <Routes>
       <Route path="/login"    element={<Login />} />
       <Route path="/register" element={<Register />} />
+      <Route path='/recuperar-senha' element={<Rec_Senha/>}/>
+        <Route path='/redefinir-senha/:uid/:token' element={<Red_Senha/>}/>
 
       <Route
         path="/admin"
