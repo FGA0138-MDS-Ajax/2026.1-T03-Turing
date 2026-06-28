@@ -122,5 +122,3 @@ class DenunciaSerializer(serializers.ModelSerializer):
         if not value or not value.strip():
             raise serializers.ValidationError("O motivo da denúncia não pode estar vazio.")
         return value
-
-

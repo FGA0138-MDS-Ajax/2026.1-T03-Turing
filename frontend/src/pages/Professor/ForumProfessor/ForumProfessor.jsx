@@ -6,6 +6,60 @@ import { ProfessorLayout } from "../../../components/professor/ProfessorLayout";
 import { markdownParaHtml } from "../../../utils/markdown";
 import "./ForumProfessor.css";
 
+// --- Identificação visual de autor [Ce7/RF21] ---
+function BadgePerfil({ tipo }) {
+  if (!tipo) return null;
+  const isProfessor = tipo === 'professor';
+  const style = isProfessor
+    ? { background: '#E8F3F4', color: '#2F5D62', border: '1px solid #B8D8DB' }
+    : { background: '#FBF0E4', color: '#B0641C', border: '1px solid #F0CBAA' };
+  return (
+    <span style={{
+      display: 'inline-flex',
+      alignItems: 'center',
+      fontSize: '10.5px',
+      fontWeight: 700,
+      padding: '2px 8px',
+      borderRadius: 999,
+      whiteSpace: 'nowrap',
+      letterSpacing: '0.02em',
+      ...style,
+    }}>
+{isProfessor ? 'Professor' : 'Aluno'}
+    </span>
+  );
+}
+
+function ForumAvatar({ nome, tipo }) {
+  const isProfessor = tipo === 'professor';
+  const bg = isProfessor ? '#2F5D62' : '#C07A30';
+  const ring = isProfessor ? '#B8D8DB' : '#FBBF6A';
+  const skinColor = isProfessor ? '#C4E0E2' : '#FFD7A0';
+  const bodyColor = isProfessor ? '#1E4F54' : '#92400E';
+
+  return (
+    <div style={{
+      width: 36, height: 36, borderRadius: '50%',
+      background: bg, boxShadow: `0 0 0 2px ${ring}`,
+      overflow: 'hidden', flexShrink: 0,
+    }}>
+      <svg viewBox="0 0 36 36" width="36" height="36">
+        <ellipse cx="18" cy="30" rx="12" ry="9" fill={bodyColor} />
+        <circle cx="18" cy="19" r="8" fill={skinColor} />
+        {isProfessor && (
+          <>
+            <polygon points="18,8 6,13 18,17 30,13" fill="#E0EDEE" />
+            <rect x="6" y="12" width="24" height="3" rx="0.5" fill="#E0EDEE" />
+            <circle cx="18" cy="8" r="2" fill="#B8D8DB" />
+            <path d="M28 12 Q32 17 30 23" fill="none" stroke="#B8D8DB" strokeWidth="1.2" strokeLinecap="round" />
+            <circle cx="30" cy="24" r="1.5" fill="#B8D8DB" />
+          </>
+        )}
+      </svg>
+    </div>
+  );
+}
+
 export default function ForumProfessor() {
   const { user } = useAuth();
   const { id: conteudoId } = useParams();
@@ -131,9 +185,8 @@ export default function ForumProfessor() {
                 className={`forum-question-card ${perguntaSelecionada?.id === pergunta.id ? "selected" : ""}`}
                 onClick={() => { selecionarPergunta(pergunta.id); setMostrandoDetalhe(true); }}
               >
-                <span className="forum-avatar">
-                  {pergunta.autor_nome?.[0]?.toUpperCase() ?? "?"}
-                </span>
+                <ForumAvatar nome={pergunta.autor_nome} tipo={pergunta.autor_tipo} />
+
                 <div className="forum-card-body" style={{ minWidth: 0 }}>
                   <div className="forum-card-top" style={{ overflow: 'hidden' }}>
                     <span className="forum-card-title">{pergunta.texto}</span>
@@ -141,8 +194,10 @@ export default function ForumProfessor() {
                       {pergunta.status === "respondida" ? "Respondida" : "Aguardando resposta"}
                     </span>
                   </div>
-                  <p className="forum-card-meta">
-                    {pergunta.autor_nome} · {new Date(pergunta.data_create).toLocaleDateString("pt-BR")}
+                  <p className="forum-card-meta" style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
+                    {pergunta.autor_nome}
+                    <BadgePerfil tipo={pergunta.autor_tipo} />
+                    · {new Date(pergunta.data_create).toLocaleDateString("pt-BR")}
                   </p>
                 </div>
                 <span className="forum-card-arrow">›</span>
@@ -170,11 +225,13 @@ export default function ForumProfessor() {
 
               <div className="forum-detail-card">
                 <div className="forum-detail-header">
-                  <span className="forum-avatar">
-                    {perguntaSelecionada.autor_nome?.[0]?.toUpperCase() ?? "?"}
-                  </span>
+                  <ForumAvatar nome={perguntaSelecionada.autor_nome} tipo={perguntaSelecionada.autor_tipo} />
+
                   <div>
-                    <div className="forum-detail-name">{perguntaSelecionada.autor_nome}</div>
+                    <div className="forum-detail-name" style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
+                      {perguntaSelecionada.autor_nome}
+                      <BadgePerfil tipo={perguntaSelecionada.autor_tipo} />
+                    </div>
                     <div className="forum-detail-date">
                       {new Date(perguntaSelecionada.data_create).toLocaleString("pt-BR")}
                     </div>
@@ -204,11 +261,13 @@ export default function ForumProfessor() {
               {perguntaSelecionada.resposta && (
                 <div className="forum-detail-card">
                   <div className="forum-detail-header">
-                    <span className="forum-avatar">
-                      {perguntaSelecionada.resposta.autor_nome?.[0]?.toUpperCase() ?? "P"}
-                    </span>
+                    <ForumAvatar nome={perguntaSelecionada.resposta.autor_nome} tipo={perguntaSelecionada.resposta.autor_tipo ?? 'professor'} />
+
                     <div>
-                      <div className="forum-detail-name">{perguntaSelecionada.resposta.autor_nome}</div>
+                      <div className="forum-detail-name" style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
+                        {perguntaSelecionada.resposta.autor_nome}
+                        <BadgePerfil tipo={perguntaSelecionada.resposta.autor_tipo ?? 'professor'} />
+                      </div>
                       <div className="forum-detail-date">
                         {new Date(perguntaSelecionada.resposta.data_create).toLocaleString("pt-BR")}
                       </div>
