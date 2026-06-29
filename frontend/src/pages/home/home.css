@@ -1534,7 +1534,7 @@
     height: 140px;
   }
 
-  .gs-logo-text {
+  .gs-logo-text1 {
     font-size: 1.3rem;
     margin-left: -35px;
   }
@@ -1542,11 +1542,7 @@
 
 @media (max-width: 480px) {
   .gs-home-hero__titulo {
-    font-size: 1.5rem;
-    line-height: 1.2;
-    letter-spacing: -0.2px;
-    max-width: 320px;
-    margin: 0 auto 1rem;
+    font-size: 1.65rem;
   }
 
   .gs-home-hero__visual {
