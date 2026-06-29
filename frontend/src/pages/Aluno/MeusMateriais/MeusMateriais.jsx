@@ -1,7 +1,6 @@
 import { useEffect, useState, useCallback  } from "react";
 import { useNavigate } from "react-router-dom";
 import { listarMateriais, listarConteudos, listarDisciplinas } from "../../../services/disciplinasService";
-import { speak } from "../../../utils/screenReader";
 import "./MeusMateriais.css";
 
 const TIPO_ICONE = {

@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
 import { listarMeusConteudos } from '../../../services/alunoService';
 import { listarProfessores, buscarConteudo } from '../../../services/conteudoService';
-import { speak } from "../../../utils/screenReader";
 import './MeusConteudos.css';
 
 const AREA_COLOR_MAP = {
