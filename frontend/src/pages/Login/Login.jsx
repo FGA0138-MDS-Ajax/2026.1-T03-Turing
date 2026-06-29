@@ -195,7 +195,7 @@ export default function Login() {
                 <span className="checkmark"></span>
                 Lembrar-me
               </label>
-              <Link to="/forgot-password" className="forgot-link">
+              <Link to="/recuperar-senha" className="forgot-link">
                 Esqueceu a senha?
               </Link>
             </div>

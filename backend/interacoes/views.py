@@ -85,7 +85,7 @@ class ForumViewSet(
 
     def get_permissions(self):
         # somente admins poderão: listar todos, atualizar, e deletar
-        if self.action in ['update', 'partial_update', 'destroy', 'list']:
+        if self.action in ['update', 'partial_update', 'destroy']:
             return [IsGoStudyAdmin()]
         return [IsAuthenticated()]
 

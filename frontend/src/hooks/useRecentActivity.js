@@ -8,7 +8,7 @@ export function useRecentActivity() {
   const { user } = useAuth();
 
   useEffect(() => {
-    if (user?.role !== 'admin') return;
+    if (user?.tipo !== 'admin') return;
 
     setLoadingActivity(true);
     adminService
