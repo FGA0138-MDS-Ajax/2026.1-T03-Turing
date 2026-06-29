@@ -31,14 +31,51 @@ function iniciais(nome) {
 }
 
 function Avatar({ nome, tipo }) {
-  const bg = tipo === 'professor' ? '#2F5D62' : '#C07A30';
+  const isProfessor = tipo === 'professor';
+  const bg = isProfessor ? '#2F5D62' : '#C07A30';
+  const ring = isProfessor ? '#B8D8DB' : '#FBBF6A';
+  const skinColor = isProfessor ? '#C4E0E2' : '#FFD7A0';
+  const bodyColor = isProfessor ? '#1E4F54' : '#92400E';
+
   return (
-    <div className="fc-avatar" style={{ background: bg }}>
-      {iniciais(nome)}
+    <div
+      className="fc-avatar"
+      style={{ background: bg, boxShadow: `0 0 0 2px ${ring}`, overflow: 'visible', position: 'relative' }}
+      aria-label={isProfessor ? 'Professor' : 'Aluno'}
+    >
+      <svg viewBox="0 0 32 32" width="32" height="32">
+        {/* corpo */}
+        <ellipse cx="16" cy="27" rx="11" ry="8" fill={bodyColor} />
+        {/* cabeça */}
+        <circle cx="16" cy="17" r="7" fill={skinColor} />
+        {isProfessor && (
+          <>
+            {/* aba do capelo */}
+            <polygon points="16,7 5,12 16,15 27,12" fill="#E0EDEE" />
+            <rect x="5" y="11" width="22" height="3" rx="0.5" fill="#E0EDEE" />
+            {/* botão */}
+            <circle cx="16" cy="7" r="2" fill="#B8D8DB" />
+            {/* cordão */}
+            <path d="M25 11 Q29 16 27 22" fill="none" stroke="#B8D8DB" strokeWidth="1.2" strokeLinecap="round" />
+            <circle cx="27" cy="23" r="1.5" fill="#B8D8DB" />
+          </>
+        )}
+      </svg>
     </div>
   );
 }
 
+// --- Identificação visual de autor [Ce7/RF21] ---
+function BadgePerfil({ tipo }) {
+  if (!tipo) return null;
+  const isProfessor = tipo === 'professor';
+  return (
+    <span className={`fc-badge-perfil ${isProfessor ? 'fc-badge-perfil--professor' : 'fc-badge-perfil--aluno'}`}>
+      {isProfessor ? 'Professor' : 'Aluno'}
+    </span>
+  );
+}
+// ------------------------------------------------
 
 function BadgeStatus({ respondida }) {
   return respondida
@@ -85,7 +122,7 @@ function CardPergunta({ mensagem, respostas, ativo, onClick }) {
       onKeyDown={e => e.key === 'Enter' && onClick()}
     >
       <div className="fc-card-topo">
-        <Avatar nome={mensagem.autor_nome} tipo="aluno" />
+        <Avatar nome={mensagem.autor_nome} tipo={mensagem.autor_tipo || 'aluno'} />
         <div className="fc-card-info">
           <span className="fc-card-titulo">{titulo}</span>
           <BadgeStatus respondida={respondida} />
@@ -96,7 +133,10 @@ function CardPergunta({ mensagem, respostas, ativo, onClick }) {
         <span className="fc-card-seta">›</span>
       </div>
       <div className="fc-card-rodape">
-        <span className="fc-card-autor">{mensagem.autor_nome}</span>
+        <span className="fc-card-autor" style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
+          {mensagem.autor_nome}
+          <BadgePerfil tipo={mensagem.autor_tipo} />
+        </span>
         <span className="fc-card-data">{formatarData(mensagem.data_create)}</span>
       </div>
     </div>
@@ -135,9 +175,12 @@ function PainelDetalhe({ pergunta, respostas, onDenunciar }) {
     <div className="fc-detalhe">
       <div className="fc-detalhe-pergunta">
         <div className="fc-detalhe-autor">
-          <Avatar nome={pergunta.autor_nome} tipo="aluno" />
+          <Avatar nome={pergunta.autor_nome} tipo={pergunta.autor_tipo || 'aluno'} />
           <div>
-            <span className="fc-detalhe-nome">{pergunta.autor_nome}</span>
+            <span className="fc-detalhe-nome" style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
+              {pergunta.autor_nome}
+              <BadgePerfil tipo={pergunta.autor_tipo} />
+            </span>
             <span className="fc-detalhe-data">{formatarData(pergunta.data_create)}</span>
           </div>
           <BadgeStatus respondida={respostas.length > 0} />
@@ -158,9 +201,12 @@ function PainelDetalhe({ pergunta, respostas, onDenunciar }) {
           {respostas.map(r => (
             <div key={r.id} className="fc-resposta-item">
               <div className="fc-detalhe-autor">
-                <Avatar nome={r.autor_nome} tipo="professor" />
+                <Avatar nome={r.autor_nome} tipo={r.autor_tipo || 'professor'} />
                 <div>
-                  <span className="fc-detalhe-nome">{r.autor_nome}</span>
+                  <span className="fc-detalhe-nome" style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
+                    {r.autor_nome}
+                    <BadgePerfil tipo={r.autor_tipo || 'professor'} />
+                  </span>
                   <span className="fc-detalhe-data">{formatarData(r.data_create)}</span>
                 </div>
                 <IconeFlag
@@ -180,10 +226,6 @@ function PainelDetalhe({ pergunta, respostas, onDenunciar }) {
     </div>
   );
 }
-
-
-
-
 
 
 export function ForumConteudo() {

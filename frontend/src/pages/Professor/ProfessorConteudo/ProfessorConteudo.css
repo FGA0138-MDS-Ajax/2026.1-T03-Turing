@@ -91,7 +91,7 @@
 .conteudo-descricao {
   color: #6b7280;
   font-size: 0.8rem;
-    margin-bottom: 14px;
+  margin-bottom: 14px;
 }
 
 .conteudo-info {
@@ -115,10 +115,12 @@
 .conteudo-footer {
   border-top: 1px solid #e5e7eb;
   padding: 9px 14px;
+  display: flex;
+  gap: 8px;
 }
 
 .btn-material {
-  width: 100%;
+  flex: 1;
   height: 36px;
   border: none;
   border-radius: 8px;
@@ -132,6 +134,23 @@
 
 .btn-material:hover {
   background: rgb(175, 175, 175);
+}
+
+.btn-forum {
+  flex: 1;
+  height: 36px;
+  border: none;
+  border-radius: 8px;
+  background: #02373a;
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.80rem;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-forum:hover {
+  background: #025a5e;
 }
 
 .filter-wrapper {
@@ -177,22 +196,22 @@
 
 @media (max-width: 768px) {
   .professor-conteudo-container {
-      padding: 20px;
+    padding: 20px;
   }
 
-                .conteudo-card {
-                  width: 100%;
-  }
-
-                .conteudo-filters select {
+  .conteudo-card {
     width: 100%;
   }
 
- .conteudo-page-header h1 {
-   font-size: 2.2rem;
- }
+  .conteudo-filters select {
+    width: 100%;
+  }
 
- .conteudo-body h2 {
-   font-size: 1.8rem;
+  .conteudo-page-header h1 {
+    font-size: 2.2rem;
+  }
+
+  .conteudo-body h2 {
+    font-size: 1.8rem;
   }
 }

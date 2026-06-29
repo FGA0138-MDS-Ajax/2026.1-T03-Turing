@@ -1,5 +1,6 @@
 import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import { ProtectedRoute }  from './ProtectedRoute';
+import { Home } from '../pages/Home/Home';
 import { AdminProvider }   from '../context/AdminContext';
 import { AdminDashboard }  from '../pages/admin/AdminDashboard';
 import { Professores }     from '../pages/admin/Professores';
@@ -24,6 +25,9 @@ import { MeusConteudos } from '../pages/Aluno/MeusConteudos/MeusConteudos';
 import { ConteudoEspecifico } from '../pages/Aluno/ConteudoEspecifico/ConteudoEspecifico';
 import { AlunoLayout }      from '../components/aluno/AlunoLayout';
 import { ForumConteudo } from '../pages/Aluno/Forum/ForumConteudo';
+import Rec_Senha from '../pages/RecSenha/RecSenha'
+import Red_Senha from '../pages/RedSenha/RedSenha'
+import Denuncias from '../pages/admin/Denuncias';
 
 function AdminLayout() {
   return (
@@ -36,8 +40,14 @@ function AdminLayout() {
 export function AppRoutes() {
   return (
     <Routes>
+
+      <Route path="/home" element={<Home />} />
+      <Route path="/" element={<Navigate to="/home" replace />} />
+
       <Route path="/login"    element={<Login />} />
       <Route path="/register" element={<Register />} />
+      <Route path='/recuperar-senha' element={<Rec_Senha/>}/>
+        <Route path='/redefinir-senha/:uid/:token' element={<Red_Senha/>}/>
 
       <Route
         path="/admin"
@@ -53,6 +63,7 @@ export function AppRoutes() {
         <Route path="configuracoes"        element={<Configuracoes />} />
         <Route path="professores/revisao"  element={<TeacherReview />} />
         <Route path="conteudos"            element={<Disciplinas />} />
+        <Route path="denuncias"            element={<Denuncias />} />
       </Route>
 
       <Route

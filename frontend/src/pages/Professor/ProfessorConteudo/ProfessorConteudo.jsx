@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../context/AuthContext";
 import {
   listarConteudos,
@@ -13,6 +14,7 @@ import ModalCriarMaterial from "../../../components/professor/ModalCriarMaterial
 
 export default function ProfessorConteudo() {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [conteudos, setConteudos] = useState([]);
   const [disciplinas, setDisciplinas] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -63,7 +65,13 @@ export default function ProfessorConteudo() {
         : [];
 
       setConteudos(conteudosDoProfessor);
-      setDisciplinas(disciplinasResponse.data);
+
+      const todasDisciplinas = Array.isArray(disciplinasResponse.data) ? disciplinasResponse.data : [];
+      const disciplinasDoProfessor = todasDisciplinas.filter(d =>
+        conteudosDoProfessor.some(c => c.disciplina === d.id)
+      );
+      setDisciplinas(disciplinasDoProfessor);
+
       setMateriais(materiaisResponse.data);
     } catch (err) {
       console.log(err);
@@ -75,26 +83,26 @@ export default function ProfessorConteudo() {
 
   const [toast, setToast] = useState(null);
 
-    const exibirToast = (tipo, mensagem) => {
-      setToast({ tipo, mensagem });
-      setTimeout(() => setToast(null), 3500);
-    };
+  const exibirToast = (tipo, mensagem) => {
+    setToast({ tipo, mensagem });
+    setTimeout(() => setToast(null), 3500);
+  };
 
   const handleCriar = async (formData) => {
-  setLoadingAcao(true);
-  try {
-    await criarMaterial(formData);
-    exibirToast('sucesso', 'Material adicionado com sucesso!');
-    await carregarDados();
-    return true;
-  } catch (err) {
-    console.error(err);
-    exibirToast('erro', 'Erro ao adicionar material.');
-    return false;
-  } finally {
-    setLoadingAcao(false);
-  }
-};
+    setLoadingAcao(true);
+    try {
+      await criarMaterial(formData);
+      exibirToast('sucesso', 'Material adicionado com sucesso!');
+      await carregarDados();
+      return true;
+    } catch (err) {
+      console.error(err);
+      exibirToast('erro', 'Erro ao adicionar material.');
+      return false;
+    } finally {
+      setLoadingAcao(false);
+    }
+  };
 
   const abrirModalParaConteudo = (conteudo) => {
     setConteudoSelecionado(conteudo);
@@ -183,6 +191,9 @@ export default function ProfessorConteudo() {
               <div className="conteudo-footer">
                 <button className="btn-material" onClick={() => abrirModalParaConteudo(conteudo)}>
                   + Adicionar material
+                </button>
+                <button className="btn-forum" onClick={() => navigate(`/professor/conteudos/${conteudo.id}/forum`)}>
+                   Fórum
                 </button>
               </div>
             </article>

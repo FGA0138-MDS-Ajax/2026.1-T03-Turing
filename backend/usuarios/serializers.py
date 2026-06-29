@@ -6,7 +6,12 @@ from services.email_service import enviar_email_boas_vindas_professor, enviar_em
 from datetime import date
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 import json
-
+from django.contrib.auth import get_user_model
+from django.utils.encoding import force_str
+from django.utils.http import urlsafe_base64_decode
+from django.contrib.auth.tokens import default_token_generator
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError as DjangoValidationError
 
 #   customizando como o token será pego
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -231,4 +236,57 @@ class AlunoSerializer(serializers.ModelSerializer):
 
             perfil.save()
         return instance
-    
+
+# usa como base a user model definida nas configs em auth_user_model    
+User = get_user_model()
+
+#verifica o email que ta solicitando recuperacao de senha
+class PasswordResetRequestSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    def validate_email(self, email):
+        return email.strip()
+
+# serializer pra redefinir senha    
+class PasswordResetConfirmSerializer(serializers.Serializer):
+    uid = serializers.CharField()
+    token = serializers.CharField()
+    nova_senha = serializers.CharField(write_only=True)
+    confirmar_senha = serializers.CharField(write_only=True)
+
+    def validate(self, attrs):
+        uid = attrs.get("uid")
+        token = attrs.get("token")
+        nova_senha = attrs.get("nova_senha")
+        confirmar_senha = attrs.get("confirmar_senha")
+
+        if nova_senha != confirmar_senha:
+            raise serializers.ValidationError({
+                "confirmar_senha": "As senhas não coincidem."
+            })
+        try:
+            user_id = force_str(urlsafe_base64_decode(uid))
+            user = User.objects.get(pk=user_id)
+        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+            raise serializers.ValidationError({
+                "token": "Link de redefinição inválido."
+            })
+        
+        if not default_token_generator.check_token(user, token):
+            raise serializers.ValidationError({
+                "token": "Link de redefinição inválido ou expirado."
+            })
+        try:
+            validate_password(nova_senha, user=user)
+        except DjangoValidationError as erro:
+            raise serializers.ValidationError({
+                "nova_senha": list(erro.messages)
+            })
+        
+        attrs["user"] = user
+        return attrs
+
+    def save(self):
+        user = self.validated_data["user"]
+        user.set_password(self.validated_data["nova_senha"])
+        user.save()
+        return user
