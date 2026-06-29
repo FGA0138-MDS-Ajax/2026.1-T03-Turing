@@ -26,6 +26,7 @@ import { AlunoLayout }      from '../components/aluno/AlunoLayout';
 import { ForumConteudo } from '../pages/Aluno/Forum/ForumConteudo';
 import Rec_Senha from '../pages/RecSenha/RecSenha'
 import Red_Senha from '../pages/RedSenha/RedSenha'
+import Denuncias from '../pages/admin/Denuncias';
 
 function AdminLayout() {
   return (
@@ -57,6 +58,7 @@ export function AppRoutes() {
         <Route path="configuracoes"        element={<Configuracoes />} />
         <Route path="professores/revisao"  element={<TeacherReview />} />
         <Route path="conteudos"            element={<Disciplinas />} />
+        <Route path="denuncias"            element={<Denuncias />} />
       </Route>
 
       <Route
