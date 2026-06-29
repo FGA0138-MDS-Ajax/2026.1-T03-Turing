@@ -1,6 +1,9 @@
 import {useState} from "react";
 import {Link, useParams} from "react-router-dom";
+import { Lock, CheckCircle } from "lucide-react";
+import logo from '../../assets/minha-logo.png';
 import api from '../../services/api'
+import "./RedSenha.css";
 
 
 function extrairMensagemErro(error) {
@@ -62,50 +65,77 @@ export default function RedSenha() {
 
     if (status === 'success') {
         return (
-            <div>
-                <h1>Senha redefinida!</h1>
-                <p>Sua senha foi alterada com sucesso. Faça login novamente com a nova senha.</p>
-                <Link to={'/login'}> Ir para o login</Link>
+             <div className="reset-password-wrapper">
+                <div className="reset-password-card">
+                    <div className="reset-password-success">
+                        <div className="success-icon">
+                            <CheckCircle size={40} />
+                        </div>
+                            <h1>Senha redefinida!</h1>
+                            <p>Sua senha foi alterada com sucesso. Faça login novamente com a nova senha.</p>
+                            <Link to={'/login'} className="auth-link"> Ir para o login</Link>
+                    </div>
+                 </div>
             </div>
-        )
+        );
     }
-
+                
+  
     return (
-        <div>
-            <h1>Criar nova senha</h1>
-            <p>Digite sua nova senha abaixo.</p>
+        <div className="reset-password-wrapper">
+            <div className="reset-password-card">
+                <div className="reset-password-logo">
+                    <img src={logo} alt="GoStudy" className="reset-password-logo-img" />
+                </div>
+                <h1 className="reset-password-title">Criar nova senha</h1>
+                <p className="reset-password-subtitle">Digite sua nova senha abaixo.</p>
 
-            <form onSubmit={handleSubmit}>
-                <label htmlFor="novaSenha">Nova senha</label>
-                <input
-                    id="novaSenha"
-                    type="password"
-                    value={novaSenha}
-                    onChange={(e) => setNovaSenha(e.target.value)}
-                    disabled={status === "loading"}
-                    autoComplete="new-password"
-                />
+                <form className="reset-password-form" onSubmit={handleSubmit}>
+                    <div className="field-group">
+                        <label htmlFor="novaSenha">Nova senha</label>
+                        <div className="input-wrapper">
+                            <span className="input-icon">
+                                <Lock size={18} />
+                            </span>
+                            <input
+                                id="novaSenha"
+                                type="password"
+                                value={novaSenha}
+                                onChange={(e) => setNovaSenha(e.target.value)}
+                                disabled={status === "loading"}
+                                autoComplete="new-password"
+                            />
+                        </div>
+                    </div>
 
-                <label htmlFor="confirmarSenha">Confirmar nova senha</label>
-                <input
-                    id="confirmarSenha"
-                    type="password"
-                    value={confirmarSenha}
-                    onChange={(e) => setConfirmarSenha(e.target.value)}
-                    disabled={status === "loading"}
-                    autoComplete="new-password"
-                />
+                    <div className="field-group">
+                        <label htmlFor="confirmarSenha">Confirmar nova senha</label>
+                        <div className="input-wrapper">
+                            <span className="input-icon">
+                                <Lock size={18} />
+                            </span>
+                            <input
+                                id="confirmarSenha"
+                                type="password"
+                                value={confirmarSenha}
+                                onChange={(e) => setConfirmarSenha(e.target.value)}
+                                disabled={status === "loading"}
+                                autoComplete="new-password"
+                            />
+                        </div>
+                    </div>
+                
+                    {status === "error" && (
+                        <p  className="error-message" role="alert">
+                            {errorMessage}
+                        </p>
+                    )}
 
-                {status === "error" && (
-                    <p role="alert" style={{color: "red"}}>
-                        {errorMessage}
-                    </p>
-                )}
-
-                <button type="submit" disabled={status === "loading"}>
-                    {status === "loading" ? "Salvando..." : "Redefinir senha"}
-                </button>
-            </form>
+                    <button type="submit" disabled={status === "loading"} className="btn-primary">
+                        {status === "loading" ? "Salvando..." : "Redefinir senha"}
+                    </button>
+                </form>
+            </div>
         </div>
-    )
-}
+        );
+    }
