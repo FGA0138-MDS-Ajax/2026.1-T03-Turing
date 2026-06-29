@@ -204,7 +204,6 @@ export default function MaterialDetalhe() {
                 </dd>
               </div>
             </dl>
-            <button className="md-btn-marcar">Marcar como visto</button>
           </div>
 
           {(material.link || material.arquivo) && (
