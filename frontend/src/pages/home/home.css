@@ -1157,14 +1157,15 @@
 .gs-home-footer__logo {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0rem;
   text-decoration: none;
 }
 
 .gs-home-footer__logo-img {
   height: 150px;
   width: auto;
-  
+   margin-left: 150px;
+
 
 }
 
@@ -1172,7 +1173,7 @@
   font-size: 1.2rem;
   font-weight: 700;
   color: #fff;
-  margin-left: -50px;
+  margin-left: -30px;
 }
 
 .gs-home-footer__desc {
