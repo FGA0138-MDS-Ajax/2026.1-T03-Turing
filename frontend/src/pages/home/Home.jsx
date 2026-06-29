@@ -168,10 +168,15 @@ export function Home() {
 
       <header className={`gs-home-nav ${isScrolled ? 'gs-home-nav--scrolled' : ''}`}>
         <div className="gs-home-nav__inner">
-          <Link to="/" className="gs-home-nav__logo">
-            <img src={logo} alt="GoStudy" className="gs-home-nav__logo-img" />
-            <span className="gs-home-nav__logo-text">GoStudy</span>
-          </Link>
+            <Link to="/" className="gs-home-nav__logo">
+                <img src={logo} alt="GoStudy" className="gs-home-nav__logo-img" />
+                <span className="gs-logo-text1">
+                    <span className="gs-destaque1">G</span>o
+                    <span className="gs-destaque1">S</span>tudy
+                </span>
+            </Link>
+            
+          
 
           <button 
             className="gs-home-nav__hamburger"
@@ -468,26 +473,6 @@ export function Home() {
         </div>
       </section>
 
-      <section className="gs-home-stats" ref={statsRef}>
-        <div className="gs-home-stats__inner">
-          <div className="gs-home-stat">
-            <span className="gs-home-stat__number" data-value="100">0</span>
-            <span className="gs-home-stat__label">Alunos ativos</span>
-          </div>
-          <div className="gs-home-stat">
-            <span className="gs-home-stat__number" data-value="50">0</span>
-            <span className="gs-home-stat__label">Professores</span>
-          </div>
-          <div className="gs-home-stat">
-            <span className="gs-home-stat__number" data-value="200">0</span>
-            <span className="gs-home-stat__label">Conteúdos</span>
-          </div>
-          <div className="gs-home-stat">
-            <span className="gs-home-stat__number" data-value="500">0</span>
-            <span className="gs-home-stat__label">Materiais</span>
-          </div>
-        </div>
-      </section>
 
       <section className="gs-home-cta">
         <div className="gs-home-cta__inner">
