@@ -528,7 +528,7 @@ export function Home() {
               <h4>Links úteis</h4>
               <a href="/login">Entrar</a>
               <a href="/register">Cadastrar</a>
-              <a href="https://github.com/grupo-turing" target="_blank" rel="noopener noreferrer">GitHub</a>
+              <a href="https://github.com/FGA0138-MDS-Ajax/2026.1-T03-Turing.git" target="_blank" rel="noopener noreferrer">GitHub</a>
             </div>
           </div>
         </div>
