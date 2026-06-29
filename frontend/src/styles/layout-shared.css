@@ -8,7 +8,7 @@
   display: flex;
   min-height: 100vh;
   width: 100%;
-background: var(--gs-bg-page, #F3F4F6);
+  background: var(--gs-bg-page, #F3F4F6);
   overflow: hidden;
 }
 
@@ -205,7 +205,7 @@ background: color-mix(in srgb, var(--gs-accent, #F3F4F6) 10%, transparent);
   width: 36px;
   height: 36px;
   border-radius: 50%;
-background: var(--gs-accent, #2F5D62);
+  background: var(--gs-accent, #2F5D62);
   color: #fff;
   /* px fixo de propósito: o header não deve escalar com Acessibilidade. */
   font-size: 12.48px;
@@ -225,13 +225,14 @@ color: var(--gs-text-primary, #101828);
 
 .gs-topbar-role {
   font-size: 12px;
-color: var(--gs-text-secondary, #6A7282);
+  color: var(--gs-text-secondary, #6A7282);
   line-height: 1.2;
 }
 
 .gs-page-content {
-  padding: 36px 40px;
+padding: 36px 40px;
 flex: 1;
+background: var(--gs-bg-page, #F3F4F6);
 }
 
 .gs-topbar {

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { buscarMaterial } from "../../../services/materialService";
 import { buscarConteudo, buscarDisciplina } from "../../../services/conteudoService";
+import { speak } from "../../../utils/screenReader";
 import "./MaterialDetalhe.css";
 
 export default function MaterialDetalhe() {

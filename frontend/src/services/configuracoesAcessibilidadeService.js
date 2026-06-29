@@ -9,9 +9,9 @@ import {
 // tratamos erro de verdade, porque localStorage pode falhar (modo anonimo/
 // privado do navegador, quota cheia, bloqueio do navegador, etc).
 
-export async function loadAccessibilitySettings() {
+export async function loadAccessibilitySettings(userKey) {
   try {
-    const local = loadStoredAccessibilityPreferences();
+    const local = loadStoredAccessibilityPreferences(userKey);
     applyAccessibilityPreferences(local);
 
     return {
@@ -32,9 +32,9 @@ export async function loadAccessibilitySettings() {
   }
 }
 
-export async function saveAccessibilitySettings(settings) {
+export async function saveAccessibilitySettings(settings, userKey) {
   try {
-    const persisted = persistAccessibilityPreferences(settings);
+    const persisted = persistAccessibilityPreferences(settings, userKey);
     applyAccessibilityPreferences(persisted);
 
     return {

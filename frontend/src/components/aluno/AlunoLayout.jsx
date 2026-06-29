@@ -41,7 +41,7 @@ export function AlunoLayout({ children }) {
         </header>
 
         <main className="gs-professor-main">
-          <div className="gs-page-content" style={{ flex: 1, padding: '40px', overflowY: 'auto', backgroundColor: '#F2EFE9', minWidth: 0, height: '100%' }}>
+          <div className="gs-page-content" style={{ flex: 1, padding: '40px', overflowY: 'auto', minWidth: 0, height: '100%' }}>
             {children}
           </div>
         </main>

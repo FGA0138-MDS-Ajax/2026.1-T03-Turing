@@ -173,7 +173,7 @@
     height: 34px;
     border-radius: 8px;
     border: 1px solid rgba(28,43,58,0.12);
-    background: #fff;
+    background: var(--gs-surface, #fff);
     color: #5A6A76;
     display: flex;
     align-items: center;
@@ -426,7 +426,7 @@
   }
 
   .gs-modal {
-    background: #fff;
+    background: var(--gs-surface, #fff);
     border-radius: 14px;
     padding: 28px 24px 20px;
     width: 360px;

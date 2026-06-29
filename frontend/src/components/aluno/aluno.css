@@ -8,7 +8,7 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background-color: #F2EFE9;
+  background: var(--gs-bg-page, #F3F4F6);
 }
 
 /* --- CABEÇALHO GLOBAL (TOP BAR) --- */
@@ -17,7 +17,7 @@
   justify-content: space-between;
   align-items: center;
   height: 70px;
-  background: #FFFFFF;
+  background: var(--gs-topbar-bg, #FFFFFF);
   padding: 0 40px;
   border-bottom: 1px solid #E5E7EB;
 }
@@ -88,11 +88,11 @@
   display: flex;
   flex: 1;
   overflow: hidden;
-  background-color: #F2EFE9 !important;
+  background-color: var(--gs-content-bg, #F2EFE9) !important;
 }
 
 aside.gs-sidebar {
-  background-color: #F2EFE9 !important;
+  background-color: var(--gs-content-bg, #F2EFE9) !important;
   border-right: none;
   width: 250px;
   padding: 32px 24px;
@@ -131,6 +131,6 @@ aside.gs-sidebar {
   flex: 1;
   padding: 40px;
   overflow-y: auto;
-  background-color: #F2EFE9 !important;
+  background-color: var(--gs-content-bg, #F2EFE9) !important;
   min-width: 0;
 }

@@ -182,3 +182,83 @@
     border-right-color: var(--border);
   }
 }
+
+/* ===========================
+   ALTO CONTRASTE GLOBAL
+=========================== */
+
+html[data-high-contrast="true"] {
+  color-scheme: dark;
+}
+
+html[data-high-contrast="true"] * {
+  color: #fff;
+}
+
+html[data-high-contrast="true"] button,
+html[data-high-contrast="true"] [class$="-btn"],
+html[data-high-contrast="true"] .md-btn-arquivo,
+html[data-high-contrast="true"] .card-material__tipo.tipo-pdf,
+html[data-high-contrast="true"] input,
+html[data-high-contrast="true"] textarea,
+html[data-high-contrast="true"] select {
+  background: #000 !important;
+  color: #fff !important;
+  border: 2px solid #fff !important;
+}
+
+html[data-high-contrast="true"] [class*="avatar"],
+html[data-high-contrast="true"] .ad-material-icone {
+  background: #000 !important;
+  color: #fff !important;
+  border: 2px solid #fff !important;
+}
+
+html[data-high-contrast="true"] button:hover {
+  background: #222 !important;
+}
+
+html[data-high-contrast="true"] a {
+  color: #00ffff !important;
+}
+
+html[data-high-contrast="true"] input::placeholder,
+html[data-high-contrast="true"] textarea::placeholder {
+  color: #ccc !important;
+}
+
+html[data-high-contrast="true"] div,
+html[data-high-contrast="true"] section,
+html[data-high-contrast="true"] article,
+html[data-high-contrast="true"] aside,
+html[data-high-contrast="true"] nav {
+  background: #000;
+}
+
+html[data-high-contrast="true"] [class$="-card"],
+html[data-high-contrast="true"] .gs-card {
+  border: 2px solid #fff !important;
+}
+
+html[data-high-contrast="true"] svg {
+  color: white;
+  stroke: white;
+}
+
+
+html[data-high-contrast="true"] [class*="badge"],
+html[data-high-contrast="true"] [class*="status"] {
+  background: #000 !important;
+  color: #fff !important;
+  border: 1px solid #fff !important;
+}
+
+html[data-screen-reader="true"] *:focus {
+  outline: 3px solid #e7d361 !important;
+  outline-offset: 3px;
+}
+
+html[data-screen-reader="true"] button,
+html[data-screen-reader="true"] a {
+  cursor: pointer;
+}

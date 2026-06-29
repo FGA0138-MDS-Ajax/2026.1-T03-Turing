@@ -1,4 +1,14 @@
-const STORAGE_KEY = 'gsAccessibilityPreferences';
+const STORAGE_KEY_PREFIX = 'gsAccessibilityPreferences';
+const GUEST_KEY = 'guest';
+
+// As preferencias de acessibilidade sao por usuario, nao globais da
+// plataforma: cada conta logada tem sua propria chave no localStorage.
+// 'guest' e usado antes do login (ex.: na propria tela de Login) ou se
+// por algum motivo nao houver usuario identificavel.
+function storageKeyFor(userKey) {
+  const safeKey = userKey ? String(userKey).toLowerCase().trim() : GUEST_KEY;
+  return `${STORAGE_KEY_PREFIX}:${safeKey}`;
+}
 
 export const DEFAULT_ACCESSIBILITY_PREFERENCES = {
   fontSize: 'medio',
@@ -42,8 +52,8 @@ export const COLOR_VISION_THEMES = {
   },
   deuteranopia: {
     // Dificuldade em perceber verde -> prioriza azul/ciano.
-    accent: '#00a3b2',
-    accentHover: '#00858c',
+    accent: '#0072B2',
+    accentHover: '#005A8C',
   },
   tritanopia: {
     // Dificuldade em perceber azul -> evita azul como referencia
@@ -78,9 +88,9 @@ function normalize(raw) {
   return next;
 }
 
-export function loadStoredAccessibilityPreferences() {
+export function loadStoredAccessibilityPreferences(userKey) {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = localStorage.getItem(storageKeyFor(userKey));
     if (!raw) return { ...DEFAULT_ACCESSIBILITY_PREFERENCES };
     return normalize(JSON.parse(raw));
   } catch {
@@ -88,9 +98,9 @@ export function loadStoredAccessibilityPreferences() {
   }
 }
 
-export function persistAccessibilityPreferences(preferences) {
+export function persistAccessibilityPreferences(preferences, userKey) {
   const normalized = normalize(preferences);
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(normalized));
+  localStorage.setItem(storageKeyFor(userKey), JSON.stringify(normalized));
   return normalized;
 }
 
@@ -156,8 +166,28 @@ export function applyAccessibilityPreferences(preferences) {
   });
 }
 
-export function loadAndApplyAccessibilityPreferences() {
-  const preferences = loadStoredAccessibilityPreferences();
+// userKey: identificador do usuario logado (ex.: email). Se omitido,
+// tenta descobrir automaticamente a partir do token salvo no
+// localStorage (util no main.jsx, antes do React/AuthContext montar);
+// se ainda assim nao houver usuario, usa as preferencias de 'guest'
+// (ex.: tela de Login, antes de qualquer login).
+function getUserKeyFromStoredToken() {
+  try {
+    const token = localStorage.getItem('authToken');
+    if (!token) return null;
+    const payloadBase64 = token.split('.')[1];
+    if (!payloadBase64) return null;
+    const base64 = payloadBase64.replace(/-/g, '+').replace(/_/g, '/');
+    const payload = JSON.parse(atob(base64));
+    return payload.email || null;
+  } catch {
+    return null;
+  }
+}
+
+export function loadAndApplyAccessibilityPreferences(userKey) {
+  const resolvedKey = userKey !== undefined ? userKey : getUserKeyFromStoredToken();
+  const preferences = loadStoredAccessibilityPreferences(resolvedKey);
   applyAccessibilityPreferences(preferences);
   return preferences;
 }

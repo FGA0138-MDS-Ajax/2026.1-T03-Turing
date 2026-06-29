@@ -9,8 +9,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #fff;
-  border: 1px solid #E5E7EB;
+  background: var(--gs-surface, #fff);
+  border: 1px solid var(--gs-border, #E5E7EB);
   border-radius: 12px;
   padding: 1.5rem 1.75rem;
   flex: 1;
@@ -26,14 +26,14 @@
 
 .prof-stat-label {
   font-size: 0.8rem;
-  color: #6A7282;
+  color: var(--gs-text-secondary, #6A7282);
   font-weight: 400;
 }
 
 .prof-stat-value {
   font-size: 2rem;
   font-weight: 700;
-  color: #101828;
+  color: var(--gs-text-primary, #101828);
   line-height: 1;
 }
 
@@ -54,8 +54,8 @@
 }
 
 .prof-panel {
-  background: #fff;
-  border: 1px solid #E5E7EB;
+  background: var(--gs-surface, #fff);
+  border: 1px solid var(--gs-border, #E5E7EB);
   border-radius: 12px;
   padding: 1.5rem;
 }
@@ -63,7 +63,7 @@
 .prof-panel-title {
   font-size: 1rem;
   font-weight: 700;
-  color: #101828;
+  color: var(--gs-text-primary, #101828);
   margin: 0 0 1.25rem 0;
 }
 
@@ -78,7 +78,7 @@
   align-items: center;
   gap: 0.85rem;
   padding: 0.75rem 0;
-  border-bottom: 1px solid #F3F4F6;
+  border-bottom: 1px solid var(--gs-border, #F3F4F6);
 }
 
 .prof-atividade-item:last-child {
@@ -106,12 +106,12 @@
 .prof-atividade-titulo {
   font-size: 0.875rem;
   font-weight: 600;
-  color: #101828;
+  color: var(--gs-text-primary, #101828);
 }
 
 .prof-atividade-disciplina {
   font-size: 0.78rem;
-  color: #6A7282;
+  color: var(--gs-text-secondary, #6A7282);
 }
 
 .prof-duvida-item {
@@ -120,7 +120,7 @@
   justify-content: space-between;
   gap: 1rem;
   padding: 0.75rem 0;
-  border-bottom: 1px solid #F3F4F6;
+  border-bottom: 1px solid var(--gs-border, #F3F4F6);
 }
 
 .prof-duvida-item:last-child {
@@ -137,17 +137,17 @@
 .prof-duvida-aluno {
   font-size: 0.875rem;
   font-weight: 600;
-  color: #101828;
+  color: var(--gs-text-primary, #101828);
 }
 
 .prof-duvida-titulo {
   font-size: 0.8rem;
-  color: #4A5565;
+  color: var(--gs-text-secondary, #4A5565);
 }
 
 .prof-duvida-meta {
   font-size: 0.75rem;
-  color: #99A1AF;
+  color: var(--gs-text-muted, #99A1AF);
 }
 
 .prof-duvida-badge {

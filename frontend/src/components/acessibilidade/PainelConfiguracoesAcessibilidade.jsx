@@ -9,6 +9,7 @@ import {
   loadAccessibilitySettings,
   saveAccessibilitySettings,
 } from '../../services/configuracoesAcessibilidadeService';
+import { useAuth } from '../../context/AuthContext';
 
 const FONT_SIZE_OPTIONS = [
   { id: 'pequeno', label: 'Pequeno', size: '14px' },
@@ -55,6 +56,9 @@ export function AccessibilitySettingsPanel({
   title = 'Configurações de Acessibilidade',
   subtitle = 'Personalize a plataforma para melhor atender às suas necessidades.',
 }) {
+  const { user } = useAuth();
+  const userKey = user?.email ?? null;
+
   const [settings, setSettings] = useState(DEFAULT_ACCESSIBILITY_PREFERENCES);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -69,7 +73,7 @@ export function AccessibilitySettingsPanel({
     async function fetchSettings() {
       setLoading(true);
       setError('');
-      const result = await loadAccessibilitySettings();
+      const result = await loadAccessibilitySettings(userKey);
       if (!mounted) return;
 
       setSettings(result.settings);
@@ -87,7 +91,7 @@ export function AccessibilitySettingsPanel({
         clearTimeout(saveTimeoutRef.current);
       }
     };
-  }, []);
+  }, [userKey]);
 
   const colorPreview = {
     ...COLOR_VISION_LABELS[settings.colorVisionMode],
@@ -102,7 +106,7 @@ export function AccessibilitySettingsPanel({
     setError('');
 
     saveTimeoutRef.current = setTimeout(async () => {
-      const result = await saveAccessibilitySettings(nextSettings);
+      const result = await saveAccessibilitySettings(nextSettings, userKey);
       setSaving(false);
 
       if (result.synced) {
