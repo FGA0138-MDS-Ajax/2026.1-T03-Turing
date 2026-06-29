@@ -24,6 +24,7 @@ import { MeusConteudos } from '../pages/Aluno/MeusConteudos/MeusConteudos';
 import { ConteudoEspecifico } from '../pages/Aluno/ConteudoEspecifico/ConteudoEspecifico';
 import { AlunoLayout }      from '../components/aluno/AlunoLayout';
 import { ForumConteudo } from '../pages/Aluno/Forum/ForumConteudo';
+import Denuncias from '../pages/admin/Denuncias';
 
 function AdminLayout() {
   return (
@@ -53,6 +54,7 @@ export function AppRoutes() {
         <Route path="configuracoes"        element={<Configuracoes />} />
         <Route path="professores/revisao"  element={<TeacherReview />} />
         <Route path="conteudos"            element={<Disciplinas />} />
+        <Route path="denuncias"            element={<Denuncias />} />
       </Route>
 
       <Route

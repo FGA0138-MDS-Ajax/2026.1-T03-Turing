@@ -70,7 +70,7 @@ export function Sidebar() {
         <CreateAdminButton />
         <button className="gs-sidebar-user" onClick={handleLogout} title="Sair">
           <div className="gs-user-avatar">
-            {user?.name?.[0]?.toUpperCase() ?? 'A'}
+            {iniciais}
           </div>
           <LogOut size={16} className="gs-sidebar-logout-icon" />
         </button>
