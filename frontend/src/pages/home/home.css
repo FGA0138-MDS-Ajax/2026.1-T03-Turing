@@ -815,7 +815,6 @@
   margin: 0;
 }
 
-/* ── Timeline ── */
 .gs-home-timeline {
   position: relative;
   display: grid;
@@ -891,4 +890,174 @@
   color: #4a4a5a;
   line-height: 1.6;
   margin: 0;
+}
+
+.gs-home-teacher {
+  padding: 2rem 0;
+}
+
+.gs-home-teacher__header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.gs-home-teacher__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: center;
+}
+
+.gs-home-teacher__flow {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.gs-home-teacher__step {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 1.25rem;
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #f0f0f0;
+  transition: all 0.3s ease;
+  animation: slideInLeft 0.6s ease both;
+}
+
+.gs-home-teacher__step:hover {
+  transform: translateX(4px);
+  border-color: #2F5D62;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+}
+
+.gs-home-teacher__step-icon {
+  width: 48px;
+  height: 48px;
+  background: rgba(47, 93, 98, 0.08);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #2F5D62;
+  flex-shrink: 0;
+}
+
+.gs-home-teacher__step-content {
+  flex: 1;
+}
+
+.gs-home-teacher__step-content h4 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin: 0 0 0.2rem 0;
+}
+
+.gs-home-teacher__step-content p {
+  font-size: 0.85rem;
+  color: #4a4a5a;
+  margin: 0;
+}
+
+.gs-home-teacher__step-arrow {
+  color: #ccc;
+  flex-shrink: 0;
+}
+
+.gs-home-teacher__visual {
+  display: flex;
+  justify-content: center;
+}
+
+.gs-home-teacher__card {
+  width: 100%;
+  max-width: 380px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+  border: 1px solid #f0f0f0;
+}
+
+.gs-home-teacher__card-header {
+  padding: 1.25rem 1.5rem;
+  background: #2F5D62;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-weight: 600;
+}
+
+.gs-home-teacher__card-body {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.gs-home-teacher__card-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  background: #fafafa;
+  border-radius: 8px;
+  color: #4a4a5a;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.gs-home-teacher__card-item:hover {
+  background: rgba(47, 93, 98, 0.05);
+  transform: translateX(4px);
+}
+
+.gs-home-teacher__card-item svg {
+  color: #2F5D62;
+  flex-shrink: 0;
+}
+
+.gs-home-stats {
+  padding: 80px 0;
+  background: #fff;
+  border-top: 1px solid #f0f0f0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.gs-home-stats__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+}
+
+.gs-home-stat {
+  text-align: center;
+}
+
+.gs-home-stat__number {
+  display: block;
+  font-size: 3rem;
+  font-weight: 800;
+  color: #2F5D62;
+  opacity: 0;
+  transform: scale(0.5);
+  transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.gs-home-stat__number.show {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.gs-home-stat__label {
+  display: block;
+  font-size: 0.95rem;
+  color: #4a4a5a;
+  margin-top: 0.5rem;
 }

@@ -460,8 +460,6 @@ export function Home() {
                     <span>Responder dúvidas</span>
                   </div>
                   <div className="gs-home-teacher__card-item">
-                    <Eye size={18} />
-                    <span>Acompanhar alunos</span>
                   </div>
                 </div>
               </div>
