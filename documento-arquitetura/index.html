@@ -1,0 +1,1778 @@
+
+<!doctype html>
+<html lang="pt" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Documentação do projeto GoStudy - Plataforma educacional gratuita">
+      
+      
+      
+      
+        <link rel="prev" href="../padronizacao/">
+      
+      
+        <link rel="next" href="../integracao_back_front/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Arquitetura - GoStudy - Documentação</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="teal">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#gostudy" class="md-skip">
+          Ir para o conteúdo
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabeçalho">
+    <a href=".." title="GoStudy - Documentação" class="md-header__button md-logo" aria-label="GoStudy - Documentação" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            GoStudy - Documentação
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Arquitetura
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Buscar" placeholder="Buscar" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Pesquisar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpar" aria-label="Limpar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando a pesquisa
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/FGA0138-MDS-Ajax/2026.1-T03-Turing" title="Ir ao repositório" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Abas" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Início
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../equipe/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Equipe
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../setup_ambiente/" class="md-tabs__link">
+          
+  
+  
+  Configuração
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../padronizacao/" class="md-tabs__link">
+          
+  
+  
+  Documentação Técnica
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../sprints/sprint1/" class="md-tabs__link">
+          
+  
+  
+  Sprints
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../documentacao-de-testes/" class="md-tabs__link">
+          
+  
+  
+  Testes
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navegação" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="GoStudy - Documentação" class="md-nav__button md-logo" aria-label="GoStudy - Documentação" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    GoStudy - Documentação
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/FGA0138-MDS-Ajax/2026.1-T03-Turing" title="Ir ao repositório" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Início
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../equipe/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Equipe
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configuração
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Configuração
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../setup_ambiente/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Setup do Ambiente
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../como_contribuir/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Como Contribuir
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Documentação Técnica
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Documentação Técnica
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../padronizacao/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Padronização
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Arquitetura
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Arquitetura
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#sumario" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sumário
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../documento-visao-produto-projeto.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visão do Produto
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integracao_back_front/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Integração Back-Front
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../endpoints/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Endpoints
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../banco_de_dados/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Banco de Dados
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sprints
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Sprints
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sprints/sprint1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sprint 1 - Cadastro
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sprints/sprint2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sprint 2 - Administração
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sprints/sprint3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sprint 3 - Postagem de material
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sprints/sprint4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sprint 4 - Visualização e interação
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sprints/sprint5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sprint 5 - Fórum
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sprints/sprint6/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sprint 6 - Acessibilidade
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Testes
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Testes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../documentacao-de-testes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Documentação de Testes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#sumario" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sumário
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<div style="text-align: center; margin-top: 30px;">
+  <a href="assets/files/Documento_de_Arquitetura-Turing (1.0).docx" download="Documento_de_Arquitetura-Turing (1.0).docx" style="display: inline-block; padding: 12px 24px; background-color: #007BFF; color: #ffffff; text-decoration: none; border-radius: 5px; font-weight: bold; font-family: sans-serif; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
+    📥 Baixar Documento de Arquitetura (.docx)
+  </a>
+</div>
+
+<h1 id="gostudy">GoStudy</h1>
+<p><strong>Documento de Arquitetura</strong></p>
+<p>Versão 1.2</p>
+<hr />
+<p><strong>Tabela - Integrantes do Grupo</strong></p>
+<table>
+<thead>
+<tr>
+<th>Matrícula</th>
+<th>Nome</th>
+<th>Função (responsabilidade)</th>
+<th>Pontos de participação na elaboração</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>242004706</td>
+<td>Gabriel Vieira Octacilio Pinheiro</td>
+<td>P.O</td>
+<td>9.1</td>
+</tr>
+<tr>
+<td>242015989</td>
+<td>Zayra Batista Moraes</td>
+<td>Analista de qualidade</td>
+<td>9.1</td>
+</tr>
+<tr>
+<td>242005196</td>
+<td>Arthur Evangelista da Silva</td>
+<td>Dev</td>
+<td>9.1</td>
+</tr>
+<tr>
+<td>242004840</td>
+<td>Luana Carvalho de Almeida</td>
+<td>Dev</td>
+<td>9.1</td>
+</tr>
+<tr>
+<td>232014370</td>
+<td>Arthur Alves Ribeiro</td>
+<td>Analista de qualidade</td>
+<td>9.1</td>
+</tr>
+<tr>
+<td>242015960</td>
+<td>Thiago Henrique Machado de Souza</td>
+<td>Dev</td>
+<td>9.1</td>
+</tr>
+<tr>
+<td>241012267</td>
+<td>João Vitor Justo Gonçalves</td>
+<td>Dev</td>
+<td>9.1</td>
+</tr>
+<tr>
+<td>242015254</td>
+<td>Luisa de Souza Renhe</td>
+<td>Dev</td>
+<td>9.1</td>
+</tr>
+<tr>
+<td>242015915</td>
+<td>Luiz Gustavo da Conceição Souza</td>
+<td>Dev</td>
+<td>9.1</td>
+</tr>
+<tr>
+<td>242015791</td>
+<td>Clarice Gitirana Gusson</td>
+<td>Dev</td>
+<td>9.1</td>
+</tr>
+<tr>
+<td>242015924</td>
+<td>Maria Eduarda de Jezus Guimarães</td>
+<td>P.O</td>
+<td>9.1</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><strong>Histórico de Revisões</strong></p>
+<table>
+<thead>
+<tr>
+<th><strong>Data</strong></th>
+<th><strong>Versão</strong></th>
+<th><strong>Descrição</strong></th>
+<th><strong>Autor(es)</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>14/05</strong></td>
+<td>1.0</td>
+<td>Primeira versão do documento</td>
+<td>Grupo Turing</td>
+</tr>
+<tr>
+<td><strong>22/05</strong></td>
+<td>1.1</td>
+<td>Alinhamento das restrições arquiteturais de testes com a inclusão do framework Pytest</td>
+<td>Maria Eduarda Guimarães</td>
+</tr>
+<tr>
+<td><strong>06/06</strong></td>
+<td>1.2</td>
+<td>Remoção completa dos módulos de Avaliações e Desempenho Acadêmico e consolidação da terminologia exclusiva de 'Disciplinas' (remoção de 'Turmas').</td>
+<td>Maria Eduarda Guimarães</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="sumario">Sumário</h2>
+<ul>
+<li><strong><em>1 Introdução</em></strong> </li>
+<li><strong>1.1 Propósito</strong> </li>
+<li><strong>1.2 Escopo</strong> </li>
+<li><strong><em>2 Representação Arquitetural</em></strong> </li>
+<li><strong>2.1 Definições</strong> </li>
+<li><strong>2.2 Justificativa.</strong> </li>
+<li><strong>2.3 Detalhamento</strong> </li>
+<li><strong>2.4 Metas e restrições arquiteturais</strong> </li>
+<li><strong>2.5 Visões</strong> <ul>
+<li><strong>2.5.1 Visão de uso</strong> </li>
+<li><strong>2.5.2 Visão de organização lógica</strong> </li>
+<li><strong>2.5.3 Visão estrutural</strong> </li>
+<li><strong>2.5.4 Visão de Implantação</strong> </li>
+</ul>
+</li>
+<li><strong>2.6 Restrições adicionais</strong> </li>
+<li><strong><em>3 Bibliografia</em></strong> </li>
+</ul>
+<hr />
+<h1 id="1-introducao">1 Introdução</h1>
+<h2 id="11-proposito">1.1 Propósito</h2>
+<p>Este documento descreve a arquitetura do sistema sendo desenvolvido pelo grupo, na disciplina de MDS-Métodos de Desenvolvimento de Software - edição do primeiro semestre de 2026, para o sistema GoStudy, a fim de fornecer uma visão abrangente do sistema para desenvolvedores, testadores e demais interessados em aspectos relacionados às tecnologias a serem usadas no desenvolvimento.</p>
+<p>O propósito deste documento é detalhar as diretrizes arquitetônicas, estruturais e de implantação da plataforma web, esclarecendo como ocorrerá a integração entre os módulos do sistema. Ele servirá como um guia técnico para garantir a escalabilidade, manutenção e comunicação adequada entre o back-end desenvolvido em Django e o front-end em React, utilizando a arquitetura de API REST.</p>
+<h2 id="12-escopo">1.2 Escopo</h2>
+<p>O sistema GoStudy é uma plataforma web educacional desenvolvida com o objetivo de apoiar o processo de ensino e aprendizagem por meio de uma aplicação digital estruturada em arquitetura SPA (Single Page Application) integrada a uma API REST.</p>
+<p>De forma geral, o escopo do produto contempla:</p>
+<ul>
+<li>Gestão de usuários, com cadastro, autenticação e controle de perfis (Aluno, Professor e Administrador);</li>
+<li>Gerenciamento de disciplinas, permitindo organização do ambiente acadêmico;</li>
+<li>Publicação e acesso a conteúdos educacionais, realizados por professores e disponibilizados aos alunos;</li>
+<li>Sistema de fórum e comunicação, promovendo interação entre usuários;</li>
+<li>Módulo de notificações, para informar sobre atividades, atualizações e eventos relevantes;</li>
+<li>Recursos de acessibilidade, garantindo inclusão e adaptação da interface para diferentes perfis de usuários.</li>
+</ul>
+<p>O sistema será desenvolvido como uma aplicação web responsiva, utilizando React no <strong>frontend</strong>, Django no backend e PostgreSQL para persistência de dados, seguindo o padrão de comunicação via API REST.</p>
+<p>Não fazem parte do escopo desta versão inicial funcionalidades que não estejam diretamente relacionadas à operação acadêmica da plataforma, bem como integrações externas complexas não previstas nos documentos de Visão e Declaração de Escopo já entregues.</p>
+<p>Em síntese, o escopo do GoStudy compreende o desenvolvimento de uma plataforma educacional modular, segura e escalável, destinada a organizar conteúdos, atividades, comunicação dentro de um ambiente web estruturado.</p>
+<hr />
+<h1 id="2-representacao-arquitetural">2 Representação Arquitetural</h1>
+<h2 id="21-definicoes">2.1 Definições</h2>
+<p>O sistema segue uma arquitetura modular em camadas baseada no modelo cliente-servidor, integrada a uma API REST para fazer a comunicação entre o frontend e o backend. Junto a isso, será utilizado o modelo Single Page Application (SPA), permitindo uma navegação dinâmica pelo usuário, sem recarregar a página inteira a cada interação.</p>
+<p>A arquitetura separa de forma clara as responsabilidades entre o frontend, o backend e o banco de dados, o que favorece a organização do código e a evolução do sistema.</p>
+<p>O frontend será construído com React, HTML, CSS e Bootstrap; o backend com Python e Django; e a persistência de dados será feita com PostgreSQL. Essas tecnologias serão beneficiadas pela escolha arquitetural, onde a comunicação entre o frontend e o backend ocorrerá por meio de requisições HTTP usando REST, enquanto que o backend acessará o banco de dados por meio do Django ORM. Por fim, o versionamento do código será feito pelo Git e Github, tudo sempre com o apoio colaborativo de toda a equipe.</p>
+<h2 id="22-justificativa">2.2 Justificativa</h2>
+<p>A escolha da arquitetura em SPA API-REST vem da necessidade de que a plataforma seja modular, escalável, acessível e de fácil manutenção, respeitando o trabalho de diversos desenvolvedores ao mesmo tempo e reduzindo conflitos durante esse desenvolvimento colaborativo (conforme definido na seção 1.3 do documento de visão do produto).</p>
+<p>O uso do React no Frontend gera uma interface dinâmica e responsiva, fácil de interagir, além da criação de módulos de acessibilidade.</p>
+<p>O Backend em Django colabora com a lógica de funcionamento e interação com banco de dados, na autenticação, controles de permissão e regras de funcionamento interno.</p>
+<p>O Banco de Dados em PostgreSQL garante a integridade dos dados com tolerância a falhas e persistência deles em todas as interações. Em escalabilidade, permite que vários usuários modifiquem os dados simultaneamente sem bloquear o banco de dados.</p>
+<p>As plataformas Git e Github ajudam na organização e gerenciamento das branches e issues definidas para as respectivas funcionalidades completas, facilitando o desenvolvimento.</p>
+<p>Cada parte tem suas responsabilidades definidas e bem estruturadas, e a escolha de comunicação (REST API) entre essas partes facilita a modularidade, assim como no momento de testes iterativos e desenvolvimento paralelo, todas características inatas do desenvolvimento ágil e XP definidos anteriormente pelo ciclo de vida (seção 2.1) no documento de visão.</p>
+<p>O SPA cria uma melhor experiência de usuário, uma vez que essa permanece mais fluída durante a sua navegação na web.</p>
+<h2 id="23-detalhamento">2.3 Detalhamento</h2>
+<p>A organização arquitetural do sistema foi definida a partir dos perfis de usuários, dos cenários funcionais e seus respectivos requisitos (todas definidas nas seções 4.2 a 4.4 do documento de visão). Com base nessas definições, serão utilizadas três camadas principais para o desenvolvimento, com responsabilidades próprias, componentes e regras de uso:</p>
+<p><strong>Camada frontend:</strong></p>
+<p>Responsabilidades: renderizar interface, navegação, formulários, configurações de acessibilidade, responsividade, comunicação de toda a aplicação com a API.</p>
+<p><strong>Camada backend:</strong></p>
+<p>Responsabilidades: verificação de autenticação, autorização, regras de negócio, endpoints de API, validação de envio de dados, gerenciamento de sessão, lógica geral de integração.</p>
+<p><strong>Camada de banco de dados:</strong></p>
+<p>Responsabilidades: armazenamento de dados e persistência, integridade relacional desses dados, performance, registro de usuário, conteúdo educacional, mensagens.</p>
+<p>A comunicação entre essas camadas acontece de forma desacoplada e padronizada, onde temos interfaces de interação.</p>
+<p><strong>frontend - backend:</strong> o frontend consome os endpoints disponibilizados pela API REST via requisições HTTP e respostas json.</p>
+<p><strong>backend - banco:</strong> o backend valida essas entradas recebidas pelo front, realiza os procedimentos lógicos necessários e acessa os dados através do django orm. O banco de dados não é acessado diretamente pelo frontend. (isso dá segurança, controle e garantia de que os dados se mantêm íntegros).</p>
+<p>A imagem a seguir representa essa organização arquitetural e as interações descritas para sua comunicação padronizada.</p>
+<p><em>Figura 01: esquema das camadas e interações</em></p>
+<p><img alt="Figura 01 - Esquema das camadas e interações" src="../assets/images/image1.png" /></p>
+<hr />
+<h2 id="24-metas-e-restricoes-arquiteturais">2.4 Metas e restrições arquiteturais</h2>
+<p>O sistema adotará uma arquitetura baseada em SPA (Single Page Application) + API REST, separando frontend do backend em aplicações independentes. Essa abordagem foi escolhida por proporcionar maior modularidade, facilidade de manutenção, escalabilidade e melhor experiência para o usuário.</p>
+<h3 id="metas-arquiteturais">Metas arquiteturais</h3>
+<ul>
+<li><strong>Desempenho</strong>:</li>
+<li>O sistema deve responder a 95% das requisições em até 2 segundos;</li>
+<li>A SPA deve carregar inicialmente em tempo reduzido, priorizando carregamento assíncrono de componentes;</li>
+<li>A comunicação entre frontend e backend deve minimizar transferências desnecessárias de dados;</li>
+<li>
+<p><strong>Justificativa:</strong> A garantia de fluidez na navegação da aplicação e a melhor experiência para o usuário;</p>
+</li>
+<li>
+<p><strong>Escalabilidade</strong>:</p>
+</li>
+<li>O frontend SPA e a API REST devem ser escalados independentemente;</li>
+<li>A arquitetura deve permitir adição de novos módulos sem impactar significativamente os componentes existentes;</li>
+<li>
+<p><strong>Justificativa:</strong> Facilita crescimento futuro do sistema e distribuição de carga;</p>
+</li>
+<li>
+<p><strong>Manutenibilidade</strong>:</p>
+</li>
+<li>O frontend e backend devem possuir responsabilidades bem definidas;</li>
+<li>A arquitetura deve permitir adição de novos módulos sem impactar significativamente os componentes existentes;</li>
+<li>
+<p><strong>Justificativa:</strong> Facilita o crescimento futuro do sistema e distribuição de carga;</p>
+</li>
+<li>
+<p><strong>Usabilidade</strong>:</p>
+</li>
+<li>A navegação entre páginas da SPA deve ocorrer sem recarregamento completo da aplicação;</li>
+<li>O sistema deve apresentar interface responsiva e intuitiva;</li>
+<li>
+<p><strong>Justificativa:</strong> Melhorar experiência do usuário e reduz tempo de interação;</p>
+</li>
+<li>
+<p><strong>Segurança:</strong></p>
+</li>
+<li>A API REST deve possuir autenticação e autorização;</li>
+<li>Dados sensíveis devem ser protegidos durante transmissão;</li>
+<li>O sistema deve validar entradas tanto no frontend quanto no backend;</li>
+<li><strong>Justificativa:</strong> Reduz riscos de acesso indevido e vulnerabilidades;</li>
+</ul>
+<h3 id="restricoes-arquiteturais">Restrições arquiteturais</h3>
+<ul>
+<li><strong>SPA + API REST:</strong></li>
+<li>O sistema deverá usar uma arquitetura baseada em API REST para comunicação entre backend e frontend, assim toda troca de informações deve ser padronizada através de endpoints HTTP;</li>
+<li>
+<p>O frontend não poderá acessar diretamente o banco de dados, dependendo exclusivamente da API.</p>
+</li>
+<li>
+<p><strong>Frontend:</strong></p>
+</li>
+<li>O frontend utilizará o React, então toda a interface da plataforma deverá utilizar componentes construídos com essa tecnologia;</li>
+<li>
+<p>A interface deverá ser compatível com diferentes resoluções e dispositivos, além de ser compatível com versões mais recentes dos principais navegadores.</p>
+</li>
+<li>
+<p><strong>Backend:</strong></p>
+</li>
+<li>O backend deverá ser desenvolvido utilizando Python com o framework Django. Toda a lógica do negócio, autenticação, gerenciamento de usuários e integração de dados será baseado nessas tecnologias;</li>
+<li>Separação clara entre regras de negócio e acesso a dados;</li>
+<li>
+<p>Os serviços principais da plataforma deverão permanecer disponíveis continuamente.</p>
+</li>
+<li>
+<p><strong>Padrão API:</strong></p>
+</li>
+<li>A API deve seguir o padrão RESTful;</li>
+<li>Endpoints devem utilizar substantivos no plural:<ul>
+<li><code>GET /usuarios/{id}</code>, <code>POST /usuarios</code></li>
+</ul>
+</li>
+<li>As respostas devem utilizar JSON;</li>
+<li>
+<p>Códigos HTTP apropriados devem ser utilizados;</p>
+</li>
+<li>
+<p><strong>BD:</strong></p>
+</li>
+<li>O sistema deverá utilizar o Postgres para persistência dos dados; todos os dados acadêmicos, autenticações e conteúdos públicos serão persistidos nele;</li>
+<li>
+<p>Alterações estruturais devem ser feitas por migrations;</p>
+</li>
+<li>
+<p><strong>Padrão de codificação:</strong></p>
+</li>
+<li>
+<p>O código-fonte deverá seguir um padrão único de organização e nomenclatura:</p>
+<ul>
+<li>Nome de classe: <code>PascalCase</code></li>
+<li>Nome de atributo/métodos: <code>snake_case</code></li>
+</ul>
+</li>
+<li>
+<p><strong>Controle de versão:</strong></p>
+</li>
+<li>
+<p>O desenvolvimento e controle de versão deve ser restringido ao Github, organizado em branches e integrado com Pull Requests revisados, sendo integrado na branch principal apenas após validação.</p>
+</li>
+<li>
+<p><strong>Testes:</strong></p>
+</li>
+<li>O backend deve possuir testes unitários para regras de negócio utilizando o framework Pytest;</li>
+<li>O frontend deve possuir testes de componentes críticos utilizando bibliotecas nativas do React;</li>
+<li>
+<p>Novas funcionalidades somente serão integradas após validação por meio de testes unitários.</p>
+</li>
+<li>
+<p><strong>Segurança:</strong></p>
+</li>
+<li>Senhas deverão ser obrigatoriamente armazenadas utilizando criptografia/hash seguro, assim garantindo que as credenciais permaneçam seguras.</li>
+</ul>
+<hr />
+<h2 id="25-visoes">2.5 Visões</h2>
+<p>As visões de arquitetura representam diferentes perspectivas utilizadas para descrever e compreender um sistema de software de forma organizada e completa. A visão de uso define o escopo do sistema e demonstra como os usuários interagem com suas funcionalidades. A visão organizacional lógica apresenta a divisão da arquitetura em camadas, módulos ou responsabilidades, evidenciando a separação entre componentes como interface, regras de negócio e persistência de dados. A visão estrutural descreve a composição interna do sistema e os relacionamentos entre suas partes, permitindo entender como os componentes se conectam e colaboram entre si. Por fim, a visão de implantação mostra o ambiente onde o sistema será executado, incluindo servidores, bancos de dados, serviços e infraestrutura necessários para o funcionamento da aplicação. Para melhor entendimento do nosso trabalho especificamos cada uma das visões nas sessões abaixo.</p>
+<h3 id="251-visao-de-uso">2.5.1 Visão de uso</h3>
+<p>O escopo do GoStudy consiste em uma plataforma web integrada de estudos voltada para estudantes do ensino médio.</p>
+<p>Seu objetivo central é organizar a rotina acadêmica através de trilhas de aprendizagem estruturadas, ferramentas de gestão de tempo e um ambiente de interação colaborativa.</p>
+<p>O sistema gerencia três perfis distintos:</p>
+<ul>
+<li><strong>Alunos</strong>: Acessam conteúdos, participam de fóruns.</li>
+<li><strong>Professores</strong>: Realizam a postagem de materiais didáticos  (que podem conter links externos para formulários e exercícios) e respondem a dúvidas.</li>
+<li><strong>Administradores</strong>: Gerenciam perfis, homologam currículos de professores, administram denúncias e mantêm as disciplinas.</li>
+</ul>
+<p>A plataforma foca na acessibilidade e na centralização de recursos pedagógicos para reduzir a desorganização do aprendizado individual.</p>
+<p><em>Figura 02: Diagrama de Casos de Uso.</em></p>
+<p><img alt="Figura 02 - Diagrama de Casos de Uso" src="../assets/images/image2.png" /></p>
+<p><em>Figura 03: Diagrama de Atividades.</em></p>
+<p><img alt="Figura 03 - Diagrama de Atividades" src="../assets/images/image3.png" /></p>
+<p>Optamos por uma arquitetura em Django, pois ela atende de forma eficiente aos requisitos de processamento e estruturação do sistema. Além disso, a adoção do Python se alinha aos conhecimentos técnicos da equipe, o que garante uma sintaxe limpa, minimiza os riscos de implementação e agiliza o desenvolvimento do projeto.</p>
+<h3 id="252-visao-de-organizacao-logica">2.5.2 Visão de organização lógica</h3>
+<p>O sistema é subdividido nos seguintes módulos:</p>
+<ol>
+<li>Cadastro e Autenticação;</li>
+<li>Gerenciamento Administrativo;</li>
+<li>Navegação do usuário;</li>
+<li>Disciplinas;</li>
+<li>Postagem de conteúdo;</li>
+<li>Notificação e comunicação;</li>
+<li>Fórum;</li>
+<li>Acessibilidade;</li>
+<li>Persistência de Dados.</li>
+</ol>
+<hr />
+<ol>
+<li><strong>Cadastro e Autenticação:</strong></li>
+</ol>
+<p>Este módulo é responsável pelo gerenciamento de acesso ao sistema, permitindo o cadastro e autenticação dos usuários (Aluno, Professor e Administrador). É necessário para garantir segurança, controle de permissões e identificação correta dos perfis.</p>
+<p>Além disso, ele implementa regras de criptografia de senha, autenticação de login e persistência segura de dados dos usuários.</p>
+<p>Este módulo se comunica com:
+  - Banco de Dados → armazenamento dos dados dos usuários;
+  - Módulo Administrativo → validação de professores;
+  - Módulo de Disciplinas → controle de permissões;
+  - Módulo de Fórum → identificação do autor das mensagens.</p>
+<p>Interfaces:
+  - Tela de Login;
+  - Tela de Cadastro de Aluno;
+  - Tela de Cadastro de Professor;
+  - API REST de autenticação;
+  - Middleware de autenticação JWT/Session.</p>
+<hr />
+<ol>
+<li><strong>Gerenciamento administrativo:</strong></li>
+</ol>
+<p>O módulo administrativo centraliza o gerenciamento global do sistema. Ele é responsável pela manutenção de usuários, análise de denúncias, homologação de professores e gerenciamento das disciplinas. Existindo para garantir uma boa organização e assistência para a plataforma.</p>
+<p>Comunica-se com:
+  - Módulo de Cadastro → gerenciamento de contas;
+  - Módulo de Fórum → recebimento de denúncias;
+  - Módulo de Disciplinas → criação e remoção de disciplinas;
+  - Banco de Dados → persistência das alterações.</p>
+<p>Interfaces:
+  - Painel administrativo;
+  - Tela de gerenciamento de usuários;
+  - Tela de denúncias;
+  - API administrativa.</p>
+<hr />
+<ol>
+<li><strong>Navegação do usuário:</strong></li>
+</ol>
+<p>Este módulo organiza a experiência do aluno dentro da plataforma, permitindo navegação entre disciplinas, conteúdos e atividades. Sua lógica é proporcionar acessibilidade, organização e facilidade de uso.</p>
+<p>Comunica-se com:
+  - Módulo de Disciplinas e conteúdos;
+  - Banco de Dados.</p>
+<p>Interfaces:
+  - Dashboard do aluno;
+  - Página de disciplinas e conteúdos;</p>
+<hr />
+<ol>
+<li><strong>Disciplinas:</strong></li>
+</ol>
+<p>Responsável pela criação, organização e gerenciamento das disciplinas disponíveis no sistema. Sua lógica é estruturar o ambiente educacional da plataforma, permitindo a separação dos conteúdos por áreas de ensino e organização acadêmica.</p>
+<p>Comunica-se com:
+  - Módulo Administrativo → manutenção das disciplinas;
+  - Módulo de Conteúdo → associação de materiais;
+  - Módulo de Navegação → exibição das disciplinas aos alunos;
+  - Banco de Dados → armazenamento das disciplinas.</p>
+<p>Interfaces:
+  - Tela de gerenciamento de disciplinas;
+  - Tela de inscrição em disciplinas;
+  - API de disciplinas.</p>
+<hr />
+<ol>
+<li><strong>Postagem de Conteúdo:</strong></li>
+</ol>
+<p>Permite que professores publiquem materiais didáticos, links de exercícios e conteúdos de apoio. A lógica deste módulo é centralizar o compartilhamento de conhecimento e garantir organização pedagógica dentro das respectivas disciplinas.</p>
+<p>Comunica-se com:
+  - Módulo de Disciplinas → vinculação do conteúdo;
+  - Módulo de Fórum → criação automática de fóruns por postagem;
+  - Banco de Dados → armazenamento dos conteúdos.</p>
+<p>Interfaces:
+  - Tela de postagem;
+  - Editor de conteúdo;
+  - API de upload/publicação.</p>
+<hr />
+<ol>
+<li><strong>Notificação e comunicação:</strong></li>
+</ol>
+<p>Responsável pelo envio de e-mails e notificações automáticas do sistema. Sua função lógica é manter usuários informados sobre a postagem de aulas e materiais, incluindo atividades por meio de links.</p>
+<p>Comunica-se com:
+  - Fórum;
+  - Cadastro;
+  - Banco de Dados.</p>
+<p>Interfaces:
+  - Serviço de e-mail;
+  - APIs SMTP;
+  - Sistema interno de notificações.</p>
+<hr />
+<ol>
+<li><strong>Fórum:</strong></li>
+</ol>
+<p>Permite comunicação entre alunos e professores através de perguntas, respostas e denúncias. Sua função lógica é incentivar interação colaborativa e suporte pedagógico contínuo.</p>
+<p>Comunica-se com:
+  - Módulo de Conteúdo;
+  - Módulo Administrativo;
+  - Módulo de Notificações;
+  - Banco de Dados.</p>
+<p>Interfaces:
+  - Fórum de dúvidas;
+  - Sistema de respostas;
+  - Tela de denúncias.</p>
+<hr />
+<ol>
+<li><strong>Acessibilidade:</strong></li>
+</ol>
+<p>Implementa recursos de inclusão digital, como alteração de fontes, contraste e modos adaptados para daltonismo e autismo. Sua lógica é garantir acessibilidade e inclusão para diferentes perfis de usuários.</p>
+<p>Comunica-se com:
+  - Interface do Front-end;
+  - Configurações do usuário;
+  - Banco de Dados.</p>
+<p>Interfaces:
+  - Painel de acessibilidade;
+  - Configurações visuais do sistema.</p>
+<hr />
+<ol>
+<li><strong>Persistência de Dados:</strong></li>
+</ol>
+<p>Responsável pela manipulação, armazenamento e recuperação das informações da plataforma. Sua lógica é garantir integridade, persistência e segurança dos dados.</p>
+<p>Comunica-se com todos os módulos através da API REST e ORM do Django.</p>
+<p>Interfaces:
+  - PostgreSQL;
+  - ORM Django;
+  - Serviços de persistência.</p>
+<hr />
+<p><em>Figura 04: </em><em>Diagrama de Pacotes.</em>**</p>
+<p><img alt="Figura 04 - Diagrama de Pacotes" src="../assets/images/image4.jpg" /></p>
+<h3 id="253-visao-estrutural">2.5.3 Visão estrutural</h3>
+<p>A plataforma GoStudy será organizada utilizando arquitetura cliente-servidor baseada em API REST. O sistema será dividido em 3 camadas principais:</p>
+<ul>
+<li>Frontend</li>
+<li>Backend</li>
+<li>Banco de dados</li>
+</ul>
+<p><em>Figura 05: Diagrama de componentes.</em></p>
+<p><img alt="Figura 05 - Diagrama de componentes" src="../assets/images/image5.png" /></p>
+<p><em>Figura 06: Diagrama de Classes.</em></p>
+<p><img alt="Figura 06 - Diagrama de Classes" src="../assets/images/image6.png" /></p>
+<h3 id="254-visao-de-implantacao">2.5.4 Visão de Implantação</h3>
+<p>A visão de implantação descreve o ambiente em que o sistema GoStudy será executado, apresentando como os componentes da aplicação serão distribuídos na infraestrutura computacional e como ocorrerá a comunicação entre eles. Essa visão permite compreender a organização dos serviços, os protocolos utilizados e as tecnologias responsáveis pela execução da plataforma.</p>
+<p>O sistema será implantado utilizando uma infraestrutura baseada em computação em nuvem (Cloud Computing), adotando serviços do tipo PaaS (Platform as a Service) e/ou IaaS (Infrastructure as a Service). A escolha desse modelo se justifica pela necessidade de garantir disponibilidade contínua da plataforma, facilidade de manutenção e possibilidade de escalabilidade conforme o aumento da quantidade de usuários simultâneos acessando o sistema.</p>
+<p>A arquitetura de implantação seguirá o modelo SPA + API REST definido anteriormente, mantendo a separação entre frontend, backend e persistência de dados. Essa divisão reduz o acoplamento entre os componentes e facilita o desenvolvimento paralelo, manutenção e evolução futura do sistema.</p>
+<p>O ambiente será composto por quatro principais nós de implantação.</p>
+<p><strong>Cliente / Navegador Web</strong></p>
+<p>O primeiro nó representa o ambiente do usuário final, onde alunos, professores e administradores acessam a plataforma através de navegadores web em computadores, tablets ou dispositivos móveis.</p>
+<p>Nesse ambiente será executada a interface da aplicação desenvolvida em React. A utilização do modelo SPA (Single Page Application) permite uma navegação mais dinâmica e fluida, reduzindo carregamentos completos de página e melhorando a experiência do usuário durante a utilização da plataforma.</p>
+<p>Além da renderização das telas, o navegador também será responsável por realizar as requisições HTTP para a API REST do sistema, enviando e recebendo dados em formato JSON.</p>
+<p><strong>Servidor Front-end</strong></p>
+<p>O servidor front-end será responsável pela hospedagem e distribuição dos arquivos estáticos da aplicação React, incluindo arquivos HTML, CSS, JavaScript e demais recursos visuais da interface.</p>
+<p>A separação do frontend em um servidor próprio facilita a manutenção da interface e permite que essa camada seja escalada independentemente do backend. Além disso, esse modelo favorece o uso de serviços de CDN (Content Delivery Network), melhorando o tempo de carregamento das páginas e reduzindo atrasos de acesso para os usuários.</p>
+<p>A comunicação entre o navegador e o servidor front-end ocorre através do protocolo HTTPS, garantindo maior segurança na transmissão dos dados.</p>
+<p><strong>Servidor Back-end</strong></p>
+<p>O servidor backend será responsável pela execução da API REST desenvolvida em Python utilizando o framework Django. Nesse ambiente estarão concentradas as regras de negócio da aplicação, autenticação de usuários, gerenciamento de permissões, validação de dados, controle das disciplinas, avaliações, conteúdos acadêmicos e demais funcionalidades centrais da plataforma.</p>
+<p>A utilização do Django contribui para uma melhor organização da aplicação, além de fornecer recursos integrados relacionados à segurança, autenticação e comunicação com banco de dados.</p>
+<p>A comunicação entre frontend e backend ocorre por meio de requisições HTTP utilizando padrão REST, com troca de informações em formato JSON. Essa separação entre interface e lógica de negócio reduz dependências entre as camadas do sistema e facilita futuras expansões da aplicação.</p>
+<p><strong>Servidor de Banco de Dados</strong></p>
+<p>O armazenamento persistente das informações será realizado em um servidor dedicado ao PostgreSQL, utilizado como Sistema Gerenciador de Banco de Dados Relacional (SGBDR).</p>
+<p>A escolha do PostgreSQL se justifica pela robustez, confiabilidade e capacidade de lidar com múltiplos acessos simultâneos, característica importante para uma plataforma educacional com diversos usuários conectados ao mesmo tempo. Além disso, o banco oferece integridade relacional dos dados e boa integração com o Django ORM utilizado no backend.</p>
+<p>Nesse ambiente serão armazenados dados relacionados aos usuários, disciplinas, conteúdos, notificações, mensagens do fórum e demais informações da plataforma.</p>
+<p>O banco de dados não será acessado diretamente pelo frontend. Toda comunicação ocorrerá exclusivamente através do backend, garantindo maior segurança, controle de permissões e integridade dos dados manipulados pelo sistema.</p>
+<p><strong>Diagrama de Implementação</strong></p>
+<p>O diagrama de implementação representa os nós físicos e lógicos do sistema, bem como os protocolos de comunicação utilizados entre os componentes.</p>
+<p><em>Figura 07: Diagrama de implementação do Sistema GoStudy</em></p>
+<p><img alt="Figura 07 - Diagrama de implementação do Sistema GoStudy" src="../assets/images/image7.png" /></p>
+<p>A figura 07 apresenta a visão de implantação do GoStudy, mostrando como os componentes do sistema são distribuídos e como ocorre a comunicação entre eles.</p>
+<p>O nó <strong>Cliente / Navegador Web</strong> representa os usuários acessando a plataforma pelo navegador, onde a aplicação React SPA é executada. O <strong>Servidor Front-end</strong> é responsável por hospedar e distribuir os arquivos da interface web via HTTPS.</p>
+<p>O <strong>Servidor Back-end</strong> hospeda a API REST desenvolvida em Django, responsável pelas regras de negócio, autenticação e gerenciamento das funcionalidades da plataforma. Já o <strong>Servidor de Banco de Dados</strong> utiliza PostgreSQL para armazenar os dados do sistema, como usuários, disciplinas, conteúdos e avaliações.</p>
+<p>A comunicação ocorre de forma segura: o cliente se conecta ao backend utilizando HTTPS e REST API, enquanto o backend acessa o banco de dados através do Django ORM via TCP/IP. O banco de dados não é acessado diretamente pelo cliente, garantindo maior segurança e controle das informações.</p>
+<hr />
+<h2 id="26-restricoes-adicionais">2.6 Restrições adicionais</h2>
+<p>O desenvolvimento do GoStudy está sujeito a um conjunto de restrições que orientam tanto as decisões técnicas quanto os aspectos de negócio da plataforma. Essas restrições foram definidas com base nas características do público-alvo, na natureza do sistema e nos requisitos de qualidade estabelecidos pela equipe:</p>
+<p><strong>Restrições de negócio</strong></p>
+<p>A plataforma GoStudy é acessível diretamente pela internet, sem necessidade de vínculo institucional ou rede privada, o que é fundamental para garantir o acesso democrático aos estudantes da rede pública. No entanto, o uso completo da plataforma exige cadastro e autenticação do usuário, uma vez que o sistema opera com três perfis distintos: Administrador, Professor e Aluno, cada um com permissões e funcionalidades específicas. O módulo de cadastro deve estar disponível 24 horas por dia, 7 dias por semana, permitindo que novos usuários se registrem a qualquer momento.</p>
+<p><strong>Características de qualidade</strong></p>
+<ul>
+<li>
+<p><strong>Usabilidade:</strong> Por atender a um público amplo e heterogêneo, que inclui estudantes de diferentes faixas etárias e níveis de familiaridade com tecnologia, a plataforma deve apresentar uma interface intuitiva e de fácil navegação. O sistema deve ser compreensível mesmo por usuários leigos, sem necessidade de treinamento prévio. Essa característica é considerada essencial para que o GoStudy cumpra seu objetivo de democratizar o acesso à educação.</p>
+</li>
+<li>
+<p><strong>Disponibilidade:</strong> O sistema deve estar disponível de forma contínua, especialmente o módulo de cadastro e acesso a conteúdos, dado que os estudantes podem acessar a plataforma em diferentes horários do dia. Interrupções prolongadas comprometem diretamente a experiência de aprendizagem e a confiança dos usuários na ferramenta.</p>
+</li>
+<li>
+<p><strong>Confiabilidade:</strong> O GoStudy deve garantir o funcionamento correto e estável de suas funcionalidades principais: como login, acesso a disciplinas, postagem e visualização de conteúdos, minimizando falhas e comportamentos inesperados. A confiabilidade é especialmente crítica para os professores, que dependem da plataforma para disponibilizar materiais aos alunos.</p>
+</li>
+<li>
+<p><strong>Portabilidade:</strong> A plataforma deve funcionar corretamente nos principais navegadores do mercado e ser responsiva para diferentes dispositivos, incluindo computadores, tablets e smartphones. Essa restrição é justificada pelo perfil do público-alvo, que frequentemente acessa conteúdos digitais por meio de celulares.</p>
+</li>
+<li>
+<p><strong>Segurança:</strong> Dado que a plataforma armazena dados pessoais dos usuários como nome, e-mail, CPF e data de nascimento, a segurança é uma restrição de alta prioridade. Os dados sensíveis, em especial senhas, devem ser armazenados com criptografia adequada. Além disso, o sistema deve garantir que cada perfil de usuário acesse exclusivamente as funcionalidades a ele atribuídas, conforme descrito a seguir:</p>
+</li>
+<li>
+<p>O <strong>Administrador</strong> possui acesso total à plataforma, podendo criar, editar e remover qualquer perfil, homologar cadastros de professores, analisar denúncias e gerenciar disciplinas. Por concentrar o maior nível de privilégio, sua conta deve ser protegida com credenciais seguras e não deve ser acessível por outros perfis.</p>
+</li>
+<li>
+<p>O <strong>Professor</strong> tem acesso restrito às funcionalidades de gestão de sua disciplina, podendo postar conteúdos de diversos tipos, incluindo links de exercícios e interagir com alunos no fórum de dúvidas. Seu cadastro só é efetivado após aprovação do currículo pelo Administrador, ou quando é adicionando diretamente pelo administrador o que representa uma camada adicional de controle de acesso.</p>
+</li>
+<li>
+<p>O <strong>Aluno</strong> tem acesso às funcionalidades de consumo de conteúdo, podendo se inscrever em disciplinas e visualizar materiais. Não possui permissão para acessar áreas administrativas ou de gerenciamento de conteúdo.</p>
+</li>
+</ul>
+<p>Essa separação de permissões está alinhada à legislação brasileira de proteção de dados (LGPD), que exige que os sistemas garantam o acesso às informações pessoais apenas por quem tem necessidade legítima de consultá-las.</p>
+<hr />
+<h1 id="3-bibliografia">3 Bibliografia</h1>
+<p>KRUTCHEN, Philippe. <em>Architectural Blueprints: The 4+1 View Model of Software Architecture</em>. Disponível em: <a href="https://arxiv.org/abs/2006.04975">arXiv</a>. Acesso em: 14 maio 2026.</p>
+<p>TURING – GoStudy. <em>Visão do Produto e do Projeto</em>. Versão 1.0. Brasília: Projeto GoStudy, 2026. 30 p.</p>
+<hr />
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "search.suggest"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado para \u00e1rea de transfer\u00eancia", "clipboard.copy": "Copiar para \u00e1rea de transfer\u00eancia", "search.result.more.one": "Mais 1 nesta p\u00e1gina", "search.result.more.other": "Mais # nesta p\u00e1gina", "search.result.none": "Nenhum resultado encontrado", "search.result.one": "1 resultado encontrado", "search.result.other": "# resultados encontrados", "search.result.placeholder": "Digite para iniciar a busca", "search.result.term.missing": "Ausente", "select.version": "Selecione a vers\u00e3o"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
