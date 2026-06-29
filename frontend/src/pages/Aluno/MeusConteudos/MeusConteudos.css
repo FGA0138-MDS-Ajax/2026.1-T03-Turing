@@ -29,11 +29,13 @@
 }
 
 .mc-title {
-  font-size: 1.6rem;
+  margin: 0 0 0.3rem 0;
+  font-size: 2rem;
   font-weight: 700;
-  color: var(--gs-accent, #1a1a2e);
+  color: var(--gs-accent, #02373a);
   margin: 0 0 4px 0;
   line-height: 1.2;
+  font-family: 'Serif'
 }
 
 .mc-subtitle {
