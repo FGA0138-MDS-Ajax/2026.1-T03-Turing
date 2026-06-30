@@ -29,10 +29,10 @@ function ActivityAvatar({ name, type }) {
 function StatusBadge({ subject }) {
   if (!subject) return null;
   const cor = subject.includes('Pendente')
-    ? { bg: '#FEF3C7', color: '#92400E' }
+    ? { bg: 'var(--gs-pendent-bg)', color: 'var(--gs-pendent-text)' }
     : subject.includes('análise')
-    ? { bg: '#DBEAFE', color: '#1E40AF' }
-    : { bg: '#D1FAE5', color: '#065F46' };
+    ? { bg: 'var(--gs-analise-bg)', color: 'var(--gs-analise-text)' }
+    : { bg: 'var(--gs-recusado-bg)', color: 'var(--gs-recusado-text)' };
 
   return (
     <span

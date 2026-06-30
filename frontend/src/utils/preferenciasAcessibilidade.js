@@ -47,9 +47,21 @@ nenhum:{
 
     teacherBg:'#E8F3F4',
     teacherText:'#2F5D62',
+    
+    removeBg:  '#FEF0F0',
+    removeText:  '#D94040',
 
     studentBg:'#FBF0E4',
     studentText:'#B0641C',
+
+    pendentBg: '#FEF3C7',
+    pendentText: '#92400E',
+
+    recusadoBg: '#D1FAE5',
+    recusadoText: '#065F46',
+
+    analiseBg: '#DBEAFE',
+    analiseText: '#1E40AF',
 
     successBg:'#EAF3DE',
     successText:'#3B6D11',
@@ -68,8 +80,20 @@ nenhum:{
     studentBg:'#FBF0E4',
     studentText:'#B0641C',
 
+    removeBg:  '#FEF0F0',
+    removeText:  '#367f09',
+
     successBg:'#EAF3DE',
     successText:'#3B6D11',
+
+    pendentBg: '#FEF3C7',
+    pendentText: '#0e9285',
+
+    recusadoBg: '#D1FAE5',
+    recusadoText: '#065F46',
+
+    analiseBg: '#DBEAFE',
+    analiseText: '#1E40AF',
 
     warningBg:'#FAEEDA',
     warningText:'#854F0B',
@@ -84,6 +108,18 @@ nenhum:{
 
     studentBg:'#FBF0E4',
     studentText:'#abb01c',
+
+    removeBg: '#FEF0F0',
+    removeText: '#66d940',
+
+    pendentBg: '#FEF3C7',
+    pendentText: '#92400E',
+
+    recusadoBg: '#D1FAE5',
+    recusadoText: '#065f34',
+
+    analiseBg: '#DBEAFE',
+    analiseText: '#1E40AF',
 
     successBg:'#EAF3DE',
     successText:'#719516',
@@ -103,8 +139,20 @@ nenhum:{
     studentBg:'#FBF0E4',
     studentText:'#B0641C',
 
+    removeBg:  '#FEF0F0',
+    removeText:  '#d84b6c',
+
     successBg:'#EAF3DE',
     successText:'#3B6D11',
+
+    pendentBg: '#FEF3C7',
+    pendentText: '#92400E',
+
+    recusadoBg: '#D1FAE5',
+    recusadoText: '#065f2d',
+
+    analiseBg: '#DBEAFE',
+    analiseText: '#af1e90',
 
     warningBg:'#FAEEDA',
     warningText:'#854F0B',
@@ -180,6 +228,19 @@ export function applyAccessibilityPreferences(preferences) {
 
     '--forum-aguardando-bg': colorTheme.warningBg,
     '--forum-aguardando-text': colorTheme.warningText,
+
+    '--gs-pendent-bg': colorTheme.pendentBg,
+    '--gs-pendent-text': colorTheme.pendentText,
+
+    '--gs-analise-bg': colorTheme.analiseBg,
+    '--gs-analise-text': colorTheme.analiseText,
+
+    '--gs-recusado-bg': colorTheme.recusadoBg,
+    '--gs-recusado-text': colorTheme.recusadoText,
+
+    '--gs-remeve-bg': colorTheme.removeBg,
+    '--gs-remove-text': colorTheme.removeText,
+
   };
 
   // --- Alto contraste: so sobrescreve fundo/texto/borda quando ativo ---

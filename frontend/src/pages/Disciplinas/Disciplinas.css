@@ -356,7 +356,7 @@
   transition: background 0.15s;
 }
 
-.mat-btn--remover { background: #FEF0F0; color: #D94040; }
+.mat-btn--remover { background: var(--gs-remove-bg, #FEF0F0); color: var(--gs-remove-text, #D94040); }
 .mat-btn--remover:hover { background: #FAD8D8; }
 .mat-btn--editar  { background: #EEF5FF; color: var(--gs-accent, #2672CE); }
 .mat-btn--editar:hover  { background: #DDE9FA; }
