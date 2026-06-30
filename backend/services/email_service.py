@@ -1,4 +1,5 @@
 from django.core.mail import send_mail
+from django.conf import settings
 
 def enviar_email(assunto, mensagem, destinatario):
     
@@ -41,8 +42,7 @@ Equipe GoStudy
 
 def enviar_email_aprovacao_professor(nome, email):
     assunto='Aprovação de inscrição - GoStudy',
-    mensagem=f'''
-Olá, {nome}!
+    mensagem=f'''Olá, {nome}!
 Seu currículo foi avaliado por nossos administradores e sua inscrição foi aprovada!
 Sua conta já está ativa e pronta para utilização.
 Estamos felizes em te ter como professor na nossa plataforma.
@@ -56,11 +56,24 @@ Equipe GoStudy
 
 def enviar_email_rejeicao_professor(nome, email):
     assunto='Rejeição de inscrição - GoStudy',
-    mensagem=f'''
-Olá, {nome}!
+    mensagem=f'''Olá, {nome}!
 Seu currículo foi avaliado por nossos administradores e infelizmente sua inscrição foi recusada
 Sua conta permanecerá inativa para utilização.
 Agradecemos por sua inscrição.
+
+Atenciosamente,
+Equipe GoStudy
+'''
+    
+    enviar_email(assunto, mensagem, email)
+
+def enviar_email_redefinicao_senha(nome, email, reset_link):
+    assunto = 'Redefinição de senha - GoStudy'
+    mensagem =f'''Olá, {nome}!
+Recebemos uma solicitação para redefinir sua senha no GoStudy.
+Para criar uma nova senha, acesse o link abaixo:
+{reset_link}
+Se você não solicitou essa alteração, apenas ignore este email.
 
 Atenciosamente,
 Equipe GoStudy

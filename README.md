@@ -1,38 +1,305 @@
-# Instruções gerais do projeto. 
+#  <img src="/documentacao/assets/logo_gostudy.png" width="100"> GoStudy
 
-- developer :
-  - branch pra desenvolvimento do software no geral,
-  - confecção de testes.
-  - rodou tudo certinho ? deploy pra testes.
-- testes :
-  - espaço pra raealiazção de qualquer tipo de testes mas principalemnte o de integração.
-  - testes aprovados, funcionalidades ativas e sem problemas deploy pra produção / Main.
- 
-## template-repository - Branch Developer
+## Sobre o Projeto
 
-Template de Repositório para a matéria de Métodos de Desenvolvimento de Software lecionado pelo professor Ricardo Ajax.
+O GoStudy é uma plataforma voltada para auxiliar estudantes e professores no gerenciamento e compartilhamento de conteúdos acadêmicos.
 
-Essa Branch deve ser usada exclusivamente para a versão de produção dos softwares da equipe.
+Desenvolvido na disciplina de Métodos de Desenvolvimento de Software (MDS), o projeto segue práticas de desenvolvimento colaborativo, integração contínua, controle de versões e metodologias ágeis.
 
-O repositório conta com mais 3 branchs:
-* docs: Usada para armazenar a documentação do projeto.
-* developer: usada como um intermediário antes do código chegar realmente para produção. É o ambiente ideal para realizar os últimos testes antes das apresentações.
-* gh-pages: Local dos arquivos estáticos de deploy da documentação. (Para deploy da documentação, consultar seu monitor)
+---
 
-## Especificações Técnicas do Repositório
+## 👥 Equipe
 
-Este repositório é planejado e estruturado para que seja realizado documentações de software. Caso haja outra necessidades, deve-se consultar a professora.
 
-Atualmente se usa a ferramenta MkDocs para gerar sua documentação baseado nos seus arquivos markdowns, vocês podem achar mais instruções sobre o MkDocs através do link da documentação da ferramenta: [https://www.mkdocs.org/](https://www.mkdocs.org/).
+<div align="center">
 
-Também é usado uma "sub-ferramenta" do MkDocs para sua estilização, o Material Theme, que pode ser consultado através do link: [https://squidfunk.github.io/mkdocs-material/](https://squidfunk.github.io/mkdocs-material/).
+<table>
+<tr>
 
-Este repositório também conta com uma pipeline de automatização de deploy do seu conteúdo MkDocs, para que a cada commit feito na main, a pipeline gere uma versão atualizada da sua documentação em minutos. Vale ressaltar que é importante realizar uma configuração para que tudo funcione da forma correta, as instruções são as seguintes:
+<td align="center" width="180px">
+<a href="https://github.com/gabriel-otacilio">
+<img src="https://github.com/gabriel-otacilio.png" width="100px;" style="border-radius:50%" alt="Nome"/>
+<br><br>
+<b>Gabriel Octacilio</b>
+</a>
+<br>
+<sub>	P.O</sub>
+</td>
 
-* Acesse as configurações do repositório;
-* Procure a aba de "Pages"
-* Em "Source" escolha a opção "Deploy from a branch";
-* Em "Branch" escolha "gh-pages";
-* Clique em salvar e pronto;
+<td align="center" width="180px">
+<a href="https://github.com/Zayra-Moraes">
+<img src="https://github.com/Zayra-Moraes.png" width="100px;" style="border-radius:50%" alt="Nome"/>
+<br><br>
+<b>Zayra Moraes</b>
+</a>
+<br>
+<sub>Analista de qualidade</sub>
+</td>
 
-Após essas etapas de configuração, o seu GitPages deve funcionar normalmente.
+<td align="center" width="180px">
+<a href="https://github.com/LuizGustavoved">
+<img src="https://github.com/LuizGustavoved.png" width="100px;" style="border-radius:50%" alt="Nome"/>
+<br><br>
+<b>Luiz Gustavo</b>
+</a>
+<br>
+<sub>Desenvolvedor</sub>
+</td>
+
+<td align="center" width="180px">
+<a href="https://github.com/Arthur061">
+<img src="https://github.com/Arthur061.png" width="100px;" style="border-radius:50%" alt="Nome"/>
+<br><br>
+<b>	Arthur Alves </b>
+</a>
+<br>
+<sub>Desenvolvedor</sub>
+</td>
+
+<td align="center" width="180px">
+<a href="https://github.com/Clarice-gg">
+<img src="https://github.com/Clarice-gg.png" width="100px;" style="border-radius:50%" alt="Nome"/>
+<br><br>
+<b>Clarice Gitirana</b>
+</a>
+<br>
+<sub>Desenvolvedor</sub>
+</td>
+
+<td align="center" width="180px">
+<a href="https://github.com/luanaa2005">
+<img src="https://github.com/luanaa2005.png" width="100px;" style="border-radius:50%" alt="Nome"/>
+<br><br>
+<b>Luana Carvalho</b>
+</a>
+<br>
+<sub>Desenvolvedor</sub>
+</td>
+
+</tr>
+
+<tr>
+
+<td align="center">
+<a href="https://github.com/luisa5r">
+<img src="https://github.com/luisa5r.png" width="100px;" style="border-radius:50%" alt="Nome"/>
+<br><br>
+<b>Luísa de Souza</b>
+</a>
+<br>
+<sub>Desenvolvedor</sub>
+</td>
+
+<td align="center">
+<a href="https://github.com/mejg">
+<img src="https://github.com/mejg.png" width="100px;" style="border-radius:50%" alt="Nome"/>
+<br><br>
+<b>Maria Eduarda</b>
+</a>
+<br>
+<sub>Desenvolvedor</sub>
+</td>
+
+<td align="center">
+<a href="https://github.com/thiagoHenrique12">
+<img src="https://github.com/thiagoHenrique12.png" width="100px;" style="border-radius:50%" alt="Nome"/>
+<br><br>
+<b>Thiago Henrique </b>
+</a>
+<br>
+<sub>Desenvolvedor</sub>
+</td>
+
+<td align="center">
+<a href="https://github.com/ArthurziEvan">
+<img src="https://github.com/ArthurziEvan.png" width="100px;" style="border-radius:50%" alt="Nome"/>
+<br><br>
+<b>Arthur Evangelista </b>
+</a>
+<br>
+<sub>Desenvolvedor</sub>
+</td>
+
+<td align="center">
+<a href="https://github.com/Jvezyk">
+<img src="https://github.com/Jvezyk.png" width="100px;" style="border-radius:50%" alt="Nome"/>
+<br><br>
+<b>João Vitor Justo </b>
+</a>
+<br>
+<sub>Desenvolvedor</sub>
+</td>
+
+</tr>
+</table>
+
+</div>
+---
+
+## 🛠️ Tecnologias Utilizadas
+
+### Frontend
+- React
+- Vite
+
+### Backend
+- Django
+- Django REST Framework
+
+### Banco de Dados
+- PostgreSQL
+
+### Ferramentas
+- Git
+- GitHub
+- Figma
+- MkDocs
+
+---
+
+## 🌳 Estratégia de Branches
+
+O projeto segue uma estratégia de desenvolvimento baseada em ambientes separados para documentação, desenvolvimento, testes e produção.
+
+### Main
+Branch destinada à versão estável e pronta para produção.
+
+### Developer
+Branch utilizada para:
+
+- Desenvolvimento das funcionalidades
+- Correções de bugs
+- Implementação de testes
+- Integração das features da equipe
+
+Após validação, as alterações são encaminhadas para a branch de testes.
+
+### Testes
+
+Ambiente destinado à validação do sistema.
+
+Nesta branch são realizados:
+
+- Testes de unitários
+- Testes funcionais
+- Validação das funcionalidades implementadas
+
+Após aprovação dos testes, as alterações podem ser promovidas para produção.
+
+### Docs
+
+Responsável pelo armazenamento da documentação do projeto.
+
+### gh-pages
+
+Responsável pelo deploy automático da documentação gerada pelo MkDocs.
+
+---
+
+## 🔄 Fluxo de Desenvolvimento
+
+```text
+Feature Branch
+      ↓
+Developer
+      ↓
+Testes
+      ↓
+Main
+```
+
+### Processo
+
+1. Desenvolvimento da funcionalidade
+2. Merge para `developer`
+3. Execução dos testes
+4. Deploy para ambiente de testes
+5. Validação da equipe
+6. Merge para `main`
+
+---
+
+## 📚 Documentação
+
+A documentação do projeto é construída utilizando:
+
+- MkDocs
+- Material for MkDocs
+
+### Deploy da documentação
+
+A documentação é publicada automaticamente através do GitHub Pages.
+
+Configuração necessária:
+
+1. Acessar Settings do repositório
+2. Selecionar Pages
+3. Escolher:
+   - Source → Deploy from a branch
+   - Branch → gh-pages
+4. Salvar
+
+---
+
+## 🏗️ Arquitetura
+
+```text
+Frontend (React)
+       ↓
+API REST
+       ↓
+Backend (Django)
+       ↓
+PostgreSQL
+```
+
+---
+
+## 📂 Estrutura do Projeto
+
+| Diretório       | Descrição                                       |
+|-----------------|-------------------------------------------------|
+| `frontend/`     | Interface web desenvolvida em React             |
+| `backend/`      | API e regras de negócio desenvolvidas em Django |
+| `documentacao/` | Documentação do projeto e padronização          |
+| `mkdocs.yml`    | Configuração do MkDocs                          |
+| `README.md`     | Documento principal do projeto                  |
+
+---
+
+## 📅 Sprints
+
+| Sprint   | Objetivo                                        | Status |
+|----------|-------------------------------------------------|---------|
+| Sprint 1 | Cadastro de alunos, professores e administrador | ✅ |
+| Sprint 2 | Administração                                   | ✅ |
+| Sprint 3 | Postagem de material                            | ✅  |
+| Sprint 4 | Visualização e interação                        | ✅  |
+| Sprint 5 | fórum                                           | 🚧 |
+| Sprint 6 | Acessibilidade                                  | 🚧 |
+
+---
+
+## 🚀 Como Executar
+
+### Backend
+
+```bash
+pip install -r requirements.txt
+
+python manage.py migrate
+
+python manage.py runserver
+```
+
+Rota: http://localhost:8000/
+
+### Frontend
+
+```bash
+npm install
+
+npm run dev
+```
+
+Rota: http://localhost:5173/

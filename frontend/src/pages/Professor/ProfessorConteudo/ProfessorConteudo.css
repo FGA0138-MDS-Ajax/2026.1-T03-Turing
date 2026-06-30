@@ -1,0 +1,217 @@
+.professor-conteudo-container {
+  min-height: 200vh;
+   padding: 1px;
+}
+
+.conteudo-page-header {
+  margin-bottom: 24px;
+}
+
+.conteudo-page-header h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 8px;
+}
+
+.conteudo-page-header p {
+  color: #6b7280;
+  font-size: 1.1rem;
+}
+
+.conteudo-filters {
+  margin-bottom: 32px;
+}
+
+.conteudo-filters select {
+  width: 320px;
+  height: 40px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 0 16px;
+  font-size: 1rem;
+  background: #fff;
+  color: #374151;
+  outline: none;
+}
+
+.conteudo-filters select:focus {
+  border-color: #3b82f6;
+}
+
+.matricula-section {
+  padding-top: 20px;
+  border-top: 1px solid #e5e7eb;
+  margin-bottom: 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btn-matricula {
+  border: none;
+  border-radius: 8px;
+  padding: 12px 18px;
+  background: #42567a;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-matricula:hover {
+  background: #29354c;
+}
+
+.conteudos-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+.conteudo-card {
+  width: 330px;
+  background: #ffffff;
+  border-radius: 14px;
+  overflow: hidden;
+  border-top: 12px solid #42567a;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.conteudo-body {
+  padding: 20px;
+}
+
+.conteudo-body h2 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 12px;
+}
+
+.conteudo-descricao {
+  color: #6b7280;
+  font-size: 0.8rem;
+  margin-bottom: 14px;
+}
+
+.conteudo-info {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.conteudo-info p {
+  margin: 0;
+  color: #4b5563;
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+
+.conteudo-info strong {
+  color: #374151;
+  font-weight: 700;
+}
+
+.conteudo-footer {
+  border-top: 1px solid #e5e7eb;
+  padding: 9px 14px;
+  display: flex;
+  gap: 8px;
+}
+
+.btn-material {
+  flex: 1;
+  height: 36px;
+  border: none;
+  border-radius: 8px;
+  background: #e3e3e3;
+  color: #42567a;
+  font-weight: 600;
+  font-size: 0.80rem;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-material:hover {
+  background: rgb(175, 175, 175);
+}
+
+.btn-forum {
+  flex: 1;
+  height: 36px;
+  border: none;
+  border-radius: 8px;
+  background: #02373a;
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.80rem;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-forum:hover {
+  background: #025a5e;
+}
+
+.filter-wrapper {
+  position: relative;
+  width: 320px;
+}
+
+.filter-wrapper svg {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #64748b;
+}
+
+.filter-wrapper select {
+  width: 100%;
+  padding-left: 45px;
+}
+
+.info-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.info-icon {
+  width: 28px;
+  height: 28px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #475569;
+  flex-shrink: 0;
+  background: #fff;
+}
+
+.info-row p {
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .professor-conteudo-container {
+    padding: 20px;
+  }
+
+  .conteudo-card {
+    width: 100%;
+  }
+
+  .conteudo-filters select {
+    width: 100%;
+  }
+
+  .conteudo-page-header h1 {
+    font-size: 2.2rem;
+  }
+
+  .conteudo-body h2 {
+    font-size: 1.8rem;
+  }
+}

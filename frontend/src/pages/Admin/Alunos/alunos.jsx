@@ -118,12 +118,16 @@ export default function Alunos() {
 
       <div className={styles.cabecalho}>
         <div>
-          <h1 className={styles.cabecalho__titulo}>Alunos ativos</h1>
+          <h1 className={styles.cabecalho__titulo} style={{ fontSize: '2rem', fontWeight: 700, color: '#02373a', margin: -35, fontFamily: 'Serif' }}>
+            Gerenciamento de Alunos
+          </h1>
         </div>
       </div>
 
       <section className={styles.bloco} aria-label="Listar alunos">
-        <h2 className={styles.bloco__titulo}>Listar alunos</h2>
+        <h2 className={styles.bloco__titulo} style={{ fontSize: '1rem', fontWeight: 600, color: '#101828', margin: 8 }}>
+          Listar alunos
+        </h2>
 
         <div className={styles.barra}>
           <div className={styles.barra__busca}>

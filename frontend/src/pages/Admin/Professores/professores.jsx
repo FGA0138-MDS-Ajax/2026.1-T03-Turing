@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useGerenciamentoUsuarios } from '../../../hooks/useGerenciamentoUsuarios';
 import {
   listarProfessores,
@@ -56,13 +56,17 @@ function ProfessorCard({ professor, onEditar, onDeletar }) {
 // Página principal de gerenciamento de professores
 
 export default function Professores() {
-  const { usuarios, loading, erro, toast, handleCriar, handleEditar, handleDeletar } =
+  const { usuarios, loading, erro, toast, handleCriar, handleEditar, handleDeletar, recarregar } =
     useGerenciamentoUsuarios({
       listar: listarProfessores,
       criar: criarProfessor,
       editar: editarProfessor,
       deletar: deletarProfessor,
     });
+
+  useEffect(() => {
+    recarregar();
+  }, []);
 
   const [busca, setBusca] = useState('');
   const [modalFormAberto, setModalFormAberto] = useState(false);
@@ -121,7 +125,7 @@ export default function Professores() {
 
       <div className={styles.cabecalho}>
         <div>
-          <h1 className={styles.cabecalho__titulo}>Professores ativos</h1>
+          <h1 style={{ fontSize: '2rem', fontWeight: 700, color: '#02373a', margin: 0, fontFamily: 'Serif' }}>Gerenciamento de Professores</h1>
         </div>
       </div>
 

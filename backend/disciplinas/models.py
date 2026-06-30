@@ -59,7 +59,7 @@ class Conteudo(models.Model):
         related_name='conteudos',
         blank=True
     )
-    nome = models.CharField(max_length=255)
+    nome = models.CharField(max_length=255, unique=True)
     descricao = models.TextField()
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='ativo')
     data_create = models.DateTimeField(auto_now_add=True)

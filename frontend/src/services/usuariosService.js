@@ -8,8 +8,9 @@ export const listarProfessores = () =>
 export const buscarProfessor = (id) =>
   api.get(`/api/usuarios/professores/${id}/`);
 
+// Rota atualizada para a issue
 export const criarProfessor = (dados) =>
-  api.post('/api/usuarios/professores/', dados);
+  api.post('/api/usuarios/professores/create_by_admin/', dados);
 
 export const editarProfessor = (id, dados) =>
   api.patch(`/api/usuarios/professores/${id}/`, dados);

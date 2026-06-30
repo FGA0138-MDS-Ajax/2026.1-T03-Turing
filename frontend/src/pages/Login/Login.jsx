@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import "./Login.css";
+import minhaLogo from '../../assets/minha-logo.png';
  
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -46,6 +47,12 @@ export default function Login() {
       if (userData.tipo === "admin") {
         console.log("4 - navegando para /admin");
         navigate("/admin/");
+      } else if (userData.tipo === 'professor') {
+        console.log("4 - navegando para /professor");
+        navigate('/professor');
+      }else if (userData.tipo === 'aluno') {
+        console.log("4 - navegando para /aluno");
+        navigate('/aluno');
       } else {
         console.log("4 - navegando para /");
         navigate("/");
@@ -100,9 +107,11 @@ export default function Login() {
       <div className="login-wrapper">
         <div className="login-card">
           <div className="login-logo">
-            <svg viewBox="0 0 24 24" fill="white" width="28" height="28">
-              <path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zM5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z" />
-            </svg>
+            <img
+              src={minhaLogo}
+              alt="Logo GoStudy"
+              style={{ width: '150px', height: 'auto' }}
+            />
           </div>
  
           <h1 className="login-title">GoStudy</h1>
@@ -186,7 +195,7 @@ export default function Login() {
                 <span className="checkmark"></span>
                 Lembrar-me
               </label>
-              <Link to="/forgot-password" className="forgot-link">
+              <Link to="/recuperar-senha" className="forgot-link">
                 Esqueceu a senha?
               </Link>
             </div>

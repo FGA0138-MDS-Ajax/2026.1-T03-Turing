@@ -22,7 +22,7 @@
     display: flex;
     flex-direction: column;
     padding: 20px 0 16px;
-    gap: 4px;
+    gap: 16px;
   }
 
   .gs-sidebar-logo {
@@ -244,7 +244,7 @@
   }
 
   .gs-stat-card {
-    background: #fff;
+    background: #FDFBF7;
     border-radius: 12px;
     padding: 18px 16px 16px;
     display: flex;
@@ -284,11 +284,14 @@
   }
 
   .gs-activity-card {
-    background: #fff;
+    background: #FDFBF7;
     border-radius: 12px;
     padding: 20px 20px 8px;
     border: 1px solid rgba(28,43,58,0.07);
     box-shadow: 0 1px 3px rgba(28,43,58,0.05);
+    margin-top: 24px;
+    
+    
   }
 
   .gs-activity-title {
@@ -323,7 +326,7 @@
     height: 36px;
     min-width: 36px;
     border-radius: 50%;
-    color: #fff;
+    color: #e2a730;
     font-size: 12px;
     font-weight: 700;
     display: flex;
@@ -512,4 +515,33 @@
   .gs-modal-cancel:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+  }
+
+    .gs-activity-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+
+  .gs-activity-count {
+    font-size: 0.75rem;
+    color: #99A1AF;
+    font-weight: 500;
+  }
+
+  .gs-activity-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.35rem;
+    flex-shrink: 0;
+  }
+
+  .gs-activity-badge {
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 0.2rem 0.6rem;
+    border-radius: 20px;
+    white-space: nowrap;
   }
