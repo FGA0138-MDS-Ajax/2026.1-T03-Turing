@@ -12,12 +12,12 @@
   font-size: 2rem;
   font-weight: 700;
   color: #02373a;
-  color: var(--gs-text-primary, #02373a)
-  font-family: 'Serif'
+  color: var(--gs-text-primary, #000000);
+    font-family: 'Serif';
 }
 
 .forum-header p {
-  font-size: 14px;
+  font-size: 0.875rem;
   color: var(--gs-text-secondary, #666);
 }
 
@@ -25,7 +25,7 @@
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  font-size: 13px;
+  font-size: 0.8125rem;
   color: var(--gs-text-secondary, #555);
   text-decoration: none;
   margin-bottom: 12px;
@@ -62,7 +62,7 @@
   padding: 8px 12px;
   border: 0.5px solid #ccc;
   border-radius: 8px;
-  font-size: 14px;
+  font-size: 0.875rem;
   background: #f9f8f6;
   color: var(--gs-text-primary, #333);
   outline: none;
@@ -80,7 +80,7 @@
   border: 0.5px solid #ccc;
   border-radius: 8px;
   background: var(--gs-surface, #fff);
-  font-size: 14px;
+  font-size: 0.875rem;
   cursor: pointer;
   color: var(--gs-text-secondary, #555);
   white-space: nowrap;
@@ -154,7 +154,7 @@
 }
 
 .forum-card-title {
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: 500;
   color: var(--gs-text-primary, #222);
   white-space: nowrap;
@@ -163,7 +163,7 @@
 }
 
 .forum-card-desc {
-  font-size: 12px;
+  font-size: 0.75rem;
   color: var(--gs-text-secondary, #777);
   margin-bottom: 4px;
   white-space: nowrap;
@@ -171,7 +171,7 @@
   text-overflow: ellipsis;
 }
 
-.forum-card-meta { font-size: 11px; color: var(--gs-text-muted, #aaa); }
+.forum-card-meta { font-size: 0.6875rem; color: var(--gs-text-muted, #aaa); }
 
 .forum-card-arrow {
   position: absolute;
@@ -179,11 +179,11 @@
   top: 50%;
   transform: translateY(-50%);
   color: var(--gs-text-muted, #bbb);
-  font-size: 16px;
+  font-size: 1rem;
 }
 
 .forum-badge {
-  font-size: 11px;
+  font-size: 0.6875rem;
   padding: 3px 8px;
   border-radius: 6px;
   font-weight: 500;
@@ -191,13 +191,13 @@
 }
 
 .forum-badge.respondida {
-  background: #EAF3DE;
-  color: #3B6D11;
+    background:var(--forum-respondida-bg,#EAF3DE);
+    color:var(--forum-respondida-text,#3B6D11);
 }
 
 .forum-badge.aguardando {
-  background: #FAEEDA;
-  color: #854F0B;
+    background:var(--forum-aguardando-bg,#FAEEDA);
+    color:var(--forum-aguardando-text,#854F0B);
 }
 
 
@@ -224,13 +224,13 @@
 }
 
 .forum-detail-name {
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: 500;
   color: var(--gs-text-primary, #222);
 }
 
 .forum-detail-date {
-  font-size: 12px;
+  font-size: 0.75rem;
   color: var(--gs-text-muted, #aaa);
 }
 
@@ -240,7 +240,7 @@
   position: absolute;
   right: 14px;
   top: 14px;
-  font-size: 16px;
+  font-size: 1rem;
   color: #ccc;
   cursor: pointer;
   background: none;
@@ -250,14 +250,14 @@
 .forum-flag-icon:hover { color: #e24b4a; }
 
 .forum-detail-title {
-  font-size: 15px;
+  font-size: 0.9375rem;
   font-weight: 500;
   color: var(--gs-text-primary, #222);
   margin-bottom: 4px;
 }
 
 .forum-detail-desc {
-  font-size: 13px;
+  font-size: 0.8125rem;
   color: var(--gs-text-secondary, #666);
   line-height: 1.5;
 }
@@ -275,7 +275,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 11px;
+  font-size: 0.6875rem;
   font-weight: 600;
   color: #fff;
   background: var(--gs-accent, #D4537E);
@@ -291,7 +291,7 @@
 }
 
 .forum-response-label {
-  font-size: 13px;
+  font-size: 0.8125rem;
   font-weight: 500;
   color: var(--gs-text-primary, #333);
   margin-bottom: 10px;
@@ -312,7 +312,7 @@
   border: none;
   background: none;
   cursor: pointer;
-  font-size: 13px;
+  font-size: 0.8125rem;
   color: var(--gs-text-secondary, #666);
   border-radius: 4px;
 }
@@ -321,7 +321,7 @@
 
 .forum-preview-btn {
   margin-left: auto;
-  font-size: 12px;
+  font-size: 0.75rem;
   color: var(--gs-text-muted, #888);
   background: none;
   border: none;
@@ -333,7 +333,7 @@
   min-height: 90px;
   border: none;
   outline: none;
-  font-size: 13px;
+  font-size: 0.8125rem;
   color: var(--gs-text-primary, #444);
   resize: none;
   font-family: inherit;
@@ -357,7 +357,7 @@
   border-radius: 8px;
   border: 0.5px solid #aaa;
   background: var(--gs-surface, #fff);
-  font-size: 14px;
+  font-size: 0.875rem;
   cursor: pointer;
   color: var(--gs-text-secondary, #555);
   transition: background 0.15s;
@@ -370,7 +370,7 @@
   border-radius: 8px;
   border: none;
   background: var(--gs-accent, #1a2e2a);
-  font-size: 14px;
+  font-size: 0.875rem;
   cursor: pointer;
   color: #fff;
   font-weight: 500;
@@ -389,14 +389,14 @@
   text-align: center;
   padding: 40px;
   color: var(--gs-text-muted, #aaa);
-  font-size: 14px;
+  font-size: 0.875rem;
 }
 
 .forum-empty {
   text-align: center;
   padding: 40px;
   color: var(--gs-text-muted, #bbb);
-  font-size: 14px;
+  font-size: 0.875rem;
 }
 
 .forum-error {
@@ -405,7 +405,7 @@
   border: 0.5px solid #F09595;
   border-radius: 8px;
   color: #791F1F;
-  font-size: 13px;
+  font-size: 0.8125rem;
 }
 
 .forum-success {
@@ -414,11 +414,11 @@
   border: 0.5px solid #97C459;
   border-radius: 8px;
   color: #27500A;
-  font-size: 13px;
+  font-size: 0.8125rem;
 }
 
 .forum-breadcrumb {
-  font-size: 12px;
+  font-size: 0.75rem;
   color: var(--gs-text-muted, #999);
   margin-bottom: 8px;
 }
@@ -438,21 +438,21 @@
   padding: 8px;
   border-radius: 6px;
   overflow-x: auto;
-  font-size: 12px;
+  font-size: 0.75rem;
 }
 
 .forum-response-preview code {
   background: #f0ede8;
   padding: 1px 4px;
   border-radius: 4px;
-  font-size: 12px;
+  font-size: 0.75rem;
 }
 
 /* Flag dentro do header, sem position absolute */
 .forum-detail-header .forum-flag-icon {
   position: static;
   margin-left: auto;
-  font-size: 16px;
+  font-size: 1rem;
   color: #ccc;
   background: none;
   border: none;
@@ -470,7 +470,7 @@
   margin-top: 12px;
   white-space: pre-wrap;
   word-break: break-word;
-  font-size: 13px;
+  font-size: 0.8125rem;
   color: var(--gs-text-primary, #444);
   line-height: 1.5;
 }

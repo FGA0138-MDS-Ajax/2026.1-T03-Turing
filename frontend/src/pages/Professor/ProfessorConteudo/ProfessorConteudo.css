@@ -141,7 +141,7 @@
   height: 36px;
   border: none;
   border-radius: 8px;
-  background: #02373a;
+  background: var(--gs-accent, #02373a);
   color: #fff;
   font-weight: 600;
   font-size: 0.80rem;
@@ -150,7 +150,7 @@
 }
 
 .btn-forum:hover {
-  background: #025a5e;
+  background: var(--gs-accent-hover, #025a5e);
 }
 
 .filter-wrapper {

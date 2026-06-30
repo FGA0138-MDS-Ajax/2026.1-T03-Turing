@@ -41,25 +41,73 @@ const FONT_SCALE_BY_SIZE = {
 // existem em layout-shared.css / dashboard-shared.css para nao quebrar
 // nada que o resto do time fez.
 export const COLOR_VISION_THEMES = {
-  nenhum: {
-    accent: '#2F5D62',
-    accentHover: '#224548',
-  },
+nenhum:{
+    accent:'#2F5D62',
+    accentHover:'#224548',
+
+    teacherBg:'#E8F3F4',
+    teacherText:'#2F5D62',
+
+    studentBg:'#FBF0E4',
+    studentText:'#B0641C',
+
+    successBg:'#EAF3DE',
+    successText:'#3B6D11',
+
+    warningBg:'#FAEEDA',
+    warningText:'#854F0B',
+},
   protanopia: {
     // Dificuldade em perceber vermelho -> prioriza azul.
     accent: '#0072B2',
     accentHover: '#005A8C',
+
+    teacherBg:'#E8F3F4',
+    teacherText:'#2F5D62',
+
+    studentBg:'#FBF0E4',
+    studentText:'#B0641C',
+
+    successBg:'#EAF3DE',
+    successText:'#3B6D11',
+
+    warningBg:'#FAEEDA',
+    warningText:'#854F0B',
   },
   deuteranopia: {
     // Dificuldade em perceber verde -> prioriza azul/ciano.
     accent: '#0072B2',
     accentHover: '#005A8C',
+
+    teacherBg:'#E8F3F4',
+    teacherText:'#2F5D62',
+
+    studentBg:'#FBF0E4',
+    studentText:'#abb01c',
+
+    successBg:'#EAF3DE',
+    successText:'#719516',
+
+    warningBg:'#FAEEDA',
+    warningText:'#73850b',
   },
   tritanopia: {
     // Dificuldade em perceber azul -> evita azul como referencia
     // principal, prioriza tons de vermelho/rosa.
     accent: '#B23A48',
     accentHover: '#8C2D38',
+
+    teacherBg:'#E8F3F4',
+    teacherText:'#622f4b',
+
+    studentBg:'#FBF0E4',
+    studentText:'#B0641C',
+
+    successBg:'#EAF3DE',
+    successText:'#3B6D11',
+
+    warningBg:'#FAEEDA',
+    warningText:'#854F0B',
   },
 };
 
@@ -121,6 +169,17 @@ export function applyAccessibilityPreferences(preferences) {
   const themeVars = {
     '--gs-accent': normalized.highContrast ? '#ffffff' : colorTheme.accent,
     '--gs-accent-hover': normalized.highContrast ? '#e5e7eb' : colorTheme.accentHover,
+    '--forum-aluno-bg': colorTheme.studentBg,
+    '--forum-aluno-text': colorTheme.studentText,
+
+    '--forum-prof-bg': colorTheme.teacherBg,
+    '--forum-prof-text': colorTheme.teacherText,
+
+    '--forum-respondida-bg': colorTheme.successBg,
+    '--forum-respondida-text': colorTheme.successText,
+
+    '--forum-aguardando-bg': colorTheme.warningBg,
+    '--forum-aguardando-text': colorTheme.warningText,
   };
 
   // --- Alto contraste: so sobrescreve fundo/texto/borda quando ativo ---
