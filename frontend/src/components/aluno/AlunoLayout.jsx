@@ -1,10 +1,12 @@
 import { Bell, Settings } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { AlunoSidebar } from './AlunoSidebar';
+import { useNavigate } from "react-router-dom";
 import '../../styles/layout-shared.css';
 
 export function AlunoLayout({ children }) {
   const { user } = useAuth();
+  const navigate = useNavigate();
 
   const iniciais = user?.nome
     ? user.nome.split(' ').slice(0, 2).map(n => n[0]).join('').toUpperCase()
@@ -21,8 +23,12 @@ export function AlunoLayout({ children }) {
             <button className="gs-icon-btn" aria-label="Notificações">
               <Bell size={17} />
             </button>
-            <button className="gs-icon-btn" aria-label="Configurações">
-              <Settings size={17} />
+            <button
+                className="gs-icon-btn"
+                aria-label="Configurações"
+                onClick={() => navigate("/aluno/configuracoes")}
+            >
+                <Settings size={17} />
             </button>
             <div className="gs-topbar-user">
               <div>
@@ -35,7 +41,7 @@ export function AlunoLayout({ children }) {
         </header>
 
         <main className="gs-professor-main">
-          <div className="gs-page-content" style={{ flex: 1, padding: '40px', overflowY: 'auto', backgroundColor: '#F2EFE9', minWidth: 0, height: '100%' }}>
+          <div className="gs-page-content" style={{ flex: 1, padding: '40px', overflowY: 'auto', minWidth: 0, height: '100%' }}>
             {children}
           </div>
         </main>

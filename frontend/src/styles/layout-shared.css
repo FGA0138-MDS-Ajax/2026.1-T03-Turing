@@ -8,13 +8,14 @@
   display: flex;
   min-height: 100vh;
   width: 100%;
-  background: #F3F4F6;
+  background: var(--gs-bg-page, #F3F4F6);
+  overflow: hidden;
 }
 
 aside.gs-sidebar {
   width: 220px;
   min-width: 220px;
-  background: #fdfbf7;
+background: var(--gs-sidebar-bg, #fdfbf7);
   height: 100vh;
   position: sticky;
   top: 0;
@@ -28,7 +29,7 @@ aside.gs-sidebar {
   align-items: center;
   padding: 0px 25px 1px 35px;
   gap: 25px;
-  border-bottom: 1px solid #e5eff0;
+border-bottom: 1px solid var(--gs-border, #e5eff0);
   flex-shrink: 0;
 }
 
@@ -41,20 +42,22 @@ aside.gs-sidebar {
 }
 
 .gs-logo-text {
-  font-family: 'Serif'; 
-  font-size: 1.6rem;
-  font-weight: 500; 
-  color: #4a4f58;  
+font-family: 'Serif';
+  /* px fixo de propósito: a logo não deve escalar com as preferências
+     de tamanho de fonte de Acessibilidade. */
+  font-size: 25.6px;
+font-weight: 500;
+color: var(--gs-text-secondary, #4a4f58);
   letter-spacing: -0.02em;
   line-height: 1;
-  transform: translateY(-7px); 
+transform: translateY(-7px);
 }
 
 .gs-logo-text .gs-destaque {
-  font-weight: 900; 
-  color: #52787B;   
+font-weight: 900;
+color: var(--gs-accent, #52787B);
   transform: translateY(-10px);
-  font-size: 1.9rem;
+  font-size: 30.4px;
 }
 
 .gs-sidebar-nav {
@@ -73,38 +76,38 @@ aside.gs-sidebar {
   border-radius: 8px;
   font-size: 0.9rem;
   font-weight: 500;
-  color: #6A7282;
+color: var(--gs-text-secondary, #6A7282);
   text-decoration: none;
   transition: background 0.15s, color 0.15s;
 }
 
 .gs-nav-item svg {
-  color: #6A7282;
+color: var(--gs-text-secondary, #6A7282);
   transition: color 0.15s;
 }
 
 .gs-nav-item:hover {
-  background: #F3F4F6;
-  color: #364153;
+background: color-mix(in srgb, var(--gs-accent, #F3F4F6) 10%, transparent);
+  color: var(--gs-text-primary, #364153);
 }
 
 .gs-nav-item:hover svg {
-  color: #364153;
+color: var(--gs-text-primary, #364153);
 }
 
 .gs-nav-item--active {
-  background: #D1D5DC;
-  color: #2F5D62;
+background: color-mix(in srgb, var(--gs-accent, #D1D5DC) 16%, transparent);
+  color: var(--gs-accent, #2F5D62);
   font-weight: 600;
 }
 
 .gs-nav-item--active svg {
-  color: #2F5D62;
+color: var(--gs-accent, #2F5D62);
 }
 
 .gs-sidebar-bottom {
   padding: 12px;
-  border-top: 1px solid #e5eff0
+border-top: 1px solid var(--gs-border, #e5eff0);
 }
 
 .gs-sidebar-user {
@@ -121,16 +124,16 @@ aside.gs-sidebar {
 }
 
 .gs-sidebar-user:hover {
-  background: #F3F4F6;
+background: color-mix(in srgb, var(--gs-accent, #F3F4F6) 10%, transparent);
 }
 
 .gs-user-avatar {
   width: 34px;
   height: 34px;
   border-radius: 50%;
-  background: #2F5D62;
+background: var(--gs-accent, #2F5D62);
   color: #fff;
-  font-size: 0.78rem;
+  font-size: 12.48px;
   font-weight: 700;
   display: flex;
   align-items: center;
@@ -139,13 +142,13 @@ aside.gs-sidebar {
 }
 
 .gs-sidebar-logout-icon {
-  color: #6A7282;
+color: var(--gs-text-secondary, #6A7282);
   margin-left: auto;
   transition: color 0.2s ease;
 }
 
 .gs-sidebar-user:hover .gs-sidebar-logout-icon {
-  color: #2F5D62;
+color: var(--gs-accent, #2F5D62);
 }
 
 .gs-professor-main {
@@ -154,12 +157,12 @@ aside.gs-sidebar {
   flex-direction: column;
   min-width: 0;
   overflow-y: auto;
-  background: #f6f1ec;
+background: var(--gs-content-bg, #f6f1ec);
 }
 
 .gs-topbar-wrapper {
-  background: #fdfbf7;
-  border-bottom: 1px solid #e5eff0;
+background: var(--gs-topbar-bg, #fdfbf7);
+  border-bottom: 1px solid var(--gs-border, #e5eff0);
   height: 60px;
   display: flex;
   align-items: center;
@@ -178,18 +181,18 @@ aside.gs-sidebar {
   width: 36px;
   height: 36px;
   border-radius: 8px;
-  border: 1px solid #E5E7EB;
-  background: #fff;
+border: 1px solid var(--gs-border, #E5E7EB);
+  background: var(--gs-surface, #fff);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: #6A7282;
+color: var(--gs-text-secondary, #6A7282);
   transition: background 0.15s;
 }
 
 .gs-icon-btn:hover {
-  background: #F3F4F6;
+background: color-mix(in srgb, var(--gs-accent, #F3F4F6) 10%, transparent);
 }
 
 .gs-topbar-user {
@@ -202,9 +205,10 @@ aside.gs-sidebar {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: #2F5D62;
+  background: var(--gs-accent, #2F5D62);
   color: #fff;
-  font-size: 0.78rem;
+  /* px fixo de propósito: o header não deve escalar com Acessibilidade. */
+  font-size: 12.48px;
   font-weight: 700;
   display: flex;
   align-items: center;
@@ -213,28 +217,29 @@ aside.gs-sidebar {
 }
 
 .gs-topbar-name {
-  font-size: 0.875rem;
+  font-size: 14px;
   font-weight: 600;
-  color: #101828;
+color: var(--gs-text-primary, #101828);
   line-height: 1.2;
 }
 
 .gs-topbar-role {
-  font-size: 0.75rem;
-  color: #6A7282;
+  font-size: 12px;
+  color: var(--gs-text-secondary, #6A7282);
   line-height: 1.2;
 }
 
 .gs-page-content {
-  padding: 36px 40px;
-  flex: 1
+padding: 36px 40px;
+flex: 1;
+background: var(--gs-bg-page, #F3F4F6);
 }
 
 .gs-topbar {
   margin-bottom: 2rem;
-  display: flex;              
-  flex-direction: column;    
-  align-items: flex-start;    
+display: flex;
+  flex-direction: column;
+  align-items: flex-start;
   gap: 5px;
 }
 
@@ -242,16 +247,14 @@ aside.gs-sidebar {
   margin: 0 0 0.3rem 0;
   font-size: 2rem;
   font-weight: 700;
-  color: #02373a;
-  font-family: 'Serif'
+color: var(--gs-accent, #02373a);
+  font-family: 'Serif';
 }
 
 .gs-page-subtitle {
   margin: 0;
-  color: #6A7282;
+color: var(--gs-text-secondary, #6A7282);
   font-size: 0.9rem;
-  
-  
 }
 
 @media (max-width: 700px) {

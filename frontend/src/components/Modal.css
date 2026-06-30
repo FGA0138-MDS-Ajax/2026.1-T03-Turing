@@ -25,7 +25,7 @@
 .modal-title {
   font-size: 22px;
   font-weight: 600;
-  color: #1a2e2a;
+  color: var(--gs-accent, #1a2e2a);
   margin: 0;
 }
 
@@ -61,7 +61,7 @@
 .modal-input:focus,
 .modal-select:focus,
 .modal-textarea:focus {
-  border-color: #1a2e2a;
+  border-color: var(--gs-accent, #1a2e2a);
 }
 
 .modal-input::placeholder {
@@ -164,7 +164,7 @@
   padding: 10px 24px;
   border-radius: 100px;
   border: none;
-  background: #1a2e2a;
+  background: var(--gs-accent, #1a2e2a);
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;

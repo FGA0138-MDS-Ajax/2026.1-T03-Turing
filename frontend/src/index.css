@@ -9,5 +9,15 @@ body {
   color: #e8e8ee;
   font-family: "Segoe UI", system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
+  font-size: calc(16px * var(--gs-font-scale, 1));
 }
- 
+/* Alto contraste para telas que ainda usam inline style com var(--gs-surface)
+   sem fallback de --gs-bg-page/--gs-text-primary (ex: Denuncias.jsx) */
+[data-high-contrast='true'] {
+  --gs-surface: #0f0f0f;
+  --gs-surface-2: #1a1a1a;
+  --gs-border: #ffffff;
+  --gs-text-primary: #ffffff;
+  --gs-text-secondary: #d1d5db;
+  --gs-text-muted: #9ca3af;
+}

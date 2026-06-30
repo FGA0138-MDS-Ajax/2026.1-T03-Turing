@@ -11,8 +11,16 @@ function BadgePerfil({ tipo }) {
   if (!tipo) return null;
   const isProfessor = tipo === 'professor';
   const style = isProfessor
-    ? { background: '#E8F3F4', color: '#2F5D62', border: '1px solid #B8D8DB' }
-    : { background: '#FBF0E4', color: '#B0641C', border: '1px solid #F0CBAA' };
+    ?{
+        background:'var(--forum-prof-bg)',
+        color:'var(--forum-prof-text)',
+        border:'1px solid var(--forum-prof-text)'
+    }
+    :{
+        background:'var(--forum-aluno-bg)',
+        color:'var(--forum-aluno-text)',
+        border:'1px solid var(--forum-aluno-text)'
+    };
   return (
     <span style={{
       display: 'inline-flex',

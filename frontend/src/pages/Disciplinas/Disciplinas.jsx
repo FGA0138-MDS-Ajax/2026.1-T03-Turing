@@ -395,14 +395,29 @@ function ModalMatriculas({ conteudo, onClose, alunos, matriculas, onMatricular, 
 
 // ─── CARDS DA INTERFACE ───────────────────────────
 
-const CORES = ['#4A90D9', '#50B87A', '#C8A96E', '#E07A5F', '#9B72CF', '#3D9970'];
+const CORES_PADRAO = ['#4A90D9', '#50B87A', '#C8A96E', '#E07A5F', '#9B72CF', '#3D9970'];
+
+// Paletas alternativas com 6 cores cada, mantendo a diferenciação visual
+// entre disciplinas mas escolhendo tons mais distinguíveis para cada
+// tipo de daltonismo (correção/realce, não simulação).
+const CORES_POR_VISAO = {
+  protanopia:    ['#0072B2', '#8bb500', '#a9d80e', '#6a8902', '#7988ea', '#779b03'],
+  deuteranopia:  ['#0072B2', '#56B4E9', '#99e600', '#617a11', '#576ddc', '#3ea058'],
+  tritanopia:    ['#07bcd4', '#3cc6ec', '#999999', '#d61f6b', '#ac2763', '#20a0d3'],
+};
+
+function getCorDisciplina(index) {
+  const modoVisao = document.documentElement.getAttribute('data-color-vision');
+  const paleta = CORES_POR_VISAO[modoVisao] || CORES_PADRAO;
+  return paleta[index % paleta.length];
+}
 const ICONES = ['⊞', '⚛', '🌐', '📐', '🔬', '📚'];
 
 
 
 
 function DisciplinaCard({ d, index, onEditar, onDeletar, conteudos }) {
-  const cor = CORES[index % CORES.length] || d.cor;
+  const cor = getCorDisciplina(index) || d.cor;
   const icone = ICONES[index % ICONES.length] || d.icone;
   const qtdConteudos = conteudos ? conteudos.filter(c => c.disciplina === d.id).length : 0;
   return (
@@ -432,7 +447,7 @@ function DisciplinaCard({ d, index, onEditar, onDeletar, conteudos }) {
 }
 
 function ConteudoCard({ c, index, disciplinas, matriculas, onEditar, onDeletar, onMatriculas, onAlocarProfessor }) {
-  const cor = CORES[index % CORES.length] || c.cor;
+  const cor = getCorDisciplina(index) || c.cor;
   const icone = ICONES[index % ICONES.length] || c.icone;
   const nomeDisciplina = disciplinas.find(d => d.id === c.disciplina)?.nome || c.disciplina || '—';
 

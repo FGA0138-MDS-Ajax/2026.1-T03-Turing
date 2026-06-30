@@ -14,13 +14,13 @@
 
 .header h1 {
   font-size: 2.2rem;
-  color: #1a1a1a;
+  color: var(--gs-accent, #1a1a1a);
   margin-bottom: 8px;
   font-weight: 700;
 }
 
 .header p {
-  color: #666666;
+  color: var(--gs-text-secondary, #666666);
   font-size: 1rem;
   margin: 0;
 }
@@ -56,7 +56,7 @@
 }
 
 .tab.active {
-  background-color: #2D5B5A; /* Mesma cor exata do bloco verde abaixo */
+  background-color: var(--gs-accent, #2D5B5A); /* Mesma cor exata do bloco verde abaixo */
   color: #ffffff; 
 }
 
@@ -64,7 +64,7 @@
    BLOCO VERDE CENTRAL 
 ========================================= */
 .conteudos-wrapper {
-  background-color: #2D5B5A; /* O verde escuro do fundo da pasta */
+  background-color: var(--gs-accent, #2D5B5A); /* O verde escuro do fundo da pasta */
   border-radius: 0 16px 16px 16px; /* Remove o arredondamento APENAS do topo-esquerdo para conectar a 1ª aba */
   padding: 32px;
   flex-grow: 1;
@@ -86,7 +86,7 @@
    CARDS
 ========================================= */
 .conteudo-card {
-  background-color: #F2EFE9;
+  background-color: var(--gs-surface, #F2EFE9);
   border-radius: 12px;
   padding: 24px;
   width: 100%;
@@ -104,7 +104,7 @@
 
 .card-header h3 {
   margin: 0;
-  color: #222;
+  color: var(--gs-text-primary, #222);
   font-size: 1.2rem;
   line-height: 1.3;
   padding-right: 16px;
@@ -121,11 +121,11 @@
 }
 
 .card-icon svg {
-  color: #2D5B5A;
+  color: var(--gs-accent, #2D5B5A);
 }
 
 .professor {
-  color: #888888;
+  color: var(--gs-text-muted, #888888);
   display: flex;
   align-items: center;
   margin-bottom: 16px;
@@ -136,7 +136,7 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
-  color: #555555;
+  color: var(--gs-text-secondary, #555555);
   margin-bottom: 24px;
   font-size: 0.9rem;
 }
@@ -172,7 +172,7 @@
 .btn-preview {
   background: transparent;
   border: none;
-  color: #555555;
+  color: var(--gs-text-secondary, #555555);
 }
 
 .btn-preview:hover {
@@ -180,13 +180,13 @@
 }
 
 .btn-inscrever {
-  border: 1px solid #2D5B5A;
+  border: 1px solid var(--gs-accent, #2D5B5A);
   background: white;
-  color: #2D5B5A;
+  color: var(--gs-accent, #2D5B5A);
 }
 
 .btn-inscrever:hover {
-  background: #2D5B5A;
+  background: var(--gs-accent, #2D5B5A);
   color: white;
 }
 
@@ -204,7 +204,7 @@
 }
 
 .modal {
-  background: #ffffff;
+  background: var(--gs-surface, #ffffff);
   width: 90%;
   max-width: 550px;
   border-radius: 16px;
@@ -244,7 +244,7 @@
 
 .modal-title-wrapper h2 {
   font-size: 1.6rem;
-  color: #1a1a1a;
+  color: var(--gs-text-primary, #1a1a1a);
   margin: 0;
 }
 
@@ -256,11 +256,11 @@
   height: 48px;
   border-radius: 10px;
   background-color: #C6D1CE;
-  color: #2D5B5A;
+  color: var(--gs-accent, #2D5B5A);
 }
 
 .modal-desc {
-  color: #666666;
+  color: var(--gs-text-secondary, #666666);
   font-size: 0.9rem;
   margin: 0 0 24px 0;
 }
@@ -272,7 +272,7 @@
 }
 
 .prof-name {
-  color: #888888;
+  color: var(--gs-text-muted, #888888);
   font-size: 0.85rem;
   margin-bottom: 8px;
   display: block;
@@ -282,7 +282,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  color: #333333;
+  color: var(--gs-text-primary, #333333);
   font-size: 0.9rem;
 }
 
@@ -295,13 +295,13 @@
 }
 
 .ementa-box h4 {
-  color: #555555;
+  color: var(--gs-text-secondary, #555555);
   margin: 0 0 12px 0;
   font-size: 1rem;
 }
 
 .ementa-box p {
-  color: #666666;
+  color: var(--gs-text-secondary, #666666);
   font-size: 0.9rem;
   margin: 0;
   line-height: 1.5;
@@ -313,7 +313,7 @@
 }
 
 .btn-inscrever-modal {
-  background-color: #2D5B5A;
+  background-color: var(--gs-accent, #2D5B5A);
   color: white;
   border: none;
   border-radius: 999px; /* Formato de pílula */
@@ -324,7 +324,7 @@
 }
 
 .btn-inscrever-modal:hover {
-  background: #1f4241;
+  background: var(--gs-accent-hover, #1f4241);
 }
 
 /* =========================================
