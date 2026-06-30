@@ -137,6 +137,10 @@ export function applyAccessibilityPreferences(preferences) {
       '--gs-text-secondary': '#d1d5db',
       '--gs-text-muted': '#d1d5db',
       '--gs-card-shadow': 'none',
+      '--gs-icon-color': '#ffffff',
+      '--gs-icon-background': '#111111',
+
+
     });
   } else {
     // Restaura os valores padrao do tema global ao desligar alto contraste,
@@ -153,6 +157,8 @@ export function applyAccessibilityPreferences(preferences) {
       '--gs-text-secondary': '#6A7282',
       '--gs-text-muted': '#99A1AF',
       '--gs-card-shadow': '0 10px 28px rgba(15, 47, 85, 0.06)',
+      '--gs-icon-color': 'var(--gs-accent)',
+      '--gs-icon-background': '#DBEAFE',
     });
   }
 
