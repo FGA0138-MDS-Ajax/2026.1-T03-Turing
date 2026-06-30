@@ -4,6 +4,7 @@ import { useAuth } from "../../../context/AuthContext";
 import { useForum } from "../../../hooks/useForum";
 import { ProfessorLayout } from "../../../components/professor/ProfessorLayout";
 import { markdownParaHtml } from "../../../utils/markdown";
+import ModalDenuncia from "../../../components/Modaldenuncia";
 import "./ForumProfessor.css";
 
 // --- Identificação visual de autor [Ce7/RF21] ---
@@ -67,6 +68,7 @@ export default function ForumProfessor() {
   const [resposta, setResposta] = useState("");
   const [prevVisualizando, setPrevVisualizando] = useState(false);
   const [mostrandoDetalhe, setMostrandoDetalhe] = useState(false);
+  const [denunciaAberta, setDenunciaAberta] = useState(null);
   const textareaRef = useRef(null);
 
   const inserirMarkdown = (antes, depois = antes) => {
@@ -239,7 +241,14 @@ export default function ForumProfessor() {
                   <span className={`forum-badge ${perguntaSelecionada.status} forum-detail-badge`}>
                     {perguntaSelecionada.status === "respondida" ? "Respondida" : "Aguardando resposta"}
                   </span>
-                  <button className="forum-flag-icon" type="button" title="Marcar">⚑</button>
+                  <button 
+                    className="forum-flag-icon" 
+                    type="button" 
+                    title="Denunciar" 
+                    onClick={() => setDenunciaAberta(perguntaSelecionada.id)}
+                  >
+                    ⚑
+                  </button>
                 </div>
                 <p className="forum-detail-desc" style={{ fontWeight: 600, marginTop: 12, whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
                   {perguntaSelecionada.texto}
@@ -342,6 +351,11 @@ export default function ForumProfessor() {
           )}
         </div>
       </div>
+        <ModalDenuncia
+        isOpen={denunciaAberta !== null}
+        onClose={() => setDenunciaAberta(null)}
+        mensagemId={denunciaAberta}
+      />
       </div>
     </ProfessorLayout>
   );
