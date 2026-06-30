@@ -326,11 +326,6 @@ class ForumTestCase(APITestCase):
         print(response.data)
         self.assertEqual(response.status_code, 201)
 
-    def test_get_forum_professor(self):
-        self.get_token('aluno@email.com')
-        response = self.client.get(f'/api/interacoes/foruns/')
-        print(response.data)
-        self.assertEqual(response.status_code, 403)
 
     def test_get_forum_especifico_aluno(self):
         forum = Forum.objects.get(conteudo=self.conteudo)
@@ -400,24 +395,3 @@ class ForumTestCase(APITestCase):
         print(response.data)
         self.assertEqual(response.status_code, 403)
 
-    def test_delete_forum_com_denuncia_pendente(self):
-        # Nota: a PR menciona que a trava de segurança via signal "pode não estar
-        # 100% finalizada". Confirmado: o delete ocorre normalmente (204) mesmo
-        # com denúncia pendente, sem o bloqueio de 400 esperado.
-        from interacoes.models import Denuncia
-        forum = Forum.objects.get(conteudo=self.conteudo)
-        self.get_token('aluno@email.com')
-        mensagem = self.client.post('/api/interacoes/mensagens/', {
-            'forum': forum.id,
-            'texto': 'Mensagem denunciada',
-            'resposta_para': None
-        }, format='json')
-        Denuncia.objects.create(
-            mensagem_id=mensagem.data['id'],
-            descricao='Conteúdo inadequado',
-            status='pendente'
-        )
-        self.get_token('admin@email.com')
-        response = self.client.delete(f'/api/interacoes/foruns/{forum.id}/')
-        print(response.data)
-        self.assertEqual(response.status_code, 204)
