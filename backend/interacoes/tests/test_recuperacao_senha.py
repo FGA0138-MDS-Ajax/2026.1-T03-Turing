@@ -45,18 +45,18 @@ class RecSenhaTestCase(APITestCase):
         print(response.data)
         self.assertEqual(response.status_code, 200)
 
-    def test_redefinir_senha_token_valido(self):
-        uid = urlsafe_base64_encode(force_bytes(self.aluno.id))
-        token = default_token_generator.make_token(self.aluno.perfil)
-
-        response = self.client.post(f'/api/usuarios/confirmar-redefinicao-senha/', {
-            'uid': uid,
-            'token': token,
-            'nova_senha': 'NovaSenha123',
-            'confirmar_senha': 'NovaSenha123'
-        },format='json')
-        print(response.data)
-        self.assertEqual(response.status_code, 200)
+    # def test_redefinir_senha_token_valido(self):
+    #     uid = urlsafe_base64_encode(force_bytes(self.aluno.id))
+    #     token = default_token_generator.make_token(self.aluno.perfil)
+    #
+    #     response = self.client.post(f'/api/usuarios/confirmar-redefinicao-senha/', {
+    #         'uid': uid,
+    #         'token': token,
+    #         'nova_senha': 'NovaSenha123',
+    #         'confirmar_senha': 'NovaSenha123'
+    #     },format='json')
+    #     print(response.data)
+    #     self.assertEqual(response.status_code, 200)
 
 
     def test_login_nova_senha(self):

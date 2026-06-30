@@ -10,7 +10,7 @@
 .cabecalho__titulo {
   font-size: 1.4rem;
   font-weight: 700;
-  color: #101828;
+  color: var(--gs-accent, #101828);
   margin: 0 0 0.2rem 0;
 }
 
@@ -77,7 +77,7 @@
 
 .btn__adicionar {
   padding: 0.5rem 1.1rem;
-  background: #2F5D62;
+  background: var(--gs-accent, #2F5D62);
   color: #fff;
   border: none;
   border-radius: 8px;
@@ -90,7 +90,7 @@
 }
 
 .btn__adicionar:hover {
-  background: #224548;
+  background: var(--gs-accent-hover, #224548);
 }
 
 .lista {
@@ -156,7 +156,7 @@
 }
 
 .card__status--ativo {
-  color: #2F5D62;
+  color: var(--gs-accent, #2F5D62);
 }
 
 .card__status--inativo {
@@ -171,7 +171,7 @@
 
 .btn__editar {
   padding: 0.32rem 0.9rem;
-  background: #2F5D62;
+  background: var(--gs-accent, #2F5D62);
   color: #fff;
   border: none;
   border-radius: 7px;
@@ -182,12 +182,12 @@
 }
 
 .btn__editar:hover {
-  background: #224548;
+  background: var(--gs-accent-hover, #224548);
 }
 
 .btn__deletar {
   padding: 0.32rem 0.9rem;
-  background: #2F5D62;
+  background: var(--gs-accent, #2F5D62);
   color: #fff;
   border: none;
   border-radius: 7px;
@@ -198,7 +198,7 @@
 }
 
 .btn__deletar:hover {
-  background: #224548;
+  background: var(--gs-accent-hover, #224548);
 }
 
 .estado {

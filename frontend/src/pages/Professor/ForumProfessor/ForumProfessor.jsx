@@ -4,6 +4,7 @@ import { useAuth } from "../../../context/AuthContext";
 import { useForum } from "../../../hooks/useForum";
 import { ProfessorLayout } from "../../../components/professor/ProfessorLayout";
 import { markdownParaHtml } from "../../../utils/markdown";
+import ModalDenuncia from "../../../components/Modaldenuncia";
 import "./ForumProfessor.css";
 
 // --- Identificação visual de autor [Ce7/RF21] ---
@@ -11,8 +12,16 @@ function BadgePerfil({ tipo }) {
   if (!tipo) return null;
   const isProfessor = tipo === 'professor';
   const style = isProfessor
-    ? { background: '#E8F3F4', color: '#2F5D62', border: '1px solid #B8D8DB' }
-    : { background: '#FBF0E4', color: '#B0641C', border: '1px solid #F0CBAA' };
+    ?{
+        background:'var(--forum-prof-bg)',
+        color:'var(--forum-prof-text)',
+        border:'1px solid var(--forum-prof-text)'
+    }
+    :{
+        background:'var(--forum-aluno-bg)',
+        color:'var(--forum-aluno-text)',
+        border:'1px solid var(--forum-aluno-text)'
+    };
   return (
     <span style={{
       display: 'inline-flex',
@@ -67,6 +76,7 @@ export default function ForumProfessor() {
   const [resposta, setResposta] = useState("");
   const [prevVisualizando, setPrevVisualizando] = useState(false);
   const [mostrandoDetalhe, setMostrandoDetalhe] = useState(false);
+  const [denunciaAberta, setDenunciaAberta] = useState(null);
   const textareaRef = useRef(null);
 
   const inserirMarkdown = (antes, depois = antes) => {
@@ -239,7 +249,14 @@ export default function ForumProfessor() {
                   <span className={`forum-badge ${perguntaSelecionada.status} forum-detail-badge`}>
                     {perguntaSelecionada.status === "respondida" ? "Respondida" : "Aguardando resposta"}
                   </span>
-                  <button className="forum-flag-icon" type="button" title="Marcar">⚑</button>
+                  <button 
+                    className="forum-flag-icon" 
+                    type="button" 
+                    title="Denunciar" 
+                    onClick={() => setDenunciaAberta(perguntaSelecionada.id)}
+                  >
+                    ⚑
+                  </button>
                 </div>
                 <p className="forum-detail-desc" style={{ fontWeight: 600, marginTop: 12, whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
                   {perguntaSelecionada.texto}
@@ -342,6 +359,11 @@ export default function ForumProfessor() {
           )}
         </div>
       </div>
+        <ModalDenuncia
+        isOpen={denunciaAberta !== null}
+        onClose={() => setDenunciaAberta(null)}
+        mensagemId={denunciaAberta}
+      />
       </div>
     </ProfessorLayout>
   );

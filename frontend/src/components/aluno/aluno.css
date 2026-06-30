@@ -8,7 +8,7 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background-color: #F2EFE9;
+  background: var(--gs-bg-page, #F3F4F6);
 }
 
 /* --- CABEÇALHO GLOBAL (TOP BAR) --- */
@@ -17,7 +17,7 @@
   justify-content: space-between;
   align-items: center;
   height: 70px;
-  background: #FFFFFF;
+  background: var(--gs-topbar-bg, #FFFFFF);
   padding: 0 40px;
   border-bottom: 1px solid #E5E7EB;
 }
@@ -26,7 +26,8 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  font-size: 1.4rem;
+  /* px fixo de propósito: a logo não deve escalar com Acessibilidade. */
+  font-size: 22.4px;
   font-weight: 700;
 }
 
@@ -44,13 +45,13 @@
 }
 
 .gs-header-user-name {
-  font-size: 0.85rem;
+  font-size: 13.6px;
   font-weight: 700;
   color: #101828;
 }
 
 .gs-header-user-role {
-  font-size: 0.75rem;
+  font-size: 12px;
   color: #6A7282;
 }
 
@@ -58,12 +59,12 @@
   width: 34px;
   height: 34px;
   border-radius: 50%;
-  background: #386663;
+  background: var(--gs-accent, #386663);
   color: #FFFFFF;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.85rem;
+  font-size: 13.6px;
   font-weight: 600;
 }
 
@@ -79,7 +80,7 @@
 }
 
 .gs-header-logout:hover { 
-  color: #386663; 
+  color: var(--gs-accent, #386663); 
 }
 
 /* --- CORPO E SIDEBAR --- */
@@ -87,11 +88,11 @@
   display: flex;
   flex: 1;
   overflow: hidden;
-  background-color: #F2EFE9 !important;
+  background-color: var(--gs-content-bg, #F2EFE9) !important;
 }
 
 aside.gs-sidebar {
-  background-color: #F2EFE9 !important;
+  background-color: var(--gs-content-bg, #F2EFE9) !important;
   border-right: none;
   width: 250px;
   padding: 32px 24px;
@@ -121,8 +122,8 @@ aside.gs-sidebar {
 }
 
 .gs-nav-item--active {
-  background: #D1D7CD !important;
-  color: #1A1A2E !important;
+  background: color-mix(in srgb, var(--gs-accent, #386663) 18%, #F2EFE9) !important;
+  color: var(--gs-accent, #1A1A2E) !important;
   font-weight: 600;
 }
 
@@ -130,6 +131,6 @@ aside.gs-sidebar {
   flex: 1;
   padding: 40px;
   overflow-y: auto;
-  background-color: #F2EFE9 !important;
+  background-color: var(--gs-content-bg, #F2EFE9) !important;
   min-width: 0;
 }

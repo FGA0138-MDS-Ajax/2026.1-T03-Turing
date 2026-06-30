@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import api from "../services/api";
+import { loadAndApplyAccessibilityPreferences } from "../utils/preferenciasAcessibilidade";
 
 const AuthContext = createContext(null);
 
@@ -45,6 +46,15 @@ export function AuthProvider({ children }) {
     }
     setLoadingAuth(false);
   }, []);
+
+  // As preferencias de acessibilidade (tamanho de fonte, daltonismo, etc)
+  // sao salvas por usuario. Sempre que o usuario logado mudar (login,
+  // logout, ou troca de conta sem reload de pagina), recarregamos as
+  // preferencias da conta certa, em vez de manter as do usuario anterior
+  // aplicadas na tela.
+  useEffect(() => {
+    loadAndApplyAccessibilityPreferences(user?.email ?? null);
+  }, [user]);
 
   const login = async (email, password) => {
     const response = await api.post("/api/usuarios/login/", {

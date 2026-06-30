@@ -13,13 +13,13 @@
 .admin-review-header h1 {
   font-size: 32px;
   font-weight: 700;
-  color: #0f172a;
+  color: var(--gs-accent, #0f172a);
   font-family: "Segoe UI", system-ui, sans-serif;
   margin-bottom: 8px;
 }
 
 .admin-description {
-  color: #5a5a5a;
+  color: var(--gs-text-secondary, #5a5a5a);
   font-family: "Segoe UI", system-ui, sans-serif;
   font-size: 16px;
   margin: 40px 0 0 0;
@@ -28,8 +28,8 @@
 /* -SECTION- */
 
 .teachers-section {
-  background: #FDFBF7;
-  border: 1px solid #E5E7EB;
+  background: var(--gs-surface, #FDFBF7);
+  border: 1px solid var(--gs-border, #E5E7EB);
   box-shadow: 0 2px 3px rgba(58, 63, 94, 0.3);
   border-radius: 12px;
   padding: 24px;
@@ -47,7 +47,7 @@
 .section-header h2 {
   font-size: 18px;
   font-weight: 700;
-  color: #16253b;
+  color: var(--gs-text-primary, #16253b);
 }
 
 /* -FILTROS- */
@@ -65,17 +65,17 @@
   width: 750px;
   height: 40px;
   border-radius: 11px;
-  border: 1px solid #ddd6cb;
-  background: #FDFBF7;
+  border: 1px solid var(--gs-border, #ddd6cb);
+  background: var(--gs-surface, #FDFBF7);
   padding: 0 35px;
   font-size: 14px;
   outline: none;
-  color: #374151;
+  color: var(--gs-text-primary, #374151);
   flex: 1;
 }
 
 .search-input::placeholder {
-  color: #777474;
+  color: var(--gs-text-secondary, #777474);
   transition: opacity 0.2s ease;
 }
 
@@ -105,9 +105,9 @@
   height: 40px;
   padding: 0 26px;
   border-radius: 10px;
-  border: 1px solid #ddd6cb;
-  background: #FDFBF7;
-  color: #777474;
+  border: 1px solid var(--gs-border, #ddd6cb);
+  background: var(--gs-surface, #FDFBF7);
+  color: var(--gs-text-secondary, #777474);
   font-size: 14px;
   cursor: pointer;
   white-space: nowrap;
@@ -128,7 +128,7 @@
 /* REJEITAR */
 .btn-danger-admin {
   background: #e5e7eb;
-  color: #374151;
+  color: var(--gs-text-primary, #374151);
   padding: 0px 22px;
   border: 2px solid #bbb8b2;
   font-size: 12px;
@@ -149,7 +149,7 @@
 
 /* APROVAR */
 .btn-primary-admin {
-  background: #2F5D62;
+  background: var(--gs-accent, #2F5D62);
   color: white;
   border: none;
   padding: 0px 22px;
@@ -165,12 +165,12 @@
 }
 
 .btn-primary-admin:hover {
-  background: #182f31;
+  background: var(--gs-accent-hover, #182f31);
 }
 
 /* VER CURRÍCULO */
 .btn-secondary-admin {
-  background: #2F5D62;
+  background: var(--gs-accent, #2F5D62);
   color: white;
   border: none;
   padding: 8px 16px;
@@ -253,12 +253,12 @@
 .teacher-info strong {
   display: block;
   font-size: 16px;
-  color: #16253b;
+  color: var(--gs-text-primary, #16253b);
   font-family: "Segoe UI", system-ui, sans-serif;
 }
 
 .teacher-info p {
-  color: #8b8b8b;
+  color: var(--gs-text-muted, #8b8b8b);
   font-size: 13px;
   margin-bottom: 3px;
   font-family: "Segoe UI", system-ui, sans-serif;
@@ -278,7 +278,7 @@
 
 .teacher-time {
   font-size: 12px;
-  color: #b0b0b0;
+  color: var(--gs-text-muted, #b0b0b0);
   margin-bottom: 50px;
 }
 
@@ -307,7 +307,7 @@
 .admin-loading {
   padding: 40px;
   text-align: center;
-  color: #8b8b8b;
+  color: var(--gs-text-muted, #8b8b8b);
 }
 
 /* TOAST */
@@ -367,11 +367,11 @@
 .resume-user-info h2 {
   font-size: 28px;
   font-weight: 700;
-  color: #111827;
+  color: var(--gs-text-primary, #111827);
 }
 
 .resume-user-info p {
-  color: #6b7280;
+  color: var(--gs-text-secondary, #6b7280);
   margin-top: 4px;
 }
 
@@ -438,7 +438,7 @@
 
 .admin-confirm-modal {
   width: 420px;
-  background: white;
+  background: var(--gs-surface, white);
   border-radius: 12px;
   padding: 28px 28px 1px;
 }
@@ -446,11 +446,11 @@
 .admin-confirm-modal h2 {
   font-size: 22px;
   margin-bottom: 14px;
-  color: #16253b;
+  color: var(--gs-text-primary, #16253b);
 }
 
 .admin-confirm-modal p {
-  color: #6b7280;
+  color: var(--gs-text-secondary, #6b7280);
   line-height: 1.5;
 }
 
@@ -477,7 +477,7 @@
 
 .btn-secondary-confirm {
   background: #e5e7eb;
-  color: #374151;
+  color: var(--gs-text-primary, #374151);
 }
 
 .btn-secondary-confirm:hover {
@@ -485,12 +485,12 @@
 }
 
 .btn-primary-confirm {
-  background: #2F5D62;
+  background: var(--gs-accent, #2F5D62);
   color: white;
 }
 
 .btn-primary-confirm:hover {
-  background: #25494d;
+  background: var(--gs-accent-hover, #25494d);
 }
 
 /* RESPONSIVO */

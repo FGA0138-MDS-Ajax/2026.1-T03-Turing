@@ -1,0 +1,497 @@
+.ac-page {
+  max-width: 900px;
+  color: var(--gs-text-primary, #101828);
+  font-family: inherit;
+}
+
+/* Alto contraste: aproveita o tema global (que ja troca --gs-bg-page,
+   --gs-surface, --gs-text-* quando highContrast=true), em vez de
+   duplicar a logica de cor aqui dentro do painel. */
+.ac-page--high-contrast .ac-section {
+  background: var(--gs-surface);
+  border-color: var(--gs-border);
+  box-shadow: none;
+}
+
+.ac-page--high-contrast .ac-font-option,
+.ac-page--high-contrast .ac-radio-option,
+.ac-page--high-contrast .ac-toggle-row,
+.ac-page--high-contrast .ac-color-preview-card,
+.ac-page--high-contrast .ac-color-preview-sample {
+  background: var(--gs-surface-2);
+  border-color: var(--gs-border);
+}
+
+.ac-page--high-contrast .ac-font-option--active,
+.ac-page--high-contrast .ac-radio-option--active {
+  background: var(--gs-surface-2);
+  border-color: var(--gs-accent);
+}
+
+.ac-page--high-contrast .ac-switch--on {
+  background: var(--gs-accent);
+}
+
+.ac-page--high-contrast .ac-color-preview-badge {
+  background: var(--gs-accent);
+  color: var(--gs-bg-page, #000);
+}
+
+.ac-page--reduce-motion .ac-font-option,
+.ac-page--reduce-motion .ac-radio-option,
+.ac-page--reduce-motion .ac-toggle-row,
+.ac-page--reduce-motion .ac-switch,
+.ac-page--reduce-motion .ac-switch-knob {
+  transition: none;
+}
+
+.ac-page--screen-reader {
+  outline: 3px solid var(--gs-accent);
+  outline-offset: 8px;
+  border-radius: 12px;
+}
+
+.ac-page--screen-reader .ac-section {
+  border-width: 2px;
+}
+
+.ac-page--screen-reader .ac-toggle-row,
+.ac-page--screen-reader .ac-radio-option,
+.ac-page--screen-reader .ac-font-option {
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--gs-accent) 18%, transparent);
+}
+
+.ac-title {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--gs-accent, #02373a);
+  font-family: 'Serif';
+}
+
+.ac-subtitle {
+  margin: 0.3rem 0 1.5rem;
+  color: var(--gs-text-secondary, #6A7282);
+  font-size: 0.9rem;
+}
+
+.ac-section {
+  border: 1px solid var(--gs-border, #e5eff0);
+  border-radius: 14px;
+  background: var(--gs-surface, #fdfbf7);
+  padding: 1.25rem;
+  margin-bottom: 1.25rem;
+  box-shadow: var(--gs-card-shadow, 0 10px 28px rgba(15, 47, 85, 0.06));
+}
+
+.ac-section-info,
+.ac-section-access-note,
+.ac-status-board {
+  background: var(--gs-surface-2, #f6f1ec);
+}
+
+.ac-status-grid {
+  margin-top: 0.6rem;
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.ac-status-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.45rem 0.65rem;
+  border-radius: 999px;
+  background: var(--gs-surface, #fff);
+  border: 1px solid var(--gs-border);
+  color: var(--gs-text-secondary);
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.ac-status-chip.is-active {
+  background: color-mix(in srgb, var(--gs-accent) 16%, transparent);
+  border-color: var(--gs-accent);
+  color: var(--gs-accent);
+}
+
+.ac-section-title {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--gs-text-primary);
+}
+
+.ac-section-text {
+  margin: 0.4rem 0 0;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  color: var(--gs-text-secondary);
+}
+
+.ac-font-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(120px, 1fr));
+  gap: 0.65rem;
+  margin-top: 0.9rem;
+}
+
+.ac-font-option {
+  border: 1px solid var(--gs-border);
+  border-radius: 12px;
+  background: var(--gs-surface, #fff);
+  min-height: 96px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  color: var(--gs-text-primary);
+  cursor: pointer;
+  transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.ac-font-option:hover {
+  transform: translateY(-2px);
+  border-color: var(--gs-accent);
+}
+
+.ac-font-option--active {
+  border-color: var(--gs-accent);
+  box-shadow: 0 0 0 1px var(--gs-accent);
+  background: color-mix(in srgb, var(--gs-accent) 8%, var(--gs-surface, #fff));
+}
+
+.ac-font-letter {
+  font-size: 1.4rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.ac-font-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.ac-font-size {
+  font-size: 0.75rem;
+  color: var(--gs-text-muted);
+}
+
+.ac-preview-text {
+  margin: 1rem 0 0;
+  padding: 0.85rem 1rem;
+  border-radius: 10px;
+  background: var(--gs-surface-2, #f6f1ec);
+  color: var(--gs-text-secondary);
+  font-size: 0.9rem;
+  /* Esta e a unica parte do painel cujo tamanho de fonte deve realmente
+     variar com a opcao selecionada, ja que e a previa explicita. */
+  font-size: calc(0.9rem * var(--gs-font-scale, 1));
+}
+
+.ac-radio-list {
+  margin-top: 0.9rem;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.ac-radio-option {
+  border: 1px solid var(--gs-border);
+  border-radius: 10px;
+  background: var(--gs-surface, #fff);
+  padding: 0.75rem 0.85rem;
+  width: 100%;
+  text-align: left;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.ac-radio-option--active {
+  border-color: var(--gs-accent);
+  background: color-mix(in srgb, var(--gs-accent) 8%, var(--gs-surface, #fff));
+}
+
+.ac-radio-title {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--gs-text-primary);
+}
+
+.ac-radio-subtitle {
+  margin: 0.1rem 0 0;
+  color: var(--gs-text-secondary);
+  font-size: 0.82rem;
+}
+
+.ac-radio-dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid var(--gs-border);
+  position: relative;
+  flex-shrink: 0;
+}
+
+.ac-radio-option--active .ac-radio-dot {
+  border-color: var(--gs-accent);
+}
+
+.ac-radio-option--active .ac-radio-dot::after {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--gs-accent);
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.ac-color-preview-label {
+  margin: 0.9rem 0 0.4rem;
+  font-size: 0.82rem;
+  color: var(--gs-text-secondary);
+}
+
+.ac-color-preview-card {
+  margin-top: 0.9rem;
+  border: 1px solid var(--gs-border);
+  border-radius: 12px;
+  padding: 0.9rem;
+  background: var(--gs-surface, #fff);
+}
+
+.ac-color-preview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.ac-color-preview-name {
+  margin: 0;
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--gs-text-primary);
+}
+
+.ac-color-preview-description {
+  margin: 0.25rem 0 0;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  color: var(--gs-text-secondary);
+}
+
+.ac-color-preview-badge {
+  border-radius: 999px;
+  padding: 0.35rem 0.6rem;
+  background: color-mix(in srgb, var(--gs-accent) 16%, transparent);
+  color: var(--gs-accent);
+  font-size: 0.72rem;
+  font-weight: 700;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.ac-color-preview-sample {
+  margin-top: 0.75rem;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--gs-border);
+  background: var(--gs-surface, #fff);
+  padding: 0.75rem;
+}
+
+.ac-color-preview-sample-content {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.ac-color-preview-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 0.85rem;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: default;
+}
+
+.ac-color-chip {
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08);
+}
+
+/* Loading skeleton, reaproveitando o mesmo efeito de shimmer usado no
+   restante da plataforma (ad-stat-skeleton em dashboard-shared.css). */
+.ac-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.ac-skeleton-line {
+  height: 14px;
+  border-radius: 6px;
+  width: 60%;
+  background: linear-gradient(90deg, var(--gs-border, #e5e7eb) 25%, var(--gs-surface-2, #f3f4f6) 50%, var(--gs-border, #e5e7eb) 75%);
+  background-size: 200% 100%;
+  animation: acShimmer 1.2s infinite;
+}
+
+.ac-skeleton-line--title {
+  width: 35%;
+  height: 18px;
+}
+
+.ac-skeleton-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.65rem;
+  margin-top: 0.5rem;
+}
+
+.ac-skeleton-box {
+  height: 90px;
+  border-radius: 12px;
+  background: linear-gradient(90deg, var(--gs-border, #e5e7eb) 25%, var(--gs-surface-2, #f3f4f6) 50%, var(--gs-border, #e5e7eb) 75%);
+  background-size: 200% 100%;
+  animation: acShimmer 1.2s infinite;
+}
+
+@keyframes acShimmer {
+  from { background-position: 200% 0; }
+  to   { background-position: -200% 0; }
+}
+
+.ac-loading-text {
+  margin-top: 0.75rem;
+  font-size: 0.85rem;
+  color: var(--gs-text-secondary);
+}
+
+.ac-page--reduce-motion .ac-skeleton-line,
+.ac-page--reduce-motion .ac-skeleton-box {
+  animation: none;
+}
+
+.ac-toggle-row {
+  margin-top: 0.6rem;
+  width: 100%;
+  border: 1px solid var(--gs-border);
+  border-radius: 10px;
+  padding: 0.75rem 0.85rem;
+  background: var(--gs-surface, #fff);
+  text-align: left;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+}
+
+.ac-toggle-title {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--gs-text-primary);
+}
+
+.ac-toggle-subtitle {
+  margin: 0.15rem 0 0;
+  font-size: 0.82rem;
+  color: var(--gs-text-secondary);
+}
+
+.ac-switch {
+  width: 44px;
+  height: 26px;
+  border-radius: 999px;
+  background: var(--gs-border, #c8d8e8);
+  position: relative;
+  transition: background 0.2s ease;
+  flex-shrink: 0;
+}
+
+.ac-switch-knob {
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  background: #fff;
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  transition: left 0.2s ease;
+  box-shadow: 0 2px 8px rgba(10, 28, 53, 0.18);
+}
+
+.ac-switch--on {
+  background: var(--gs-accent);
+}
+
+.ac-switch--on .ac-switch-knob {
+  left: 21px;
+}
+
+.ac-feedback-row {
+  min-height: 22px;
+  margin-top: 0.5rem;
+}
+
+.ac-feedback {
+  font-size: 0.85rem;
+}
+
+.ac-feedback--saving {
+  color: var(--gs-text-secondary);
+}
+
+.ac-feedback--ok {
+  color: #0e7a46;
+}
+
+.ac-feedback--error {
+  color: #b42318;
+}
+
+@media (max-width: 840px) {
+  .ac-font-grid {
+    grid-template-columns: repeat(2, minmax(120px, 1fr));
+  }
+}
+
+@media (max-width: 520px) {
+  .ac-title {
+    font-size: 1.6rem;
+  }
+
+  .ac-section {
+    border-radius: 12px;
+    padding: 1rem;
+  }
+
+  .ac-font-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ac-color-preview-header {
+    flex-direction: column;
+  }
+
+  .ac-status-grid {
+    flex-direction: column;
+  }
+}
